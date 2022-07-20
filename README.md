@@ -17,6 +17,7 @@ Create  `.env` file in the root of repository with content like in the file `.en
 ```bash
 yarn start
 ```
+
 ## Storybook
 
 Runs a storybook UI at http://localhost:6006/
@@ -28,6 +29,17 @@ Create  `.env` file in the root of repository with content like in the file `.en
 ```bash
 yarn start
 ```
+
+## Commits
+
+To commit to the repository after staging the commit:
+
+```bash
+yarn commit
+```
+
+Select the appropriate type of commit message, any issues to close, and note any breaking
+changes.
 ## Production build
 
 ```bash

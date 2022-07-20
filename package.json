@@ -54,6 +54,7 @@
     "start": "cra-webpack-rewired start",
     "build": "cra-webpack-rewired build",
     "test": "cra-webpack-rewired test",
+    "commit": "git-cz -S",
     "protoc:libs": "cp -pR ./node_modules/@windingtree/stays-models/dist/proto/*.proto ./src/proto/",
     "protoc:local": "protoc --ts_out ./src/proto --proto_path ./src/proto ./src/proto/*.proto",
     "prepublish": "yarn protoc:libs && yarn protoc:local && yarn typechain:videre",
