@@ -1,26 +1,40 @@
 import type { TypedDataDomain } from "@ethersproject/abstract-signer";
-import type { Waku } from '../hooks/useWaku';
 import type { StaticProvider } from '../hooks/useRpcProvider';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
   Web3ModalSignOutFunction
 } from '../hooks/useWeb3Modal';
-import { Facility as FacilityMetadata, Space } from "../proto/facility";
 
 export interface GenericStateRecord {
   id: string;
   [key: string]: unknown;
 }
 
-export interface Facility extends FacilityMetadata {
+export interface Location {
+  latitude: number,
+  longitude: number,
+}
+
+export interface Space {
   id: string;
-  spaces: Space[];
+  [key: string]: unknown;
+}
+
+export interface Facility {
+  id: string;
+  name:string;
+  description: string;
+  emails: [],
+  phones: [],
+  uris: [],
+  location: Location,
+  photos: [],
+  spaces: Space[]
 }
 
 export interface State {
   isConnecting: boolean;
-  waku?: Waku;
   staticProvider?: StaticProvider;
   provider?: Web3ModalProvider;
   signIn?: Web3ModalSignInFunction;
@@ -36,11 +50,6 @@ export interface State {
 export interface SetConnectingAction {
   type: 'SET_CONNECTING',
   payload: boolean;
-}
-
-export interface SetWakuAction {
-  type: 'SET_WAKU',
-  payload?: Waku;
 }
 
 export interface SetStaticProviderAction {
@@ -108,7 +117,6 @@ export interface SetServiceProvider {
 
 export type Action =
   | SetConnectingAction
-  | SetWakuAction
   | SetStaticProviderAction
   | SetProviderAction
   | SetWeb3ModalSignInAction

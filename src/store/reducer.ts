@@ -19,11 +19,6 @@ export const mainReducer = (state: State, action: Action): State => {
           ...state,
           isConnecting: action.payload
         };
-      case 'SET_WAKU':
-        return {
-          ...state,
-          waku: action.payload
-        };
       case 'SET_STATIC_PROVIDER':
         return {
           ...state,
