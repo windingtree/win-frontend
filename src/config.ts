@@ -17,13 +17,14 @@ export interface NetworkInfo {
   rpc?: string;
 }
 
-export interface ApiKeys {
-  [name: string]: string;
-}
+export interface Api {
+  key: string;
+  url: string;
+};
 
 export interface DappConfig {
   allowedNetworks: NetworkInfo[];
-  apiKeys: ApiKeys;
+  api: { [name: string]: Api };
   address: string;
   mode: "development" | "production" | "test";
 }
@@ -40,6 +41,13 @@ if (
   process.env.REACT_APP_API_KEY === ''
 ) {
   throw new Error('REACT_APP_API_KEY must be provided in the ENV');
+}
+
+if (
+  !process.env.REACT_APP_API_URL ||
+  process.env.REACT_APP_API_URL === ''
+) {
+  throw new Error('REACT_APP_API_URL must be provided in the ENV');
 }
 
 const allowedNetworks: NetworkInfo[] = [
@@ -79,11 +87,14 @@ const allowedNetworks: NetworkInfo[] = [
 
 const config: DappConfig = {
   allowedNetworks,
-  mode:process.env.NODE_ENV || Mode.dev,
-  apiKeys: {
-    backend: process.env.REACT_APP_API_KEY
+  mode: process.env.NODE_ENV || Mode.dev,
+  api: {
+    backend: {
+      key: process.env.REACT_APP_API_KEY,
+      url: process.env.REACT_APP_API_URL
+    }
   },
-  address:process.env.REACT_APP_CONTRACT_ADDRESS as string
+  address: process.env.REACT_APP_CONTRACT_ADDRESS as string
 };
 
 export default config;

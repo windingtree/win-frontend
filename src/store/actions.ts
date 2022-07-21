@@ -23,7 +23,7 @@ export interface Space {
 
 export interface Facility {
   id: string;
-  name:string;
+  name: string;
   description: string;
   emails: [],
   phones: [],
@@ -44,6 +44,10 @@ export interface State {
   account?: string;
   serviceProviderDataDomain?: TypedDataDomain;
   facilities: Facility[];
+  authentication: {
+    token?: string;
+    timestamp: number;
+  };
   [key: string]: unknown | GenericStateRecord[];
 }
 
@@ -115,7 +119,16 @@ export interface SetServiceProvider {
   payload: TypedDataDomain | undefined;
 }
 
+export interface SetAuthenticationTokenAction {
+  type: 'SET_AUTHENTICATION_TOKEN';
+  payload: {
+    token?: string;
+    timestamp: number;
+  }
+}
+
 export type Action =
+  | SetAuthenticationTokenAction
   | SetConnectingAction
   | SetStaticProviderAction
   | SetProviderAction
