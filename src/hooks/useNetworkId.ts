@@ -1,6 +1,7 @@
 import type { Web3ModalProvider } from './useWeb3Modal';
 import { useState, useEffect } from 'react';
 import Logger from '../utils/logger';
+import config from '../config';
 
 const logger = Logger('useNetworkId');
 
@@ -14,7 +15,7 @@ export type NetworkIdHook = [
 // useNetworkId react hook
 export const useNetworkId = (
   provider: undefined | Web3ModalProvider,
-  allowedNetwork: number
+  // allowedNetwork: number[]
 ): NetworkIdHook => {
   const [networkId, setNetworkId] = useState<undefined | number>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -36,13 +37,13 @@ export const useNetworkId = (
         logger.debug('getNetwork:', network);
 
         if (network) {
-
-          if (allowedNetwork === network.chainId) {
+          const allowed = config.allowedNetworks.find((n) => n.chainId === network.chainId)
+          if (allowed) {
             setNetworkId(network.chainId);
             setIsRightNetwork(true);
           } else {
             throw new Error(
-              `Invalid network ${network.chainId} though expected ${allowedNetwork}`
+              `Invalid network ${network.chainId} though expected ${config.allowedNetworks.map(n => n.name + ' ')}`
             );
           }
         } else {
@@ -64,7 +65,7 @@ export const useNetworkId = (
     };
 
     getNetworkId();
-  }, [provider, allowedNetwork]);
+  }, [provider]);
 
   return [
     networkId,
