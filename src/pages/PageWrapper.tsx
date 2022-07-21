@@ -4,7 +4,7 @@ import { Page, PageContent, Box, ResponsiveContext } from 'grommet';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { MessageBox } from '../components/MessageBox';
 import { useAppState } from '../store';
-import { name } from '../config';
+import config from '../config';
 
 export interface PageWrapperProps {
   children?: React.ReactNode;
@@ -28,7 +28,7 @@ export const PageWrapper = ({ children, breadcrumbs, kind }: PageWrapperProps) =
             The Dapp is connecting
           </MessageBox>
           <MessageBox type='warn' show={!isRightNetwork}>
-            You are connected to a wrong network. Please switch to: {name}
+            You are connected to a wrong network. Supported networks: {config.allowedNetworks.map((n,i) => n.name + ((config.allowedNetworks.length - 1 !== i ) ? ', ': ''))}
           </MessageBox>
         </Box>
         {children}

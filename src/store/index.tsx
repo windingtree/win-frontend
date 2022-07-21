@@ -3,13 +3,11 @@ import type { Web3ModalConfig } from '../hooks/useWeb3Modal';
 import { createContext, useContext, useEffect } from 'react';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { useAppReducer } from './reducer';
-import { useWaku } from '../hooks/useWaku';
 import { useWeb3Modal } from '../hooks/useWeb3Modal';
-import { chainId, rpc } from '../config';
-import { useRpcProvider } from '../hooks/useRpcProvider';
+import config from '../config';
+// import { useRpcProvider } from '../hooks/useRpcProvider';
 import { useNetworkId } from '../hooks/useNetworkId';
 import { useAccount } from '../hooks/useAccount';
-import { useDataDomain } from "../hooks/useDataDomain";
 
 export type AppReducerType = ReturnType<typeof useAppReducer>;
 export type State = AppReducerType[0];
@@ -45,9 +43,8 @@ const web3ModalConfig: Web3ModalConfig = {
     walletconnect: {
       package: WalletConnectProvider,
       options: {
-        rpc: {
-          [chainId]: rpc
-        },
+        rpc: config.allowedNetworks.map((n) => ({[n.chainId]: n.rpc}))
+          // [config.network.chainId]: config.network.rpc
       }
     }
   }
@@ -55,8 +52,12 @@ const web3ModalConfig: Web3ModalConfig = {
 
 export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useAppReducer();
-  const waku = useWaku();
-  const [staticProvider] = useRpcProvider(rpc);
+  // const [
+  //   networkId,
+  //   isNetworkIdLoading,
+  //   isRightNetwork
+  // ] = useNetworkId(provider);
+  // const [staticProvider] = useRpcProvider(config.network.rpc);
   const [
     provider,
     signIn,
@@ -67,33 +68,20 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
     networkId,
     isNetworkIdLoading,
     isRightNetwork
-  ] = useNetworkId(provider, chainId);
+  ] = useNetworkId(provider);
   const [account, isAccountLoading] = useAccount(provider);
-  const [, serviceProviderDataDomain, isDataDomainLoading] = useDataDomain(provider, networkId);
 
   useEffect(
     () => {
       dispatch({
         type: 'SET_CONNECTING',
         payload:
-          !!!waku ||
           isWeb3ModalConnecting ||
           isNetworkIdLoading ||
-          isAccountLoading ||
-          isDataDomainLoading
+          isAccountLoading
       });
     },
-    [dispatch, waku, isWeb3ModalConnecting, isNetworkIdLoading, isAccountLoading, isDataDomainLoading]
-  );
-
-  useEffect(
-    () => {
-      dispatch({
-        type: 'SET_WAKU',
-        payload: waku
-      });
-    },
-    [dispatch, waku]
+    [dispatch, isWeb3ModalConnecting, isNetworkIdLoading, isAccountLoading]
   );
 
   useEffect(
@@ -116,15 +104,15 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
     [dispatch, signOut]
   );
 
-  useEffect(
-    () => {
-      dispatch({
-        type: 'SET_STATIC_PROVIDER',
-        payload: staticProvider
-      });
-    },
-    [dispatch, staticProvider]
-  );
+  // useEffect(
+  //   () => {
+  //     dispatch({
+  //       type: 'SET_STATIC_PROVIDER',
+  //       payload: staticProvider
+  //     });
+  //   },
+  //   [dispatch, staticProvider]
+  // );
 
   useEffect(
     () => {
@@ -157,18 +145,10 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
     })
   }, [dispatch, account]);
 
-  useEffect(() => {
-    dispatch({
-      type: 'SET_SERVICE_PROVIDER',
-      payload: serviceProviderDataDomain
-    })
-  }, [dispatch, serviceProviderDataDomain]);
-
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         {children}
-
       </DispatchContext.Provider>
     </StateContext.Provider>
   );

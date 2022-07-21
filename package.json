@@ -3,8 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@protobuf-ts/plugin": "^2.6.0",
-    "@protobuf-ts/runtime": "^2.5.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^14.1.1",
@@ -30,7 +28,6 @@
     "grommet": "^2.23.0",
     "grommet-icons": "^4.7.0",
     "https-browserify": "^1.0.0",
-    "js-waku": "^0.24.0",
     "leaflet": "^1.8.0",
     "luxon": "^2.4.0",
     "os-browserify": "^0.3.0",
@@ -54,12 +51,8 @@
     "start": "cra-webpack-rewired start",
     "build": "cra-webpack-rewired build",
     "test": "cra-webpack-rewired test",
-    "protoc:libs": "cp -pR ./node_modules/@windingtree/stays-models/dist/proto/*.proto ./src/proto/",
-    "protoc:local": "protoc --ts_out ./src/proto --proto_path ./src/proto ./src/proto/*.proto",
-    "prepublish": "yarn protoc:libs && yarn protoc:local && yarn typechain:videre",
-    "typechain:videre": "npx typechain --target ethers-v5 --out-dir ./src/typechain-videre './node_modules/@windingtree/videre-contracts/artifacts/contracts/**/*.json'",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "commit": "git-cz -S"
   },
   "eslintConfig": {
     "extends": [
@@ -75,8 +68,7 @@
           "import/no-anonymous-default-export": "off"
         }
       }
-    ],
-    "ignorePatterns": ["*/proto/*"]
+    ]
   },
   "browserslist": {
     "production": [

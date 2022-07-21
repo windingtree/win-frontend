@@ -7,14 +7,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Logger from "../utils/logger";
 import { MessageBox } from "./MessageBox";
 import { useWindowsDimension } from "../hooks/useWindowsDimension";
-import { sendMessage } from "../utils/waku";
-import { useAppState } from "../store";
-import { geoToH3, kRing } from 'h3-js';
-// import { Ask } from '../proto/ask';
-import { Ping } from "../proto/pingpong";
-import { utils } from "@windingtree/videre-sdk";
-import { videreConfig } from "../config";
-// import { Close } from "grommet-icons";
 
 const logger = Logger('Search');
 const today = DateTime.local().toMillis();
@@ -55,9 +47,8 @@ export const Search: React.FC<{
   center: LatLngTuple,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,
   open: boolean
-}> = ({ onSubmit, center,setOpen,open }) => {
+}> = ({ onSubmit, center, setOpen, open }) => {
   const navigate = useNavigate();
-  const { waku } = useAppState();
   const { winWidth } = useWindowsDimension();
   const { search } = useLocation();
 
@@ -76,9 +67,15 @@ export const Search: React.FC<{
       logger.info('requst map')
       setLoading(true);
       setError(undefined);
+
       try {
+        const searchValue = params.get('searchValue')
+        if (searchValue === null || searchValue === '') {
+          setLoading(false);
+          return
+        }
         const res = await axios.request({
-          url: `https://nominatim.openstreetmap.org/search?format=json&q=${params.get('searchValue') ?? ''}`,
+          url: `https://nominatim.openstreetmap.org/search?format=json&q=${searchValue}`,
           method: 'GET'
         })
 
@@ -117,17 +114,6 @@ export const Search: React.FC<{
     [searchValue, checkInCheckOut, numSpacesReq, numAdults, numChildren, navigate]
   );
 
-  const handleSendMessage = useCallback(async () => {
-    const h3 = geoToH3(center[0], center[1], utils.constants.DefaultH3Resolution);
-    const h3Indexes = kRing(h3, utils.constants.DefaultRingSize)
-    const ping: Ping = {}
-
-    await Promise.all([
-      // ...h3Indexes.map((h) => sendMessage(waku, Ask, ask, utils.generateTopic({ ...videreConfig, topic: 'ask' }, h))),
-      ...h3Indexes.map((h) => sendMessage(waku, Ping, ping, utils.generateTopic({ ...videreConfig, topic: 'ping' }, h)))
-    ])
-  }, [center, waku])
-
   const handleDateChange = ({ value }: { value: string[] }) => {
     const checkInisInPast = today > DateTime.fromISO(value[0]).toMillis()
     const checkOutisInPast = tomorrow > DateTime.fromISO(value[1]).toMillis()
@@ -150,10 +136,6 @@ export const Search: React.FC<{
   useEffect(() => {
     handleMapSearch()
   }, [search, handleMapSearch]);
-
-  useEffect(() => {
-    handleSendMessage()
-  }, [center, handleSendMessage]);
 
   return (
     <Form

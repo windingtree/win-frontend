@@ -19,11 +19,6 @@ export const mainReducer = (state: State, action: Action): State => {
           ...state,
           isConnecting: action.payload
         };
-      case 'SET_WAKU':
-        return {
-          ...state,
-          waku: action.payload
-        };
       case 'SET_STATIC_PROVIDER':
         return {
           ...state,
@@ -111,7 +106,10 @@ const fakeFacilities: Facility[] = [
 const initialState: State = {
   isConnecting: true,
   isRightNetwork: true,
-  facilities:[]
+  facilities:[],
+  authentication: {
+    timestamp: 0
+  },
 };
 
 export const combineReducers = (

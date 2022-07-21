@@ -7,16 +7,11 @@ All dependencies have to be installed via `yarn` from the root of repository.
 
 ## Development
 
-Create proto folder in `src/` and run `yarn`
-```bash
-mkdir src/proto
-yarn
-```
-
 Create  `.env` file in the root of repository with content like in the file `.env.example`. To start project locally please rum this command.
 ```bash
 yarn start
 ```
+
 ## Storybook
 
 Runs a storybook UI at http://localhost:6006/
@@ -28,6 +23,17 @@ Create  `.env` file in the root of repository with content like in the file `.en
 ```bash
 yarn start
 ```
+
+## Commits
+
+To commit to the repository after staging the commit:
+
+```bash
+yarn commit
+```
+
+Select the appropriate type of commit message, any issues to close, and note any breaking
+changes.
 ## Production build
 
 ```bash
