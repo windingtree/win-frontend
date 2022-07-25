@@ -54,7 +54,7 @@ export const mainReducer = (state: State, action: Action): State => {
 
 const fakeFacilities: Facility[] = [
   {
-    id:'1',
+    id: '1',
     name: 'Fake Name n1',
     description: 'Fake description 3',
     emails: [],
@@ -65,12 +65,24 @@ const fakeFacilities: Facility[] = [
       longitude: 14.437800,
     },
     photos: [],
-    spaces: []
+    spaces: [
+      {
+        id: '1',
+        name: 'space 1',
+        description: 'space 1 description',
+        // amenities: Amenity[];
+        capacity: 5,
+        guestsNumber: 3,
+        beds: 1,
+        price: '100',
+        // type: Spa,
+      }
+    ]
     // policies?: Policies,
     // connectivity?: Connectivity
   },
   {
-    id:'2',
+    id: '2',
     name: 'Fake Name n2',
     description: 'Fake description 3',
     emails: [],
@@ -86,7 +98,7 @@ const fakeFacilities: Facility[] = [
     // connectivity?: Connectivity
   },
   {
-    id:'3',
+    id: '3',
     name: 'Fake Name n3',
     description: 'Fake description 3',
     emails: [],
@@ -106,7 +118,7 @@ const fakeFacilities: Facility[] = [
 const initialState: State = {
   isConnecting: true,
   isRightNetwork: true,
-  facilities:[],
+  facilities: [...fakeFacilities],
   authentication: {
     timestamp: 0
   },

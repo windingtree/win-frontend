@@ -13,6 +13,7 @@ import { Contacts } from './pages/Contacts';
 import { Legal } from './pages/Legal';
 import { Security } from './pages/Security';
 import { Developers } from './pages/Developers';
+import { Checkout } from './pages/Checkout';
 
 export interface ProtectedProps {
   component: ReactNode;
@@ -101,6 +102,12 @@ export const pagesRoutesConfig: Routes = [
     element: <Developers />,
     title: "Developers",
     // label: "Developers",
+  },
+  {
+    path: "/checkout/:id",
+    element: <Checkout />,
+    title: "Checkout",
+    // label: "Checkout",
   }
 
 ];
