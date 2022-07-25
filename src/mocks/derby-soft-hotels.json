@@ -1,0 +1,3496 @@
+{
+  "data": [
+    {
+      "id": "627e112355474f716311e3eb",
+      "providerId": "DERBYSOFT",
+      "providerHotelId": "GOH202",
+      "hotelName": "This is a test hotel",
+      "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
+      "location": {
+        "coordinates": [
+          -68.387982,
+          34.748995
+        ],
+        "type": "Point"
+      },
+      "addresses": [
+        {
+          "addressLine": [
+            "14800 Landmark Blvd, Suite 640"
+          ],
+          "country": "China",
+          "city": "Nanjing",
+          "state": "GA",
+          "postalCode": "30346",
+          "premise": ""
+        },
+        {
+          "addressLine": null,
+          "country": "US",
+          "city": "abc",
+          "state": "CO",
+          "postalCode": "12345",
+          "premise": "123"
+        }
+      ],
+      "phones": [
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3957700"
+        },
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3929503"
+        }
+      ],
+      "emails": [
+        "test@derbysoft.com"
+      ],
+      "roomTypes": [
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "PROMO",
+            "rateName": "Promote Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "AD100P_100P": "Non Refundable"
+          }
+        },
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "King Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 0
+          },
+          "media": null,
+          "customData": {
+            "roomId": "K1",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "King Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "Family Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 2
+          },
+          "media": null,
+          "customData": {
+            "roomId": "FM4",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Family Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        }
+      ],
+      "checkInOutPolicy": {
+        "checkOutTime": "11:00:00",
+        "checkInTime": "15:00:00"
+      },
+      "rating": 3,
+      "customData": {
+        "supplierId": "GOHOTEL",
+        "status": "Actived",
+        "ariType": "LOS",
+        "timezone": "America/Los_Angeles",
+        "rateType": "AmountBeforeTax",
+        "maxChildAge": null,
+        "brandCode": "Hampton Inn",
+        "chainCode": "Hilton",
+        "childRateType": null,
+        "settings": {}
+      }
+    },
+    {
+      "id": "627e112355474f716311e3ed",
+      "providerId": "DERBYSOFT",
+      "providerHotelId": "GOH102",
+      "hotelName": "This is a test hotel",
+      "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
+      "location": {
+        "coordinates": [
+          -77.387982,
+          34.748995
+        ],
+        "type": "Point"
+      },
+      "addresses": [
+        {
+          "addressLine": [
+            "14800 Landmark Blvd, Suite 640"
+          ],
+          "country": "China",
+          "city": "Nanjing",
+          "state": "GA",
+          "postalCode": "30346",
+          "premise": ""
+        },
+        {
+          "addressLine": null,
+          "country": "US",
+          "city": "abc",
+          "state": "CO",
+          "postalCode": "12345",
+          "premise": "123"
+        }
+      ],
+      "phones": [
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3957700"
+        },
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3929503"
+        }
+      ],
+      "emails": [
+        "test@derbysoft.com"
+      ],
+      "roomTypes": [
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "PROMO",
+            "rateName": "Promote Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "AD100P_100P": "Non Refundable"
+          }
+        },
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "King Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 0
+          },
+          "media": null,
+          "customData": {
+            "roomId": "K1",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "King Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "Family Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 2
+          },
+          "media": null,
+          "customData": {
+            "roomId": "FM4",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Family Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        }
+      ],
+      "checkInOutPolicy": {
+        "checkOutTime": "11:00:00",
+        "checkInTime": "15:00:00"
+      },
+      "rating": 3,
+      "customData": {
+        "supplierId": "GOHOTEL",
+        "status": "Actived",
+        "ariType": "Daily",
+        "timezone": "America/Los_Angeles",
+        "rateType": "AmountBeforeTax",
+        "maxChildAge": null,
+        "brandCode": "Hampton Inn",
+        "chainCode": "Hilton",
+        "childRateType": null,
+        "settings": {}
+      }
+    },
+    {
+      "id": "627e112355474f716311e3ec",
+      "providerId": "DERBYSOFT",
+      "providerHotelId": "GOH201",
+      "hotelName": "This is a test hotel",
+      "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
+      "location": {
+        "coordinates": [
+          -71.387982,
+          34.748995
+        ],
+        "type": "Point"
+      },
+      "addresses": [
+        {
+          "addressLine": [
+            "14800 Landmark Blvd, Suite 640"
+          ],
+          "country": "China",
+          "city": "Nanjing",
+          "state": "GA",
+          "postalCode": "30346",
+          "premise": ""
+        },
+        {
+          "addressLine": null,
+          "country": "US",
+          "city": "abc",
+          "state": "CO",
+          "postalCode": "12345",
+          "premise": "123"
+        }
+      ],
+      "phones": [
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3957700"
+        },
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3929503"
+        }
+      ],
+      "emails": [
+        "test@derbysoft.com"
+      ],
+      "roomTypes": [
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "PROMO",
+            "rateName": "Promote Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "AD100P_100P": "Non Refundable"
+          }
+        },
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "King Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 0
+          },
+          "media": null,
+          "customData": {
+            "roomId": "K1",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "King Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "Family Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 2
+          },
+          "media": null,
+          "customData": {
+            "roomId": "FM4",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Family Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        }
+      ],
+      "checkInOutPolicy": {
+        "checkOutTime": "11:00:00",
+        "checkInTime": "15:00:00"
+      },
+      "rating": 3,
+      "customData": {
+        "supplierId": "GOHOTEL",
+        "status": "Actived",
+        "ariType": "LOS",
+        "timezone": "Asia/Shanghai",
+        "rateType": "AmountAfterTax",
+        "maxChildAge": null,
+        "brandCode": "Hampton Inn",
+        "chainCode": "Hilton",
+        "childRateType": null,
+        "settings": {}
+      }
+    },
+    {
+      "id": "627e112355474f716311e3ef",
+      "providerId": "DERBYSOFT",
+      "providerHotelId": "GOH203",
+      "hotelName": "This is a test hotel",
+      "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
+      "location": {
+        "coordinates": [
+          -65.387982,
+          34.748995
+        ],
+        "type": "Point"
+      },
+      "addresses": [
+        {
+          "addressLine": [
+            "14800 Landmark Blvd, Suite 640"
+          ],
+          "country": "China",
+          "city": "Nanjing",
+          "state": "GA",
+          "postalCode": "30346",
+          "premise": ""
+        },
+        {
+          "addressLine": null,
+          "country": "US",
+          "city": "abc",
+          "state": "CO",
+          "postalCode": "12345",
+          "premise": "123"
+        }
+      ],
+      "phones": [
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3957700"
+        },
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3929503"
+        }
+      ],
+      "emails": [
+        "test@derbysoft.com"
+      ],
+      "roomTypes": [
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "PROMO",
+            "rateName": "Promote Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "AD100P_100P": "Non Refundable"
+          }
+        },
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "King Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 0
+          },
+          "media": null,
+          "customData": {
+            "roomId": "K1",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "King Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "Family Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 2
+          },
+          "media": null,
+          "customData": {
+            "roomId": "FM4",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Family Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        }
+      ],
+      "checkInOutPolicy": {
+        "checkOutTime": "11:00:00",
+        "checkInTime": "15:00:00"
+      },
+      "rating": 3,
+      "customData": {
+        "supplierId": "GOHOTEL",
+        "status": "Actived",
+        "ariType": "LOS",
+        "timezone": "America/Los_Angeles",
+        "rateType": "AmountBeforeTax",
+        "maxChildAge": null,
+        "brandCode": "Hampton Inn",
+        "chainCode": "Hilton",
+        "childRateType": null,
+        "settings": {}
+      }
+    },
+    {
+      "id": "627e112355474f716311e3ee",
+      "providerId": "DERBYSOFT",
+      "providerHotelId": "GOH103",
+      "hotelName": "This is a test hotel",
+      "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
+      "location": {
+        "coordinates": [
+          -74.387982,
+          34.748995
+        ],
+        "type": "Point"
+      },
+      "addresses": [
+        {
+          "addressLine": [
+            "14800 Landmark Blvd, Suite 640"
+          ],
+          "country": "China",
+          "city": "Nanjing",
+          "state": "GA",
+          "postalCode": "30346",
+          "premise": ""
+        },
+        {
+          "addressLine": null,
+          "country": "US",
+          "city": "abc",
+          "state": "CO",
+          "postalCode": "12345",
+          "premise": "123"
+        }
+      ],
+      "phones": [
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3957700"
+        },
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3929503"
+        }
+      ],
+      "emails": [
+        "test@derbysoft.com"
+      ],
+      "roomTypes": [
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "PROMO",
+            "rateName": "Promote Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "AD100P_100P": "Non Refundable"
+          }
+        },
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "King Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 0
+          },
+          "media": null,
+          "customData": {
+            "roomId": "K1",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "King Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "Family Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Refrigerator Upon Request",
+              "description": "Refrigerator Upon Request",
+              "otaCode": "88"
+            },
+            {
+              "name": "Microwave Oven (Upon Request)",
+              "description": "Microwave Oven (Upon Request)",
+              "otaCode": "68"
+            },
+            {
+              "name": "Heavenly® Crib Available",
+              "description": "Heavenly® Crib Available",
+              "otaCode": "26"
+            },
+            {
+              "name": "Data Port",
+              "description": "Data Port",
+              "otaCode": "27"
+            },
+            {
+              "name": "Work Desk and Chair",
+              "description": "Work Desk and Chair",
+              "otaCode": "28"
+            },
+            {
+              "name": "Video Games",
+              "description": "Video Games",
+              "otaCode": "254"
+            },
+            {
+              "name": "Outlet Adaptors",
+              "description": "Outlet Adaptors",
+              "otaCode": "159"
+            },
+            {
+              "name": "Rollaway Bed Available Upon Request (Charge)",
+              "description": "Rollaway Bed Available Upon Request (Charge)",
+              "otaCode": "91"
+            },
+            {
+              "name": "Personalized Voicemail",
+              "description": "Personalized Voicemail",
+              "otaCode": "118"
+            },
+            {
+              "name": "In-Room Safe",
+              "description": "In-Room Safe",
+              "otaCode": "92"
+            },
+            {
+              "name": "Wake-Up Service",
+              "description": "Wake-Up Service",
+              "otaCode": "119"
+            },
+            {
+              "name": "Hairdryer",
+              "description": "Hairdryer",
+              "otaCode": "50"
+            },
+            {
+              "name": "Complimentary Daily Newspaper",
+              "description": "Complimentary Daily Newspaper",
+              "otaCode": "73"
+            },
+            {
+              "name": "High Speed Internet Access",
+              "description": "High Speed Internet Access",
+              "otaCode": "51"
+            },
+            {
+              "name": "100% Smoke Free Guest Rooms",
+              "description": "100% Smoke Free Guest Rooms",
+              "otaCode": "74"
+            },
+            {
+              "name": "Direct Dialing",
+              "description": "Direct Dialing",
+              "otaCode": "31"
+            },
+            {
+              "name": "Iron  Ironing Board",
+              "description": "Iron  Ironing Board",
+              "otaCode": "55"
+            },
+            {
+              "name": "Coffee/Tea Maker",
+              "description": "Coffee/Tea Maker",
+              "otaCode": "19"
+            },
+            {
+              "name": "ADA Accessible Rooms Available",
+              "description": "ADA Accessible Rooms Available",
+              "otaCode": "161"
+            },
+            {
+              "name": "Entertainment Center",
+              "description": "Entertainment Center",
+              "otaCode": "184"
+            },
+            {
+              "name": "Hypo-allergenic Pillows",
+              "description": "Hypo-allergenic Pillows",
+              "otaCode": "187"
+            },
+            {
+              "name": "Smoke Detectors",
+              "description": "Smoke Detectors",
+              "otaCode": "100"
+            },
+            {
+              "name": "Alarm/Clock/Radio",
+              "description": "Alarm/Clock/Radio",
+              "otaCode": "3"
+            },
+            {
+              "name": "Air-Conditioned",
+              "description": "Air-Conditioned",
+              "otaCode": "126"
+            },
+            {
+              "name": "Cordless Telephone",
+              "description": "Cordless Telephone",
+              "otaCode": "107"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 2
+          },
+          "media": null,
+          "customData": {
+            "roomId": "FM4",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Family Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        }
+      ],
+      "checkInOutPolicy": {
+        "checkOutTime": "11:00:00",
+        "checkInTime": "15:00:00"
+      },
+      "rating": 3,
+      "customData": {
+        "supplierId": "GOHOTEL",
+        "status": "Actived",
+        "ariType": "Daily",
+        "timezone": "America/Los_Angeles",
+        "rateType": "AmountBeforeTax",
+        "maxChildAge": null,
+        "brandCode": "Hampton Inn",
+        "chainCode": "Hilton",
+        "childRateType": null,
+        "settings": {}
+      }
+    },
+    {
+      "id": "627e112355474f716311e3f0",
+      "providerId": "DERBYSOFT",
+      "providerHotelId": "GOH101",
+      "hotelName": "This is a test hotel",
+      "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
+      "location": {
+        "coordinates": [
+          -80.387982,
+          34.748995
+        ],
+        "type": "Point"
+      },
+      "addresses": [
+        {
+          "addressLine": [
+            "14800 Landmark Blvd, Suite 640"
+          ],
+          "country": "China",
+          "city": "Nanjing",
+          "state": "GA",
+          "postalCode": "30346",
+          "premise": ""
+        },
+        {
+          "addressLine": null,
+          "country": "US",
+          "city": "abc",
+          "state": "CO",
+          "postalCode": "12345",
+          "premise": "123"
+        }
+      ],
+      "phones": [
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3957700"
+        },
+        {
+          "areaCityCode": "770",
+          "countryAccessCode": "1",
+          "phoneNumber": "3929503"
+        }
+      ],
+      "emails": [
+        "test@derbysoft.com"
+      ],
+      "roomTypes": [
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Whirlpool",
+              "description": "Whirlpool in room",
+              "otaCode": "57"
+            },
+            {
+              "name": null,
+              "description": null,
+              "otaCode": "68"
+            },
+            {
+              "name": null,
+              "description": null,
+              "otaCode": "164"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "PROMO",
+            "rateName": "Promote Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "AD100P_100P": "Non Refundable"
+          }
+        },
+        {
+          "name": "Twin Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Whirlpool",
+              "description": "Whirlpool in room",
+              "otaCode": "57"
+            },
+            {
+              "name": null,
+              "description": null,
+              "otaCode": "68"
+            },
+            {
+              "name": null,
+              "description": null,
+              "otaCode": "164"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 1
+          },
+          "media": null,
+          "customData": {
+            "roomId": "T2",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Twin Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "King Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": null,
+              "description": null,
+              "otaCode": "68"
+            },
+            {
+              "name": null,
+              "description": null,
+              "otaCode": "102"
+            },
+            {
+              "name": "Desk",
+              "description": "Desks in each room",
+              "otaCode": "28"
+            },
+            {
+              "name": null,
+              "description": null,
+              "otaCode": "164"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 0
+          },
+          "media": null,
+          "customData": {
+            "roomId": "K1",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "King Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        },
+        {
+          "name": "Family Room",
+          "size": null,
+          "amenities": [
+            {
+              "name": "Family/oversized room",
+              "description": "Family/oversized room",
+              "otaCode": "185"
+            }
+          ],
+          "description": "Soak in city views in our Deluxe room, which features a well-appointed ensuite bathroom and up-to-date entertainment offerings.",
+          "maximumOccupancy": {
+            "adults": 2,
+            "children": 2
+          },
+          "media": null,
+          "customData": {
+            "roomId": "FM4",
+            "rateId": "BAR",
+            "rateName": "Best available Rate",
+            "rateDescription": "Begin your day with a hearty meal.",
+            "roomName": "Family Room"
+          },
+          "policies": {
+            "4PM0D1N_100P": "cancel before 4PM of arrival date is free"
+          }
+        }
+      ],
+      "checkInOutPolicy": {
+        "checkOutTime": "11:00:00",
+        "checkInTime": "15:00:00"
+      },
+      "rating": 3,
+      "customData": {
+        "supplierId": "GOHOTEL",
+        "status": "Actived",
+        "ariType": "Daily",
+        "timezone": "Asia/Shanghai",
+        "rateType": "AmountAfterTax",
+        "maxChildAge": null,
+        "brandCode": "Hampton Inn",
+        "chainCode": "Hilton",
+        "childRateType": null,
+        "settings": {}
+      }
+    }
+  ],
+  "status": "success"
+}

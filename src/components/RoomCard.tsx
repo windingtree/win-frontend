@@ -1,5 +1,5 @@
-import type { Space } from '../store/actions';
-import { Box, Text, Image, Grid, Button, Notification, Carousel, Anchor } from 'grommet';
+import type { Room } from '../store/actions';
+import { Box, Text, Image, Grid, Button, Notification, Carousel } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppState } from '../store';
 import { useState } from 'react';
@@ -37,11 +37,11 @@ const ResponsiveArea = (winWidth: number): any[] => {
   ];
 };
 
-export const SpaceCard: React.FC<{
-  space: Space,
+export const RoomCard: React.FC<{
+  room: Room,
   // numberOfDays: number,
   facilityId: string
-}> = ({ facilityId, space }) => {
+}> = ({ facilityId, room }) => {
   const { checkout } = useAppState();
   const { winWidth } = useWindowsDimension();
   const dispatch = useAppDispatch();
@@ -57,7 +57,7 @@ export const SpaceCard: React.FC<{
       type: 'SET_CHECKOUT',
       payload: {
         id,
-        spaceId: space.id,
+        spaceId: room.id,
         facilityId,
         from: 'today',
         to: 'tomorrow',
@@ -92,9 +92,9 @@ export const SpaceCard: React.FC<{
           <Carousel fill>
             <Image
               fit="cover"
-            // src={space.media.logo}
+            // src={room.media.logo}
             />
-            {/* {space.media.images?.map((img, i) =>
+            {/* {room.media.images?.map((img, i) =>
               <Image
                 key={i}
                 fit="cover"
@@ -105,21 +105,21 @@ export const SpaceCard: React.FC<{
         </Box>
         <Box gridArea="header">
           <Text size='xxlarge' margin={{ bottom: 'xsmall' }}>
-            {space.name}
+            {room.name}
           </Text>
           <Text size='medium' margin={{ bottom: 'xsmall' }}>
-            {space.beds} {space.beds > 1 ? 'beds' : 'bed'}
+            {room.beds} {room.beds > 1 ? 'beds' : 'bed'}
           </Text>
         </Box>
         <Box direction='column' justify='start' gridArea="main">
           <Text size='large'>
-            {space.description}
+            {room.description}
           </Text>
         </Box>
         <Box direction='row' justify='between' align='center' gridArea="action">
           <Text size='large'>{numberOfDays} nights, {roomsNumber} room{roomsNumber > 1 ? 's' : ''}</Text>
           <Button
-            label={'Book for ' + '$$$' + ' xDAI'}
+            label={'Book for $$$ xDAI'}
             onClick={() => {
               handleBook();
             }}

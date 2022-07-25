@@ -18,7 +18,7 @@ export interface Location {
 export enum SpaceType {
 
 }
-export interface Space {
+export interface Room {
   id: string;
   name: string;
   description: string;
@@ -34,14 +34,14 @@ export interface Space {
 
 export interface Facility {
   id: string;
-  name: string;
+  hotelName: string;
   description: string;
   emails: [],
   phones: [],
   uris: [],
   location: Location,
   photos: string[],
-  spaces: Space[]
+  roomTypes: Room[]
 }
 
 export interface CheckOut {

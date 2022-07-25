@@ -7,6 +7,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Logger from "../utils/logger";
 import { MessageBox } from "./MessageBox";
 import { useWindowsDimension } from "../hooks/useWindowsDimension";
+import { useAppDispatch } from "../store";
+//@ts-ignore
+import mockdata from '../mocks/derby-soft-hotels.json'
 
 const logger = Logger('Search');
 const today = DateTime.local().toMillis();
@@ -50,6 +53,7 @@ export const Search: React.FC<{
 }> = ({ onSubmit, center, setOpen, open }) => {
   const navigate = useNavigate();
   const { winWidth } = useWindowsDimension();
+  const dispatch = useAppDispatch();
   const { search } = useLocation();
 
   const [searchValue, setSearchValue] = useState<string>('');
@@ -136,6 +140,23 @@ export const Search: React.FC<{
   useEffect(() => {
     handleMapSearch()
   }, [search, handleMapSearch]);
+
+  // todo: should send API to win-backend and save response to store/local-storage
+  // dep/input: geo center point
+  useEffect(() => {
+    console.log('data', mockdata)
+    mockdata.data.map(
+      record => dispatch({
+        type: 'SET_RECORD',
+        payload: {
+          name: 'facilities',
+          record: {
+            ...record
+          }
+        }
+      })
+    );
+  }, [search]);
 
   return (
     <Form

@@ -26,7 +26,7 @@ export const Results: React.FC<{
   >
     {facilities.map((facility) => <Card key={facility.id} pad='small' background={'white'}>
       <CardHeader>
-        {facility.name}
+        {facility.hotelName}
       </CardHeader>
       <CardBody pad={'small'}>
         {facility.description}

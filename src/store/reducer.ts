@@ -1,5 +1,5 @@
 import type { Reducer } from 'react';
-import type { Action, Facility, State } from './actions';
+import type { Action, State } from './actions';
 import { useReducer } from 'react';
 import { web3ModalReducer } from './web3ModalReducer';
 import { recordsReducer } from './recordsReducer';
@@ -52,73 +52,10 @@ export const mainReducer = (state: State, action: Action): State => {
   }
 };
 
-const fakeFacilities: Facility[] = [
-  {
-    id: '1',
-    name: 'Fake Name n1',
-    description: 'Fake description 3',
-    emails: [],
-    phones: [],
-    uris: [],
-    location: {
-      latitude: 50.075539,
-      longitude: 14.437800,
-    },
-    photos: [],
-    spaces: [
-      {
-        id: '1',
-        name: 'space 1',
-        description: 'space 1 description',
-        // amenities: Amenity[];
-        capacity: 5,
-        guestsNumber: 3,
-        beds: 1,
-        price: '100',
-        // type: Spa,
-      }
-    ]
-    // policies?: Policies,
-    // connectivity?: Connectivity
-  },
-  {
-    id: '2',
-    name: 'Fake Name n2',
-    description: 'Fake description 3',
-    emails: [],
-    phones: [],
-    uris: [],
-    location: {
-      latitude: 50.076301,
-      longitude: 14.451210,
-    },
-    photos: [],
-    spaces: []
-    // policies?: Policies,
-    // connectivity?: Connectivity
-  },
-  {
-    id: '3',
-    name: 'Fake Name n3',
-    description: 'Fake description 3',
-    emails: [],
-    phones: [],
-    uris: [],
-    location: {
-      latitude: 50.073437,
-      longitude: 14.447431,
-    },
-    photos: [],
-    spaces: []
-    // policies?: Policies,
-    // connectivity?: Connectivity
-  }
-]
-
 const initialState: State = {
   isConnecting: true,
   isRightNetwork: true,
-  facilities: [...fakeFacilities],
+  facilities: [],
   authentication: {
     timestamp: 0
   },
