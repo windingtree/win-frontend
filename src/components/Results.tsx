@@ -13,28 +13,33 @@ export const Results: React.FC<{
   const navigate = useNavigate();
 
   return <Box
-    gap='0.5rem'
+    fill={true}
+    overflow='hidden'
     style={{
       position: 'absolute',
       zIndex: '1',
-      background: 'white',
       width: '25rem',
+      height: '95vh',
       margin: '1rem',
       right: 0,
       backgroundColor: 'rgba(0, 0, 0, 0)'
     }}
   >
-    {facilities.map((facility) => <Card key={facility.id} pad='small' background={'white'}>
-      <CardHeader>
-        {facility.hotelName}
-      </CardHeader>
-      <CardBody pad={'small'}>
-        {facility.description}
-      </CardBody>
-      <CardFooter justify="end">
-        <Button label='book' onClick={() => navigate(`/facility/${facility.id}`)} />
-      </CardFooter>
-    </Card>
-    )}
+    <Box flex={true} overflow='auto'>
+      <Box gap='0.5rem' flex={false}>
+        {facilities.map((facility) => <Card key={facility.id} pad='small' background={'white'}>
+          <CardHeader>
+            {facility.hotelName}
+          </CardHeader>
+          <CardBody pad={'small'}>
+            {facility.description.substring(0,80)+ '...'}
+          </CardBody>
+          <CardFooter justify="end">
+            <Button label='book' onClick={() => navigate(`/facility/${facility.id}`)} />
+          </CardFooter>
+        </Card>
+        )}
+      </Box>
+    </Box>
   </Box>;
 };
