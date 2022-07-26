@@ -103,7 +103,7 @@ export const MapBox: React.FC<{
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {facilities && facilities.length > 0 ? (facilities as any[]).map((f) =>
-          <Marker icon={pinIcon} position={[f.location.latitude, f.location.longitude]}>
+          <Marker key={f.id} icon={pinIcon} position={[f.location.coordinates[0], f.location.coordinates[1]]}>
             <Popup>
               {f.name} <br /> Easily customizable.
             </Popup>

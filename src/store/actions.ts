@@ -15,22 +15,44 @@ export interface Location {
   latitude: number,
   longitude: number,
 }
+export enum SpaceType {
 
-export interface Space {
+}
+export interface Room {
   id: string;
+  name: string;
+  description: string;
+  // amenities: Amenity[];
+  capacity: number;
+  guestsNumber: number;
+  beds: number;
+  price: string;
+  type?: SpaceType;
+  // media: MediaListReference;
   [key: string]: unknown;
 }
 
 export interface Facility {
   id: string;
-  name: string;
+  hotelName: string;
   description: string;
   emails: [],
   phones: [],
   uris: [],
   location: Location,
-  photos: [],
-  spaces: Space[]
+  photos: string[],
+  roomTypes: Room[]
+}
+
+export interface CheckOut {
+  id?: string;
+  spaceId: string;
+  facilityId: string;
+  from: string;
+  to: string;
+  roomsNumber: number;
+  timestamp: number;
+  // [key: string]: unknown;
 }
 
 export interface State {
@@ -48,6 +70,7 @@ export interface State {
     token?: string;
     timestamp: number;
   };
+  checkout?: CheckOut;
   [key: string]: unknown | GenericStateRecord[];
 }
 
@@ -127,7 +150,13 @@ export interface SetAuthenticationTokenAction {
   }
 }
 
+export interface SetCheckOutAction {
+  type: 'SET_CHECKOUT';
+  payload: CheckOut;
+}
+
 export type Action =
+  | SetCheckOutAction
   | SetAuthenticationTokenAction
   | SetConnectingAction
   | SetStaticProviderAction
