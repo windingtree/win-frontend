@@ -1,4 +1,4 @@
-import type { Room } from '../store/actions';
+import type { Room } from '../store/types';
 import { Box, Text, Image, Grid, Button, Notification, Carousel } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppState } from '../store';
@@ -57,12 +57,13 @@ export const RoomCard: React.FC<{
       type: 'SET_CHECKOUT',
       payload: {
         id,
-        spaceId: room.id,
+        spaceId: room.customData.roomId,
         facilityId,
         from: 'today',
         to: 'tomorrow',
         roomsNumber: 2,
-        timestamp: 0,      }
+        timestamp: 0,
+      }
     });
     navigate(`/checkout/${id}`)
   }
@@ -108,7 +109,7 @@ export const RoomCard: React.FC<{
             {room.name}
           </Text>
           <Text size='medium' margin={{ bottom: 'xsmall' }}>
-            {room.beds} {room.beds > 1 ? 'beds' : 'bed'}
+            {room.maximumOccupancy.adults}  {room.maximumOccupancy.adults > 1 ? 'adults' : 'adult'}, {room.maximumOccupancy.children} {room.maximumOccupancy.children > 1 ? 'children' : 'child'}
           </Text>
         </Box>
         <Box direction='column' justify='start' gridArea="main">

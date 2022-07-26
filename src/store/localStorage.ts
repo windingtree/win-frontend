@@ -1,4 +1,5 @@
-import type { Action, State } from './actions';
+import type { Action } from './actions';
+import type { State } from './types';
 import { safeObjectStringify } from '../utils/objects';
 
 export const UNKNOWN_LOCAL_STORAGE_ERROR = 'Unknown localStorage error';

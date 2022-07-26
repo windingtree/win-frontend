@@ -8,7 +8,6 @@ export const Facility = () => {
   const { isConnecting, facilities } = useAppState();
   const facility = useMemo(() => facilities.find(f => '/facility/' + f.id === window.location.pathname), [facilities])
 
-  const hasPhotos = facility !== undefined && facility.photos && facility.photos.length > 0
 
   return (
     <PageWrapper
@@ -28,7 +27,6 @@ export const Facility = () => {
             <Image
               height={300}
               width={300}
-              src={hasPhotos ? facility.photos[0] : ''}
             />
             <Box>
               <Text weight={500} size='1rem' margin='small'>

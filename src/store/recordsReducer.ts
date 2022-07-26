@@ -1,4 +1,5 @@
-import type { Action, State, GenericStateRecord } from './actions';
+import type { Action } from './actions';
+import type { State, GenericStateRecord } from './types';
 
 export const recordsReducer = (state: State, action: Action): State => {
   let records: GenericStateRecord[];

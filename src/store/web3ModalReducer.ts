@@ -1,4 +1,5 @@
-import type { Action, State } from './actions';
+import type { Action } from './actions';
+import type { State } from './types';
 
 export const web3ModalReducer = (state: State, action: Action): State => {
   const type = action.type;

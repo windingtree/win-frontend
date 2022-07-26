@@ -1,5 +1,6 @@
 import type { Reducer } from 'react';
-import type { Action, State } from './actions';
+import type { Action } from './actions';
+import type { State } from './types';
 import { useReducer } from 'react';
 import { web3ModalReducer } from './web3ModalReducer';
 import { recordsReducer } from './recordsReducer';
