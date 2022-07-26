@@ -5,74 +5,7 @@ import type {
   Web3ModalSignInFunction,
   Web3ModalSignOutFunction
 } from '../hooks/useWeb3Modal';
-
-export interface GenericStateRecord {
-  id: string;
-  [key: string]: unknown;
-}
-
-export interface Location {
-  latitude: number,
-  longitude: number,
-}
-export enum SpaceType {
-
-}
-export interface Room {
-  id: string;
-  name: string;
-  description: string;
-  // amenities: Amenity[];
-  capacity: number;
-  guestsNumber: number;
-  beds: number;
-  price: string;
-  type?: SpaceType;
-  // media: MediaListReference;
-  [key: string]: unknown;
-}
-
-export interface Facility {
-  id: string;
-  hotelName: string;
-  description: string;
-  emails: [],
-  phones: [],
-  uris: [],
-  location: Location,
-  photos: string[],
-  roomTypes: Room[]
-}
-
-export interface CheckOut {
-  id?: string;
-  spaceId: string;
-  facilityId: string;
-  from: string;
-  to: string;
-  roomsNumber: number;
-  timestamp: number;
-  // [key: string]: unknown;
-}
-
-export interface State {
-  isConnecting: boolean;
-  staticProvider?: StaticProvider;
-  provider?: Web3ModalProvider;
-  signIn?: Web3ModalSignInFunction;
-  signOut?: Web3ModalSignOutFunction;
-  networkId?: number;
-  isRightNetwork: boolean;
-  account?: string;
-  serviceProviderDataDomain?: TypedDataDomain;
-  facilities: Facility[];
-  authentication: {
-    token?: string;
-    timestamp: number;
-  };
-  checkout?: CheckOut;
-  [key: string]: unknown | GenericStateRecord[];
-}
+import { CheckOut, GenericStateRecord } from "./types";
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING',
