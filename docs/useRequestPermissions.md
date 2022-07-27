@@ -26,4 +26,3 @@ export const myComponent = () => {
 ```
 
 Clicking on the button will open to the Metamask browser extension accounts selection pop-up.
-

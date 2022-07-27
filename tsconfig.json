@@ -17,6 +17,6 @@
     "composite": true,
     "skipLibCheck": true
   },
-  "include": ["./src", "./test", "./swagger"],
+  "include": ["./src", "./test", "./swagger", "./src/mocks/derby-soft-hotels.json"],
   "types": ["reflect-metadata", "swagger-express-ts"]
 }

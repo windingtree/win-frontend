@@ -11,8 +11,8 @@ export const Contacts = () => {
         }
       ]}
     >
-      <Box align='center' overflow='hidden'>
-        <Text weight={500} size='2rem' margin='small'>
+      <Box align="center" overflow="hidden">
+        <Text weight={500} size="2rem" margin="small">
           Contacts
         </Text>
       </Box>

@@ -111,6 +111,7 @@ console.log(state);
 ## Payload validation
 
 Reducer fails when:
+
 - `payload.name` not provided
 - `payload.record` not provided (SET_RECORD case)
 - `payload.record.id` not provided (SET_RECORD case)

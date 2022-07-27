@@ -17,18 +17,16 @@ export const PageWrapper = ({ children, breadcrumbs, kind }: PageWrapperProps) =
   const { isConnecting, isRightNetwork } = useAppState();
 
   return (
-    <Page height={{ min: '75vh' }} kind={kind ?? 'narrow'}>
-      <PageContent pad='none'>
-        <Breadcrumbs
-          breadcrumbs={breadcrumbs}
-          size={size}
-        />
-        <Box fill='horizontal'>
-          <MessageBox loading type='info' show={isConnecting}>
+    <Page height={{ min: '75vh' }} margin={{ bottom: '1rem' }} kind={kind ?? 'narrow'}>
+      <PageContent pad="none">
+        <Breadcrumbs breadcrumbs={breadcrumbs} size={size} />
+        <Box fill="horizontal">
+          <MessageBox loading type="info" show={isConnecting}>
             The Dapp is connecting
           </MessageBox>
-          <MessageBox type='warn' show={!isRightNetwork}>
-            You are connected to a wrong network. Supported networks: {config.allowedNetworks.map((n,i) => n.name + ((config.allowedNetworks.length - 1 !== i ) ? ', ': ''))}
+          <MessageBox type="warn" show={!isRightNetwork}>
+            You are connected to a wrong network. Supported networks:{' '}
+            {config.allowedNetworks.map((n, i) => n.name + (config.allowedNetworks.length - 1 !== i ? ', ' : ''))}
           </MessageBox>
         </Box>
         {children}

@@ -30,100 +30,84 @@ export interface RouteConfig {
 
 export type Routes = RouteConfig[];
 
-export const Protected = ({
-  component,
-  path = '/'
-}: ProtectedProps) => {
+export const Protected = ({ component, path = '/' }: ProtectedProps) => {
   const location = useLocation();
   const { account } = useAppState();
 
-  return (
-    <>
-      {
-        account !== undefined
-          ? component
-          : <Navigate to={path} state={{ location }} />
-      }
-    </>
-  );
+  return <>{account !== undefined ? component : <Navigate to={path} state={{ location }} />}</>;
 };
 
 export const pagesRoutesConfig: Routes = [
   {
-    path: "/",
+    path: '/',
     element: <Home />,
-    title: "Stays",
-    label: "Home",
+    title: 'Stays',
+    label: 'Home'
   },
   {
-    path: "/facility/:id",
+    path: '/facility/:id',
     element: <Facility />,
-    title: "Facility",
+    title: 'Facility'
     // label: "Facility",
   },
   {
-    path: "/bookings",
+    path: '/bookings',
     element: <Bookings />,
-    title: "Bookings",
-    label: "Bookings",
+    title: 'Bookings',
+    label: 'Bookings'
   },
   {
-    path: "/faq",
+    path: '/faq',
     element: <Faq />,
-    title: "FAQ",
-    label: "FAQ",
+    title: 'FAQ',
+    label: 'FAQ'
   },
   {
-    path: "/about",
+    path: '/about',
     element: <About />,
-    title: "About",
-    label: "About",
+    title: 'About',
+    label: 'About'
   },
   {
-    path: "/security",
+    path: '/security',
     element: <Security />,
-    title: "Security info",
-    label: "Security info",
+    title: 'Security info',
+    label: 'Security info'
   },
   {
-    path: "/legal",
+    path: '/legal',
     element: <Legal />,
-    title: "Legal info",
-    label: "Legal info",
+    title: 'Legal info',
+    label: 'Legal info'
   },
   {
-    path: "/contacts",
+    path: '/contacts',
     element: <Contacts />,
-    title: "Contacts",
-    label: "Contacts",
+    title: 'Contacts',
+    label: 'Contacts'
   },
   {
-    path: "/developers",
+    path: '/developers',
     element: <Developers />,
-    title: "Developers",
+    title: 'Developers'
     // label: "Developers",
   },
   {
-    path: "/checkout/:id",
+    path: '/checkout/:id',
     element: <Checkout />,
-    title: "Checkout",
+    title: 'Checkout'
     // label: "Checkout",
   }
-
 ];
 
 export const processPagesConfig = (config: Routes): Routes =>
-  config.map(
-    (route: RouteConfig) => route.protected
+  config.map((route: RouteConfig) =>
+    route.protected
       ? {
-        ...route,
-        element: <Protected component={route.element} />
-      }
+          ...route,
+          element: <Protected component={route.element} />
+        }
       : route
   );
 
-export const AppRoutes = () => useRoutes(
-  useMemo(
-    () => processPagesConfig(pagesRoutesConfig), []
-  )
-);
+export const AppRoutes = () => useRoutes(useMemo(() => processPagesConfig(pagesRoutesConfig), []));

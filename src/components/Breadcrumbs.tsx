@@ -18,18 +18,17 @@ export const Breadcrumbs = ({ breadcrumbs, size }: BreadcrumbsProps) => {
   const navigate = useNavigate();
 
   const items = useMemo(
-    () => (breadcrumbs || []).map(
-      ({ path, label }, i) => (
+    () =>
+      (breadcrumbs || []).map(({ path, label }, i) => (
         <Anchor
           key={i}
           label={label}
-          onClick={() => path === undefined ? navigate(-1) : navigate(path)}
+          onClick={() => (path === undefined ? navigate(-1) : navigate(path))}
           icon={<FormPrevious />}
-          gap='xsmall'
-          color='black'
+          gap="xsmall"
+          color="black"
         />
-      )
-    ),
+      )),
     [navigate, breadcrumbs]
   );
 
@@ -39,8 +38,8 @@ export const Breadcrumbs = ({ breadcrumbs, size }: BreadcrumbsProps) => {
 
   return (
     <Nav
-      direction='row'
-      align='center'
+      direction="row"
+      align="center"
       margin={{
         bottom: size
       }}
