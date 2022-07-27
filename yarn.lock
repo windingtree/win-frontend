@@ -3502,6 +3502,16 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@openzeppelin/contracts-upgradeable@^4.7.1":
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.7.1.tgz#f63fc384255d6ac139e0a2561aa207fd7c14183c"
+  integrity sha512-5EFiZld3DYFd8aTL8eeMnhnaWh1/oXLXFNuFMrgF3b1DNPshF3LCyO7VR6lc+gac2URJ0BlVcZoCfkk/3MoEfg==
+
+"@openzeppelin/contracts@^4.7.1":
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.7.1.tgz#33d0a857b76b18d313e6bb6ed28cdaf367e90cfe"
+  integrity sha512-UXmAjKARsXORHlHZu5GCD7ZbRKm6nU8UHnbuT/QJJa2JEOEcbvV/X8w/sUk62Sl9VZuuljM1akrZLyAtzUgsxw==
+
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.1":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.7.tgz#58f8217ba70069cc6a73f5d7e05e85b458c150e2"
@@ -5854,6 +5864,14 @@
     "@protobuf-ts/runtime" "^2.5.0"
     ethers "^5.6.5"
     h3-js "^3.7.2"
+
+"@windingtree/win-pay@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.0.0.tgz#726b0a0990a2f7d8ff0e425ab4278afab9c05ff8"
+  integrity sha512-nlz/YXo7JP9e5RPh3t0q60QkX/ImwRGxkkqOexag1xsijJfuJaRxYAiL+tFNZWDqE0VVUvDGTdSz0vAyYPMbUg==
+  dependencies:
+    "@openzeppelin/contracts" "^4.7.1"
+    "@openzeppelin/contracts-upgradeable" "^4.7.1"
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
