@@ -1,5 +1,6 @@
-export interface Passengers {
-}
+// @todo Remove eslint disable tag when interface will be defined properly
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Passengers {}
 
 export interface Price {
   currency: string;
@@ -35,8 +36,9 @@ export interface Offers {
   [id: string]: Offer;
 }
 
-export interface PricePlans {
-}
+// @todo Remove eslint disable tag when interface will be defined properly
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface PricePlans {}
 
 export interface Address {
   country: string;

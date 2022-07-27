@@ -59,12 +59,11 @@ const initialState: State = {
   facilities: [],
   authentication: {
     timestamp: 0
-  },
+  }
 };
 
-export const combineReducers = (
-  reducers: Reducer<State, Action>[]
-): Reducer<State, Action> =>
+export const combineReducers =
+  (reducers: Reducer<State, Action>[]): Reducer<State, Action> =>
   (state: State, action: Action): State => {
     let updatedState = state;
 
@@ -79,14 +78,12 @@ export const useAppReducer = () => {
   const storedState = getState(); // Restoration of the Dapp state
 
   return useReducer(
-    combineReducers(
-      [
-        mainReducer,
-        web3ModalReducer,
-        recordsReducer,
-        storageReducer() // Always must be the last
-      ]
-    ),
+    combineReducers([
+      mainReducer,
+      web3ModalReducer,
+      recordsReducer,
+      storageReducer() // Always must be the last
+    ]),
     {
       ...initialState,
       ...storedState

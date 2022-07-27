@@ -7,11 +7,7 @@ import config from '../config';
 const logger = Logger('useGetAuth');
 const path = '/api/user/login';
 
-export type UseGetAuthHook = [
-  load: (login: string, password: string) => void,
-  loading: boolean,
-  error?: string
-];
+export type UseGetAuthHook = [load: (login: string, password: string) => void, loading: boolean, error?: string];
 
 export const useGetAuth = (): UseGetAuthHook => {
   const dispatch = useAppDispatch();
@@ -26,7 +22,7 @@ export const useGetAuth = (): UseGetAuthHook => {
       try {
         const res = await axios.post(config.api.url + path, {
           login,
-          password,
+          password
         });
         //@todo handle res errors
 
@@ -40,12 +36,12 @@ export const useGetAuth = (): UseGetAuthHook => {
         setLoading(false);
       } catch (error) {
         logger.error(error);
-        const message = (error as Error).message || 'Unknown useGetAuth error'
+        const message = (error as Error).message || 'Unknown useGetAuth error';
         setError(message);
         setLoading(false);
       }
     },
     [setError, setLoading, dispatch]
   );
-  return [load, loading, error]
+  return [load, loading, error];
 };

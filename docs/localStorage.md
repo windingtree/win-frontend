@@ -12,10 +12,7 @@ Names of properties that must be automatically stored to a localStorage should b
 
 ```typescript
 export const storageConnectorConfig: LocalStorageConnectorConfig = {
-  properties: [
-    'keys',
-    'resolverHistory',
-  ]
+  properties: ['keys', 'resolverHistory']
 };
 ```
 
@@ -28,7 +25,7 @@ This is a safe version of the `JSON.stringify` that allows serializing objects w
 ```typescript
 const obj = { zzz: 1, eee: new Error('AAA'), qqq: 'string' };
 
-console.log(safeObjectStringify(obj, 2))
+console.log(safeObjectStringify(obj, 2));
 // '{"zzz":1,"eee":{"stack":"Error: AAA\\n    at <anonymous>:1:26","message":"AAA"},"qqq":"string"}'
 ```
 
@@ -49,15 +46,13 @@ export const useAppReducer = () => {
   const storedState = getState(); // Restoration of the Dapp state
 
   return useReducer(
-    combineReducers(
-      [
-        mainReducer,
-        // anotherReducer1,
-        // anotherReducer2,
-        // anotherReducer3,
-        storageReducer() // Always must be the last
-      ]
-    ),
+    combineReducers([
+      mainReducer,
+      // anotherReducer1,
+      // anotherReducer2,
+      // anotherReducer3,
+      storageReducer() // Always must be the last
+    ]),
     {
       ...initialState,
       ...storedState

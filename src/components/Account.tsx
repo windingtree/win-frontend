@@ -29,31 +29,20 @@ export const Account: React.FC<AccountProps> = ({ account, provider }) => {
   const [balance, setBalance] = useState<string>('');
   const [notification, setNotification] = useState<boolean>(false);
 
-  const shortAccount = useMemo(
-    () => centerEllipsis(account || ''),
-    [account]
-  );
+  const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
 
-  const getBalance = useCallback(
-    () => {
-      if (provider && account) {
-        provider
-          .getBalance(account)
-          .then(balance => setBalance(utils.formatEther(balance)))
-          .catch(console.error);
-      } else {
-        setBalance('');
-      }
-    },
-    [provider, account]
-  );
+  const getBalance = useCallback(() => {
+    if (provider && account) {
+      provider
+        .getBalance(account)
+        .then((balance) => setBalance(utils.formatEther(balance)))
+        .catch(console.error);
+    } else {
+      setBalance('');
+    }
+  }, [provider, account]);
 
-  usePoller(
-    getBalance,
-    !!provider,
-    2000,
-    'Account balance'
-  );
+  usePoller(getBalance, !!provider, 2000, 'Account balance');
 
   if (!provider || !account) {
     return null;
@@ -61,8 +50,8 @@ export const Account: React.FC<AccountProps> = ({ account, provider }) => {
 
   return (
     <Box
-      direction='row'
-      align='center'
+      direction="row"
+      align="center"
       style={{ boxShadow: 'none' }}
       onClick={() => {
         copyToClipboard(account);
@@ -70,22 +59,11 @@ export const Account: React.FC<AccountProps> = ({ account, provider }) => {
         setTimeout(() => setNotification(false), 1500);
       }}
     >
-      <AccountIcon
-        seed={account}
-        size={7}
-        scale={4}
-      />
-      <AccountHash size='small'>
-        {shortAccount}&nbsp;
-        ({Number(balance).toFixed(2)} xDAI)
+      <AccountIcon seed={account} size={7} scale={4} />
+      <AccountHash size="small">
+        {shortAccount}&nbsp; ({Number(balance).toFixed(2)} xDAI)
       </AccountHash>
-      {notification &&
-        <Notification
-          toast
-          title='Copied to clipboard'
-          status='normal'
-        />
-      }
+      {notification && <Notification toast title="Copied to clipboard" status="normal" />}
     </Box>
   );
 };

@@ -4,11 +4,7 @@ import Logger from '../utils/logger';
 
 const logger = Logger('useAccount');
 
-export type UseAccountHook = [
-  account: undefined | string,
-  isLoading: boolean,
-  error: undefined | string
-];
+export type UseAccountHook = [account: undefined | string, isLoading: boolean, error: undefined | string];
 
 export const useAccount = (provider?: Web3ModalProvider): UseAccountHook => {
   const [account, setAccount] = useState<undefined | string>();

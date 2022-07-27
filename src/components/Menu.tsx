@@ -9,21 +9,19 @@ export const Menu = () => {
   const { isConnecting } = useAppState();
   const navigate = useNavigate();
   const buildMenuConfig = useMemo(
-    () => pagesRoutesConfig
-      .reduce<Routes>(
-        (a, v) => ([
+    () =>
+      pagesRoutesConfig.reduce<Routes>(
+        (a, v) => [
           ...a,
-          ...(
-            v.label // Items without labels are ignored
-              ? [
+          ...(v.label // Items without labels are ignored
+            ? [
                 {
                   ...v,
                   onClick: () => navigate(v.path)
                 }
               ]
-              : []
-          )
-        ]),
+            : [])
+        ],
         []
       ),
     [navigate]
@@ -33,11 +31,11 @@ export const Menu = () => {
     <MenuWrap
       dropBackground={{ color: 'black', opacity: 0.9 }}
       dropAlign={{
-        top: "bottom",
-        left: "left",
+        top: 'bottom',
+        left: 'left'
       }}
       disabled={isConnecting}
-      icon={(<MenuIcon color='black' />)}
+      icon={<MenuIcon color="black" />}
       items={buildMenuConfig}
     />
   );

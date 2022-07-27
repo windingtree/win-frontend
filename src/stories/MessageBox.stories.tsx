@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import type { Meta, Story } from '@storybook/react';
 import type { MessageBoxProps } from '../components/MessageBox';
 import { MessageBox } from '../components/MessageBox';
 
 export default {
   title: 'Components/MessageBox',
-  component: MessageBox,
+  component: MessageBox
 } as Meta;
 
-const Template: Story<MessageBoxProps> = args => <MessageBox {...args} />;
+const Template: Story<MessageBoxProps> = (args) => <MessageBox {...args} />;
 
 export const TypeErro = Template.bind({});
 TypeErro.args = {
@@ -49,4 +50,3 @@ LoadingMessage.args = {
   loading: true,
   onClose: undefined
 };
-

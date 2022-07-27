@@ -7,7 +7,8 @@ All dependencies have to be installed via `yarn` from the root of repository.
 
 ## Development
 
-Create  `.env` file in the root of repository with content like in the file `.env.example`. To start project locally please rum this command.
+Create `.env` file in the root of repository with content like in the file `.env.example`. To start project locally please rum this command.
+
 ```bash
 yarn start
 ```
@@ -15,11 +16,13 @@ yarn start
 ## Storybook
 
 Runs a storybook UI at http://localhost:6006/
+
 ```bash
 yarn storybook
 ```
 
-Create  `.env` file in the root of repository with content like in the file `.env.example`. To start project locally please rum this command.
+Create `.env` file in the root of repository with content like in the file `.env.example`. To start project locally please rum this command.
+
 ```bash
 yarn start
 ```
@@ -34,6 +37,7 @@ yarn commit
 
 Select the appropriate type of commit message, any issues to close, and note any breaking
 changes.
+
 ## Production build
 
 ```bash

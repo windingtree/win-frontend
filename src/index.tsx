@@ -5,13 +5,14 @@ import 'leaflet/dist/leaflet.css';
 import './reset.css';
 import App from './App';
 
-window.addEventListener('unhandledrejection', event => {
+window.addEventListener('unhandledrejection', (event) => {
   event.preventDefault();
   event.stopPropagation();
   console.log('Unhandled error event', event);
 });
 
 const container = document.getElementById('root');
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);
 root.render(
   <BrowserRouter>
