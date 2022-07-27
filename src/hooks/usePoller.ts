@@ -5,43 +5,51 @@ const logger = Logger('usePoller');
 
 export type PollerContextFunction = () => void | Promise<void>;
 
-export const usePoller = (fn: PollerContextFunction, enabled = true, interval = 5000, pollerName?: string) => {
+export const usePoller = (
+  fn: PollerContextFunction,
+  enabled = true,
+  interval = 5000,
+  pollerName?: string
+) => {
   if (typeof fn !== 'function') {
-    throw new TypeError("Can't poll without a callback function");
+    throw new TypeError('Can\'t poll without a callback function');
   }
 
-  return useEffect(() => {
-    let disabled = false;
-    let failures = 0;
+  return useEffect(
+    () => {
+      let disabled = false;
+      let failures = 0;
 
-    const poll = async () => {
-      if (disabled || !enabled) {
-        return;
+      const poll = async () => {
+        if (disabled || !enabled) {
+          return;
+        }
+
+        try {
+          await fn();
+        } catch (error) {
+          failures++;
+          logger.error(error);
+        }
+
+        if (failures < 100) {
+          setTimeout(poll, interval);
+        } else {
+          logger.debug(`Too much errors in poller ${pollerName}. Disabled`);
+        }
       }
 
-      try {
-        await fn();
-      } catch (error) {
-        failures++;
-        logger.error(error);
+      if (enabled) {
+        poll();
+        logger.debug(`Poller ${pollerName} started`);
       }
 
-      if (failures < 100) {
-        setTimeout(poll, interval);
-      } else {
-        logger.debug(`Too much errors in poller ${pollerName}. Disabled`);
-      }
-    };
-
-    if (enabled) {
-      poll();
-      logger.debug(`Poller ${pollerName} started`);
-    }
-
-    return () => {
-      disabled = true;
-      failures = 0;
-      logger.debug(`Poller ${pollerName} stopped`);
-    };
-  }, [fn, enabled, interval, pollerName]);
+      return () => {
+        disabled = true;
+        failures = 0;
+        logger.debug(`Poller ${pollerName} stopped`);
+      };
+    },
+    [fn, enabled, interval, pollerName]
+  );
 };
