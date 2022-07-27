@@ -4,9 +4,8 @@ import { createContext, useContext, useEffect } from 'react';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { useAppReducer } from './reducer';
 import { useWeb3Modal } from '../hooks/useWeb3Modal';
-import config from '../config';
+import { allowedNetworks } from '../config';
 // import { useRpcProvider } from '../hooks/useRpcProvider';
-import { useNetworkId } from '../hooks/useNetworkId';
 import { useAccount } from '../hooks/useAccount';
 
 export type AppReducerType = ReturnType<typeof useAppReducer>;
@@ -43,8 +42,7 @@ const web3ModalConfig: Web3ModalConfig = {
     walletconnect: {
       package: WalletConnectProvider,
       options: {
-        rpc: config.allowedNetworks.map((n) => ({ [n.chainId]: n.rpc }))
-        // [config.network.chainId]: config.network.rpc
+        rpc: allowedNetworks.map((n) => ({ [n.chainId]: n.rpc }))
       }
     }
   }
@@ -52,22 +50,15 @@ const web3ModalConfig: Web3ModalConfig = {
 
 export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useAppReducer();
-  // const [
-  //   networkId,
-  //   isNetworkIdLoading,
-  //   isRightNetwork
-  // ] = useNetworkId(provider);
-  // const [staticProvider] = useRpcProvider(config.network.rpc);
   const [provider, signIn, signOut, isWeb3ModalConnecting] = useWeb3Modal(web3ModalConfig);
-  const [networkId, isNetworkIdLoading, isRightNetwork] = useNetworkId(provider);
   const [account, isAccountLoading] = useAccount(provider);
 
   useEffect(() => {
     dispatch({
       type: 'SET_CONNECTING',
-      payload: isWeb3ModalConnecting || isNetworkIdLoading || isAccountLoading
+      payload: isWeb3ModalConnecting || isAccountLoading
     });
-  }, [dispatch, isWeb3ModalConnecting, isNetworkIdLoading, isAccountLoading]);
+  }, [dispatch, isWeb3ModalConnecting, isAccountLoading]);
 
   useEffect(() => {
     dispatch({
@@ -83,36 +74,12 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [dispatch, signOut]);
 
-  // useEffect(
-  //   () => {
-  //     dispatch({
-  //       type: 'SET_STATIC_PROVIDER',
-  //       payload: staticProvider
-  //     });
-  //   },
-  //   [dispatch, staticProvider]
-  // );
-
   useEffect(() => {
     dispatch({
       type: 'SET_PROVIDER',
       payload: provider
     });
   }, [dispatch, provider]);
-
-  useEffect(() => {
-    dispatch({
-      type: 'SET_IS_RIGHT_NETWORK',
-      payload: isRightNetwork
-    });
-  }, [dispatch, isRightNetwork]);
-
-  useEffect(() => {
-    dispatch({
-      type: 'SET_NETWORK_ID',
-      payload: networkId
-    });
-  }, [dispatch, networkId]);
 
   useEffect(() => {
     dispatch({
