@@ -28,16 +28,6 @@ export interface SetWeb3ModalSignOutAction {
   payload?: Web3ModalSignOutFunction;
 }
 
-export interface SetIsRightNetworkAction {
-  type: 'SET_IS_RIGHT_NETWORK';
-  payload: boolean;
-}
-
-export interface SetNetworkIdAction {
-  type: 'SET_NETWORK_ID';
-  payload: number | undefined;
-}
-
 export interface SetAccountAction {
   type: 'SET_ACCOUNT';
   payload: string | undefined;
@@ -92,8 +82,6 @@ export type Action =
   | SetProviderAction
   | SetWeb3ModalSignInAction
   | SetWeb3ModalSignOutAction
-  | SetIsRightNetworkAction
-  | SetNetworkIdAction
   | SetAccountAction
   | SetRecordAction
   | RemoveRecordAction

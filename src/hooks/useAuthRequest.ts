@@ -2,7 +2,7 @@ import axios from 'axios';
 import Logger from '../utils/logger';
 import { useCallback, useState } from 'react';
 import { useAppDispatch, useAppState } from '../store';
-import config from '../config';
+import { backend } from '../config';
 
 const logger = Logger('useAuthRequest');
 
@@ -18,11 +18,11 @@ export enum Method {
 
 export const requests = {
   refresh: {
-    url: config.api.url + '/api/user/refresh',
+    url: backend.url + '/api/user/refresh',
     method: Method.post
   },
   getAll: {
-    url: config.api.url + '/api/user/get-all',
+    url: backend.url + '/api/user/get-all',
     method: Method.get
   }
 };

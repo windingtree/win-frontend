@@ -2,7 +2,7 @@ import axios from 'axios';
 import Logger from '../utils/logger';
 import { useAppDispatch } from '../store';
 import { useCallback, useState } from 'react';
-import config from '../config';
+import { backend } from '../config';
 
 const logger = Logger('useGetAuth');
 const path = '/api/user/login';
@@ -20,7 +20,7 @@ export const useGetAuth = (): UseGetAuthHook => {
       setError(undefined);
 
       try {
-        const res = await axios.post(config.api.url + path, {
+        const res = await axios.post(backend.url + path, {
           login,
           password
         });
