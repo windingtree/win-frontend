@@ -95,8 +95,8 @@ export const pagesRoutesConfig: Routes = [
   {
     path: '/checkout/:id',
     element: <Checkout />,
-    title: 'Checkout'
-    // label: "Checkout",
+    title: 'Checkout',
+    label: "Checkout"
   }
 ];
 
