@@ -17,25 +17,16 @@ export const SignInButton = () => {
   }
 
   return (
-    <Button
-      onClick={() => signIn()}
-      disabled={isConnecting}
-    >
+    <Button onClick={() => signIn()} disabled={isConnecting}>
       {() => (
-        <Box direction='row' align='center'>
-          {size !== 'small' &&
-            <Text>
-              {isConnecting ? 'Connecting' : 'Connect'}
-            </Text>
-          }
-          {size === 'small' &&
-            <Login />
-          }
+        <Box direction="row" align="center">
+          {size !== 'small' && <Text>{isConnecting ? 'Connecting' : 'Connect'}</Text>}
+          {size === 'small' && <Login />}
           {isConnecting && <InnerSpinner />}
         </Box>
       )}
     </Button>
-  )
+  );
 };
 
 export const SignOutButton = () => {
@@ -47,23 +38,14 @@ export const SignOutButton = () => {
   }
 
   return (
-    <Button
-      onClick={() => signOut()}
-      disabled={isConnecting}
-    >
+    <Button onClick={() => signOut()} disabled={isConnecting}>
       {() => (
-        <Box direction='row' align='center'>
-          {size !== 'small' &&
-            <Text>
-              {isConnecting ? 'Connecting' : 'Disconnect'}
-            </Text>
-          }
-          {size === 'small' &&
-            <Logout />
-          }
+        <Box direction="row" align="center">
+          {size !== 'small' && <Text>{isConnecting ? 'Connecting' : 'Disconnect'}</Text>}
+          {size === 'small' && <Logout />}
           {isConnecting && <InnerSpinner />}
         </Box>
       )}
     </Button>
-  )
+  );
 };

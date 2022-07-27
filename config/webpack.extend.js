@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 
-const resolveFallback = config => {
+const resolveFallback = (config) => {
   Object.assign(config.resolve.fallback, {
     buffer: require.resolve('buffer'),
     crypto: require.resolve('crypto-browserify'),
@@ -8,7 +8,7 @@ const resolveFallback = config => {
     url: require.resolve('url'),
     os: require.resolve('os-browserify'),
     http: require.resolve('stream-http'),
-    https: require.resolve('https-browserify'),
+    https: require.resolve('https-browserify')
   });
 };
 
@@ -22,13 +22,13 @@ module.exports = {
     if (!config.plugins) config.plugins = [];
     config.plugins.push(
       new webpack.DefinePlugin({
-        'process.env.ENV': JSON.stringify('dev'),
+        'process.env.ENV': JSON.stringify('dev')
       })
     );
     config.plugins.push(
       new webpack.ProvidePlugin({
         process: 'process/browser.js',
-        Buffer: ['buffer', 'Buffer'],
+        Buffer: ['buffer', 'Buffer']
       })
     );
 
@@ -46,13 +46,13 @@ module.exports = {
     if (!config.plugins) config.plugins = [];
     config.plugins.push(
       new webpack.DefinePlugin({
-        'process.env.ENV': JSON.stringify('prod'),
+        'process.env.ENV': JSON.stringify('prod')
       })
     );
     config.plugins.push(
       new webpack.ProvidePlugin({
         process: 'process/browser.js',
-        Buffer: ['buffer', 'Buffer'],
+        Buffer: ['buffer', 'Buffer']
       })
     );
 
@@ -60,5 +60,5 @@ module.exports = {
     config.ignoreWarnings.push(/Failed to parse source map/);
 
     return config;
-  },
+  }
 };

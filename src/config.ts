@@ -1,11 +1,11 @@
-import { Settings } from "luxon";
+import { Settings } from 'luxon';
 
 // Configure the time zone
 Settings.defaultZone = 'Etc/GMT0';
 enum Mode {
-  dev = "development",
-  prod = "production",
-  test = "test"
+  dev = 'development',
+  prod = 'production',
+  test = 'test'
 }
 
 export interface NetworkInfo {
@@ -20,33 +20,24 @@ export interface NetworkInfo {
 export interface Api {
   key: string;
   url: string;
-};
+}
 
 export interface DappConfig {
   allowedNetworks: NetworkInfo[];
   api: { [name: string]: Api };
   address: string;
-  mode: "development" | "production" | "test";
+  mode: 'development' | 'production' | 'test';
 }
 
-if (
-  !process.env.REACT_APP_CONTRACT_ADDRESS ||
-  process.env.REACT_APP_CONTRACT_ADDRESS === ''
-) {
+if (!process.env.REACT_APP_CONTRACT_ADDRESS || process.env.REACT_APP_CONTRACT_ADDRESS === '') {
   throw new Error('REACT_APP_CONTRACT_ADDRESS must be provided in the ENV');
 }
 
-if (
-  !process.env.REACT_APP_API_KEY ||
-  process.env.REACT_APP_API_KEY === ''
-) {
+if (!process.env.REACT_APP_API_KEY || process.env.REACT_APP_API_KEY === '') {
   throw new Error('REACT_APP_API_KEY must be provided in the ENV');
 }
 
-if (
-  !process.env.REACT_APP_API_URL ||
-  process.env.REACT_APP_API_URL === ''
-) {
+if (!process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL === '') {
   throw new Error('REACT_APP_API_URL must be provided in the ENV');
 }
 
@@ -55,19 +46,19 @@ const allowedNetworks: NetworkInfo[] = [
     name: 'Ropsten Testnet',
     chainId: 3,
     address: '',
-    blockExplorer: 'https://ropsten.etherscan.io',
+    blockExplorer: 'https://ropsten.etherscan.io'
   },
   {
     name: 'Rinkeby Testnet',
     chainId: 4,
-    address: "",
-    blockExplorer: 'https://rinkeby.etherscan.io',
+    address: '',
+    blockExplorer: 'https://rinkeby.etherscan.io'
   },
   {
     name: 'Arbitrum Rinkeby',
     chainId: 421611,
     address: '',
-    blockExplorer: 'https://rinkeby-explorer.arbitrum.io',
+    blockExplorer: 'https://rinkeby-explorer.arbitrum.io'
   },
   {
     name: 'Sokol Testnet (xDai)',
@@ -82,7 +73,7 @@ const allowedNetworks: NetworkInfo[] = [
     address: '',
     blockExplorer: 'https://blockscout.com/xdai/mainnet',
     currency: 'XDAI'
-  },
+  }
 ];
 
 const config: DappConfig = {

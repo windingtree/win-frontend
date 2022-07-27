@@ -11,8 +11,8 @@ export const Security = () => {
         }
       ]}
     >
-      <Box align='center' overflow='hidden'>
-        <Text weight={500} size='2rem' margin='small'>
+      <Box align="center" overflow="hidden">
+        <Text weight={500} size="2rem" margin="small">
           Security info
         </Text>
       </Box>

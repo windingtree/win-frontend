@@ -24,7 +24,7 @@ export const web3ModalReducer = (state: State, action: Action): State => {
       default:
         return state;
     }
-  } catch(error) {
+  } catch (error) {
     return state;
   }
 };

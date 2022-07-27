@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 export const useWindowsDimension = () => {
   const [windowDimenion, detectHW] = useState({
     winWidth: window.innerWidth,
-    winHeight: window.innerHeight,
+    winHeight: window.innerHeight
   });
 
   const detectSize = () => {
     detectHW({
       winWidth: window.innerWidth,
-      winHeight: window.innerHeight,
+      winHeight: window.innerHeight
     });
   };
 

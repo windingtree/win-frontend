@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import type { Action } from './actions';
 import type { State, GenericStateRecord } from './types';
 
@@ -19,12 +20,8 @@ export const recordsReducer = (state: State, action: Action): State => {
         }
         // Add or update a record
         records = state[action.payload.name] as GenericStateRecord[];
-        const knownRecord = records.filter(
-          (r: GenericStateRecord) => r.id === action.payload.record.id
-        )[0] || {};
-        const restRecords = records.filter(
-          (r: GenericStateRecord) => r.id !== action.payload.record.id
-        );
+        const knownRecord = records.filter((r: GenericStateRecord) => r.id === action.payload.record.id)[0] || {};
+        const restRecords = records.filter((r: GenericStateRecord) => r.id !== action.payload.record.id);
         return {
           ...state,
           [action.payload.name]: [
@@ -48,9 +45,7 @@ export const recordsReducer = (state: State, action: Action): State => {
         records = state[action.payload.name] as GenericStateRecord[];
         return {
           ...state,
-          [action.payload.name]: records.filter(
-            (r: GenericStateRecord) => r.id !== action.payload.id
-          )
+          [action.payload.name]: records.filter((r: GenericStateRecord) => r.id !== action.payload.id)
         };
       case 'RESET_RECORD':
         if (!action.payload.name) {
@@ -63,7 +58,7 @@ export const recordsReducer = (state: State, action: Action): State => {
       default:
         return state;
     }
-  } catch(error) {
+  } catch (error) {
     return state;
   }
 };

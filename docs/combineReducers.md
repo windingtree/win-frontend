@@ -12,19 +12,15 @@ type DappReducer = Reducer<State, Action>;
 
 A combined reducer must be provided to the `useReducer` react hook. The state is passing through reducers from top to down.
 
-
 ```typescript
 export const useAppReducer = () => {
-
   return useReducer(
-    combineReducers(
-      [
-        mainReducer,
-        // anotherReducer1,
-        // anotherReducer2,
-        // anotherReducer3,
-      ]
-    ),
+    combineReducers([
+      mainReducer
+      // anotherReducer1,
+      // anotherReducer2,
+      // anotherReducer3,
+    ]),
     {
       ...initialState,
       ...storedState

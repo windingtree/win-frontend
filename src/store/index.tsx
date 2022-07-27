@@ -34,7 +34,7 @@ export const useAppDispatch = () => {
   }
 
   return ctx;
-}
+};
 
 // Web3Modal initialization
 const web3ModalConfig: Web3ModalConfig = {
@@ -43,8 +43,8 @@ const web3ModalConfig: Web3ModalConfig = {
     walletconnect: {
       package: WalletConnectProvider,
       options: {
-        rpc: config.allowedNetworks.map((n) => ({[n.chainId]: n.rpc}))
-          // [config.network.chainId]: config.network.rpc
+        rpc: config.allowedNetworks.map((n) => ({ [n.chainId]: n.rpc }))
+        // [config.network.chainId]: config.network.rpc
       }
     }
   }
@@ -58,51 +58,30 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   //   isRightNetwork
   // ] = useNetworkId(provider);
   // const [staticProvider] = useRpcProvider(config.network.rpc);
-  const [
-    provider,
-    signIn,
-    signOut,
-    isWeb3ModalConnecting
-  ] = useWeb3Modal(web3ModalConfig);
-  const [
-    networkId,
-    isNetworkIdLoading,
-    isRightNetwork
-  ] = useNetworkId(provider);
+  const [provider, signIn, signOut, isWeb3ModalConnecting] = useWeb3Modal(web3ModalConfig);
+  const [networkId, isNetworkIdLoading, isRightNetwork] = useNetworkId(provider);
   const [account, isAccountLoading] = useAccount(provider);
 
-  useEffect(
-    () => {
-      dispatch({
-        type: 'SET_CONNECTING',
-        payload:
-          isWeb3ModalConnecting ||
-          isNetworkIdLoading ||
-          isAccountLoading
-      });
-    },
-    [dispatch, isWeb3ModalConnecting, isNetworkIdLoading, isAccountLoading]
-  );
+  useEffect(() => {
+    dispatch({
+      type: 'SET_CONNECTING',
+      payload: isWeb3ModalConnecting || isNetworkIdLoading || isAccountLoading
+    });
+  }, [dispatch, isWeb3ModalConnecting, isNetworkIdLoading, isAccountLoading]);
 
-  useEffect(
-    () => {
-      dispatch({
-        type: 'SET_WEB3MODAL_SIGN_IN',
-        payload: signIn
-      });
-    },
-    [dispatch, signIn]
-  );
+  useEffect(() => {
+    dispatch({
+      type: 'SET_WEB3MODAL_SIGN_IN',
+      payload: signIn
+    });
+  }, [dispatch, signIn]);
 
-  useEffect(
-    () => {
-      dispatch({
-        type: 'SET_WEB3MODAL_SIGN_OUT',
-        payload: signOut
-      });
-    },
-    [dispatch, signOut]
-  );
+  useEffect(() => {
+    dispatch({
+      type: 'SET_WEB3MODAL_SIGN_OUT',
+      payload: signOut
+    });
+  }, [dispatch, signOut]);
 
   // useEffect(
   //   () => {
@@ -114,42 +93,37 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   //   [dispatch, staticProvider]
   // );
 
-  useEffect(
-    () => {
-      dispatch({
-        type: 'SET_PROVIDER',
-        payload: provider
-      });
-    },
-    [dispatch, provider]
-  );
+  useEffect(() => {
+    dispatch({
+      type: 'SET_PROVIDER',
+      payload: provider
+    });
+  }, [dispatch, provider]);
 
   useEffect(() => {
     dispatch({
       type: 'SET_IS_RIGHT_NETWORK',
       payload: isRightNetwork
-    })
+    });
   }, [dispatch, isRightNetwork]);
 
   useEffect(() => {
     dispatch({
       type: 'SET_NETWORK_ID',
       payload: networkId
-    })
+    });
   }, [dispatch, networkId]);
 
   useEffect(() => {
     dispatch({
       type: 'SET_ACCOUNT',
       payload: account
-    })
+    });
   }, [dispatch, account]);
 
   return (
     <StateContext.Provider value={state}>
-      <DispatchContext.Provider value={dispatch}>
-        {children}
-      </DispatchContext.Provider>
+      <DispatchContext.Provider value={dispatch}>{children}</DispatchContext.Provider>
     </StateContext.Provider>
   );
 };

@@ -4,10 +4,10 @@ import { Account } from '../components/Account';
 
 export default {
   title: 'Components/Account',
-  component: Account,
+  component: Account
 } as Meta;
 
-const Template: Story<AccountProps> = args => <Account {...args} />;
+const Template: Story<AccountProps> = (args) => <Account {...args} />;
 
 export const LoggedInAccount = Template.bind({});
 LoggedInAccount.args = {

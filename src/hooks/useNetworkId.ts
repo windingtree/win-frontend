@@ -14,7 +14,7 @@ export type NetworkIdHook = [
 
 // useNetworkId react hook
 export const useNetworkId = (
-  provider: undefined | Web3ModalProvider,
+  provider: undefined | Web3ModalProvider
   // allowedNetwork: number[]
 ): NetworkIdHook => {
   const [networkId, setNetworkId] = useState<undefined | number>();
@@ -37,13 +37,13 @@ export const useNetworkId = (
         logger.debug('getNetwork:', network);
 
         if (network) {
-          const allowed = config.allowedNetworks.find((n) => n.chainId === network.chainId)
+          const allowed = config.allowedNetworks.find((n) => n.chainId === network.chainId);
           if (allowed) {
             setNetworkId(network.chainId);
             setIsRightNetwork(true);
           } else {
             throw new Error(
-              `Invalid network ${network.chainId} though expected ${config.allowedNetworks.map(n => n.name + ' ')}`
+              `Invalid network ${network.chainId} though expected ${config.allowedNetworks.map((n) => n.name + ' ')}`
             );
           }
         } else {
@@ -67,10 +67,5 @@ export const useNetworkId = (
     getNetworkId();
   }, [provider]);
 
-  return [
-    networkId,
-    isLoading,
-    isRightNetwork,
-    error
-  ];
+  return [networkId, isLoading, isRightNetwork, error];
 };
