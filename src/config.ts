@@ -15,9 +15,12 @@ export interface CryptoAsset {
   permit: boolean;
 }
 
-export interface NetworkInfo {
+export interface Network {
   name: string;
   chainId: number;
+}
+
+export interface NetworkInfo extends Network {
   currency: string;
   decimals: number;
   rpc: string;
@@ -108,6 +111,14 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
     }
   },
 ]);
+
+export const getNetworkInfo = (chainId: number): NetworkInfo => {
+  const chain = allowedNetworks.find(n => n.chainId === chainId);
+  if (!chain) {
+    throw new Error(`Unsupported chainId #${chainId}`);
+  }
+  return chain;
+};
 
 export const mode = process.env.NODE_ENV || AppMode.dev;
 
