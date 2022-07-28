@@ -3,6 +3,7 @@ import type { Action } from './actions';
 import type { State } from './types';
 import { useReducer } from 'react';
 import { web3ModalReducer } from './web3ModalReducer';
+import { cryptoReducer } from './cryptoReducer';
 import { recordsReducer } from './recordsReducer';
 import { getState, storageReducer } from './localStorage';
 import Logger from '../utils/logger';
@@ -71,6 +72,7 @@ export const useAppReducer = () => {
     combineReducers([
       mainReducer,
       web3ModalReducer,
+      cryptoReducer,
       recordsReducer,
       storageReducer() // Always must be the last
     ]),

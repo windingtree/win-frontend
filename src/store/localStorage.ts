@@ -10,7 +10,12 @@ export interface LocalStorageConnectorConfig {
 }
 
 export const storageConnectorConfig: LocalStorageConnectorConfig = {
-  properties: ['offers','facilities']
+  properties: [
+    'offers',
+    'facilities',
+    'selectedNetwork',
+    'selectedAsset'
+  ]
 };
 
 export type StoredStateProps = typeof storageConnectorConfig.properties[number];

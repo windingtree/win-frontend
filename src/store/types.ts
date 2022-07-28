@@ -1,5 +1,6 @@
 import type { TypedDataDomain } from '@ethersproject/abstract-signer';
 import type { Facility, Offer } from '../types/offers';
+import type { NetworkInfo, CryptoAsset } from '../config';
 import type { StaticProvider } from '../hooks/useRpcProvider';
 import type { Web3ModalProvider, Web3ModalSignInFunction, Web3ModalSignOutFunction } from '../hooks/useWeb3Modal';
 
@@ -122,5 +123,7 @@ export interface State {
     timestamp: number;
   };
   checkout?: CheckOut;
+  selectedNetwork?: NetworkInfo;
+  selectedAsset?: CryptoAsset;
   [key: string]: unknown | GenericStateRecord[];
 }
