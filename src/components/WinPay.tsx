@@ -1,9 +1,12 @@
+import type { NetworkInfo, CryptoAsset } from '../config';
+import { useCallback } from 'react';
 import { Box } from 'grommet';
 import { BigNumber } from 'ethers';
-import { useAppState, State } from '../store';
+import { useAppDispatch, useAppState } from '../store';
 import { Account } from './Account';
 import { SignInButton, SignOutButton } from './Web3Modal';
 import { NetworkSelector } from './NetworkSelector';
+import { CurrenciesSelector } from './CurrenciesSelector';
 
 export const allowedCurrencies = [
   'EUR',
@@ -22,7 +25,29 @@ export interface WinPayProps {
 }
 
 export const WinPay = ({ cost }: WinPayProps) => {
-  const { provider, account } = useAppState();
+  const dispatch = useAppDispatch();
+  const {
+    provider,
+    account,
+    selectedNetwork,
+    selectedAsset
+  } = useAppState();
+
+  const setNetwork = useCallback(
+    (network: NetworkInfo) => dispatch({
+      type: 'SET_SELECTED_NETWORK',
+      payload: network
+    }),
+    [dispatch]
+  );
+
+  const setAsset = useCallback(
+    (asset: CryptoAsset) => dispatch({
+      type: 'SET_SELECTED_ASSET',
+      payload: asset
+    }),
+    [dispatch]
+  );
 
   return (
     <Box direction="column" gap="small" fill>
@@ -31,7 +56,17 @@ export const WinPay = ({ cost }: WinPayProps) => {
         {account ? <SignOutButton /> : <SignInButton />}
       </Box>
       {account &&
-        <NetworkSelector/>
+        <Box direction="column" gap="small" fill>
+          <NetworkSelector
+            value={selectedNetwork}
+            onChange={setNetwork}
+          />
+          <CurrenciesSelector
+            network={selectedNetwork}
+            value={selectedAsset}
+            onChange={setAsset}
+          />
+        </Box>
       }
     </Box>
   );
