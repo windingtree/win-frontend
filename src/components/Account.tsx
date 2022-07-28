@@ -4,8 +4,13 @@ import { utils } from 'ethers';
 import Blockies from 'react-blockies';
 import styled from 'styled-components';
 import { Box, Text, Notification } from 'grommet';
+import { allowedNetworks } from '../config';
 import { centerEllipsis, copyToClipboard } from '../utils/strings';
 import { usePoller } from '../hooks/usePoller';
+import Logger from '../utils/logger';
+
+// Initialize logger
+const logger = Logger('Account');
 
 export interface AccountProps {
   account?: string;
@@ -21,23 +26,33 @@ const AccountHash = styled(Text)`
   cursor: pointer;
 `;
 
-export const Account: React.FC<AccountProps> = ({ account, provider }) => {
-  // const {
-  //   provider,
-  //   account
-  // } = useAppState();
+export const Account = ({ account, provider }: AccountProps) => {
   const [balance, setBalance] = useState<string>('');
   const [notification, setNotification] = useState<boolean>(false);
 
   const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
 
-  const getBalance = useCallback(() => {
-    if (provider && account) {
-      provider
-        .getBalance(account)
-        .then((balance) => setBalance(utils.formatEther(balance)))
-        .catch(console.error);
-    } else {
+  const getBalance = useCallback(async () => {
+    try {
+      if (provider && account) {
+        const network = await provider.getNetwork();
+        const chain = allowedNetworks.find(n => n.chainId === network.chainId);
+        if (!chain) {
+          throw new Error(`Unsupported chainId #${network.chainId}`);
+        }
+        provider
+          .getBalance(account)
+          .then(
+            (balance) => setBalance(
+              `(${Number(utils.formatEther(balance)).toFixed(2)} ${chain.currency})`
+            )
+          )
+          .catch(console.error);
+      } else {
+        setBalance('');
+      }
+    } catch (err) {
+      logger.error(err);
       setBalance('');
     }
   }, [provider, account]);
@@ -61,7 +76,7 @@ export const Account: React.FC<AccountProps> = ({ account, provider }) => {
     >
       <AccountIcon seed={account} size={7} scale={4} />
       <AccountHash size="small">
-        {shortAccount}&nbsp; ({Number(balance).toFixed(2)} xDAI)
+        {shortAccount}&nbsp;{balance}
       </AccountHash>
       {notification && <Notification toast title="Copied to clipboard" status="normal" />}
     </Box>

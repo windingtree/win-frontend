@@ -112,8 +112,6 @@ export interface State {
   provider?: Web3ModalProvider;
   signIn?: Web3ModalSignInFunction;
   signOut?: Web3ModalSignOutFunction;
-  networkId?: number;
-  isRightNetwork: boolean;
   account?: string;
   serviceProviderDataDomain?: TypedDataDomain;
   facilities: Facility[];

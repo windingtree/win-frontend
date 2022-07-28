@@ -25,16 +25,6 @@ export const mainReducer = (state: State, action: Action): State => {
           ...state,
           staticProvider: action.payload
         };
-      case 'SET_IS_RIGHT_NETWORK':
-        return {
-          ...state,
-          isRightNetwork: action.payload
-        };
-      case 'SET_NETWORK_ID':
-        return {
-          ...state,
-          networkId: action.payload
-        };
       case 'SET_ACCOUNT':
         return {
           ...state,
@@ -55,7 +45,6 @@ export const mainReducer = (state: State, action: Action): State => {
 
 const initialState: State = {
   isConnecting: true,
-  isRightNetwork: true,
   facilities: [],
   authentication: {
     timestamp: 0
