@@ -1,7 +1,12 @@
 import type { TypedDataDomain } from '@ethersproject/abstract-signer';
+import type { NetworkInfo, CryptoAsset } from '../config';
 import type { StaticProvider } from '../hooks/useRpcProvider';
-import type { Web3ModalProvider, Web3ModalSignInFunction, Web3ModalSignOutFunction } from '../hooks/useWeb3Modal';
-import { CheckOut, GenericStateRecord } from './types';
+import type {
+  Web3ModalProvider,
+  Web3ModalSignInFunction,
+  Web3ModalSignOutFunction
+} from '../hooks/useWeb3Modal';
+import type { CheckOut, GenericStateRecord } from './types';
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';
@@ -74,6 +79,16 @@ export interface SetCheckOutAction {
   payload: CheckOut;
 }
 
+export interface SetSelectedNetwork {
+  type: 'SET_SELECTED_NETWORK';
+  payload: NetworkInfo;
+}
+
+export interface SetSelectedAsset {
+  type: 'SET_SELECTED_ASSET';
+  payload: CryptoAsset;
+}
+
 export type Action =
   | SetCheckOutAction
   | SetAuthenticationTokenAction
@@ -83,6 +98,8 @@ export type Action =
   | SetWeb3ModalSignInAction
   | SetWeb3ModalSignOutAction
   | SetAccountAction
+  | SetSelectedNetwork
+  | SetSelectedAsset
   | SetRecordAction
   | RemoveRecordAction
   | ResetRecordAction

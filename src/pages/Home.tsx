@@ -19,7 +19,7 @@ export const Home = () => {
   return (
     <PageWrapper kind="full">
       {!isConnecting && (
-        <Box  pad='0' style={{ position: 'relative' }}>
+        <Box pad="0" style={{ position: 'relative' }}>
           <Button
             margin={size}
             style={{
@@ -27,8 +27,12 @@ export const Home = () => {
               zIndex: '1',
               alignSelf: 'center',
               background: 'white',
-              // borderRadius: '0.5rem',
-              boxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'
+              // width: '70%',
+              margin: '1rem',
+              // padding: '0.75rem',
+              borderRadius: '0.5rem',
+              boxShadow:
+                'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'
             }}
             onClick={() => setOpen(!open)}
             justify="end"

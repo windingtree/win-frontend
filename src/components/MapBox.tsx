@@ -58,7 +58,9 @@ const MapSettings: React.FC<{
   }, [zoom, map]);
 
   useEffect(() => {
-    logger.debug(`latitude: ${position.lat.toFixed(4)}, longitude: ${position.lng.toFixed(4)}`);
+    logger.debug(
+      `latitude: ${position.lat.toFixed(4)}, longitude: ${position.lng.toFixed(4)}`
+    );
   }, [position]);
 
   useEffect(() => {
@@ -70,7 +72,9 @@ const MapSettings: React.FC<{
     const h3Indexes = kRing(h3, utils.constants.DefaultRingSize);
 
     h3Indexes.forEach((h) => {
-      L.polygon(h3ToGeoBoundary(h) as unknown as LatLngExpression[][], { color: 'red' }).addTo(map);
+      L.polygon(h3ToGeoBoundary(h) as unknown as LatLngExpression[][], {
+        color: 'red'
+      }).addTo(map);
     });
   }, [center, map]);
 
@@ -103,15 +107,19 @@ export const MapBox: React.FC<{
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ZoomControl position='bottomleft' />
-        {(facilities && facilities.length > 0)
-          ? (facilities).map((f) => (
-            <Marker key={f.id} icon={pinIcon} position={[f.location.lat, f.location.long]}>
-              <Popup>
-                {f.name} <br /> Easily customizable.
-              </Popup>
-            </Marker>
-          ))
+        <ZoomControl position="bottomleft" />
+        {facilities && facilities.length > 0
+          ? facilities.map((f) => (
+              <Marker
+                key={f.id}
+                icon={pinIcon}
+                position={[f.location.lat, f.location.long]}
+              >
+                <Popup>
+                  {f.name} <br /> Easily customizable.
+                </Popup>
+              </Marker>
+            ))
           : null}
       </MapContainer>
     ),

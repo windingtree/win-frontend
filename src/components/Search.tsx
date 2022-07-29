@@ -53,7 +53,10 @@ export const Search: React.FC<{
   const { search } = useLocation();
 
   const [searchValue, setSearchValue] = useState<string>('');
-  const [checkInCheckOut, setCheckInCheckOut] = useState<[number, number]>([today, tomorrow]);
+  const [checkInCheckOut, setCheckInCheckOut] = useState<[number, number]>([
+    today,
+    tomorrow
+  ]);
   const [numSpacesReq, setNumSpacesReq] = useState<number>(1);
   const [numAdults, setNumAdults] = useState<number>(1);
   const [numChildren, setNumChildren] = useState<number>(0);
@@ -61,42 +64,43 @@ export const Search: React.FC<{
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
 
-  const handleMapSearch: () => Promise<LatLngTuple | undefined> = useCallback(async () => {
-    const params = new URLSearchParams(search);
-    logger.info('requst map');
-    setLoading(true);
-    setError(undefined);
+  const handleMapSearch: () => Promise<LatLngTuple | undefined> =
+    useCallback(async () => {
+      const params = new URLSearchParams(search);
+      logger.info('requst map');
+      setLoading(true);
+      setError(undefined);
 
-    try {
-      const searchValue = params.get('searchValue');
-      if (searchValue === null || searchValue === '') {
+      try {
+        const searchValue = params.get('searchValue');
+        if (searchValue === null || searchValue === '') {
+          setLoading(false);
+          return;
+        }
+        const res = await axios.request({
+          url: `https://nominatim.openstreetmap.org/search?format=json&q=${searchValue}`,
+          method: 'GET'
+        });
+
+        if (res.data === undefined) {
+          throw Error('Something went wrong');
+        }
+        if (res.data.length === 0) {
+          throw Error('Could not find place');
+        }
+
+        onSubmit([res.data[0].lat, res.data[0].lon]);
+        setOpen(false);
         setLoading(false);
-        return;
+        logger.info('map successfully fetched');
+        return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
+      } catch (error) {
+        logger.error(error);
+        const message = (error as Error).message || 'Unknown Search error';
+        setError(message);
+        setLoading(false);
       }
-      const res = await axios.request({
-        url: `https://nominatim.openstreetmap.org/search?format=json&q=${searchValue}`,
-        method: 'GET'
-      });
-
-      if (res.data === undefined) {
-        throw Error('Something went wrong');
-      }
-      if (res.data.length === 0) {
-        throw Error('Could not find place');
-      }
-
-      onSubmit([res.data[0].lat, res.data[0].lon]);
-      setOpen(false)
-      setLoading(false);
-      logger.info('map successfully fetched');
-      return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
-    } catch (error) {
-      logger.error(error);
-      const message = (error as Error).message || 'Unknown Search error';
-      setError(message);
-      setLoading(false);
-    }
-  }, [search, onSubmit]);
+    }, [search, onSubmit]);
 
   const handleSubmit = useCallback(async () => {
     const query = new URLSearchParams([
@@ -123,7 +127,10 @@ export const Search: React.FC<{
   useEffect(() => {
     const params = new URLSearchParams(search);
     setSearchValue(String(params.get('searchValue') ?? ''));
-    setCheckInCheckOut([Number(params.get('checkIn') ?? today), Number(params.get('checkOut') ?? tomorrow)]);
+    setCheckInCheckOut([
+      Number(params.get('checkIn') ?? today),
+      Number(params.get('checkOut') ?? tomorrow)
+    ]);
     setNumSpacesReq(Number(params.get('numSpacesReq') ?? 1));
     setNumAdults(Number(params.get('numAdults') ?? 1));
     setNumChildren(Number(params.get('numChildren') ?? 0));
@@ -134,7 +141,6 @@ export const Search: React.FC<{
   }, [search, handleMapSearch]);
 
   return (
-
     <Box
       pad="medium"
       style={{
@@ -144,29 +150,32 @@ export const Search: React.FC<{
         width: winWidth > 900 ? '33rem' : '100%',
         maxWidth: '100%',
         left: 0,
-        top: '10%',
+        top: '10%'
       }}
     >
-
       <Form
         style={{
           background: 'white',
           padding: '0.75rem',
-          borderRadius: '0.5rem',
+          borderRadius: '0.5rem'
         }}
         onSubmit={() => handleSubmit()}
       >
         {/* <Button onClick={() => setOpen(false)} alignSelf="end" icon={<Close size="medium" />} /> */}
         <Grid columns={'50%'} responsive={true}>
           <FormField label="Place">
-            <TextInput value={searchValue} onChange={(e) => setSearchValue(e.target.value)} placeholder="type here" />
+            <TextInput
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="type here"
+            />
           </FormField>
           <FormField label="Date">
             <DateInput
               buttonProps={{
-                label: `${DateTime.fromMillis(checkInCheckOut[0]).toFormat('dd.MM.yy')}-${DateTime.fromMillis(
-                  checkInCheckOut[1]
-                ).toFormat('dd.MM.yy')}`,
+                label: `${DateTime.fromMillis(checkInCheckOut[0]).toFormat(
+                  'dd.MM.yy'
+                )}-${DateTime.fromMillis(checkInCheckOut[1]).toFormat('dd.MM.yy')}`,
                 icon: undefined,
                 alignSelf: 'start',
                 style: {

@@ -4,7 +4,7 @@ import { utils } from 'ethers';
 import Blockies from 'react-blockies';
 import styled from 'styled-components';
 import { Box, Text, Notification } from 'grommet';
-import { allowedNetworks } from '../config';
+import { getNetworkInfo } from '../config';
 import { centerEllipsis, copyToClipboard } from '../utils/strings';
 import { usePoller } from '../hooks/usePoller';
 import Logger from '../utils/logger';
@@ -36,14 +36,11 @@ export const Account = ({ account, provider }: AccountProps) => {
     try {
       if (provider && account) {
         const network = await provider.getNetwork();
-        const chain = allowedNetworks.find(n => n.chainId === network.chainId);
-        if (!chain) {
-          throw new Error(`Unsupported chainId #${network.chainId}`);
-        }
+        const chain = getNetworkInfo(network.chainId);
         provider
           .getBalance(account)
-          .then(
-            (balance) => setBalance(
+          .then((balance) =>
+            setBalance(
               `(${Number(utils.formatEther(balance)).toFixed(2)} ${chain.currency})`
             )
           )

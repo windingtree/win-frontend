@@ -10,7 +10,7 @@ export interface LocalStorageConnectorConfig {
 }
 
 export const storageConnectorConfig: LocalStorageConnectorConfig = {
-  properties: ['offers','facilities']
+  properties: ['offers', 'facilities', 'selectedNetwork', 'selectedAsset']
 };
 
 export type StoredStateProps = typeof storageConnectorConfig.properties[number];
@@ -50,7 +50,9 @@ export const getState = (transform?: TransformCallback): StoredState => {
     return JSON.parse(serializedState);
   } catch (error) {
     throw new Error(
-      `Unable to get stored state due to error: ${(error as Error).message || UNKNOWN_LOCAL_STORAGE_ERROR}`
+      `Unable to get stored state due to error: ${
+        (error as Error).message || UNKNOWN_LOCAL_STORAGE_ERROR
+      }`
     );
   }
 };
@@ -60,17 +62,24 @@ export const setState = (state: StoredState, transform?: TransformCallback): voi
   const storage = localStorage;
   try {
     const serializedState = safeObjectStringify(state);
-    storage.setItem(storagePropertyName, transform ? transform<string>(serializedState) : serializedState);
+    storage.setItem(
+      storagePropertyName,
+      transform ? transform<string>(serializedState) : serializedState
+    );
   } catch (error) {
-    throw new Error(`Unable to store state due to error: ${(error as Error).message || UNKNOWN_LOCAL_STORAGE_ERROR}`);
+    throw new Error(
+      `Unable to store state due to error: ${
+        (error as Error).message || UNKNOWN_LOCAL_STORAGE_ERROR
+      }`
+    );
   }
 };
 
 // Returns combined reducer
 export const storageReducer =
   (transform?: TransformCallback) =>
-    (state: State, _: Action): State => {
-      const stateToStore = selectedState(state);
-      setState(stateToStore, transform);
-      return state;
-    };
+  (state: State, _: Action): State => {
+    const stateToStore = selectedState(state);
+    setState(stateToStore, transform);
+    return state;
+  };

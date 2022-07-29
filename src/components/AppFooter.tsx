@@ -15,7 +15,12 @@ export const AppFooter = () => {
       width={{ width: '90vw' }}
       direction="row"
     >
-      <Box direction={size === 'small' ? 'column' : "row"} align="between" gap="1rem" margin={{ bottom: 'small' }}>
+      <Box
+        direction={size === 'small' ? 'column' : 'row'}
+        align="between"
+        gap="1rem"
+        margin={{ bottom: 'small' }}
+      >
         <Anchor weight="400" color={color} href="/about" label="About" />
         <Anchor weight="400" color={color} href="/security" label="Security info" />
         <Anchor weight="400" color={color} href="/legal" label="Legal info" />
@@ -23,7 +28,7 @@ export const AppFooter = () => {
         <Anchor weight="400" color={color} href="/faq" label="FAQ" />
         <Anchor weight="400" color={color} href="/developers" label="Developers" />
       </Box>
-      <Box color={color} align="center" direction={size === 'small' ? 'column' : "row"}>
+      <Box color={color} align="center" direction={size === 'small' ? 'column' : 'row'}>
         <Anchor
           color={color}
           icon={

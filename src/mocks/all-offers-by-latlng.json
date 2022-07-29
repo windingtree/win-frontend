@@ -98,13 +98,8 @@
             "streetAddress": "14800 Landmark Blvd, Suite 640",
             "locality": "Nanjing, GA"
           },
-          "emails": [
-            "test@derbysoft.com"
-          ],
-          "phoneNumbers": [
-            "1 770 3957700",
-            "1 770 3929503"
-          ]
+          "emails": ["test@derbysoft.com"],
+          "phoneNumbers": ["1 770 3957700", "1 770 3929503"]
         },
         "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
         "location": {
@@ -683,10 +678,7 @@
           "checkOutTime": "11:00:00",
           "checkInTime": "15:00:00"
         },
-        "otherPolicies": [
-          "Non Refundable",
-          "cancel before 4PM of arrival date is free"
-        ]
+        "otherPolicies": ["Non Refundable", "cancel before 4PM of arrival date is free"]
       },
       "ec92bc67-2ba7-4ef5-bc65-105d704c626e": {
         "hotelId": "GOH203",
@@ -697,13 +689,8 @@
             "streetAddress": "14800 Landmark Blvd, Suite 640",
             "locality": "Nanjing, GA"
           },
-          "emails": [
-            "test@derbysoft.com"
-          ],
-          "phoneNumbers": [
-            "1 770 3957700",
-            "1 770 3929503"
-          ]
+          "emails": ["test@derbysoft.com"],
+          "phoneNumbers": ["1 770 3957700", "1 770 3929503"]
         },
         "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
         "location": {
@@ -1282,10 +1269,7 @@
           "checkOutTime": "11:00:00",
           "checkInTime": "15:00:00"
         },
-        "otherPolicies": [
-          "Non Refundable",
-          "cancel before 4PM of arrival date is free"
-        ]
+        "otherPolicies": ["Non Refundable", "cancel before 4PM of arrival date is free"]
       },
       "82508e25-2e6e-4d22-a83d-133525d2ac49": {
         "hotelId": "GOH103",
@@ -1296,13 +1280,8 @@
             "streetAddress": "14800 Landmark Blvd, Suite 640",
             "locality": "Nanjing, GA"
           },
-          "emails": [
-            "test@derbysoft.com"
-          ],
-          "phoneNumbers": [
-            "1 770 3957700",
-            "1 770 3929503"
-          ]
+          "emails": ["test@derbysoft.com"],
+          "phoneNumbers": ["1 770 3957700", "1 770 3929503"]
         },
         "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
         "location": {
@@ -1881,10 +1860,7 @@
           "checkOutTime": "11:00:00",
           "checkInTime": "15:00:00"
         },
-        "otherPolicies": [
-          "Non Refundable",
-          "cancel before 4PM of arrival date is free"
-        ]
+        "otherPolicies": ["Non Refundable", "cancel before 4PM of arrival date is free"]
       },
       "ea1d44e0-ded5-4bad-bba1-7289dcded121": {
         "hotelId": "GOH201",
@@ -1895,13 +1871,8 @@
             "streetAddress": "14800 Landmark Blvd, Suite 640",
             "locality": "Nanjing, GA"
           },
-          "emails": [
-            "test@derbysoft.com"
-          ],
-          "phoneNumbers": [
-            "1 770 3957700",
-            "1 770 3929503"
-          ]
+          "emails": ["test@derbysoft.com"],
+          "phoneNumbers": ["1 770 3957700", "1 770 3929503"]
         },
         "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
         "location": {
@@ -2480,10 +2451,7 @@
           "checkOutTime": "11:00:00",
           "checkInTime": "15:00:00"
         },
-        "otherPolicies": [
-          "Non Refundable",
-          "cancel before 4PM of arrival date is free"
-        ]
+        "otherPolicies": ["Non Refundable", "cancel before 4PM of arrival date is free"]
       },
       "880a2674-6b67-49b0-9ca0-ba27724227c6": {
         "hotelId": "GOH101",
@@ -2494,13 +2462,8 @@
             "streetAddress": "14800 Landmark Blvd, Suite 640",
             "locality": "Nanjing, GA"
           },
-          "emails": [
-            "test@derbysoft.com"
-          ],
-          "phoneNumbers": [
-            "1 770 3957700",
-            "1 770 3929503"
-          ]
+          "emails": ["test@derbysoft.com"],
+          "phoneNumbers": ["1 770 3957700", "1 770 3929503"]
         },
         "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
         "location": {
@@ -2634,10 +2597,7 @@
           "checkOutTime": "11:00:00",
           "checkInTime": "15:00:00"
         },
-        "otherPolicies": [
-          "Non Refundable",
-          "cancel before 4PM of arrival date is free"
-        ]
+        "otherPolicies": ["Non Refundable", "cancel before 4PM of arrival date is free"]
       },
       "2f16dfb5-c288-430c-90d3-9b2ec743b1dd": {
         "hotelId": "GOH102",
@@ -2648,13 +2608,8 @@
             "streetAddress": "14800 Landmark Blvd, Suite 640",
             "locality": "Nanjing, GA"
           },
-          "emails": [
-            "test@derbysoft.com"
-          ],
-          "phoneNumbers": [
-            "1 770 3957700",
-            "1 770 3929503"
-          ]
+          "emails": ["test@derbysoft.com"],
+          "phoneNumbers": ["1 770 3957700", "1 770 3929503"]
         },
         "description": "Welcome to the our hotel.  Atlanta is a dazzling Southern jewel. A vibrant, rich center for arts and culture. Featuring many museums, a presidential library and an incredible nightlife, Atlanta is tons of fun for business and leisure travelers alike. If you're looking for a convenient Atlanta airport hotel, we think you'll love our hotel. It's just north of Hartsfield-Jackson International Airport and just southwest of downtown Atlanta. Our Hartsfield hotel is two and a half miles from the Georgia International Convention Center, four miles from Atlanta Expo Center and 15 miles from Six Flags Over Georgia. Other nearby attractions include the World of Coca-Cola, Underground Atlanta, CNN Center, Georgia Dome, Georgia World Congress Center, and Georgia Aquarium-all less than 10 miles away from our property! Whatever brings you to this vibrant area, we think you'll have a splendid stay at our hotel near the Atlanta Airport. Our team looks forward to helping you have a terrific time. We are an excellent choice for your stay in the Atlanta Airport area. Welcome to our hotel, we're glad you landed here! We're passionate about taking good care of you. That's why we offer a broad range of services and amenities at our hotel to make your stay exceptional. Whether you're planning a corporate meeting or need accommodations for a family reunion or your child's sporting group, our ATL Airport hotel is delighted to offer you easy planning and booking tools to make the process quick and organized.",
         "location": {
@@ -3233,10 +3188,7 @@
           "checkOutTime": "11:00:00",
           "checkInTime": "15:00:00"
         },
-        "otherPolicies": [
-          "Non Refundable",
-          "cancel before 4PM of arrival date is free"
-        ]
+        "otherPolicies": ["Non Refundable", "cancel before 4PM of arrival date is free"]
       }
     },
     "rawResponse": {
@@ -3262,17 +3214,13 @@
                 "roomCount": 1,
                 "adultCount": 1,
                 "childCount": 1,
-                "childAges": [
-                  13
-                ]
+                "childAges": [13]
               },
               "inventory": 9,
               "roomId": "T2",
               "rateId": "BAR",
               "currency": "JPY",
-              "amountBeforeTax": [
-                12000
-              ],
+              "amountBeforeTax": [12000],
               "mealPlan": "RO",
               "fees": [
                 {
@@ -3335,17 +3283,13 @@
                 "roomCount": 1,
                 "adultCount": 1,
                 "childCount": 1,
-                "childAges": [
-                  13
-                ]
+                "childAges": [13]
               },
               "inventory": 20,
               "roomId": "T2",
               "rateId": "PROMO",
               "currency": "JPY",
-              "amountBeforeTax": [
-                10800
-              ],
+              "amountBeforeTax": [10800],
               "mealPlan": "RO",
               "fees": [
                 {
@@ -3408,17 +3352,13 @@
                 "roomCount": 1,
                 "adultCount": 1,
                 "childCount": 1,
-                "childAges": [
-                  13
-                ]
+                "childAges": [13]
               },
               "inventory": 5,
               "roomId": "FM4",
               "rateId": "BAR",
               "currency": "JPY",
-              "amountBeforeTax": [
-                17000
-              ],
+              "amountBeforeTax": [17000],
               "mealPlan": "BB",
               "fees": [
                 {
@@ -3492,17 +3432,13 @@
                 "roomCount": 1,
                 "adultCount": 1,
                 "childCount": 1,
-                "childAges": [
-                  13
-                ]
+                "childAges": [13]
               },
               "inventory": 9,
               "roomId": "T2",
               "rateId": "BAR",
               "currency": "JPY",
-              "amountBeforeTax": [
-                12000
-              ],
+              "amountBeforeTax": [12000],
               "mealPlan": "RO",
               "fees": [
                 {

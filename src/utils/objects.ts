@@ -1,29 +1,26 @@
-// Stringifies objects with circular dependencies
-export const safeObjectStringify = (obj: unknown, indent?: number): string => {
-  const cache = new Set();
+const circularReplacer = (maxCopies = 3) => {
+  const seen = new WeakMap();
+  const copies = {};
 
-  return JSON.stringify(
-    obj,
-    (_, value: unknown) => {
-      if (value instanceof Error) {
-        return Object.getOwnPropertyNames(value).reduce<Record<string, unknown>>(
-          (a, v) => ({
-            ...a,
-            [v]: value[v]
-          }),
-          {}
-        );
-      }
-
-      if (typeof value === 'object' && value !== null) {
-        if (cache.has(value)) {
-          return;
+  return (key: string, value: unknown) => {
+    if (value !== null && typeof value === 'object') {
+      if (seen.has(value) && seen.get(value) !== key) {
+        if (copies[key] >= maxCopies) {
+          return '[Circular]';
+        } else {
+          copies[key] = copies[key] ? copies[key]++ : (copies[key] = 1);
+          return value;
         }
-        cache.add(value);
       }
-
-      return value;
-    },
-    indent ? indent : undefined
-  );
+      seen.set(value, key);
+    }
+    return value;
+  };
 };
+
+// Stringifies objects with circular dependencies
+export const safeObjectStringify = (
+  object: unknown,
+  indent?: number,
+  maxCopies?: number
+): string => JSON.stringify(object, circularReplacer(maxCopies), indent);

@@ -9,7 +9,12 @@ const logger = Logger('useAuthRequest');
 // Allow cookie
 axios.defaults.withCredentials = true;
 
-export type UseRequestHook = [send: () => void, response: any, loading: boolean, error?: string];
+export type UseRequestHook = [
+  send: () => void,
+  response: any,
+  loading: boolean,
+  error?: string
+];
 
 export enum Method {
   post = 'post',
@@ -27,7 +32,15 @@ export const requests = {
   }
 };
 
-export const useAuthRequest = ({ url, method, data }: { url: string; method: Method; data?: any }): UseRequestHook => {
+export const useAuthRequest = ({
+  url,
+  method,
+  data
+}: {
+  url: string;
+  method: Method;
+  data?: any;
+}): UseRequestHook => {
   const dispatch = useAppDispatch();
   const { authentication } = useAppState();
   const [error, setError] = useState<string | undefined>(undefined);

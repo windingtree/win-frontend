@@ -13,9 +13,12 @@ export const Facility = () => {
   );
 
   const rooms = useMemo(
-    () => facility !== undefined ? offers.find(offer =>
-      Object.keys(offer.pricePlansReferences).includes(facility.id)
-    ) : null,
+    () =>
+      facility !== undefined
+        ? offers.find((offer) =>
+            Object.keys(offer.pricePlansReferences).includes(facility.id)
+          )
+        : null,
     [offers, facility]
   );
   return (

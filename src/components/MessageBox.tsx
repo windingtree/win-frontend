@@ -14,7 +14,13 @@ export interface MessageBoxProps {
   onClose?: () => void;
 }
 
-export const MessageBox = ({ type = 'info', show = false, loading = false, children, onClose }: MessageBoxProps) => {
+export const MessageBox = ({
+  type = 'info',
+  show = false,
+  loading = false,
+  children,
+  onClose
+}: MessageBoxProps) => {
   const size = useContext(ResponsiveContext);
 
   if (!show) {
@@ -22,7 +28,15 @@ export const MessageBox = ({ type = 'info', show = false, loading = false, child
   }
 
   return (
-    <Box fill direction="row" background="light-2" align="center" gap={size} pad={size} margin={{ bottom: 'small' }}>
+    <Box
+      fill
+      direction="row"
+      background="light-2"
+      align="center"
+      gap={size}
+      pad={size}
+      margin={{ bottom: 'small' }}
+    >
       <Box>
         {type === 'info' && <StatusInfo color="status-ok" size={size} />}
         {type === 'warn' && <Alert color="status-warning" size={size} />}
