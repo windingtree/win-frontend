@@ -23,7 +23,7 @@ export const Facility = () => {
       {!isConnecting && facility !== undefined && (
         <Box align="center" overflow="hidden">
           <Text weight={500} size="2rem" margin="small">
-            {facility.hotelName}
+            {facility.name}
           </Text>
           <Box direction="row">
             <Image height={300} width={300} />

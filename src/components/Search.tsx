@@ -121,7 +121,6 @@ export const Search: React.FC<{
   };
 
   useEffect(() => {
-    logger.info('params changed');
     const params = new URLSearchParams(search);
     setSearchValue(String(params.get('searchValue') ?? ''));
     setCheckInCheckOut([Number(params.get('checkIn') ?? today), Number(params.get('checkOut') ?? tomorrow)]);
@@ -135,90 +134,98 @@ export const Search: React.FC<{
   }, [search, handleMapSearch]);
 
   return (
-    <Form
+
+    <Box
+      pad="medium"
       style={{
         position: 'absolute',
-        zIndex: `${open ? '1' : '-1'}`,
-        alignSelf: 'center',
-        background: 'white',
-        width: '33rem',
-        margin: '1rem',
-        padding: '0.75rem',
-        marginTop:'5rem',
-        borderRadius: '0.5rem',
-        boxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'
+        zIndex: `${open ? '2' : '-1'}`,
+
+        width: winWidth > 900 ? '33rem' : '100%',
+        maxWidth: '100%',
+        left: 0,
+        top: '10%',
       }}
-      onSubmit={() => handleSubmit()}
     >
-      {/* <Button onClick={() => setOpen(false)} alignSelf="end" icon={<Close size="medium" />} /> */}
-      <Grid columns={ResponsiveTopGrid(winWidth)} responsive={true}>
-        <FormField label="Place">
-          <TextInput value={searchValue} onChange={(e) => setSearchValue(e.target.value)} placeholder="type here" />
-        </FormField>
-        <FormField label="Date">
-          <DateInput
-            buttonProps={{
-              label: `${DateTime.fromMillis(checkInCheckOut[0]).toFormat('dd.MM.yy')}-${DateTime.fromMillis(
-                checkInCheckOut[1]
-              ).toFormat('dd.MM.yy')}`,
-              icon: undefined,
-              alignSelf: 'start',
-              style: {
-                border: 'none',
-                padding: '0.51rem 0.75rem'
-              }
-            }}
-            calendarProps={{
-              // bounds: [defaultStartDay.toISO(), defaultEndDay.toISO()],
-              fill: false,
-              alignSelf: 'center',
-              margin: 'small',
-              size: 'medium'
-            }}
-            value={[
-              DateTime.fromMillis(checkInCheckOut[0]).toString(),
-              DateTime.fromMillis(checkInCheckOut[1]).toString()
-            ]}
-            onChange={({ value }) => handleDateChange({ value } as { value: string[] })}
-          />
-        </FormField>
-      </Grid>
-      <Grid columns={ResponsiveBottomGrid(winWidth)} responsive={true}>
-        <FormField label="Spaces">
-          <TextInput
-            value={numSpacesReq}
-            type="number"
-            disabled
-            onChange={(e) => setNumSpacesReq(Number(e.target.value))}
-            placeholder="type here"
-          />
-        </FormField>
-        <FormField label="Adults">
-          <TextInput
-            value={numAdults}
-            type="number"
-            onChange={(e) => setNumAdults(Number(e.target.value))}
-            placeholder="type here"
-          />
-        </FormField>
-        <FormField label="Children">
-          <TextInput
-            value={numChildren}
-            type="number"
-            onChange={(e) => setNumChildren(Number(e.target.value))}
-            placeholder="type here"
-          />
-        </FormField>
-        <Box alignSelf="center" pad={{ vertical: 'small', horizontal: 'xsmall' }}>
-          <Button type="submit" label="Search..." />
-        </Box>
-      </Grid>
-      <MessageBox loading type="info" show={loading}>
-        loading...
-      </MessageBox>
-      <MessageBox type="error" show={!!error}>
-        {error}
-      </MessageBox>
-    </Form>
+
+      <Form
+        style={{
+          background: 'white',
+          padding: '0.75rem',
+          borderRadius: '0.5rem',
+        }}
+        onSubmit={() => handleSubmit()}
+      >
+        {/* <Button onClick={() => setOpen(false)} alignSelf="end" icon={<Close size="medium" />} /> */}
+        <Grid columns={'50%'} responsive={true}>
+          <FormField label="Place">
+            <TextInput value={searchValue} onChange={(e) => setSearchValue(e.target.value)} placeholder="type here" />
+          </FormField>
+          <FormField label="Date">
+            <DateInput
+              buttonProps={{
+                label: `${DateTime.fromMillis(checkInCheckOut[0]).toFormat('dd.MM.yy')}-${DateTime.fromMillis(
+                  checkInCheckOut[1]
+                ).toFormat('dd.MM.yy')}`,
+                icon: undefined,
+                alignSelf: 'start',
+                style: {
+                  border: 'none',
+                  padding: '0.51rem 0.75rem'
+                }
+              }}
+              calendarProps={{
+                // bounds: [defaultStartDay.toISO(), defaultEndDay.toISO()],
+                fill: false,
+                alignSelf: 'center',
+                margin: 'small',
+                size: 'medium'
+              }}
+              value={[
+                DateTime.fromMillis(checkInCheckOut[0]).toString(),
+                DateTime.fromMillis(checkInCheckOut[1]).toString()
+              ]}
+              onChange={({ value }) => handleDateChange({ value } as { value: string[] })}
+            />
+          </FormField>
+        </Grid>
+        <Grid columns={'25%'} responsive={true}>
+          <FormField label="Spaces">
+            <TextInput
+              value={numSpacesReq}
+              type="number"
+              disabled
+              onChange={(e) => setNumSpacesReq(Number(e.target.value))}
+              placeholder="type here"
+            />
+          </FormField>
+          <FormField label="Adults">
+            <TextInput
+              value={numAdults}
+              type="number"
+              onChange={(e) => setNumAdults(Number(e.target.value))}
+              placeholder="type here"
+            />
+          </FormField>
+          <FormField label="Children">
+            <TextInput
+              value={numChildren}
+              type="number"
+              onChange={(e) => setNumChildren(Number(e.target.value))}
+              placeholder="type here"
+            />
+          </FormField>
+          <Box alignSelf="center" pad={{ vertical: 'small', horizontal: 'xsmall' }}>
+            <Button type="submit" label="Search..." />
+          </Box>
+        </Grid>
+        <MessageBox loading type="info" show={loading}>
+          loading...
+        </MessageBox>
+        <MessageBox type="error" show={!!error}>
+          {error}
+        </MessageBox>
+      </Form>
+    </Box>
   );
 };

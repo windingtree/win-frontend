@@ -46,6 +46,7 @@ export const mainReducer = (state: State, action: Action): State => {
 const initialState: State = {
   isConnecting: true,
   facilities: [],
+  offers: [],
   authentication: {
     timestamp: 0
   }

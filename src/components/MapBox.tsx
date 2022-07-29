@@ -104,9 +104,9 @@ export const MapBox: React.FC<{
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ZoomControl position='bottomleft' />
-        {facilities && facilities.length > 0
-          ? (facilities as any[]).map((f) => (
-            <Marker key={f.id} icon={pinIcon} position={[f.location.coordinates[0], f.location.coordinates[1]]}>
+        {(facilities && facilities.length > 0)
+          ? (facilities).map((f) => (
+            <Marker key={f.id} icon={pinIcon} position={[f.location.lat, f.location.long]}>
               <Popup>
                 {f.name} <br /> Easily customizable.
               </Popup>
