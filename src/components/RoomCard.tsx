@@ -1,7 +1,7 @@
 import type { Room } from '../store/types';
 import { Box, Text, Image, Grid, Button, Notification, Carousel } from 'grommet';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppState } from '../store';
+import { useAppDispatch } from '../store';
 import { useState } from 'react';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,7 +20,7 @@ const ResponsiveRow = (winWidth: number): string[] => {
   return ['xsmall', 'small', 'xsmall'];
 };
 
-const ResponsiveArea = (winWidth: number): any[] => {
+const ResponsiveArea = (winWidth: number): Array<{name: string, start: Array<number>, end: Array<number>}> => {
   if (winWidth <= 768) {
     return [
       { name: 'img', start: [0, 0], end: [1, 0] },
@@ -42,12 +42,11 @@ export const RoomCard: React.FC<{
   // numberOfDays: number,
   facilityId: string;
 }> = ({ facilityId, room }) => {
-  const { checkout } = useAppState();
   const { winWidth } = useWindowsDimension();
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
-  const [notification, setNotification] = useState<string | undefined>();
+  const [notification] = useState<string | undefined>();
   const numberOfDays = 1;
   const roomsNumber = 1;
 

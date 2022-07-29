@@ -58,11 +58,11 @@ export interface Policies {
 
 export interface Room {
   name: string;
-  size?: any;
+  size?: number | string;
   amenities: Amenity[];
   description: string;
   maximumOccupancy: MaximumOccupancy;
-  media?: any;
+  media?: number | string;
   customData: RoomCustomData;
   policies: Policies;
 }

@@ -76,10 +76,10 @@ export interface RoomType {
   amenities: Amenity[];
   description: string;
   maximumOccupancy: MaximumOccupancy;
-  media?: any;
+  media?: string | number;
   name: string;
   policies: Policies;
-  size?: any;
+  size?: string | number;
 }
 
 export interface RoomTypes {

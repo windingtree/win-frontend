@@ -1,6 +1,4 @@
-import type { State } from '../store';
-import { useMemo } from 'react';
-import { useLocation, Navigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Box, Header, Text } from 'grommet';
 import { Menu } from './Menu';
 import { usePageTitle } from '../hooks/usePageTitle';

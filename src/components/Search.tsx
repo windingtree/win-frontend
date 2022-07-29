@@ -47,7 +47,7 @@ export const Search: React.FC<{
   center: LatLngTuple;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   open: boolean;
-}> = ({ onSubmit, center, setOpen, open }) => {
+}> = ({ onSubmit, setOpen, open }) => {
   const navigate = useNavigate();
   const { winWidth } = useWindowsDimension();
   const { search } = useLocation();
