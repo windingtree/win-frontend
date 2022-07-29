@@ -20,11 +20,11 @@ export const ResponsiveTopGrid = (winWidth: number) => {
   } else if (winWidth >= 768) {
     return ['50%', '50%'];
   } else if (winWidth >= 600) {
-    return ['100%'];
+    return ['40%','60%'];
   } else if (winWidth <= 500) {
-    return ['100%'];
+    return ['40%','60%'];
   } else if (winWidth <= 400) {
-    return ['100%'];
+    return ['40%','60%'];
   }
 };
 export const ResponsiveBottomGrid = (winWidth: number) => {
@@ -162,7 +162,7 @@ export const Search: React.FC<{
         onSubmit={() => handleSubmit()}
       >
         {/* <Button onClick={() => setOpen(false)} alignSelf="end" icon={<Close size="medium" />} /> */}
-        <Grid columns={'50%'} responsive={true}>
+        <Grid columns={ResponsiveTopGrid(winWidth)} responsive={true}>
           <FormField label="Place">
             <TextInput
               value={searchValue}
