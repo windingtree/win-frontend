@@ -102,5 +102,8 @@
     "url": "^0.11.0",
     "os-browserify": "^0.3.0",
     "stream-http": "^3.2.0"
+  },
+  "resolutions": {
+    "autoprefixer": "10.4.5"
   }
 }

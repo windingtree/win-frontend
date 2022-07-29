@@ -12,7 +12,7 @@ export interface Fare {
 
 export interface PricedItem {
   fare: Fare[];
-  taxes: any[];
+  taxes: number[];
 }
 
 export interface Offer {

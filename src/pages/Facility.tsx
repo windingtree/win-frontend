@@ -2,25 +2,23 @@ import { useAppState } from '../store';
 import { PageWrapper } from './PageWrapper';
 import { Box, Text, Image } from 'grommet';
 import { useMemo } from 'react';
-import { RoomCard } from '../components/RoomCard';
-import { PricePlansReferences } from '../types/offers';
 
 export const Facility = () => {
-  const { isConnecting, facilities, offers } = useAppState();
+  const { isConnecting, facilities } = useAppState();
   const facility = useMemo(
     () => facilities.find((f) => '/facility/' + f.id === window.location.pathname),
     [facilities]
   );
 
-  const rooms = useMemo(
-    () =>
-      facility !== undefined
-        ? offers.find((offer) =>
-            Object.keys(offer.pricePlansReferences).includes(facility.id)
-          )
-        : null,
-    [offers, facility]
-  );
+  // const rooms = useMemo(
+  //   () =>
+  //     facility !== undefined
+  //       ? offers.find((offer) =>
+  //           Object.keys(offer.pricePlansReferences).includes(facility.id)
+  //         )
+  //       : null,
+  //   [offers, facility]
+  // );
   return (
     <PageWrapper
       breadcrumbs={[

@@ -11,7 +11,7 @@ axios.defaults.withCredentials = true;
 
 export type UseRequestHook = [
   send: () => void,
-  response: any,
+  response: { [key: string]: null | string | number } | undefined,
   loading: boolean,
   error?: string
 ];
@@ -39,7 +39,7 @@ export const useAuthRequest = ({
 }: {
   url: string;
   method: Method;
-  data?: any;
+  data?: { [key: string]: null | undefined | string | number };
 }): UseRequestHook => {
   const dispatch = useAppDispatch();
   const { authentication } = useAppState();
