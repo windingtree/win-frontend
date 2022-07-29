@@ -89,18 +89,18 @@ export const Search: React.FC<{
           throw Error('Could not find place');
         }
 
-      onSubmit([res.data[0].lat, res.data[0].lon]);
-      setOpen(false)
-      setLoading(false);
-      logger.info('map successfully fetched');
-      return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
-    } catch (error) {
-      logger.error(error);
-      const message = (error as Error).message || 'Unknown Search error';
-      setError(message);
-      setLoading(false);
-    }
-  }, [search, onSubmit]);
+        onSubmit([res.data[0].lat, res.data[0].lon]);
+        setOpen(false);
+        setLoading(false);
+        logger.info('map successfully fetched');
+        return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
+      } catch (error) {
+        logger.error(error);
+        const message = (error as Error).message || 'Unknown Search error';
+        setError(message);
+        setLoading(false);
+      }
+    }, [search, onSubmit]);
 
   const handleSubmit = useCallback(async () => {
     const query = new URLSearchParams([
@@ -141,7 +141,6 @@ export const Search: React.FC<{
   }, [search, handleMapSearch]);
 
   return (
-
     <Box
       pad="medium"
       style={{
@@ -151,29 +150,32 @@ export const Search: React.FC<{
         width: winWidth > 900 ? '33rem' : '100%',
         maxWidth: '100%',
         left: 0,
-        top: '10%',
+        top: '10%'
       }}
     >
-
       <Form
         style={{
           background: 'white',
           padding: '0.75rem',
-          borderRadius: '0.5rem',
+          borderRadius: '0.5rem'
         }}
         onSubmit={() => handleSubmit()}
       >
         {/* <Button onClick={() => setOpen(false)} alignSelf="end" icon={<Close size="medium" />} /> */}
         <Grid columns={'50%'} responsive={true}>
           <FormField label="Place">
-            <TextInput value={searchValue} onChange={(e) => setSearchValue(e.target.value)} placeholder="type here" />
+            <TextInput
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="type here"
+            />
           </FormField>
           <FormField label="Date">
             <DateInput
               buttonProps={{
-                label: `${DateTime.fromMillis(checkInCheckOut[0]).toFormat('dd.MM.yy')}-${DateTime.fromMillis(
-                  checkInCheckOut[1]
-                ).toFormat('dd.MM.yy')}`,
+                label: `${DateTime.fromMillis(checkInCheckOut[0]).toFormat(
+                  'dd.MM.yy'
+                )}-${DateTime.fromMillis(checkInCheckOut[1]).toFormat('dd.MM.yy')}`,
                 icon: undefined,
                 alignSelf: 'start',
                 style: {

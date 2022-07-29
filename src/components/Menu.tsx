@@ -36,7 +36,7 @@ export const Menu = () => {
       }}
       style={{
         background: 'white'
-      }} 
+      }}
       disabled={isConnecting}
       icon={<MenuIcon color="black" />}
       items={buildMenuConfig}

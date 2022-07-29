@@ -13,15 +13,20 @@ export const AppHeader = () => {
 
   return (
     <Header
-      pad="medium" direction="row"
-      width='100vw'
-      style={location.pathname === '/' ? {
-        position: 'absolute',
-        zIndex: '1'
-      }: {}}
+      pad="medium"
+      direction="row"
+      width="100vw"
+      style={
+        location.pathname === '/'
+          ? {
+              position: 'absolute',
+              zIndex: '1'
+            }
+          : {}
+      }
     >
       {/* {returnLocation && account && <Navigate to={returnLocation} state={null} />} */}
-      <Box background='white'>
+      <Box background="white">
         <Text size="large" weight="bold" color="brand">
           {pageTitle}
         </Text>

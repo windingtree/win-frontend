@@ -107,15 +107,19 @@ export const MapBox: React.FC<{
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ZoomControl position='bottomleft' />
-        {(facilities && facilities.length > 0)
-          ? (facilities).map((f) => (
-            <Marker key={f.id} icon={pinIcon} position={[f.location.lat, f.location.long]}>
-              <Popup>
-                {f.name} <br /> Easily customizable.
-              </Popup>
-            </Marker>
-          ))
+        <ZoomControl position="bottomleft" />
+        {facilities && facilities.length > 0
+          ? facilities.map((f) => (
+              <Marker
+                key={f.id}
+                icon={pinIcon}
+                position={[f.location.lat, f.location.long]}
+              >
+                <Popup>
+                  {f.name} <br /> Easily customizable.
+                </Popup>
+              </Marker>
+            ))
           : null}
       </MapContainer>
     ),

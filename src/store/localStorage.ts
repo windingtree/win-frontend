@@ -10,12 +10,7 @@ export interface LocalStorageConnectorConfig {
 }
 
 export const storageConnectorConfig: LocalStorageConnectorConfig = {
-  properties: [
-    'offers',
-    'facilities',
-    'selectedNetwork',
-    'selectedAsset'
-  ]
+  properties: ['offers', 'facilities', 'selectedNetwork', 'selectedAsset']
 };
 
 export type StoredStateProps = typeof storageConnectorConfig.properties[number];
@@ -83,8 +78,8 @@ export const setState = (state: StoredState, transform?: TransformCallback): voi
 // Returns combined reducer
 export const storageReducer =
   (transform?: TransformCallback) =>
-    (state: State, _: Action): State => {
-      const stateToStore = selectedState(state);
-      setState(stateToStore, transform);
-      return state;
-    };
+  (state: State, _: Action): State => {
+    const stateToStore = selectedState(state);
+    setState(stateToStore, transform);
+    return state;
+  };
