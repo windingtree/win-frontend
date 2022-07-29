@@ -50,7 +50,8 @@ const web3ModalConfig: Web3ModalConfig = {
 
 export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useAppReducer();
-  const [provider, signIn, signOut, isWeb3ModalConnecting] = useWeb3Modal(web3ModalConfig);
+  const [provider, signIn, signOut, isWeb3ModalConnecting] =
+    useWeb3Modal(web3ModalConfig);
   const [account, isAccountLoading] = useAccount(provider);
 
   useEffect(() => {

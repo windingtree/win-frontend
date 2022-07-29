@@ -18,7 +18,9 @@ export const Bookings = () => {
           <Header>Bookings</Header>
           <MessageBox type="info" show={isLoading}>
             <Box direction="row">
-              <Box margin={{ right: 'small ' }}>Tokens data is loading. Please wait..&nbsp;</Box>
+              <Box margin={{ right: 'small ' }}>
+                Tokens data is loading. Please wait..&nbsp;
+              </Box>
               <Spinner color="black" />
             </Box>
           </MessageBox>

@@ -7,7 +7,11 @@ import { backend } from '../config';
 const logger = Logger('useGetAuth');
 const path = '/api/user/login';
 
-export type UseGetAuthHook = [load: (login: string, password: string) => void, loading: boolean, error?: string];
+export type UseGetAuthHook = [
+  load: (login: string, password: string) => void,
+  loading: boolean,
+  error?: string
+];
 
 export const useGetAuth = (): UseGetAuthHook => {
   const dispatch = useAppDispatch();

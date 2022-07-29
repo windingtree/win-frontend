@@ -39,8 +39,8 @@ export const Account = ({ account, provider }: AccountProps) => {
         const chain = getNetworkInfo(network.chainId);
         provider
           .getBalance(account)
-          .then(
-            (balance) => setBalance(
+          .then((balance) =>
+            setBalance(
               `(${Number(utils.formatEther(balance)).toFixed(2)} ${chain.currency})`
             )
           )

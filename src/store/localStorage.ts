@@ -55,7 +55,9 @@ export const getState = (transform?: TransformCallback): StoredState => {
     return JSON.parse(serializedState);
   } catch (error) {
     throw new Error(
-      `Unable to get stored state due to error: ${(error as Error).message || UNKNOWN_LOCAL_STORAGE_ERROR}`
+      `Unable to get stored state due to error: ${
+        (error as Error).message || UNKNOWN_LOCAL_STORAGE_ERROR
+      }`
     );
   }
 };
@@ -65,9 +67,16 @@ export const setState = (state: StoredState, transform?: TransformCallback): voi
   const storage = localStorage;
   try {
     const serializedState = safeObjectStringify(state);
-    storage.setItem(storagePropertyName, transform ? transform<string>(serializedState) : serializedState);
+    storage.setItem(
+      storagePropertyName,
+      transform ? transform<string>(serializedState) : serializedState
+    );
   } catch (error) {
-    throw new Error(`Unable to store state due to error: ${(error as Error).message || UNKNOWN_LOCAL_STORAGE_ERROR}`);
+    throw new Error(
+      `Unable to store state due to error: ${
+        (error as Error).message || UNKNOWN_LOCAL_STORAGE_ERROR
+      }`
+    );
   }
 };
 

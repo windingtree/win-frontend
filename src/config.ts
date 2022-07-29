@@ -28,9 +28,9 @@ export interface NetworkInfo extends Network {
   decimals: number;
   rpc: string;
   contracts: {
-    ledger: string,
-    winPay: string,
-    assets: CryptoAsset[]
+    ledger: string;
+    winPay: string;
+    assets: CryptoAsset[];
   };
   blockExplorer: string;
 }
@@ -65,7 +65,8 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
           symbol: 'xDAI',
           address: '0xFca9C0F6ecF47FE8923ba42F310ef0a11D2bFd1D',
           decimals: 18,
-          image: 'https://bafybeiesj7lzhl7gb3xnnazkozdh6cdsby2nmgphqc6ts6rnlf4mnczzbm.ipfs.dweb.link/8635.png',
+          image:
+            'https://bafybeiesj7lzhl7gb3xnnazkozdh6cdsby2nmgphqc6ts6rnlf4mnczzbm.ipfs.dweb.link/8635.png',
           native: true,
           permit: false
         },
@@ -74,7 +75,8 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
           symbol: 'wxDAI',
           address: '0xFca9C0F6ecF47FE8923ba42F310ef0a11D2bFd1D',
           decimals: 18,
-          image: 'https://bafybeicj27bao6jkip26yhvc32tcyror5asop6dfxk3db67yfkxc6me6ym.ipfs.dweb.link/9021.png',
+          image:
+            'https://bafybeicj27bao6jkip26yhvc32tcyror5asop6dfxk3db67yfkxc6me6ym.ipfs.dweb.link/9021.png',
           native: false,
           permit: true
         },
@@ -83,7 +85,8 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
           symbol: 'USDC',
           address: '0x6C6E555AA2b879AEE6DFdbBd0cdf5435fd0fb5af',
           decimals: 18,
-          image: 'https://bafybeif5mtgb4mtvvqbhw2kdr4uruu5xm742vtwa3cwndpnsqdb2t4676m.ipfs.dweb.link/3408.png',
+          image:
+            'https://bafybeif5mtgb4mtvvqbhw2kdr4uruu5xm742vtwa3cwndpnsqdb2t4676m.ipfs.dweb.link/3408.png',
           native: false,
           permit: true
         }
@@ -106,7 +109,8 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
           symbol: 'xDAI',
           address: '0x25149dE5afe2043C61687AD136527d2167EFC241',
           decimals: 18,
-          image: 'https://bafybeiesj7lzhl7gb3xnnazkozdh6cdsby2nmgphqc6ts6rnlf4mnczzbm.ipfs.dweb.link/8635.png',
+          image:
+            'https://bafybeiesj7lzhl7gb3xnnazkozdh6cdsby2nmgphqc6ts6rnlf4mnczzbm.ipfs.dweb.link/8635.png',
           native: true,
           permit: false
         },
@@ -115,7 +119,8 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
           symbol: 'wxDAI',
           address: '0x25149dE5afe2043C61687AD136527d2167EFC241',
           decimals: 18,
-          image: 'https://bafybeicj27bao6jkip26yhvc32tcyror5asop6dfxk3db67yfkxc6me6ym.ipfs.dweb.link/9021.png',
+          image:
+            'https://bafybeicj27bao6jkip26yhvc32tcyror5asop6dfxk3db67yfkxc6me6ym.ipfs.dweb.link/9021.png',
           native: false,
           permit: true
         },
@@ -124,17 +129,18 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
           symbol: 'USDC',
           address: '0x1C375919362730AC69c5ACffeC775F11c9b75cF2',
           decimals: 18,
-          image: 'https://bafybeif5mtgb4mtvvqbhw2kdr4uruu5xm742vtwa3cwndpnsqdb2t4676m.ipfs.dweb.link/3408.png',
+          image:
+            'https://bafybeif5mtgb4mtvvqbhw2kdr4uruu5xm742vtwa3cwndpnsqdb2t4676m.ipfs.dweb.link/3408.png',
           native: false,
           permit: true
         }
       ]
     }
-  },
+  }
 ]);
 
 export const getNetworkInfo = (chainId: number): NetworkInfo => {
-  const chain = allowedNetworks.find(n => n.chainId === chainId);
+  const chain = allowedNetworks.find((n) => n.chainId === chainId);
   if (!chain) {
     throw new Error(`Unsupported chainId #${chainId}`);
   }

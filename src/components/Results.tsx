@@ -95,7 +95,10 @@ export const Results: React.FC<{
               <CardHeader>{facility.name}</CardHeader>
               <CardBody pad={'small'}>{facility.description.substring(0, 80) + '...'}</CardBody>
               <CardFooter justify="end">
-                <Button label="book" onClick={() => navigate(`/facility/${facility.id}`)} />
+                <Button
+                  label="book"
+                  onClick={() => navigate(`/facility/${facility.id}`)}
+                />
               </CardFooter>
             </Card>
           ))}

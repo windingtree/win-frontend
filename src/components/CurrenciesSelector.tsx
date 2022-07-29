@@ -8,7 +8,7 @@ const logger = Logger('CurrenciesSelector');
 
 export interface CurrenciesSelectorProps {
   network: NetworkInfo | undefined;
-  value: CryptoAsset | undefined,
+  value: CryptoAsset | undefined;
   onChange: (asset?: CryptoAsset) => void;
 }
 
@@ -20,37 +20,27 @@ export const CurrenciesSelector = ({
   const [asset, setAsset] = useState<CryptoAsset | undefined>(
     network ? value : undefined
   );
-  const options = useMemo<CryptoAsset[]>(
-    () => {
-      if (!network) {
-        return [];
-      }
-      const chain = getNetworkInfo(network.chainId);
-      return [...chain.contracts.assets];
-    },
-    [network]
-  );
+  const options = useMemo<CryptoAsset[]>(() => {
+    if (!network) {
+      return [];
+    }
+    const chain = getNetworkInfo(network.chainId);
+    return [...chain.contracts.assets];
+  }, [network]);
 
-  useEffect(
-    () => {
-      if (
-        !network ||
-        (
-          value &&
-          network &&
-          !network.contracts.assets.find(a => (
-            a.name === value.name && a.address === value.address
-          ))
-        )
-      ) {
-        logger.debug(
-          'Reset: saved currency value not found in the network config'
-        );
-        setAsset(undefined);
-      }
-    },
-    [network, value]
-  );
+  useEffect(() => {
+    if (
+      !network ||
+      (value &&
+        network &&
+        !network.contracts.assets.find(
+          (a) => a.name === value.name && a.address === value.address
+        ))
+    ) {
+      logger.debug('Reset: saved currency value not found in the network config');
+      setAsset(undefined);
+    }
+  }, [network, value]);
 
   const omCurrencyChange = async (option: CryptoAsset) => {
     try {
@@ -61,10 +51,7 @@ export const CurrenciesSelector = ({
     }
   };
 
-  useEffect(
-    () => onChange(asset),
-    [asset]
-  );
+  useEffect(() => onChange(asset), [asset]);
 
   if (!network) {
     return null;

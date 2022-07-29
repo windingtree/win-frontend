@@ -34,7 +34,9 @@ export const Protected = ({ component, path = '/' }: ProtectedProps) => {
   const location = useLocation();
   const { account } = useAppState();
 
-  return <>{account !== undefined ? component : <Navigate to={path} state={{ location }} />}</>;
+  return (
+    <>{account !== undefined ? component : <Navigate to={path} state={{ location }} />}</>
+  );
 };
 
 export const pagesRoutesConfig: Routes = [
@@ -96,7 +98,7 @@ export const pagesRoutesConfig: Routes = [
     path: '/checkout/:id',
     element: <Checkout />,
     title: 'Checkout',
-    label: "Checkout"
+    label: 'Checkout'
   }
 ];
 
@@ -110,4 +112,5 @@ export const processPagesConfig = (config: Routes): Routes =>
       : route
   );
 
-export const AppRoutes = () => useRoutes(useMemo(() => processPagesConfig(pagesRoutesConfig), []));
+export const AppRoutes = () =>
+  useRoutes(useMemo(() => processPagesConfig(pagesRoutesConfig), []));

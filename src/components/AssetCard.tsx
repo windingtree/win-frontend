@@ -47,11 +47,7 @@ export const AssetCard = ({ provider, network, asset }: AssetCardProps) => {
   const [account, setAccount] = useState<string | undefined>();
   const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
   const [notification, setNotification] = useState<boolean>(false);
-  const {
-    assetContract,
-    tokenContract,
-    tokenAddress
-  } = useAsset(provider, asset);
+  const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
   const [balance, setBalance] = useState<BigNumber>(BN.from(0));
 
   useEffect(() => {
@@ -69,48 +65,42 @@ export const AssetCard = ({ provider, network, asset }: AssetCardProps) => {
     getAccount();
   }, [provider]);
 
-  const addTokenToWallet = useCallback(
-    async () => {
-      try {
-        if (tokenAddress && asset) {
-          await watchAsset('ERC20', {
-            address: tokenAddress,
-            symbol: asset.symbol,
-            decimals: asset.decimals,
-            image: asset.image
-          });
-        }
-      } catch (err) {
-        logger.error(err);
+  const addTokenToWallet = useCallback(async () => {
+    try {
+      if (tokenAddress && asset) {
+        await watchAsset('ERC20', {
+          address: tokenAddress,
+          symbol: asset.symbol,
+          decimals: asset.decimals,
+          image: asset.image
+        });
       }
-    },
-    [tokenAddress, asset]
-  );
+    } catch (err) {
+      logger.error(err);
+    }
+  }, [tokenAddress, asset]);
 
-  const getBalance = useCallback(
-    async () => {
-      try {
-        if (provider && asset && assetContract && tokenContract && account) {
-          let currentBalance: BigNumber;
-          if (asset.native) {
-            currentBalance = await provider.getBalance(account);
-            logger.debug('Account balance (native):', currentBalance.toString());
-            setBalance(currentBalance);
-          } else {
-            currentBalance = await tokenContract.balanceOf(account);
-            logger.debug('Account balance (token):', currentBalance.toString());
-            setBalance(currentBalance);
-          }
+  const getBalance = useCallback(async () => {
+    try {
+      if (provider && asset && assetContract && tokenContract && account) {
+        let currentBalance: BigNumber;
+        if (asset.native) {
+          currentBalance = await provider.getBalance(account);
+          logger.debug('Account balance (native):', currentBalance.toString());
+          setBalance(currentBalance);
         } else {
-          setBalance(BN.from(0));
+          currentBalance = await tokenContract.balanceOf(account);
+          logger.debug('Account balance (token):', currentBalance.toString());
+          setBalance(currentBalance);
         }
-      } catch (err) {
-        logger.error(err);
+      } else {
         setBalance(BN.from(0));
       }
-    },
-    [provider, asset, assetContract, tokenContract, account]
-  );
+    } catch (err) {
+      logger.error(err);
+      setBalance(BN.from(0));
+    }
+  }, [provider, asset, assetContract, tokenContract, account]);
 
   const openExplorer = useCallback(
     (address: string) => {
@@ -121,12 +111,7 @@ export const AssetCard = ({ provider, network, asset }: AssetCardProps) => {
     [network]
   );
 
-  usePoller(
-    getBalance,
-    provider && asset && !!account,
-    2000,
-    'Account balance'
-  );
+  usePoller(getBalance, provider && asset && !!account, 2000, 'Account balance');
 
   if (!provider || !asset) {
     return null;
@@ -136,13 +121,10 @@ export const AssetCard = ({ provider, network, asset }: AssetCardProps) => {
     <Card background="light-1" fill>
       <CardHeader pad="small">
         <Box width="xsmall" height="xsmall">
-          <Image
-            fit="cover"
-            src={asset.image}
-          />
+          <Image fit="cover" src={asset.image} />
         </Box>
-        {!asset.native &&
-          <Box direction='column'>
+        {!asset.native && (
+          <Box direction="column">
             <Button
               primary
               size="small"
@@ -159,13 +141,11 @@ export const AssetCard = ({ provider, network, asset }: AssetCardProps) => {
               reverse
             />
           </Box>
-        }
+        )}
       </CardHeader>
       <CardBody pad="small">
-        {!account &&
-          <Spinner />
-        }
-        {account &&
+        {!account && <Spinner />}
+        {account && (
           <Box
             direction="row"
             align="center"
@@ -178,15 +158,16 @@ export const AssetCard = ({ provider, network, asset }: AssetCardProps) => {
           >
             <AccountIcon seed={account} size={7} scale={4} />
             <AccountHash size="small">
-              {shortAccount} ({Number(utils.formatEther(balance)).toFixed(2)} {asset.symbol})
+              {shortAccount} ({Number(utils.formatEther(balance)).toFixed(2)}{' '}
+              {asset.symbol})
             </AccountHash>
-            {notification && <Notification toast title="Copied to clipboard" status="normal" />}
+            {notification && (
+              <Notification toast title="Copied to clipboard" status="normal" />
+            )}
           </Box>
-        }
+        )}
       </CardBody>
-      <CardFooter pad="small">
-
-      </CardFooter>
+      <CardFooter pad="small"></CardFooter>
     </Card>
   );
 };

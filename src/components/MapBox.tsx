@@ -58,7 +58,9 @@ const MapSettings: React.FC<{
   }, [zoom, map]);
 
   useEffect(() => {
-    logger.debug(`latitude: ${position.lat.toFixed(4)}, longitude: ${position.lng.toFixed(4)}`);
+    logger.debug(
+      `latitude: ${position.lat.toFixed(4)}, longitude: ${position.lng.toFixed(4)}`
+    );
   }, [position]);
 
   useEffect(() => {
@@ -70,7 +72,9 @@ const MapSettings: React.FC<{
     const h3Indexes = kRing(h3, utils.constants.DefaultRingSize);
 
     h3Indexes.forEach((h) => {
-      L.polygon(h3ToGeoBoundary(h) as unknown as LatLngExpression[][], { color: 'red' }).addTo(map);
+      L.polygon(h3ToGeoBoundary(h) as unknown as LatLngExpression[][], {
+        color: 'red'
+      }).addTo(map);
     });
   }, [center, map]);
 

@@ -1,7 +1,7 @@
 import type {
   Asset,
   MockERC20,
-  MockWrappedERC20,
+  MockWrappedERC20
 } from '@windingtree/win-pay/dist/typechain';
 import type { CryptoAsset } from '../config';
 import { useState, useEffect } from 'react';
@@ -31,39 +31,41 @@ export const useAsset = (
   asset: CryptoAsset | undefined
 ) => {
   const [assetContract, setAssetContract] = useState<Asset | undefined>();
-  const [tokenContract, setTokenContract] = useState<MockERC20 | MockWrappedERC20 | undefined>();
+  const [tokenContract, setTokenContract] = useState<
+    MockERC20 | MockWrappedERC20 | undefined
+  >();
   const [tokenAddress, setTokenAddress] = useState<string | undefined>();
 
-  useEffect(
-    () => {
-      const getContracts  = async () => {
-        try {
-          if (provider && asset) {
-            const contract = Asset__factory.connect(asset.address, provider);
-            const assetAddress = await contract.asset();
-            logger.debug('Asset token address:', assetAddress);
-            const isWrapped = await contract.wrapped();
-            setTokenAddress(assetAddress);
-            setAssetContract(contract);
-            setTokenContract((
-              isWrapped ? MockERC20__factory : MockWrappedERC20__factory
-            ).connect(assetAddress, provider));
-          } else {
-            setTokenAddress(undefined);
-            setAssetContract(undefined);
-            setTokenContract(undefined);
-          }
-        } catch (err) {
-          logger.error(err);
+  useEffect(() => {
+    const getContracts = async () => {
+      try {
+        if (provider && asset) {
+          const contract = Asset__factory.connect(asset.address, provider);
+          const assetAddress = await contract.asset();
+          logger.debug('Asset token address:', assetAddress);
+          const isWrapped = await contract.wrapped();
+          setTokenAddress(assetAddress);
+          setAssetContract(contract);
+          setTokenContract(
+            (isWrapped ? MockERC20__factory : MockWrappedERC20__factory).connect(
+              assetAddress,
+              provider
+            )
+          );
+        } else {
           setTokenAddress(undefined);
           setAssetContract(undefined);
           setTokenContract(undefined);
         }
-      };
-      getContracts();
-    },
-    [provider, asset]
-  );
+      } catch (err) {
+        logger.error(err);
+        setTokenAddress(undefined);
+        setAssetContract(undefined);
+        setTokenContract(undefined);
+      }
+    };
+    getContracts();
+  }, [provider, asset]);
 
   return {
     assetContract,

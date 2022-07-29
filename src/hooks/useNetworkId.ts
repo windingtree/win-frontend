@@ -43,7 +43,9 @@ export const useNetworkId = (
             setIsRightNetwork(true);
           } else {
             throw new Error(
-              `Invalid network ${network.chainId} though expected ${allowedNetworks.map((n) => n.name + ' ')}`
+              `Invalid network ${network.chainId} though expected ${allowedNetworks.map(
+                (n) => n.name + ' '
+              )}`
             );
           }
         } else {

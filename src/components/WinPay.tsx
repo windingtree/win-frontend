@@ -8,10 +8,7 @@ import { NetworkSelector } from './NetworkSelector';
 import { CurrenciesSelector } from './CurrenciesSelector';
 import { AssetCard } from './AssetCard';
 
-export const allowedCurrencies = [
-  'EUR',
-  'USD'
-];
+export const allowedCurrencies = ['EUR', 'USD'];
 
 export type AllowedCurrency = typeof allowedCurrencies[number];
 
@@ -21,31 +18,29 @@ export interface PaymentCost {
 }
 
 export interface WinPayProps {
-  cost?: PaymentCost
+  cost?: PaymentCost;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const WinPay = ({ cost }: WinPayProps) => {
   const dispatch = useAppDispatch();
-  const {
-    provider,
-    account,
-    selectedNetwork,
-    selectedAsset
-  } = useAppState();
+  const { provider, account, selectedNetwork, selectedAsset } = useAppState();
 
   const setNetwork = useCallback(
-    (network: NetworkInfo) => dispatch({
-      type: 'SET_SELECTED_NETWORK',
-      payload: network
-    }),
+    (network: NetworkInfo) =>
+      dispatch({
+        type: 'SET_SELECTED_NETWORK',
+        payload: network
+      }),
     [dispatch]
   );
 
   const setAsset = useCallback(
-    (asset: CryptoAsset) => dispatch({
-      type: 'SET_SELECTED_ASSET',
-      payload: asset
-    }),
+    (asset: CryptoAsset) =>
+      dispatch({
+        type: 'SET_SELECTED_ASSET',
+        payload: asset
+      }),
     [dispatch]
   );
 
@@ -54,12 +49,9 @@ export const WinPay = ({ cost }: WinPayProps) => {
       <Box direction="row" align="right" gap="small">
         {account ? <SignOutButton /> : <SignInButton />}
       </Box>
-      {account &&
+      {account && (
         <Box direction="column" gap="small" fill>
-          <NetworkSelector
-            value={selectedNetwork}
-            onChange={setNetwork}
-          />
+          <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
           <CurrenciesSelector
             network={selectedNetwork}
             value={selectedAsset}
@@ -71,7 +63,7 @@ export const WinPay = ({ cost }: WinPayProps) => {
             asset={selectedAsset}
           />
         </Box>
-      }
+      )}
     </Box>
   );
 };

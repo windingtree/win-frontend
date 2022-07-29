@@ -109,8 +109,10 @@ export const RoomCard: React.FC<{
             {room.name}
           </Text>
           <Text size="medium" margin={{ bottom: 'xsmall' }}>
-            {room.maximumOccupancy.adults} {room.maximumOccupancy.adults > 1 ? 'adults' : 'adult'},{' '}
-            {room.maximumOccupancy.children} {room.maximumOccupancy.children > 1 ? 'children' : 'child'}
+            {room.maximumOccupancy.adults}{' '}
+            {room.maximumOccupancy.adults > 1 ? 'adults' : 'adult'},{' '}
+            {room.maximumOccupancy.children}{' '}
+            {room.maximumOccupancy.children > 1 ? 'children' : 'child'}
           </Text>
         </Box>
         <Box direction="column" justify="start" gridArea="main">

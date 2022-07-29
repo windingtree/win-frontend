@@ -16,7 +16,8 @@ const logLevels: Record<string, number> = {
 const logLevel = logLevels[process?.env?.REACT_APP_LOG_LEVEL || 'none'] || 0;
 
 // Default logging function
-const logFunction = (subject: string, args: unknown[]) => console.log(...[`${subject}:`, ...args]);
+const logFunction = (subject: string, args: unknown[]) =>
+  console.log(...[`${subject}:`, ...args]);
 
 // Creates logger
 const Logger = (subject: string): LoggerApi => ({
