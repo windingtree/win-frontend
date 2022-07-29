@@ -44,12 +44,10 @@ export const Results: React.FC<{
         })
       );
       const offers = mockOffers.data.offers;
+      const ids: string[] = []
       Object.keys(offers).map((key) => {
-        facilityIds.push();
         const priceRef: PricePlansReferences = offers[key].pricePlansReferences;
-        Object.keys(priceRef).map((r) => {
-          setFacilityIds([...facilityIds, priceRef[r].accommodation]);
-        });
+        Object.keys(priceRef).map((r) => ids.push(r));
 
         dispatch({
           type: 'SET_RECORD',
@@ -62,11 +60,14 @@ export const Results: React.FC<{
           }
         });
       });
+      setFacilityIds([...ids]);
     }
   }, [center, dispatch]);
+
   if (filteredFacilities.length === 0) {
     return null;
   }
+
   return (
     <Box
       pad="medium"
