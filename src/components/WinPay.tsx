@@ -3,10 +3,10 @@ import { useCallback } from 'react';
 import { Box } from 'grommet';
 import { BigNumber } from 'ethers';
 import { useAppDispatch, useAppState } from '../store';
-import { Account } from './Account';
 import { SignInButton, SignOutButton } from './Web3Modal';
 import { NetworkSelector } from './NetworkSelector';
 import { CurrenciesSelector } from './CurrenciesSelector';
+import { AssetCard } from './AssetCard';
 
 export const allowedCurrencies = [
   'EUR',
@@ -52,7 +52,6 @@ export const WinPay = ({ cost }: WinPayProps) => {
   return (
     <Box direction="column" gap="small" fill>
       <Box direction="row" align="right" gap="small">
-        <Account account={account} provider={provider} />
         {account ? <SignOutButton /> : <SignInButton />}
       </Box>
       {account &&
@@ -65,6 +64,11 @@ export const WinPay = ({ cost }: WinPayProps) => {
             network={selectedNetwork}
             value={selectedAsset}
             onChange={setAsset}
+          />
+          <AssetCard
+            provider={provider}
+            network={selectedNetwork}
+            asset={selectedAsset}
           />
         </Box>
       }
