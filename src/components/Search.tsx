@@ -86,6 +86,7 @@ export const Search: React.FC<{
       }
 
       onSubmit([res.data[0].lat, res.data[0].lon]);
+      setOpen(false)
       setLoading(false);
       logger.info('map successfully fetched');
       return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
@@ -140,9 +141,10 @@ export const Search: React.FC<{
         zIndex: `${open ? '1' : '-1'}`,
         alignSelf: 'center',
         background: 'white',
-        width: '35rem',
+        width: '33rem',
         margin: '1rem',
         padding: '0.75rem',
+        marginTop:'5rem',
         borderRadius: '0.5rem',
         boxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'
       }}

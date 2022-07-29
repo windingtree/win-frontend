@@ -1,10 +1,10 @@
 import type { LatLngTuple } from 'leaflet';
 import { useAppState, useAppDispatch } from '../store';
 // import Logger from '../utils/logger';
-import { Button, Box, Card, CardHeader, CardBody, CardFooter } from 'grommet';
+import { Button, Box, Card, CardHeader, CardBody, CardFooter, ResponsiveContext } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import mockdata from '../mocks/derby-soft-hotels.json';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 
 // const logger = Logger('Results');
 
@@ -14,6 +14,7 @@ export const Results: React.FC<{
   const { facilities } = useAppState();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const size = useContext(ResponsiveContext);
 
   // todo: should send API to win-backend and save response to store/local-storage
   // dep/input: geo center point
@@ -36,18 +37,19 @@ export const Results: React.FC<{
       );
     }
   }, [center, dispatch]);
-
   return (
     <Box
+      pad="medium"
       fill={true}
       overflow="hidden"
       style={{
         position: 'absolute',
         zIndex: '1',
-        width: '25rem',
-        height: '95vh',
-        margin: '1rem',
+        width: size === 'small' ? '100%' : '25rem',
+        maxWidth: '100%',
+        height: size === 'small' ? '45%' : '90%',
         right: 0,
+        bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0)'
       }}
     >

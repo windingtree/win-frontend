@@ -81,6 +81,7 @@ export interface HotelCustomData {
 
 export interface Facility {
   id: string;
+  name:string;
   providerId: string;
   providerHotelId: string;
   hotelName: string;

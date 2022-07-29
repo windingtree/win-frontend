@@ -96,6 +96,7 @@
     "prettier": "^2.6.2",
     "commitlint": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
-    "@windingtree/win-pay": "^1.0.0"
+    "@windingtree/win-pay": "^1.0.0",
+    "react-image-gallery":"1.2.8"
   }
 }

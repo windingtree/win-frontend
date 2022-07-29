@@ -1,8 +1,10 @@
-import { Image, Box, Footer, Anchor } from 'grommet';
+import { Image, Box, Footer, Anchor, ResponsiveContext } from 'grommet';
 import { Youtube } from 'grommet-icons';
+import { useContext } from 'react';
 
 export const AppFooter = () => {
   const color = 'black';
+  const size = useContext(ResponsiveContext);
 
   return (
     <Footer
@@ -10,10 +12,10 @@ export const AppFooter = () => {
       justify="between"
       margin={{ left: 'auto', right: 'auto' }}
       pad={{ horizontal: 'small' }}
-      width={{ width: '100%', max: '900px' }}
+      width={{ width: '90vw' }}
       direction="row"
     >
-      <Box direction="row" align="between" gap="1rem" margin={{ bottom: 'small' }}>
+      <Box direction={size === 'small' ? 'column' : "row"} align="between" gap="1rem" margin={{ bottom: 'small' }}>
         <Anchor weight="400" color={color} href="/about" label="About" />
         <Anchor weight="400" color={color} href="/security" label="Security info" />
         <Anchor weight="400" color={color} href="/legal" label="Legal info" />
@@ -21,7 +23,7 @@ export const AppFooter = () => {
         <Anchor weight="400" color={color} href="/faq" label="FAQ" />
         <Anchor weight="400" color={color} href="/developers" label="Developers" />
       </Box>
-      <Box color={color} align="center" direction="row">
+      <Box color={color} align="center" direction={size === 'small' ? 'column' : "row"}>
         <Anchor
           color={color}
           icon={
