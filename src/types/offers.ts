@@ -104,6 +104,10 @@ export interface Accommodation {
   otherPolicies: string[];
 }
 
+export interface Facility extends Accommodation {
+  id: string;
+}
+
 export interface Accommodations {
   [id: string]: Accommodation;
 }

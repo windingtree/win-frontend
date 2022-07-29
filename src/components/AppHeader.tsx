@@ -1,22 +1,31 @@
 import type { State } from '../store';
 import { useMemo } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
-import { Header, Text } from 'grommet';
+import { Box, Header, Text } from 'grommet';
 import { Menu } from './Menu';
 import { usePageTitle } from '../hooks/usePageTitle';
 
 export const AppHeader = () => {
-  // const { state } = useLocation();
+  const location = useLocation();
   const pageTitle = usePageTitle();
 
   // const returnLocation = useMemo(() => (state as State)?.location as Location, [state]);
 
   return (
-    <Header pad="medium" direction="row">
+    <Header
+      pad="medium" direction="row"
+      width='100vw'
+      style={location.pathname === '/' ? {
+        position: 'absolute',
+        zIndex: '1'
+      }: {}}
+    >
       {/* {returnLocation && account && <Navigate to={returnLocation} state={null} />} */}
-      <Text size="large" weight="bold" color="brand">
-        {pageTitle}
-      </Text>
+      <Box background='white'>
+        <Text size="large" weight="bold" color="brand">
+          {pageTitle}
+        </Text>
+      </Box>
       <Menu />
     </Header>
   );

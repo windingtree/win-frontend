@@ -1,4 +1,5 @@
 import type { TypedDataDomain } from '@ethersproject/abstract-signer';
+import type { Facility, Offer } from '../types/offers';
 import type { StaticProvider } from '../hooks/useRpcProvider';
 import type { Web3ModalProvider, Web3ModalSignInFunction, Web3ModalSignOutFunction } from '../hooks/useWeb3Modal';
 
@@ -66,34 +67,34 @@ export interface CheckInOutPolicy {
   checkInTime: `${number}:${number}:${number}`;
 }
 
-export interface HotelCustomData {
-  supplierId: string;
-  status: string;
-  ariType: string;
-  timezone: string;
-  rateType: string;
-  maxChildAge?: number;
-  brandCode: string;
-  chainCode: string;
-  childRateType?: any;
-  settings: any;
-}
+// export interface HotelCustomData {
+//   supplierId: string;
+//   status: string;
+//   ariType: string;
+//   timezone: string;
+//   rateType: string;
+//   maxChildAge?: number;
+//   brandCode: string;
+//   chainCode: string;
+//   childRateType?: any;
+//   settings: any;
+// }
 
-export interface Facility {
-  id: string;
-  providerId: string;
-  providerHotelId: string;
-  hotelName: string;
-  description: string;
-  location: Location;
-  addresses: Address[];
-  phones: Phone[];
-  emails: string[];
-  roomTypes: Room[];
-  checkInOutPolicy: CheckInOutPolicy;
-  rating: number;
-  customData: HotelCustomData;
-}
+// export interface Facility {
+//   id: string;
+//   providerId: string;
+//   providerHotelId: string;
+//   hotelName: string;
+//   description: string;
+//   location: Location;
+//   addresses: Address[];
+//   phones: Phone[];
+//   emails: string[];
+//   roomTypes: Room[];
+//   checkInOutPolicy: CheckInOutPolicy;
+//   rating: number;
+//   customData: HotelCustomData;
+// }
 
 export interface CheckOut {
   id?: string;
@@ -115,6 +116,7 @@ export interface State {
   account?: string;
   serviceProviderDataDomain?: TypedDataDomain;
   facilities: Facility[];
+  offers: Offer[];
   authentication: {
     token?: string;
     timestamp: number;

@@ -1,0 +1,41 @@
+{
+  "data": {
+    "offerId": "c0098f94-e9c3-43aa-bf03-6167daabf611",
+    "offer": {
+      "expiration": "2022-07-27T10:12:16.591Z",
+      "price": {
+        "currency": "JPY",
+        "public": 12000,
+        "taxes": 0
+      },
+      "pricedItems": [
+        {
+          "fare": [
+            {
+              "usage": "base",
+              "amount": 12000,
+              "description": "Base amount"
+            }
+          ],
+          "taxes": []
+        }
+      ],
+      "disclosures": [
+        [
+          "Exclusive of City Tax 15% per room per night",
+          "Exclusive of Occupancy Tax 5 JPY per person per night"
+        ]
+      ]
+    },
+    "rawResponse": {
+      "bookingToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiU0lNQVJEfEdPSE9URUx8R09IMjAzfDIwMjIwNzI4fDIwMjIwNzI5fDF8MXwxfFsxM118VDJ8QkFSIiwidGltZSI6IjE2NTg5MTQ5MzY0OTUifQ.YRfkb4mQqfnvzEVOwfyJxPHuHvW7bYCy1mfsPxnAQeA",
+      "header": {
+        "version": "v4",
+        "token": "4373dd40-293e-4fee-978a-3c2769b88092",
+        "supplierId": "GOHOTEL",
+        "distributorId": "SIMARD"
+      }
+    }
+  },
+  "status": "success"
+}
