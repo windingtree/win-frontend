@@ -56,50 +56,10 @@ export interface Policies {
   [key: string]: string;
 }
 
-export interface Room {
-  name: string;
-  size?: number | string;
-  amenities: Amenity[];
-  description: string;
-  maximumOccupancy: MaximumOccupancy;
-  media?: number | string;
-  customData: RoomCustomData;
-  policies: Policies;
-}
-
 export interface CheckInOutPolicy {
   checkOutTime: `${number}:${number}:${number}`;
   checkInTime: `${number}:${number}:${number}`;
 }
-
-// export interface HotelCustomData {
-//   supplierId: string;
-//   status: string;
-//   ariType: string;
-//   timezone: string;
-//   rateType: string;
-//   maxChildAge?: number;
-//   brandCode: string;
-//   chainCode: string;
-//   childRateType?: any;
-//   settings: any;
-// }
-
-// export interface Facility {
-//   id: string;
-//   providerId: string;
-//   providerHotelId: string;
-//   hotelName: string;
-//   description: string;
-//   location: Location;
-//   addresses: Address[];
-//   phones: Phone[];
-//   emails: string[];
-//   roomTypes: Room[];
-//   checkInOutPolicy: CheckInOutPolicy;
-//   rating: number;
-//   customData: HotelCustomData;
-// }
 
 export interface CheckOut {
   id?: string;
@@ -109,7 +69,6 @@ export interface CheckOut {
   to: string;
   roomsNumber: number;
   timestamp: number;
-  // [key: string]: unknown;
 }
 
 export interface State {

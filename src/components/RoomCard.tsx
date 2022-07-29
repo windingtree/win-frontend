@@ -1,4 +1,4 @@
-import type { Room } from '../store/types';
+import type { Offer, RoomType } from './../types/offers';
 import { Box, Text, Image, Grid, Button, Notification, Carousel } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store';
@@ -20,7 +20,7 @@ const ResponsiveRow = (winWidth: number): string[] => {
   return ['xsmall', 'small', 'xsmall'];
 };
 
-const ResponsiveArea = (winWidth: number): Array<{name: string, start: Array<number>, end: Array<number>}> => {
+const ResponsiveArea = (winWidth: number): Array<{ name: string, start: Array<number>, end: Array<number> }> => {
   if (winWidth <= 768) {
     return [
       { name: 'img', start: [0, 0], end: [1, 0] },
@@ -38,10 +38,11 @@ const ResponsiveArea = (winWidth: number): Array<{name: string, start: Array<num
 };
 
 export const RoomCard: React.FC<{
-  room: Room;
-  // numberOfDays: number,
+  room: RoomType;
+  roomId: string;
+  offer: Offer,
   facilityId: string;
-}> = ({ facilityId, room }) => {
+}> = ({ facilityId, room, roomId }) => {
   const { winWidth } = useWindowsDimension();
   const dispatch = useAppDispatch();
 
@@ -56,7 +57,7 @@ export const RoomCard: React.FC<{
       type: 'SET_CHECKOUT',
       payload: {
         id,
-        spaceId: room.customData.roomId,
+        spaceId: roomId,
         facilityId,
         from: 'today',
         to: 'tomorrow',
@@ -90,17 +91,13 @@ export const RoomCard: React.FC<{
       >
         <Box gridArea="img" fill>
           <Carousel fill>
-            <Image
-              fit="cover"
-              // src={room.media.logo}
-            />
-            {/* {room.media.images?.map((img, i) =>
+            {room.media?.map((img, i) =>
               <Image
                 key={i}
                 fit="cover"
-                src={img.uri}
+                src={img.url}
               />
-            )} */}
+            )}
           </Carousel>
         </Box>
         <Box gridArea="header">

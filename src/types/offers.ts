@@ -72,11 +72,18 @@ export interface Policies {
   [id: string]: string;
 }
 
+export interface Media {
+  type:string;
+  height:string;
+  width:string;
+  url:string
+}
+
 export interface RoomType {
   amenities: Amenity[];
   description: string;
   maximumOccupancy: MaximumOccupancy;
-  media?: string | number;
+  media?: Media[];
   name: string;
   policies: Policies;
   size?: string | number;
