@@ -3,14 +3,15 @@ import axios from 'axios';
 import { DateTime } from 'luxon';
 import { Box, Button, DateInput, Form, FormField, Grid, TextInput } from 'grommet';
 import { useCallback, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Logger from '../utils/logger';
 import { MessageBox } from './MessageBox';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
+import { useAppDispatch, useAppState } from '../store';
 
 const logger = Logger('Search');
-const today = DateTime.local().toMillis();
-const tomorrow = DateTime.local().plus({ days: 1 }).toMillis();
+const today = DateTime.local().toISO();
+const tomorrow = DateTime.local().plus({ days: 1 }).toISO();
 
 export const ResponsiveTopGrid = (winWidth: number) => {
   if (winWidth >= 1300) {
@@ -20,11 +21,11 @@ export const ResponsiveTopGrid = (winWidth: number) => {
   } else if (winWidth >= 768) {
     return ['50%', '50%'];
   } else if (winWidth >= 600) {
-    return ['100%'];
+    return ['40%', '60%'];
   } else if (winWidth <= 500) {
-    return ['100%'];
+    return ['40%', '60%'];
   } else if (winWidth <= 400) {
-    return ['100%'];
+    return ['40%', '60%'];
   }
 };
 export const ResponsiveBottomGrid = (winWidth: number) => {
@@ -49,11 +50,12 @@ export const Search: React.FC<{
   open: boolean;
 }> = ({ onSubmit, setOpen, open }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { winWidth } = useWindowsDimension();
-  const { search } = useLocation();
+  const { searchParams } = useAppState();
 
   const [searchValue, setSearchValue] = useState<string>('');
-  const [checkInCheckOut, setCheckInCheckOut] = useState<[number, number]>([
+  const [checkInCheckOut, setCheckInCheckOut] = useState<[string, string]>([
     today,
     tomorrow
   ]);
@@ -66,19 +68,17 @@ export const Search: React.FC<{
 
   const handleMapSearch: () => Promise<LatLngTuple | undefined> =
     useCallback(async () => {
-      const params = new URLSearchParams(search);
       logger.info('requst map');
       setLoading(true);
       setError(undefined);
 
       try {
-        const searchValue = params.get('searchValue');
-        if (searchValue === null || searchValue === '') {
+        if (searchParams === undefined) {
           setLoading(false);
           return;
         }
         const res = await axios.request({
-          url: `https://nominatim.openstreetmap.org/search?format=json&q=${searchValue}`,
+          url: `https://nominatim.openstreetmap.org/search?format=json&q=${searchParams?.place}`,
           method: 'GET'
         });
 
@@ -100,45 +100,59 @@ export const Search: React.FC<{
         setError(message);
         setLoading(false);
       }
-    }, [search, onSubmit]);
+    }, [searchParams, dispatch]);
 
   const handleSubmit = useCallback(async () => {
-    const query = new URLSearchParams([
-      ['searchValue', String(searchValue)],
-      ['checkIn', String(checkInCheckOut[0])],
-      ['checkOut', String(checkInCheckOut[1])],
-      ['numSpacesReq', String(numSpacesReq)],
-      ['numAdults', String(numAdults)],
-      ['numChildren', String(numChildren)]
-    ]);
+    if (searchValue === '') {
+      throw Error('Place field should not be empty');
+    }
 
-    navigate(`?${query}`, { replace: true });
-  }, [searchValue, checkInCheckOut, numSpacesReq, numAdults, numChildren, navigate]);
+    dispatch({
+      type: 'SET_SEARCH_PARAMS',
+      payload: {
+        place: searchValue,
+        arrival: checkInCheckOut[0],
+        departure: checkInCheckOut[1],
+        roomCount: numSpacesReq,
+        children: numChildren,
+        adults: numAdults
+      }
+    });
+  }, [
+    dispatch,
+    searchValue,
+    checkInCheckOut,
+    numSpacesReq,
+    numAdults,
+    numChildren,
+    navigate
+  ]);
 
   const handleDateChange = ({ value }: { value: string[] }) => {
-    const checkInisInPast = today > DateTime.fromISO(value[0]).toMillis();
-    const checkOutisInPast = tomorrow > DateTime.fromISO(value[1]).toMillis();
+    const checkInisInPast =
+      DateTime.fromISO(today).toMillis() > DateTime.fromISO(value[0]).toMillis();
+    const checkOutisInPast =
+      DateTime.fromISO(tomorrow).toMillis() > DateTime.fromISO(value[1]).toMillis();
     setCheckInCheckOut([
-      checkInisInPast ? today : DateTime.fromISO(value[0]).toMillis(),
-      checkOutisInPast ? tomorrow : DateTime.fromISO(value[1]).toMillis()
+      checkInisInPast ? today : value[0],
+      checkOutisInPast ? tomorrow : value[1]
     ]);
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(search);
-    setSearchValue(String(params.get('searchValue') ?? ''));
+    setSearchValue(searchParams?.place ?? '');
     setCheckInCheckOut([
-      Number(params.get('checkIn') ?? today),
-      Number(params.get('checkOut') ?? tomorrow)
+      searchParams?.arrival ?? today,
+      searchParams?.departure ?? tomorrow
     ]);
-    setNumSpacesReq(Number(params.get('numSpacesReq') ?? 1));
-    setNumAdults(Number(params.get('numAdults') ?? 1));
-    setNumChildren(Number(params.get('numChildren') ?? 0));
-  }, [search]);
+    setNumSpacesReq(searchParams?.roomCount ?? 1);
+    setNumAdults(searchParams?.adults ?? 1);
+    setNumChildren(searchParams?.children ?? 0);
+  }, [searchParams]);
 
   useEffect(() => {
     handleMapSearch();
-  }, [search, handleMapSearch]);
+  }, [searchParams, handleMapSearch]);
 
   return (
     <Box
@@ -162,7 +176,7 @@ export const Search: React.FC<{
         onSubmit={() => handleSubmit()}
       >
         {/* <Button onClick={() => setOpen(false)} alignSelf="end" icon={<Close size="medium" />} /> */}
-        <Grid columns={'50%'} responsive={true}>
+        <Grid columns={ResponsiveTopGrid(winWidth)} responsive={true}>
           <FormField label="Place">
             <TextInput
               value={searchValue}
@@ -173,9 +187,9 @@ export const Search: React.FC<{
           <FormField label="Date">
             <DateInput
               buttonProps={{
-                label: `${DateTime.fromMillis(checkInCheckOut[0]).toFormat(
+                label: `${DateTime.fromISO(checkInCheckOut[0]).toFormat(
                   'dd.MM.yy'
-                )}-${DateTime.fromMillis(checkInCheckOut[1]).toFormat('dd.MM.yy')}`,
+                )}-${DateTime.fromISO(checkInCheckOut[1]).toFormat('dd.MM.yy')}`,
                 icon: undefined,
                 alignSelf: 'start',
                 style: {
@@ -191,8 +205,8 @@ export const Search: React.FC<{
                 size: 'medium'
               }}
               value={[
-                DateTime.fromMillis(checkInCheckOut[0]).toString(),
-                DateTime.fromMillis(checkInCheckOut[1]).toString()
+                DateTime.fromISO(checkInCheckOut[0]).toString(),
+                DateTime.fromISO(checkInCheckOut[1]).toString()
               ]}
               onChange={({ value }) => handleDateChange({ value } as { value: string[] })}
             />

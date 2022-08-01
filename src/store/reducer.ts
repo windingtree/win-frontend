@@ -36,6 +36,11 @@ export const mainReducer = (state: State, action: Action): State => {
           ...state,
           serviceProviderDataDomain: action.payload
         };
+      case 'SET_SEARCH_PARAMS':
+        return {
+          ...state,
+          searchParams: action.payload
+        };
       default:
         return state;
     }

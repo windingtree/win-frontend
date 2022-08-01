@@ -17,7 +17,10 @@ export const PageWrapper = ({ children, breadcrumbs, kind }: PageWrapperProps) =
 
   return (
     <Page height={{ min: '75vh' }} margin={{ bottom: '1rem' }} kind={kind ?? 'narrow'}>
-      <PageContent width="100%" pad={kind && kind === 'full' ? 'none' : size}>
+      <PageContent
+        width="100%"
+        pad={{ horizontal: kind && kind === 'full' ? 'none' : 'large' }}
+      >
         <Breadcrumbs breadcrumbs={breadcrumbs} size={size} />
         <Box fill="horizontal">
           <MessageBox loading type="info" show={isConnecting}>

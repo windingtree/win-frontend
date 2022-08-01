@@ -1,6 +1,6 @@
 import { useAppState } from '../store';
 import { PageWrapper } from './PageWrapper';
-import { Box, Header, Spinner } from 'grommet';
+import { Box, Spinner } from 'grommet';
 import { useMemo } from 'react';
 import { MessageBox } from 'src/components/MessageBox';
 
@@ -15,7 +15,6 @@ export const Bookings = () => {
     <PageWrapper>
       {!isConnecting && (
         <Box>
-          <Header>Bookings</Header>
           <MessageBox type="info" show={isLoading}>
             <Box direction="row">
               <Box margin={{ right: 'small ' }}>
