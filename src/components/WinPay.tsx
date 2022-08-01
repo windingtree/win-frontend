@@ -1,28 +1,20 @@
 import type { NetworkInfo, CryptoAsset } from '../config';
+import type { Payment, PaymentSuccess } from './PaymentCard';
 import { useCallback } from 'react';
-import { Box } from 'grommet';
-import { BigNumber } from 'ethers';
+import { Box, Text } from 'grommet';
+import { formatCost } from '../utils/strings';
 import { useAppDispatch, useAppState } from '../store';
 import { SignInButton, SignOutButton } from './Web3Modal';
 import { NetworkSelector } from './NetworkSelector';
-import { CurrenciesSelector } from './CurrenciesSelector';
-import { AssetCard } from './AssetCard';
-
-export const allowedCurrencies = ['EUR', 'USD'];
-
-export type AllowedCurrency = typeof allowedCurrencies[number];
-
-export interface PaymentCost {
-  currency: AllowedCurrency;
-  value: BigNumber;
-}
+import { AssetSelector } from './AssetSelector';
+import { PaymentCard } from './PaymentCard';
 
 export interface WinPayProps {
-  cost?: PaymentCost;
+  payment: Payment;
+  onSuccess: (result: PaymentSuccess) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const WinPay = ({ cost }: WinPayProps) => {
+export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
   const dispatch = useAppDispatch();
   const { provider, account, selectedNetwork, selectedAsset } = useAppState();
 
@@ -47,20 +39,28 @@ export const WinPay = ({ cost }: WinPayProps) => {
   return (
     <Box direction="column" gap="small" fill>
       <Box direction="row" align="right" gap="small">
+        <Box direction="row" align="center">
+          <Text size="middle" weight="bold">
+            {formatCost(payment)}
+          </Text>
+        </Box>
         {account ? <SignOutButton /> : <SignInButton />}
       </Box>
       {account && (
         <Box direction="column" gap="small" fill>
           <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
-          <CurrenciesSelector
+          <AssetSelector
             network={selectedNetwork}
-            value={selectedAsset}
+            payment={payment}
+            asset={selectedAsset}
             onChange={setAsset}
           />
-          <AssetCard
+          <PaymentCard
             provider={provider}
             network={selectedNetwork}
             asset={selectedAsset}
+            payment={payment}
+            onSuccess={onSuccess}
           />
         </Box>
       )}

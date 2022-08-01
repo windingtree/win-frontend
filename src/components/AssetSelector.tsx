@@ -1,22 +1,26 @@
 import type { NetworkInfo, CryptoAsset } from '../config';
+import type { Payment } from './PaymentCard';
 import { useEffect, useMemo, useState } from 'react';
-import { Box, Select } from 'grommet';
+import { Select } from 'grommet';
 import { getNetworkInfo } from '../config';
+import { MessageBox } from './MessageBox';
 import Logger from '../utils/logger';
 
-const logger = Logger('CurrenciesSelector');
+const logger = Logger('AssetSelector');
 
-export interface CurrenciesSelectorProps {
+export interface AssetSelectorProps {
   network: NetworkInfo | undefined;
-  value: CryptoAsset | undefined;
+  payment: Payment;
+  asset: CryptoAsset | undefined;
   onChange: (asset?: CryptoAsset) => void;
 }
 
-export const CurrenciesSelector = ({
+export const AssetSelector = ({
   network,
-  value,
+  payment,
+  asset: value,
   onChange
-}: CurrenciesSelectorProps) => {
+}: AssetSelectorProps) => {
   const [asset, setAsset] = useState<CryptoAsset | undefined>(
     network ? value : undefined
   );
@@ -25,8 +29,27 @@ export const CurrenciesSelector = ({
       return [];
     }
     const chain = getNetworkInfo(network.chainId);
-    return [...chain.contracts.assets];
-  }, [network]);
+    return [...chain.contracts.assets.filter((a) => a.currency === payment.currency)];
+  }, [network, payment]);
+  const noOptions = useMemo(() => !!asset && options.length === 0, [options, asset]);
+
+  useEffect(() => {
+    try {
+      if (value) {
+        setAsset(
+          options.find(
+            (o) =>
+              o.name === value.name &&
+              o.address === value.address &&
+              o.native === value.native
+          )
+        );
+      }
+    } catch (err) {
+      logger.error(err);
+      setAsset(undefined);
+    }
+  }, [value, options]);
 
   useEffect(() => {
     if (
@@ -58,7 +81,7 @@ export const CurrenciesSelector = ({
   }
 
   return (
-    <Box>
+    <>
       <Select
         placeholder="Select token"
         labelKey="name"
@@ -66,6 +89,9 @@ export const CurrenciesSelector = ({
         value={asset}
         onChange={({ option }) => omCurrencyChange(option)}
       />
-    </Box>
+      <MessageBox type="warn" show={noOptions}>
+        {`The selected network does not support payments in ${payment.currency}`}
+      </MessageBox>
+    </>
   );
 };

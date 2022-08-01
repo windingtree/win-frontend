@@ -44,8 +44,6 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
     try {
       if (networkId) {
         setNetwork(getNetworkInfo(networkId));
-      } else {
-        setNetwork(undefined);
       }
     } catch (err) {
       logger.error(err);
