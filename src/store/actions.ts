@@ -1,4 +1,5 @@
 import type { TypedDataDomain } from '@ethersproject/abstract-signer';
+import { LatLngTuple } from 'leaflet';
 import type { NetworkInfo, CryptoAsset } from '../config';
 import type { StaticProvider } from '../hooks/useRpcProvider';
 import type {
@@ -6,7 +7,7 @@ import type {
   Web3ModalSignInFunction,
   Web3ModalSignOutFunction
 } from '../hooks/useWeb3Modal';
-import type { CheckOut, GenericStateRecord } from './types';
+import type { CheckOut, GenericStateRecord, SearchParams } from './types';
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';
@@ -89,7 +90,14 @@ export interface SetSelectedAsset {
   payload: CryptoAsset;
 }
 
+export interface SetSearchParams {
+  type: 'SET_SEARCH_PARAMS';
+  payload: SearchParams;
+}
+
+
 export type Action =
+  | SetSearchParams
   | SetCheckOutAction
   | SetAuthenticationTokenAction
   | SetConnectingAction

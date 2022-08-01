@@ -71,6 +71,15 @@ export interface CheckOut {
   timestamp: number;
 }
 
+export interface SearchParams {
+  place: string;
+  arrival: string;
+  departure: string;
+  roomCount: number;
+  children: number;
+  adults: number;
+}
+
 export interface State {
   isConnecting: boolean;
   staticProvider?: StaticProvider;
@@ -88,5 +97,6 @@ export interface State {
   checkout?: CheckOut;
   selectedNetwork?: NetworkInfo;
   selectedAsset?: CryptoAsset;
+  searchParams?: SearchParams;
   [key: string]: unknown | GenericStateRecord[];
 }
