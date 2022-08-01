@@ -15,11 +15,6 @@ import Logger from '../utils/logger';
 
 const logger = Logger('useAsset');
 
-export interface UseAssetHookProps {
-  provider?: Web3ModalProvider;
-  asset?: CryptoAsset;
-}
-
 export interface UseAssetHook {
   assetContract: Asset | undefined;
   tokenContract: MockERC20 | MockWrappedERC20 | undefined;
@@ -40,17 +35,21 @@ export const useAsset = (
     const getContracts = async () => {
       try {
         if (provider && asset) {
-          const contract = Asset__factory.connect(asset.address, provider);
+          const contract = Asset__factory
+            .connect(asset.address, provider)
+            .connect(provider.getSigner());
           const assetAddress = await contract.asset();
           logger.debug('Asset token address:', assetAddress);
           const isWrapped = await contract.wrapped();
           setTokenAddress(assetAddress);
           setAssetContract(contract);
           setTokenContract(
-            (isWrapped ? MockERC20__factory : MockWrappedERC20__factory).connect(
+            (isWrapped ? MockERC20__factory : MockWrappedERC20__factory)
+            .connect(
               assetAddress,
               provider
             )
+            .connect(provider.getSigner())
           );
         } else {
           setTokenAddress(undefined);
