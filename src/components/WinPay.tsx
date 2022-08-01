@@ -11,7 +11,7 @@ import { PaymentCard } from './PaymentCard';
 
 export interface WinPayProps {
   payment: Payment;
-  onSuccess: (result: PaymentSuccess) => void
+  onSuccess: (result: PaymentSuccess) => void;
 }
 
 export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
@@ -40,7 +40,7 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
     <Box direction="column" gap="small" fill>
       <Box direction="row" align="right" gap="small">
         <Box direction="row" align="center">
-          <Text size='middle' weight="bold">
+          <Text size="middle" weight="bold">
             {formatCost(payment)}
           </Text>
         </Box>

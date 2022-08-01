@@ -1,6 +1,12 @@
 import type { Web3ModalProvider } from '../hooks/useWeb3Modal';
 import type { NetworkInfo, CryptoAsset, AssetCurrency } from '../config';
-import type { BigNumber, Wallet, Signature, ContractReceipt, ContractTransaction } from 'ethers';
+import type {
+  BigNumber,
+  Wallet,
+  Signature,
+  ContractReceipt,
+  ContractTransaction
+} from 'ethers';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { utils, BigNumber as BN } from 'ethers';
 import Blockies from 'react-blockies';
@@ -51,7 +57,7 @@ export interface PaymentCardProps {
   network?: NetworkInfo;
   asset?: CryptoAsset;
   payment: Payment;
-  onSuccess: (result: PaymentSuccess) => void
+  onSuccess: (result: PaymentSuccess) => void;
 }
 
 const AccountIcon = styled(Blockies)`
@@ -63,7 +69,13 @@ const AccountHash = styled(Text)`
   cursor: pointer;
 `;
 
-export const PaymentCard = ({ provider, network, asset, payment, onSuccess }: PaymentCardProps) => {
+export const PaymentCard = ({
+  provider,
+  network,
+  asset,
+  payment,
+  onSuccess
+}: PaymentCardProps) => {
   const { watchAsset } = useWalletRpcApi(provider, allowedNetworks);
   const [account, setAccount] = useState<string | undefined>();
   const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
@@ -79,17 +91,18 @@ export const PaymentCard = ({ provider, network, asset, payment, onSuccess }: Pa
   const [paymentError, setPaymentError] = useState<string | undefined>();
   const [txHash, setTxHash] = useState<string | undefined>();
   const paymentBlocked = useMemo(
-    () => (
+    () =>
       !!costError ||
-      (asset && !asset.native && tokenAllowance.lt(payment.value) && permitSignature === undefined)
-    ),
+      (asset &&
+        !asset.native &&
+        tokenAllowance.lt(payment.value) &&
+        permitSignature === undefined),
     [costError, asset, tokenAllowance, permitSignature]
   );
   const allowanceBlocked = useMemo(
-    () => (
+    () =>
       (asset && !asset.native && tokenAllowance.gte(payment.value)) ||
-      permitSignature !== undefined
-    ),
+      permitSignature !== undefined,
     [asset, tokenAllowance, permitSignature]
   );
   const permitBlocked = useMemo(
@@ -106,43 +119,34 @@ export const PaymentCard = ({ provider, network, asset, payment, onSuccess }: Pa
     setTxHash(undefined);
   };
 
-  useEffect(
-    () => {
-      if (!assetsCurrencies.includes(payment.currency)) {
-        throw new Error(`Unsupported currency ${payment.currency}`);
-      }
-    },
-    [payment]
-  );
+  useEffect(() => {
+    if (!assetsCurrencies.includes(payment.currency)) {
+      throw new Error(`Unsupported currency ${payment.currency}`);
+    }
+  }, [payment]);
 
-  useEffect(
-    () => {
-      const getAccount = async () => {
-        try {
-          if (provider) {
-            setAccount(await provider.getSigner().getAddress());
-          } else {
-            setAccount(undefined);
-          }
-        } catch (err) {
-          logger.error(err);
+  useEffect(() => {
+    const getAccount = async () => {
+      try {
+        if (provider) {
+          setAccount(await provider.getSigner().getAddress());
+        } else {
+          setAccount(undefined);
         }
-      };
-      getAccount();
-    },
-    [provider]
-  );
-
-  useEffect(
-    () => {
-      setCostError(undefined);
-
-      if (payment && balance && balance.lt(payment.value)) {
-        setCostError('Balance not enough for payment');
+      } catch (err) {
+        logger.error(err);
       }
-    },
-    [payment, balance]
-  );
+    };
+    getAccount();
+  }, [provider]);
+
+  useEffect(() => {
+    setCostError(undefined);
+
+    if (payment && balance && balance.lt(payment.value)) {
+      setCostError('Balance not enough for payment');
+    }
+  }, [payment, balance]);
 
   const addTokenToWallet = useCallback(async () => {
     try {
@@ -181,139 +185,128 @@ export const PaymentCard = ({ provider, network, asset, payment, onSuccess }: Pa
     }
   }, [provider, asset, assetContract, tokenContract, account]);
 
-  const createPermit = useCallback(
-    async () => {
-      try {
-        setPermitError(undefined);
+  const createPermit = useCallback(async () => {
+    try {
+      setPermitError(undefined);
 
-        if (provider && asset && tokenContract && account) {
-          const signature = await createPermitSignature(
-            provider.getSigner() as unknown as Wallet,
-            tokenContract,
-            account,
+      if (provider && asset && tokenContract && account) {
+        const signature = await createPermitSignature(
+          provider.getSigner() as unknown as Wallet,
+          tokenContract,
+          account,
+          asset.address,
+          payment.value,
+          payment.expiration
+        );
+        logger.debug('Permit signature', signature);
+        setPermitSignature(signature);
+      } else {
+        throw new Error('You cannot create permit signature. The component is not ready');
+      }
+    } catch (err) {
+      logger.error(err);
+      setPermitError((err as Error).message || 'Unknown permit signature error');
+      setPermitSignature(undefined);
+    }
+  }, [provider, asset, tokenContract, account]);
+
+  const approveTokens = useCallback(async () => {
+    try {
+      setApprovalError(undefined);
+      setTxHash(undefined);
+
+      if (tokenContract && asset) {
+        const tx = await tokenContract.approve(asset.address, payment.value);
+        logger.debug('Approval tx', tx);
+        setTxHash(tx.hash);
+        const receipt = await tx.wait();
+        logger.debug('Approval receipt', receipt);
+      }
+    } catch (err) {
+      logger.error(err);
+      setApprovalError(
+        err.message ? err.message.split('[')[0] : 'Unknown tokens approval error'
+      );
+    }
+  }, [tokenContract, asset, payment]);
+
+  const makePayment = useCallback(async () => {
+    try {
+      setPaymentError(undefined);
+      setTxHash(undefined);
+
+      if (winPayContract && asset && account) {
+        let tx: ContractTransaction;
+        let receipt: ContractReceipt;
+
+        if (permitSignature !== undefined) {
+          // Make payment with permitted tokens
+          tx = await winPayContract[
+            'deal(bytes32,bytes32,uint256,address,uint256,(address,uint256,uint8,bytes32,bytes32))'
+          ](
+            payment.providerId,
+            payment.serviceId,
+            payment.expiration,
             asset.address,
             payment.value,
-            payment.expiration
+            {
+              owner: account,
+              deadline: payment.expiration,
+              v: permitSignature.v,
+              r: permitSignature.r,
+              s: permitSignature.s
+            }
           );
-          logger.debug('Permit signature', signature);
-          setPermitSignature(signature);
-        } else {
-          throw new Error(
-            'You cannot create permit signature. The component is not ready'
-          );
-        }
-      } catch (err) {
-        logger.error(err);
-        setPermitError((err as Error).message || 'Unknown permit signature error');
-        setPermitSignature(undefined);
-      }
-    },
-    [provider, asset, tokenContract, account]
-  );
-
-  const approveTokens = useCallback(
-    async () => {
-      try {
-        setApprovalError(undefined);
-        setTxHash(undefined);
-
-        if (tokenContract && asset) {
-          const tx = await tokenContract.approve(asset.address, payment.value);
-          logger.debug('Approval tx', tx);
+          logger.debug('Payment (permitted) tx', tx);
           setTxHash(tx.hash);
-          const receipt = await tx.wait();
-          logger.debug('Approval receipt', receipt);
-        }
-      } catch (err) {
-        logger.error(err);
-        setApprovalError(
-          err.message ? err.message.split('[')[0] : 'Unknown tokens approval error'
-        );
-      }
-    },
-    [tokenContract, asset, payment]
-  );
-
-  const makePayment = useCallback(
-    async () => {
-      try {
-        setPaymentError(undefined);
-        setTxHash(undefined);
-
-        if (winPayContract && asset && account) {
-          let tx: ContractTransaction;
-          let receipt: ContractReceipt;
-
-          if (permitSignature !== undefined) {
-            // Make payment with permitted tokens
-            tx = await winPayContract['deal(bytes32,bytes32,uint256,address,uint256,(address,uint256,uint8,bytes32,bytes32))'](
-              payment.providerId,
-              payment.serviceId,
-              payment.expiration,
-              asset.address,
-              payment.value,
-              {
-                owner: account,
-                deadline: payment.expiration,
-                v: permitSignature.v,
-                r: permitSignature.r,
-                s: permitSignature.s
-              }
-            );
-            logger.debug('Payment (permitted) tx', tx);
-            setTxHash(tx.hash);
-            receipt = await tx.wait();
-            logger.debug('Payment (permitted) deal receipt', receipt);
-          } else if (asset.native) {
-            // Make payment with native tokens
-            tx = await winPayContract['deal(bytes32,bytes32,uint256,address,uint256)'](
-              payment.providerId,
-              payment.serviceId,
-              payment.expiration,
-              asset.address,
-              payment.value,
-              {
-                value: payment.value
-              }
-            );
-            logger.debug('Payment (native) tx', tx);
-            setTxHash(tx.hash);
-            receipt = await tx.wait();
-            logger.debug('Payment (native) deal receipt', receipt);
-          } else {
-            // Make payment with approved tokens
-            tx = await winPayContract['deal(bytes32,bytes32,uint256,address,uint256)'](
-              payment.providerId,
-              payment.serviceId,
-              payment.expiration,
-              asset.address,
-              payment.value
-            );
-            logger.debug('Payment (approved) tx', tx);
-            setTxHash(tx.hash);
-            receipt = await tx.wait();
-            logger.debug('Payment (approved) deal receipt', receipt);
-          }
-          resetState();
-          onSuccess({
-            payment,
-            tx,
-            receipt
-          });
-        } else {
-          throw new Error(
-            'You cannot make payment. The component is not ready'
+          receipt = await tx.wait();
+          logger.debug('Payment (permitted) deal receipt', receipt);
+        } else if (asset.native) {
+          // Make payment with native tokens
+          tx = await winPayContract['deal(bytes32,bytes32,uint256,address,uint256)'](
+            payment.providerId,
+            payment.serviceId,
+            payment.expiration,
+            asset.address,
+            payment.value,
+            {
+              value: payment.value
+            }
           );
+          logger.debug('Payment (native) tx', tx);
+          setTxHash(tx.hash);
+          receipt = await tx.wait();
+          logger.debug('Payment (native) deal receipt', receipt);
+        } else {
+          // Make payment with approved tokens
+          tx = await winPayContract['deal(bytes32,bytes32,uint256,address,uint256)'](
+            payment.providerId,
+            payment.serviceId,
+            payment.expiration,
+            asset.address,
+            payment.value
+          );
+          logger.debug('Payment (approved) tx', tx);
+          setTxHash(tx.hash);
+          receipt = await tx.wait();
+          logger.debug('Payment (approved) deal receipt', receipt);
         }
-      } catch (err) {
-        logger.error(err);
-        setPaymentError(
-          err.message ? err.message.split('[')[0] : 'Unknown payment signature error'
-        );
+        resetState();
+        onSuccess({
+          payment,
+          tx,
+          receipt
+        });
+      } else {
+        throw new Error('You cannot make payment. The component is not ready');
       }
-    },
-    [winPayContract, asset, account, permitSignature]
-  );
+    } catch (err) {
+      logger.error(err);
+      setPaymentError(
+        err.message ? err.message.split('[')[0] : 'Unknown payment signature error'
+      );
+    }
+  }, [winPayContract, asset, account, permitSignature]);
 
   const openExplorer = useCallback(
     (address: string) => {
@@ -332,7 +325,7 @@ export const PaymentCard = ({ provider, network, asset, payment, onSuccess }: Pa
 
   return (
     <>
-      <Card background="light-1" margin={{ bottom: "small" }} fill>
+      <Card background="light-1" margin={{ bottom: 'small' }} fill>
         <CardHeader pad="small">
           <Box width="xsmall" height="xsmall">
             <Image fit="cover" src={asset.image} />
@@ -387,8 +380,8 @@ export const PaymentCard = ({ provider, network, asset, payment, onSuccess }: Pa
               {formatCost(payment, asset.symbol)}
             </Text>
           </Box>
-          <Box direction='row' gap='small'>
-            {!asset.native &&
+          <Box direction="row" gap="small">
+            {!asset.native && (
               <Button
                 secondary
                 size="small"
@@ -396,8 +389,8 @@ export const PaymentCard = ({ provider, network, asset, payment, onSuccess }: Pa
                 onClick={approveTokens}
                 disabled={allowanceBlocked}
               />
-            }
-            {asset.permit &&
+            )}
+            {asset.permit && (
               <Button
                 secondary
                 size="small"
@@ -405,7 +398,7 @@ export const PaymentCard = ({ provider, network, asset, payment, onSuccess }: Pa
                 onClick={createPermit}
                 disabled={permitBlocked}
               />
-            }
+            )}
             <Button
               primary
               size="small"
@@ -419,10 +412,7 @@ export const PaymentCard = ({ provider, network, asset, payment, onSuccess }: Pa
       <MessageBox type="info" show={!!txHash}>
         <Text>
           Transaction hash:&nbsp;
-          <ExternalLink
-            href={`${network?.blockExplorer}/tx/${txHash}`}
-            target="_blank"
-          >
+          <ExternalLink href={`${network?.blockExplorer}/tx/${txHash}`} target="_blank">
             {centerEllipsis(txHash || '')}
           </ExternalLink>
         </Text>

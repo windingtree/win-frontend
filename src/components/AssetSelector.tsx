@@ -29,23 +29,21 @@ export const AssetSelector = ({
       return [];
     }
     const chain = getNetworkInfo(network.chainId);
-    return [
-      ...chain.contracts.assets.filter(a => a.currency === payment.currency)
-    ];
+    return [...chain.contracts.assets.filter((a) => a.currency === payment.currency)];
   }, [network, payment]);
-  const noOptions = useMemo(
-    () => !!asset && options.length === 0,
-    [options, asset]
-  );
+  const noOptions = useMemo(() => !!asset && options.length === 0, [options, asset]);
 
   useEffect(() => {
     try {
       if (value) {
-        setAsset(options.find(o => (
-          o.name === value.name &&
-          o.address === value.address &&
-          o.native === value.native
-        )));
+        setAsset(
+          options.find(
+            (o) =>
+              o.name === value.name &&
+              o.address === value.address &&
+              o.native === value.native
+          )
+        );
       }
     } catch (err) {
       logger.error(err);

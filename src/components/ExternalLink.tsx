@@ -9,12 +9,7 @@ export interface ExternalLinkProps {
   children?: ReactNode;
 }
 
-export const ExternalLink = ({
-  href,
-  target,
-  label,
-  children
-}: ExternalLinkProps) => (
+export const ExternalLink = ({ href, target, label, children }: ExternalLinkProps) => (
   <Anchor
     href={href}
     target={target}
