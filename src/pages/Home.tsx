@@ -28,7 +28,8 @@ export const Home = () => {
               alignSelf: 'center',
               background: 'white',
               borderRadius: '0.5rem',
-              boxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'
+              boxShadow:
+                'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'
             }}
             onClick={() => setOpen(!open)}
             justify="end"

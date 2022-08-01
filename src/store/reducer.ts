@@ -60,15 +60,15 @@ const initialState: State = {
 
 export const combineReducers =
   (reducers: Reducer<State, Action>[]): Reducer<State, Action> =>
-    (state: State, action: Action): State => {
-      let updatedState = state;
+  (state: State, action: Action): State => {
+    let updatedState = state;
 
-      for (const reducer of reducers) {
-        updatedState = reducer(updatedState, action);
-      }
+    for (const reducer of reducers) {
+      updatedState = reducer(updatedState, action);
+    }
 
-      return updatedState;
-    };
+    return updatedState;
+  };
 
 export const useAppReducer = () => {
   const storedState = getState(); // Restoration of the Dapp state

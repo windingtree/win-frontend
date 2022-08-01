@@ -75,7 +75,7 @@ export const Search: React.FC<{
       try {
         if (searchParams === undefined) {
           setLoading(false);
-          return
+          return;
         }
         const res = await axios.request({
           url: `https://nominatim.openstreetmap.org/search?format=json&q=${searchParams?.place}`,
@@ -104,7 +104,7 @@ export const Search: React.FC<{
 
   const handleSubmit = useCallback(async () => {
     if (searchValue === '') {
-      throw Error('Place field should not be empty')
+      throw Error('Place field should not be empty');
     }
 
     dispatch({
@@ -118,11 +118,21 @@ export const Search: React.FC<{
         adults: numAdults
       }
     });
-  }, [dispatch, searchValue, checkInCheckOut, numSpacesReq, numAdults, numChildren, navigate]);
+  }, [
+    dispatch,
+    searchValue,
+    checkInCheckOut,
+    numSpacesReq,
+    numAdults,
+    numChildren,
+    navigate
+  ]);
 
   const handleDateChange = ({ value }: { value: string[] }) => {
-    const checkInisInPast = DateTime.fromISO(today).toMillis() > DateTime.fromISO(value[0]).toMillis();
-    const checkOutisInPast = DateTime.fromISO(tomorrow).toMillis() > DateTime.fromISO(value[1]).toMillis();
+    const checkInisInPast =
+      DateTime.fromISO(today).toMillis() > DateTime.fromISO(value[0]).toMillis();
+    const checkOutisInPast =
+      DateTime.fromISO(tomorrow).toMillis() > DateTime.fromISO(value[1]).toMillis();
     setCheckInCheckOut([
       checkInisInPast ? today : value[0],
       checkOutisInPast ? tomorrow : value[1]

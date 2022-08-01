@@ -73,10 +73,10 @@ export interface Policies {
 }
 
 export interface Media {
-  type:string;
-  height:string;
-  width:string;
-  url:string
+  type: string;
+  height: string;
+  width: string;
+  url: string;
 }
 
 export interface RoomType {

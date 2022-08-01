@@ -1,5 +1,4 @@
 import type { TypedDataDomain } from '@ethersproject/abstract-signer';
-import { LatLngTuple } from 'leaflet';
 import type { NetworkInfo, CryptoAsset } from '../config';
 import type { StaticProvider } from '../hooks/useRpcProvider';
 import type {
@@ -94,7 +93,6 @@ export interface SetSearchParams {
   type: 'SET_SEARCH_PARAMS';
   payload: SearchParams;
 }
-
 
 export type Action =
   | SetSearchParams

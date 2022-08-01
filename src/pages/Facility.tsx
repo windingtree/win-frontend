@@ -14,9 +14,7 @@ export const Facility = () => {
   const facilityOffers = useMemo(
     () =>
       facility !== undefined
-        ? offers.filter((offer) =>
-          offer.pricePlansReferences[facility.id] !== undefined
-        )
+        ? offers.filter((offer) => offer.pricePlansReferences[facility.id] !== undefined)
         : null,
     [offers, facility]
   );
@@ -43,15 +41,18 @@ export const Facility = () => {
               </Text>
             </Box>
           </Box>
-          {facilityOffers && facilityOffers.map((offer, i) => (
-            <RoomCard
-              key={i}
-              facilityId={facility.id}
-              offer={offer}
-              room={facility.roomTypes[offer.pricePlansReferences[facility.id].roomType]}
-              roomId={offer.pricePlansReferences[facility.id].roomType}
-            />
-          ))}
+          {facilityOffers &&
+            facilityOffers.map((offer, i) => (
+              <RoomCard
+                key={i}
+                facilityId={facility.id}
+                offer={offer}
+                room={
+                  facility.roomTypes[offer.pricePlansReferences[facility.id].roomType]
+                }
+                roomId={offer.pricePlansReferences[facility.id].roomType}
+              />
+            ))}
         </Box>
       )}
     </PageWrapper>

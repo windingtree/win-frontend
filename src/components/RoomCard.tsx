@@ -20,7 +20,9 @@ const ResponsiveRow = (winWidth: number): string[] => {
   return ['xsmall', 'small', 'xsmall'];
 };
 
-const ResponsiveArea = (winWidth: number): Array<{ name: string, start: Array<number>, end: Array<number> }> => {
+const ResponsiveArea = (
+  winWidth: number
+): Array<{ name: string; start: Array<number>; end: Array<number> }> => {
   if (winWidth <= 768) {
     return [
       { name: 'img', start: [0, 0], end: [1, 0] },
@@ -40,7 +42,7 @@ const ResponsiveArea = (winWidth: number): Array<{ name: string, start: Array<nu
 export const RoomCard: React.FC<{
   room: RoomType;
   roomId: string;
-  offer: Offer,
+  offer: Offer;
   facilityId: string;
 }> = ({ facilityId, room, roomId }) => {
   const { winWidth } = useWindowsDimension();
@@ -91,13 +93,9 @@ export const RoomCard: React.FC<{
       >
         <Box gridArea="img" fill>
           <Carousel fill>
-            {room.media?.map((img, i) =>
-              <Image
-                key={i}
-                fit="cover"
-                src={img.url}
-              />
-            )}
+            {room.media?.map((img, i) => (
+              <Image key={i} fit="cover" src={img.url} />
+            ))}
           </Carousel>
         </Box>
         <Box gridArea="header">
