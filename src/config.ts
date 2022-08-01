@@ -8,6 +8,10 @@ export enum AppMode {
   test = 'test'
 }
 
+export const assetsCurrencies = ['EUR', 'USD']; // currency the asset is pegged to
+
+export type AssetCurrency = typeof assetsCurrencies[number];
+
 export interface CryptoAsset {
   name: string;
   symbol: string;
@@ -16,6 +20,7 @@ export interface CryptoAsset {
   image: string;
   native: boolean;
   permit: boolean;
+  currency: AssetCurrency;
 }
 
 export interface Network {
@@ -57,38 +62,41 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
     currency: 'xDAI',
     decimals: 18,
     contracts: {
-      ledger: '0x0062bCFd8ED3Ac59639Ae4A5D38B81491CCb83Bd',
-      winPay: '0x3C00738B2eEe7663C273f9A0d945FED411483d45',
+      ledger: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
+      winPay: '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
       assets: [
         {
           name: 'Native xDAI',
           symbol: 'xDAI',
-          address: '0xFca9C0F6ecF47FE8923ba42F310ef0a11D2bFd1D',
+          address: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
           decimals: 18,
           image:
             'https://bafybeiesj7lzhl7gb3xnnazkozdh6cdsby2nmgphqc6ts6rnlf4mnczzbm.ipfs.dweb.link/8635.png',
           native: true,
-          permit: false
+          permit: false,
+          currency: 'USD'
         },
         {
           name: 'Wrapped xDAI',
           symbol: 'wxDAI',
-          address: '0xFca9C0F6ecF47FE8923ba42F310ef0a11D2bFd1D',
+          address: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
           decimals: 18,
           image:
             'https://bafybeicj27bao6jkip26yhvc32tcyror5asop6dfxk3db67yfkxc6me6ym.ipfs.dweb.link/9021.png',
           native: false,
-          permit: true
+          permit: true,
+          currency: 'USD'
         },
         {
           name: 'USDC',
           symbol: 'USDC',
-          address: '0x6C6E555AA2b879AEE6DFdbBd0cdf5435fd0fb5af',
+          address: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
           decimals: 18,
           image:
             'https://bafybeif5mtgb4mtvvqbhw2kdr4uruu5xm742vtwa3cwndpnsqdb2t4676m.ipfs.dweb.link/3408.png',
           native: false,
-          permit: true
+          permit: true,
+          currency: 'USD'
         }
       ]
     }
@@ -112,7 +120,8 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
           image:
             'https://bafybeiesj7lzhl7gb3xnnazkozdh6cdsby2nmgphqc6ts6rnlf4mnczzbm.ipfs.dweb.link/8635.png',
           native: true,
-          permit: false
+          permit: false,
+          currency: 'USD'
         },
         {
           name: 'Wrapped xDAI',
@@ -122,7 +131,8 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
           image:
             'https://bafybeicj27bao6jkip26yhvc32tcyror5asop6dfxk3db67yfkxc6me6ym.ipfs.dweb.link/9021.png',
           native: false,
-          permit: true
+          permit: true,
+          currency: 'USD'
         },
         {
           name: 'USDC',
@@ -132,7 +142,8 @@ export const allowedNetworks: readonly NetworkInfo[] = Object.freeze([
           image:
             'https://bafybeif5mtgb4mtvvqbhw2kdr4uruu5xm742vtwa3cwndpnsqdb2t4676m.ipfs.dweb.link/3408.png',
           native: false,
-          permit: true
+          permit: true,
+          currency: 'USD'
         }
       ]
     }
