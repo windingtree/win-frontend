@@ -1,3 +1,6 @@
+import type { Payment } from '../components/PaymentCard';
+import { utils } from 'ethers';
+
 // Makes shorter text with ellipsis in the center
 export const centerEllipsis = (text: string, width = 4, prefix = 2): string =>
   text
@@ -9,9 +12,10 @@ export const centerEllipsis = (text: string, width = 4, prefix = 2): string =>
     : '';
 
 // Copies text to clipboard
-export const copyToClipboard = (text: string): Promise<void> => {
+export const copyToClipboard = async (text: string): Promise<void> => {
   if (navigator.clipboard && window.isSecureContext) {
-    return navigator.clipboard.writeText(text).then((resolve) => resolve);
+    const resolve = await navigator.clipboard.writeText(text);
+    return resolve;
   } else {
     const textArea = document.createElement('textarea');
     textArea.value = text;
@@ -25,3 +29,6 @@ export const copyToClipboard = (text: string): Promise<void> => {
     });
   }
 };
+
+export const formatCost = (cost: Payment, token?: string): string =>
+  `${Number(utils.formatEther(cost.value)).toFixed(2)} ${token || cost.currency}`;
