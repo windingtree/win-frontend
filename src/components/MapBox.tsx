@@ -1,11 +1,9 @@
-import type { Map, LatLngTuple, LatLngExpression } from 'leaflet';
+import type { Map, LatLngTuple } from 'leaflet';
 import { Box } from 'grommet';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
 import L from 'leaflet';
-import { geoToH3, h3ToGeoBoundary, kRing } from 'h3-js';
-import { utils } from '@windingtree/videre-sdk';
 import { useAppState } from '../store';
 
 const logger = Logger('MapBox');
@@ -66,17 +64,6 @@ const MapSettings: React.FC<{
   useEffect(() => {
     logger.debug(`zoom: ${zoom}`);
   }, [zoom]);
-
-  useEffect(() => {
-    const h3 = geoToH3(center[0], center[1], utils.constants.DefaultH3Resolution);
-    const h3Indexes = kRing(h3, utils.constants.DefaultRingSize);
-
-    h3Indexes.forEach((h) => {
-      L.polygon(h3ToGeoBoundary(h) as unknown as LatLngExpression[][], {
-        color: 'red'
-      }).addTo(map);
-    });
-  }, [center, map]);
 
   return null;
 };
