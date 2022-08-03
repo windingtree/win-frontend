@@ -36,8 +36,8 @@ export const Facility = () => {
             {facility.name}
           </Text>
           <Grid
-            rows={['medium', 'medium']}
-            columns={['medium']}
+            rows={['auto']}
+            columns={['medium', 'medium']}
             gap="small"
             areas={[
               { name: 'image', start: [0, 0], end: [0, 0] },
@@ -45,9 +45,7 @@ export const Facility = () => {
             ]}
           >
             <Box gridArea="image">
-              <Image />
-
-              {/* <Image height={300} width={300} /> */}
+              <Image height={300} width={300} />
             </Box>
             <Box gridArea="text">
               <Text weight={500} size="1rem" margin="small">

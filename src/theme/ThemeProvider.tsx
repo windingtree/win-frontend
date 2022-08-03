@@ -1,4 +1,5 @@
 import { Grommet } from 'grommet';
+import breakpoints from './breakpoints';
 
 const theme = {
   global: {
@@ -9,11 +10,12 @@ const theme = {
       family: 'Inter',
       size: '1rem',
       height: '1.1rem'
-    }
+    },
+    breakpoints
   }
 };
 
-export const Theme: React.FC<{
+export const ThemeProvider: React.FC<{
   children?: React.ReactNode;
 }> = ({ children }) => (
   <Grommet theme={theme} full>

@@ -1,12 +1,12 @@
 import { AppStateProvider } from './store';
 import { AppRoutes } from './Routes';
-import { Theme } from './Theme';
+import { ThemeProvider } from './theme/ThemeProvider';
 
 const App = () => (
   <AppStateProvider>
-    <Theme>
+    <ThemeProvider>
       <AppRoutes />
-    </Theme>
+    </ThemeProvider>
   </AppStateProvider>
 );
 
