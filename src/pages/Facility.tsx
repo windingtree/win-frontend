@@ -1,6 +1,6 @@
 import { useAppState } from '../store';
 import { MainLayout } from '../layouts/MainLayout';
-import { Box, Text, Image, Grid } from 'grommet';
+import { Box, Text, Image } from 'grommet';
 import { useMemo } from 'react';
 import { RoomCard } from '../components/RoomCard';
 
@@ -21,7 +21,6 @@ export const Facility = () => {
   );
 
   return (
-    // Put the MainLayout in the layout folder
     <MainLayout
       breadcrumbs={[
         {
@@ -35,26 +34,14 @@ export const Facility = () => {
           <Text weight={500} size="2rem" margin="small">
             {facility.name}
           </Text>
-          <Grid
-            rows={['medium', 'medium']}
-            columns={['medium']}
-            gap="small"
-            areas={[
-              { name: 'image', start: [0, 0], end: [0, 0] },
-              { name: 'text', start: [1, 0], end: [1, 0] }
-            ]}
-          >
-            <Box gridArea="image">
-              <Image />
-
-              {/* <Image height={300} width={300} /> */}
-            </Box>
-            <Box gridArea="text">
+          <Box direction="row">
+            <Image height={300} width={300} />
+            <Box>
               <Text weight={500} size="1rem" margin="small">
                 {facility.description}
               </Text>
             </Box>
-          </Grid>
+          </Box>
           {facilityOffers?.map((offer) => {
             return (
               <RoomCard
