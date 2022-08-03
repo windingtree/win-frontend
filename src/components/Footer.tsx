@@ -1,13 +1,13 @@
-import { Image, Box, Footer, Anchor, ResponsiveContext } from 'grommet';
+import { Image, Box, Footer as BaseFooter, Anchor, ResponsiveContext } from 'grommet';
 import { Youtube } from 'grommet-icons';
 import { useContext } from 'react';
 
-export const AppFooter = () => {
+export const Footer = () => {
   const color = 'black';
   const size = useContext(ResponsiveContext);
 
   return (
-    <Footer
+    <BaseFooter
       responsive={true}
       justify="between"
       margin={{ left: 'auto', right: 'auto' }}
@@ -60,6 +60,6 @@ export const AppFooter = () => {
           title="Follow Winding Tree on Youtube"
         />
       </Box>
-    </Footer>
+    </BaseFooter>
   );
 };
