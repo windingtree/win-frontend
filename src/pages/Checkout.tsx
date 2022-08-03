@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import { utils } from 'ethers';
 import { useNavigate } from 'react-router-dom';
-import { PageWrapper } from './PageWrapper';
+import { MainLayout } from '../layouts/MainLayout';
 import { WinPay } from '../components/WinPay';
 import Logger from '../utils/logger';
 
@@ -11,7 +11,7 @@ export const Checkout = () => {
   const navigate = useNavigate();
 
   return (
-    <PageWrapper
+    <MainLayout
       breadcrumbs={[
         {
           label: 'Home',
@@ -38,6 +38,6 @@ export const Checkout = () => {
           }}
         />
       </Box>
-    </PageWrapper>
+    </MainLayout>
   );
 };

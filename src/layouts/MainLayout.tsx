@@ -5,13 +5,13 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 import { MessageBox } from '../components/MessageBox';
 import { useAppState } from '../store';
 
-export interface PageWrapperProps {
+export interface MainLayoutProps {
   children?: React.ReactNode;
   breadcrumbs?: Breadcrumb[];
   kind?: string;
 }
 
-export const PageWrapper = ({ children, breadcrumbs, kind }: PageWrapperProps) => {
+export const MainLayout = ({ children, breadcrumbs, kind }: MainLayoutProps) => {
   const size = useContext(ResponsiveContext);
   const { isConnecting } = useAppState();
 

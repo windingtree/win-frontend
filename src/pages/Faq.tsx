@@ -1,4 +1,4 @@
-import { PageWrapper } from './PageWrapper';
+import { MainLayout } from '../layouts/MainLayout';
 import { Accordion, AccordionPanel, Box, Text } from 'grommet';
 const faq = [
   {
@@ -41,7 +41,7 @@ const faq = [
 
 export const Faq = () => {
   return (
-    <PageWrapper
+    <MainLayout
       breadcrumbs={[
         {
           label: 'Home',
@@ -60,6 +60,6 @@ export const Faq = () => {
           </AccordionPanel>
         ))}
       </Accordion>
-    </PageWrapper>
+    </MainLayout>
   );
 };

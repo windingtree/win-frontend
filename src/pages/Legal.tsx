@@ -1,9 +1,9 @@
-import { PageWrapper } from './PageWrapper';
+import { MainLayout } from '../layouts/MainLayout';
 import { Box, Text } from 'grommet';
 
 export const Legal = () => {
   return (
-    <PageWrapper
+    <MainLayout
       breadcrumbs={[
         {
           label: 'Home',
@@ -16,6 +16,6 @@ export const Legal = () => {
           Legal info
         </Text>
       </Box>
-    </PageWrapper>
+    </MainLayout>
   );
 };

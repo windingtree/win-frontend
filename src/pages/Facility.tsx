@@ -1,11 +1,12 @@
 import { useAppState } from '../store';
-import { PageWrapper } from './PageWrapper';
+import { MainLayout } from '../layouts/MainLayout';
 import { Box, Text, Image } from 'grommet';
 import { useMemo } from 'react';
 import { RoomCard } from '../components/RoomCard';
 
 export const Facility = () => {
-  const { isConnecting, facilities, offers } = useAppState();
+  const { facilities, offers } = useAppState();
+
   const facility = useMemo(
     () => facilities.find((f) => '/facility/' + f.id === window.location.pathname),
     [facilities]
@@ -20,7 +21,8 @@ export const Facility = () => {
   );
 
   return (
-    <PageWrapper
+    // Put the MainLayout in the layout folder
+    <MainLayout
       breadcrumbs={[
         {
           label: 'Search',
@@ -28,7 +30,7 @@ export const Facility = () => {
         }
       ]}
     >
-      {!isConnecting && facility !== undefined && (
+      {facility && (
         <Box align="center" overflow="hidden">
           <Text weight={500} size="2rem" margin="small">
             {facility.name}
@@ -41,20 +43,21 @@ export const Facility = () => {
               </Text>
             </Box>
           </Box>
-          {facilityOffers &&
-            facilityOffers.map((offer, i) => (
+          {facilityOffers?.map((offer) => {
+            return (
               <RoomCard
-                key={i}
-                facilityId={facility.id}
+                key={offer?.id}
+                facilityId={facility?.id}
                 offer={offer}
                 room={
                   facility.roomTypes[offer.pricePlansReferences[facility.id].roomType]
                 }
                 roomId={offer.pricePlansReferences[facility.id].roomType}
               />
-            ))}
+            );
+          })}
         </Box>
       )}
-    </PageWrapper>
+    </MainLayout>
   );
 };
