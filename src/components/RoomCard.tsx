@@ -1,5 +1,4 @@
-import type { Offer, RoomType } from './../types/offers';
-import type { GenericStateRecord } from '../store/types';
+import type { OfferRecord, RoomType } from './../types/offers';
 import { Box, Text, Image, Grid, Button, Notification, Carousel, Spinner } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store';
@@ -48,7 +47,7 @@ const ResponsiveArea = (
 export const RoomCard: React.FC<{
   room: RoomType;
   roomId: string;
-  offer: Offer & GenericStateRecord;
+  offer: OfferRecord;
   facilityId: string;
 }> = ({ offer, facilityId, room }) => {
   const { winWidth } = useWindowsDimension();
@@ -67,7 +66,7 @@ export const RoomCard: React.FC<{
       setError(undefined);
       setLoading(true);
 
-      const res = await axios.post(backend.url + '/offers/' + offer.id + '/price');
+      const res = await axios.post(`${backend.url}/offers/${offer.id}/price`);
       dispatch({
         type: 'SET_CHECKOUT',
         payload: {

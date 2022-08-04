@@ -1,11 +1,10 @@
+import type { OfferRecord } from '../types/offers';
 import { useAppState } from '../store';
 import { MainLayout } from '../layouts/MainLayout';
 import { Box, Text, Image } from 'grommet';
 import { useMemo } from 'react';
 import { RoomCard } from '../components/RoomCard';
 import { Container, Row, Col } from 'react-grid-system';
-import { Offer } from '../types/offers';
-import { GenericStateRecord } from '../store/types';
 
 export const Facility = () => {
   const { facilities, offers } = useAppState();
@@ -18,7 +17,7 @@ export const Facility = () => {
   const facilityOffers = useMemo(
     () =>
       facility !== undefined && offers !== undefined
-        ? (offers as (Offer & GenericStateRecord)[]).filter(
+        ? (offers as OfferRecord[]).filter(
             (offer) => offer.pricePlansReferences[facility.id] !== undefined
           )
         : null,

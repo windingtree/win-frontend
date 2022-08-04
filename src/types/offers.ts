@@ -32,9 +32,14 @@ export interface Offer {
   price: Price;
   pricePlansReferences: PricePlansReferences;
 }
+export interface OfferRecord extends Offer {
+  id: string;
+}
+
 export interface PricedOffer extends Offer {
   offerId: string;
 }
+
 export interface Offers {
   [id: string]: Offer;
 }

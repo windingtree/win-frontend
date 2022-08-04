@@ -1,21 +1,21 @@
+import type { PersonalInfo } from '../store/types';
 import { Box, FormField, TextInput, DateInput, Form, Button } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { PageWrapper } from './PageWrapper';
 import Logger from '../utils/logger';
 import { useCallback, useState } from 'react';
 import axios from 'axios';
-import { MessageBox } from 'src/components/MessageBox';
+import { MessageBox } from '../components/MessageBox';
 import { DateTime } from 'luxon';
 import { useAppDispatch, useAppState } from '../store';
-import { PersonalInfo } from 'src/store/types';
 import { backend } from '../config';
+import { regexp } from '@windingtree/org.id-utils';
 
-// const offerId = 1;
 const logger = Logger('GuestInfo');
-const defaultValue = {
+const defaultValue: PersonalInfo = {
   firstname: '',
   lastname: '',
-  birthday: new Date(),
+  birthdate: new Date(),
   email: '',
   phone: ''
 };
@@ -33,21 +33,23 @@ export const GuestInfo = () => {
     try {
       setError(undefined);
       setLoading(true);
-      if (
-        value.firstname === '' ||
-        value.lastname === '' ||
-        value.email === '' ||
-        value.phone === ''
-      ) {
-        throw Error('Empty fields');
-      }
+
       if (checkout === undefined) {
         throw Error('Something went wrong');
       }
+      const passengers = {
+        T1: {
+          firstnames: [value.firstname],
+          lastnames: [value.lastname],
+          contactInformation: [value.email, value.phone],
+          birthdate: value.birthdate,
+          type: 'ADT'
+        }
+      };
 
       await axios.post(
-        backend.url + '/offers/' + checkout.pricedOffer.offerId + '/pii',
-        value
+        `${backend.url}/offers/${checkout.pricedOffer.offerId}/pii`,
+        passengers
       );
       dispatch({
         type: 'SET_CHECKOUT',
@@ -96,7 +98,7 @@ export const GuestInfo = () => {
               htmlFor="firstname"
               label="First Name"
               validate={{
-                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)*$/g,
+                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)+$/g,
                 message: 'Only a-z, A-Z chars',
                 status: 'error'
               }}
@@ -108,14 +110,23 @@ export const GuestInfo = () => {
               htmlFor="lastname"
               label="Last Name"
               validate={{
-                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)*$/g,
+                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)+$/g,
                 message: 'Only a-z, A-Z chars',
                 status: 'error'
               }}
             >
               <TextInput id="lastname" name="lastname" />
             </FormField>
-            <FormField name="birthday" htmlFor="birthday" label="Date of birth">
+            <FormField
+              name="birthday"
+              htmlFor="birthday"
+              label="Date of birth"
+              validate={{
+                regexp: regexp.isoDate,
+                message: 'Incorrect Date',
+                status: 'error'
+              }}
+            >
               <DateInput
                 calendarProps={{
                   bounds: ['01/01/1900', DateTime.now().toFormat('dd/mm/yyyy')]
@@ -130,7 +141,7 @@ export const GuestInfo = () => {
               htmlFor="email"
               label="Email"
               validate={{
-                regexp: /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/g,
+                regexp: regexp.email,
                 message: 'Incorrect email',
                 status: 'error'
               }}
@@ -142,8 +153,7 @@ export const GuestInfo = () => {
               htmlFor="phone"
               label="Phone"
               validate={{
-                regexp:
-                  /\(?\+[0-9]{1,3}\)? ?-?[0-9]{1,3} ?-?[0-9]{3,5} ?-?[0-9]{4}( ?-?[0-9]{3})? ?(\w{1,10}\s?\d{1,6})?/g,
+                regexp: regexp.phone,
                 message: 'Incorrect phone number',
                 status: 'error'
               }}
