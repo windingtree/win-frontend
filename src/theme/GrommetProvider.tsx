@@ -1,5 +1,8 @@
 import { Grommet } from 'grommet';
 import breakpoints from './breakpoints';
+import { setConfiguration } from 'react-grid-system';
+
+setConfiguration({ breakpoints: Object.values(breakpoints) });
 
 const theme = {
   global: {
@@ -10,12 +13,11 @@ const theme = {
       family: 'Inter',
       size: '1rem',
       height: '1.1rem'
-    },
-    breakpoints
+    }
   }
 };
 
-export const ThemeProvider: React.FC<{
+export const GrommetProvider: React.FC<{
   children?: React.ReactNode;
 }> = ({ children }) => (
   <Grommet theme={theme} full>
