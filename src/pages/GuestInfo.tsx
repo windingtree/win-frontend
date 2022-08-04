@@ -6,8 +6,11 @@ import { useCallback, useState } from 'react';
 import axios from 'axios';
 import { MessageBox } from 'src/components/MessageBox';
 import { DateTime } from 'luxon';
+import { useAppDispatch, useAppState } from '../store';
+import { PersonalInfo } from 'src/store/types';
+import { backend } from '../config';
 
-const offerId = 1;
+// const offerId = 1;
 const logger = Logger('GuestInfo');
 const defaultValue = {
   firstname: '',
@@ -19,8 +22,10 @@ const defaultValue = {
 
 export const GuestInfo = () => {
   const navigate = useNavigate();
-  const [value, setValue] = useState(defaultValue);
+  const dispatch = useAppDispatch();
+  const { checkout } = useAppState();
 
+  const [value, setValue] = useState<PersonalInfo>(defaultValue);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
 
@@ -36,10 +41,24 @@ export const GuestInfo = () => {
       ) {
         throw Error('Empty fields');
       }
+      if (checkout === undefined) {
+        throw Error('Something went wrong');
+      }
 
-      const res = await axios.post('/derby-soft/offers/' + offerId + '/price', value);
+      await axios.post(
+        backend.url + '/offers/' + checkout.pricedOffer.offerId + '/pii',
+        value
+      );
+      dispatch({
+        type: 'SET_CHECKOUT',
+        payload: {
+          ...checkout,
+          personalInfo: value
+        }
+      });
+
       logger.info('Guest info sent successfully');
-      navigate('/checkout/' + res.data.offerId);
+      navigate('/checkout/' + checkout.pricedOffer.offerId);
     } catch (error) {
       const message = (error as Error).message || 'Unknown useAuthRequest error';
       setLoading(false);
@@ -55,8 +74,8 @@ export const GuestInfo = () => {
           path: '/'
         },
         {
-          label: 'Facility'
-          // path: '/facilities/'
+          label: 'Facility',
+          path: '/facilities/' + checkout?.facilityId
         }
       ]}
     >

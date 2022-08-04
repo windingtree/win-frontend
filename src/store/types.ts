@@ -1,5 +1,5 @@
 import type { TypedDataDomain } from '@ethersproject/abstract-signer';
-import type { Facility, Offer } from '../types/offers';
+import type { Facility, PricedOffer } from '../types/offers';
 import type { NetworkInfo, CryptoAsset } from '../config';
 import type { StaticProvider } from '../hooks/useRpcProvider';
 import type {
@@ -60,15 +60,18 @@ export interface CheckInOutPolicy {
   checkOutTime: `${number}:${number}:${number}`;
   checkInTime: `${number}:${number}:${number}`;
 }
+export interface PersonalInfo {
+  firstname: string;
+  lastname: string;
+  birthday: Date;
+  email: string;
+  phone: string;
+}
 
 export interface CheckOut {
-  id?: string;
-  spaceId: string;
+  pricedOffer: PricedOffer;
+  personalInfo?: PersonalInfo;
   facilityId: string;
-  from: string;
-  to: string;
-  roomsNumber: number;
-  timestamp: number;
 }
 
 export interface SearchParams {
@@ -89,7 +92,7 @@ export interface State {
   account?: string;
   serviceProviderDataDomain?: TypedDataDomain;
   facilities: Facility[];
-  offers: Offer[];
+  // offers: Offer[];
   authentication: {
     token?: string;
     timestamp: number;

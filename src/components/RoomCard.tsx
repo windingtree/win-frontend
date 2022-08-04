@@ -1,10 +1,16 @@
 import type { Offer, RoomType } from './../types/offers';
-import { Box, Text, Image, Grid, Button, Notification, Carousel } from 'grommet';
+import type { GenericStateRecord } from '../store/types';
+import { Box, Text, Image, Grid, Button, Notification, Carousel, Spinner } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
-import { v4 as uuidv4 } from 'uuid';
+import Logger from '../utils/logger';
+import axios from 'axios';
+import { backend } from '../config';
+import { MessageBox } from './MessageBox';
+
+const logger = Logger('RoomCard');
 
 const ResponsiveColumn = (winWidth: number): string[] => {
   if (winWidth <= 768) {
@@ -42,9 +48,9 @@ const ResponsiveArea = (
 export const RoomCard: React.FC<{
   room: RoomType;
   roomId: string;
-  offer: Offer;
+  offer: Offer & GenericStateRecord;
   facilityId: string;
-}> = ({ facilityId, room, roomId }) => {
+}> = ({ offer, facilityId, room }) => {
   const { winWidth } = useWindowsDimension();
   const dispatch = useAppDispatch();
 
@@ -53,22 +59,32 @@ export const RoomCard: React.FC<{
   const numberOfDays = 1;
   const roomsNumber = 1;
 
-  const handleBook = () => {
-    const id = uuidv4();
-    dispatch({
-      type: 'SET_CHECKOUT',
-      payload: {
-        id,
-        spaceId: roomId,
-        facilityId,
-        from: 'today',
-        to: 'tomorrow',
-        roomsNumber: 2,
-        timestamp: 0
-      }
-    });
-    navigate(`/guest-info`);
-  };
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<undefined | string>();
+
+  const handleBook = useCallback(async () => {
+    try {
+      setError(undefined);
+      setLoading(true);
+
+      const res = await axios.post(backend.url + '/offers/' + offer.id + '/price');
+      dispatch({
+        type: 'SET_CHECKOUT',
+        payload: {
+          facilityId,
+          pricedOffer: res.data
+        }
+      });
+
+      logger.info('Get priced offer successfully');
+      navigate('/guest-info');
+    } catch (error) {
+      const message = (error as Error).message || 'Unknown useAuthRequest error';
+      setLoading(false);
+      setError(message);
+    }
+  }, [dispatch]);
+
   return (
     <Box
       fill
@@ -118,11 +134,13 @@ export const RoomCard: React.FC<{
           </Text>
           <Button
             label={'Book for $$$ xDAI'}
-            onClick={() => {
-              handleBook();
-            }}
+            onClick={() => handleBook()}
+            icon={loading ? <Spinner /> : undefined}
           />
         </Box>
+        <MessageBox type="error" show={!!error}>
+          {error}
+        </MessageBox>
       </Grid>
       {notification && <Notification toast title={notification} status="warning" />}
     </Box>
