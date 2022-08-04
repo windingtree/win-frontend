@@ -51,3 +51,7 @@ yarn build
 - [Persistent state reducer](docs/localStorage.md)
 - [Records reducer](docs/records.md)
 - [Dapp routes](docs/routes.md)
+
+## Commit messages
+
+Husky forces us to commit messages in a certain format. The conventions of these messages can be found here: https://www.conventionalcommits.org/en/v1.0.0/

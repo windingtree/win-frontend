@@ -1,5 +1,5 @@
 import { useAppState } from '../store';
-import { PageWrapper } from './PageWrapper';
+import { MainLayout } from '../layouts/MainLayout';
 import { Box, Spinner } from 'grommet';
 import { useMemo } from 'react';
 import { MessageBox } from 'src/components/MessageBox';
@@ -11,8 +11,9 @@ export const Bookings = () => {
 
   const isLoading = useMemo(() => false, []);
   const isError = useMemo(() => false, []);
+
   return (
-    <PageWrapper>
+    <MainLayout>
       {!isConnecting && (
         <Box>
           <MessageBox type="info" show={isLoading}>
@@ -35,6 +36,6 @@ export const Bookings = () => {
           <Box direction="column">{/* token cards list */}</Box>
         </Box>
       )}
-    </PageWrapper>
+    </MainLayout>
   );
 };

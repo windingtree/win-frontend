@@ -27,6 +27,7 @@ export interface PricePlansReferences {
 }
 
 export interface Offer {
+  id: string;
   expiration: Date;
   price: Price;
   pricePlansReferences: PricePlansReferences;

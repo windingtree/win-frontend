@@ -1,16 +1,16 @@
 import { useLocation } from 'react-router-dom';
-import { Box, Header, Text } from 'grommet';
+import { Box, Header as BaseHeader, Text } from 'grommet';
 import { Menu } from './Menu';
 import { usePageTitle } from '../hooks/usePageTitle';
 
-export const AppHeader = () => {
+export const Header = () => {
   const location = useLocation();
   const pageTitle = usePageTitle();
 
   // const returnLocation = useMemo(() => (state as State)?.location as Location, [state]);
 
   return (
-    <Header
+    <BaseHeader
       pad="medium"
       direction="row"
       width="100vw"
@@ -30,6 +30,6 @@ export const AppHeader = () => {
         </Text>
       </Box>
       <Menu />
-    </Header>
+    </BaseHeader>
   );
 };

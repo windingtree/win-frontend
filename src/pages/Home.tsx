@@ -1,6 +1,6 @@
 import type { LatLngTuple } from 'leaflet';
 import { useAppState } from '../store';
-import { PageWrapper } from './PageWrapper';
+import { MainLayout } from '../layouts/MainLayout';
 import { Search } from '../components/Search';
 import { MapBox } from '../components/MapBox';
 import { Box, Button, ResponsiveContext } from 'grommet';
@@ -17,7 +17,7 @@ export const Home = () => {
   const size = useContext(ResponsiveContext);
 
   return (
-    <PageWrapper kind="full">
+    <MainLayout kind="full">
       {!isConnecting && (
         <Box pad="0" style={{ position: 'relative' }}>
           <Button
@@ -40,6 +40,6 @@ export const Home = () => {
           <MapBox center={center} />
         </Box>
       )}
-    </PageWrapper>
+    </MainLayout>
   );
 };

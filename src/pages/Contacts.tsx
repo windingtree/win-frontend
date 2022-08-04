@@ -1,9 +1,9 @@
-import { PageWrapper } from './PageWrapper';
+import { MainLayout } from '../layouts/MainLayout';
 import { Box, Text } from 'grommet';
 
 export const Contacts = () => {
   return (
-    <PageWrapper
+    <MainLayout
       breadcrumbs={[
         {
           label: 'Home',
@@ -16,6 +16,6 @@ export const Contacts = () => {
           Contacts
         </Text>
       </Box>
-    </PageWrapper>
+    </MainLayout>
   );
 };
