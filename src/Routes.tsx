@@ -14,6 +14,7 @@ import { Legal } from './pages/Legal';
 import { Security } from './pages/Security';
 import { Developers } from './pages/Developers';
 import { Checkout } from './pages/Checkout';
+import { GuestInfo } from './pages/GuestInfo';
 
 export interface ProtectedProps {
   component: ReactNode;
@@ -99,6 +100,12 @@ export const pagesRoutesConfig: Routes = [
     element: <Checkout />,
     title: 'Checkout',
     label: 'Checkout'
+  },
+  {
+    path: '/guest-info',
+    element: <GuestInfo />,
+    title: 'Guest Info',
+    label: 'Guest Info'
   }
 ];
 

@@ -67,7 +67,7 @@ export const RoomCard: React.FC<{
         timestamp: 0
       }
     });
-    navigate(`/checkout/${id}`);
+    navigate(`/guest-info`);
   };
   return (
     <Box
