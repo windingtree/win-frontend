@@ -1,7 +1,7 @@
 import type { PersonalInfo } from '../store/types';
 import { Box, FormField, TextInput, DateInput, Form, Button } from 'grommet';
 import { useNavigate } from 'react-router-dom';
-import { PageWrapper } from './PageWrapper';
+import { MainLayout } from '../layouts/MainLayout';
 import Logger from '../utils/logger';
 import { useCallback, useState } from 'react';
 import axios from 'axios';
@@ -69,7 +69,7 @@ export const GuestInfo = () => {
   }, [value]);
 
   return (
-    <PageWrapper
+    <MainLayout
       breadcrumbs={[
         {
           label: 'Search',
@@ -164,6 +164,6 @@ export const GuestInfo = () => {
           </Form>
         </Box>
       </Box>
-    </PageWrapper>
+    </MainLayout>
   );
 };
