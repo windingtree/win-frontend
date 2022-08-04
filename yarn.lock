@@ -2333,11 +2333,6 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@protobuf-ts/runtime@^2.5.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@protobuf-ts/runtime/-/runtime-2.7.0.tgz#108252b9935018bd7eb9c0d4a349b8db11e382f7"
-  integrity sha512-CzunTplg81oMkF9MnSYiX2WOdHnAyHKnokZncgOHm5bt8iEfFNnUsMSbsWUus/ulRNIZ9VAVMjutd96vmySQaw==
-
 "@react-leaflet/core@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@react-leaflet/core/-/core-2.0.0.tgz#212f4d87dc7681f40ca0e47d99672676c20c8ef6"
@@ -4595,15 +4590,6 @@
     "@webassemblyjs/ast" "1.9.0"
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
-
-"@windingtree/videre-sdk@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@windingtree/videre-sdk/-/videre-sdk-0.7.4.tgz#c636e3107c924d92b4da6678a1c3387d37e1e20c"
-  integrity sha512-gCT0biWlknnB9vIQRtl8P1VqLhpzHjiOS3Qmfljy9gHYGAqTPSMD2WM4RxvsXQ3COhFMoU+BpV39Tl/dalx+xg==
-  dependencies:
-    "@protobuf-ts/runtime" "^2.5.0"
-    ethers "^5.6.5"
-    h3-js "^3.7.2"
 
 "@windingtree/win-pay@^1.1.0":
   version "1.1.0"
@@ -8242,7 +8228,7 @@ ethereumjs-vm@^2.3.4:
     rustbn.js "~0.2.0"
     safe-buffer "^5.1.1"
 
-ethers@^5.6.5, ethers@^5.6.9:
+ethers@^5.6.9:
   version "5.6.9"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.6.9.tgz#4e12f8dfcb67b88ae7a78a9519b384c23c576a4d"
   integrity sha512-lMGC2zv9HC5EC+8r429WaWu3uWJUCgUCt8xxKCFqkrFuBDZXDYIdzDUECxzjf2BMF8IVBByY1EBoGSL3RTm8RA==
@@ -9200,11 +9186,6 @@ gzip-size@^6.0.0:
   integrity sha512-ax7ZYomf6jqPTQ4+XCpUGyXKHk5WweS+e05MBO4/y3WJ5RkmPXNKvX+bx1behVILVwr6JSQvZAku021CHPXG3Q==
   dependencies:
     duplexer "^0.1.2"
-
-h3-js@^3.7.2:
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/h3-js/-/h3-js-3.7.2.tgz#61d4feb7bb42868ca9cdb2d5cf9d9dda94f9e5a3"
-  integrity sha512-LPjlHSwB9zQZrMqKloCZmmmt3yZzIK7nqPcXqwU93zT3TtYG6jP4tZBzAPouxut7lLjdFbMQ75wRBiKfpsnY7w==
 
 handle-thing@^2.0.0:
   version "2.0.1"
