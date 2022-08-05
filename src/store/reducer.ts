@@ -8,7 +8,7 @@ import { recordsReducer } from './recordsReducer';
 import { getState, storageReducer } from './localStorage';
 import Logger from '../utils/logger';
 
-const logger = Logger('Reducer');
+const logger = Logger('mainReducer');
 
 export const mainReducer = (state: State, action: Action): State => {
   const type = action.type;
@@ -45,6 +45,7 @@ export const mainReducer = (state: State, action: Action): State => {
         return state;
     }
   } catch (error) {
+    logger.error(error);
     return state;
   }
 };
