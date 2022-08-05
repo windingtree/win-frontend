@@ -63,7 +63,7 @@ export interface CheckInOutPolicy {
 export interface PersonalInfo {
   firstname: string;
   lastname: string;
-  birthdate: Date;
+  birthdate: Date | null;
   email: string;
   phone: string;
 }

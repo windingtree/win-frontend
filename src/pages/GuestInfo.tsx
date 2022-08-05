@@ -15,7 +15,7 @@ const logger = Logger('GuestInfo');
 const defaultValue: PersonalInfo = {
   firstname: '',
   lastname: '',
-  birthdate: new Date(),
+  birthdate: null,
   email: '',
   phone: ''
 };
@@ -97,8 +97,9 @@ export const GuestInfo = () => {
               name="firstname"
               htmlFor="firstname"
               label="First Name"
+              required
               validate={{
-                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)+$/g,
+                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)*$/g,
                 message: 'Only a-z, A-Z chars',
                 status: 'error'
               }}
@@ -109,8 +110,9 @@ export const GuestInfo = () => {
               name="lastname"
               htmlFor="lastname"
               label="Last Name"
+              required
               validate={{
-                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)+$/g,
+                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)*$/g,
                 message: 'Only a-z, A-Z chars',
                 status: 'error'
               }}
@@ -121,6 +123,7 @@ export const GuestInfo = () => {
               name="birthday"
               htmlFor="birthday"
               label="Date of birth"
+              required
               validate={{
                 regexp: regexp.isoDate,
                 message: 'Incorrect Date',
@@ -137,6 +140,7 @@ export const GuestInfo = () => {
               />
             </FormField>
             <FormField
+              required
               name="email"
               htmlFor="email"
               label="Email"
@@ -149,6 +153,7 @@ export const GuestInfo = () => {
               <TextInput id="email" name="email" />
             </FormField>
             <FormField
+              required
               name="phone"
               htmlFor="phone"
               label="Phone"
