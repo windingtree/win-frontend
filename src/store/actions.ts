@@ -13,11 +13,6 @@ export interface SetConnectingAction {
   payload: boolean;
 }
 
-export interface SetStaticProviderAction {
-  type: 'SET_STATIC_PROVIDER';
-  payload?: StaticProvider;
-}
-
 export interface SetProviderAction {
   type: 'SET_PROVIDER';
   payload?: Web3ModalProvider;
@@ -94,7 +89,6 @@ export type Action =
   | SetCheckOutAction
   | SetAuthenticationTokenAction
   | SetConnectingAction
-  | SetStaticProviderAction
   | SetProviderAction
   | SetWeb3ModalSignInAction
   | SetWeb3ModalSignOutAction

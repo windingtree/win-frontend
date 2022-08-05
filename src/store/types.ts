@@ -1,7 +1,5 @@
-import type { TypedDataDomain } from '@ethersproject/abstract-signer';
 import type { Facility, PricedOffer } from '../types/offers';
 import type { NetworkInfo, CryptoAsset } from '../config';
-import type { StaticProvider } from '../hooks/useRpcProvider';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
@@ -85,12 +83,10 @@ export interface SearchParams {
 
 export interface State {
   isConnecting: boolean;
-  staticProvider?: StaticProvider;
   provider?: Web3ModalProvider;
   signIn?: Web3ModalSignInFunction;
   signOut?: Web3ModalSignOutFunction;
   account?: string;
-  serviceProviderDataDomain?: TypedDataDomain;
   facilities: Facility[];
   // offers: Offer[];
   authentication: {
