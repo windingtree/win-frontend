@@ -61,11 +61,6 @@ export interface ResetRecordAction {
   };
 }
 
-export interface SetServiceProvider {
-  type: 'SET_SERVICE_PROVIDER';
-  payload: TypedDataDomain | undefined;
-}
-
 export interface SetAuthenticationTokenAction {
   type: 'SET_AUTHENTICATION_TOKEN';
   payload: {
@@ -108,5 +103,4 @@ export type Action =
   | SetSelectedAsset
   | SetRecordAction
   | RemoveRecordAction
-  | ResetRecordAction
-  | SetServiceProvider;
+  | ResetRecordAction;
