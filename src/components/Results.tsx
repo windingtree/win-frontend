@@ -8,7 +8,7 @@ import { PricePlansReferences } from 'src/types/offers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import axios from 'axios';
 import { MessageBox } from './MessageBox';
-import { backend } from '../config';
+import { OffersRequest } from '../api/OffersRequest';
 
 const logger = Logger('Results');
 const defaultCenter: LatLngTuple = [51.505, -0.09];
@@ -39,35 +39,8 @@ export const Results: React.FC<{
       if (searchParams === undefined) {
         throw new Error('searchParams must be provided');
       }
+      const res = await axios.request(new OffersRequest(center, searchParams));
 
-      const body = {
-        accommodation: {
-          location: {
-            lon: Number(center[1]),
-            lat: Number(center[0]),
-            radius: 2000
-          },
-          arrival: searchParams.arrival,
-          departure: searchParams.departure,
-          roomCount: searchParams.roomCount
-        },
-        passengers: [
-          {
-            type: 'ADT',
-            count: searchParams.adults
-          },
-          {
-            type: 'CHD',
-            count: searchParams.children,
-            childrenAges: [13]
-          }
-        ]
-      };
-      const res = await axios.request({
-        url: backend.url + '/api/derby-soft/offers/search',
-        method: 'POST',
-        data: body
-      });
       if (res.data === undefined) {
         throw Error('Something went wrong');
       }
