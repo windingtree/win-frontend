@@ -89,7 +89,7 @@ export const Search: React.FC<{
           throw Error('Could not find place');
         }
 
-        onSubmit([res.data[0].lat, res.data[0].lon]);
+        onSubmit([Number(res.data[0].lat), Number(res.data[0].lon)]);
         setOpen(false);
         setLoading(false);
         logger.info('map successfully fetched');
