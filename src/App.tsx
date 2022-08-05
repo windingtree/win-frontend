@@ -1,12 +1,12 @@
 import { AppStateProvider } from './store';
 import { AppRoutes } from './Routes';
-import { Theme } from './Theme';
+import { GrommetProvider } from './theme/GrommetProvider';
 
 const App = () => (
   <AppStateProvider>
-    <Theme>
+    <GrommetProvider>
       <AppRoutes />
-    </Theme>
+    </GrommetProvider>
   </AppStateProvider>
 );
 

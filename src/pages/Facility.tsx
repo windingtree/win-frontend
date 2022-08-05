@@ -3,6 +3,7 @@ import { MainLayout } from '../layouts/MainLayout';
 import { Box, Text, Image } from 'grommet';
 import { useMemo } from 'react';
 import { RoomCard } from '../components/RoomCard';
+import { Container, Row, Col } from 'react-grid-system';
 
 export const Facility = () => {
   const { facilities, offers } = useAppState();
@@ -34,14 +35,23 @@ export const Facility = () => {
           <Text weight={500} size="2rem" margin="small">
             {facility.name}
           </Text>
-          <Box direction="row">
-            <Image height={300} width={300} />
-            <Box>
-              <Text weight={500} size="1rem" margin="small">
-                {facility.description}
-              </Text>
-            </Box>
-          </Box>
+
+          <Container>
+            <Row justify="center">
+              <Col
+                lg={6}
+                style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}
+              >
+                <Image height={300} width={300} />
+              </Col>
+              <Col lg={6}>
+                <Text weight={500} size="1rem" margin="small">
+                  {facility.description}
+                </Text>
+              </Col>
+            </Row>
+          </Container>
+
           {facilityOffers?.map((offer) => {
             return (
               <RoomCard
