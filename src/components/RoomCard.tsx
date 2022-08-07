@@ -1,4 +1,5 @@
-import type { OfferRecord, RoomType } from './../types/offers';
+import type { RoomType } from './../types/offers';
+import type { OfferRecord } from './../store/types';
 import { Box, Text, Image, Grid, Button, Notification, Carousel, Spinner } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store';

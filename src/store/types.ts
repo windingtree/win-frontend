@@ -1,4 +1,4 @@
-import type { Facility, PricedOffer } from '../types/offers';
+import type { Facility, Offer, PricedOffer } from '../types/offers';
 import type { NetworkInfo, CryptoAsset } from '../config';
 import type {
   Web3ModalProvider,
@@ -10,6 +10,8 @@ export interface GenericStateRecord {
   id: string;
   [key: string]: unknown;
 }
+
+export type OfferRecord = Offer & GenericStateRecord;
 
 export interface Location {
   coordinates: number[];
@@ -88,7 +90,7 @@ export interface State {
   signOut?: Web3ModalSignOutFunction;
   account?: string;
   facilities: Facility[];
-  // offers: Offer[];
+  offers: OfferRecord[];
   authentication: {
     token?: string;
     timestamp: number;

@@ -1,4 +1,3 @@
-import type { OfferRecord } from '../types/offers';
 import { useAppState } from '../store';
 import { MainLayout } from '../layouts/MainLayout';
 import { Box, Text, Image } from 'grommet';
@@ -17,9 +16,7 @@ export const Facility = () => {
   const facilityOffers = useMemo(
     () =>
       facility !== undefined && offers !== undefined
-        ? (offers as OfferRecord[]).filter(
-            (offer) => offer.pricePlansReferences[facility.id] !== undefined
-          )
+        ? offers.filter((offer) => offer.pricePlansReferences[facility.id] !== undefined)
         : null,
     [offers, facility]
   );
