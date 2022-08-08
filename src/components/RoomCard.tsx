@@ -7,8 +7,8 @@ import { useCallback, useState } from 'react';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import Logger from '../utils/logger';
 import axios from 'axios';
-import { backend } from '../config';
 import { MessageBox } from './MessageBox';
+import { PricedOfferRequest, PricedOfferResponse } from '../api/PricedOffer';
 
 const logger = Logger('RoomCard');
 
@@ -67,12 +67,14 @@ export const RoomCard: React.FC<{
       setError(undefined);
       setLoading(true);
 
-      const res = await axios.post(`${backend.url}/offers/${offer.id}/price`);
+      const res = await axios.request<PricedOfferResponse>(
+        new PricedOfferRequest(offer.id)
+      );
       dispatch({
         type: 'SET_CHECKOUT',
         payload: {
           facilityId,
-          pricedOffer: res.data
+          pricedOffer: res.data.data.pricedOffer
         }
       });
 

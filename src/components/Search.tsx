@@ -8,6 +8,7 @@ import Logger from '../utils/logger';
 import { MessageBox } from './MessageBox';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { useAppDispatch, useAppState } from '../store';
+import { CoordinatesRequest, CoordinatesResponse } from '../api/CoordinatesRequest';
 
 const logger = Logger('Search');
 const today = DateTime.local().toISO();
@@ -77,15 +78,14 @@ export const Search: React.FC<{
           setLoading(false);
           return;
         }
-        const res = await axios.request({
-          url: `https://nominatim.openstreetmap.org/search?format=json&q=${searchParams?.place}`,
-          method: 'GET'
-        });
+        const res = await axios.request<CoordinatesResponse>(
+          new CoordinatesRequest(searchParams?.place)
+        );
 
         if (res.data === undefined) {
           throw Error('Something went wrong');
         }
-        if (res.data.length === 0) {
+        if (res.data[0].length === 0) {
           throw Error('Could not find place');
         }
 

@@ -8,8 +8,8 @@ import axios from 'axios';
 import { MessageBox } from '../components/MessageBox';
 import { DateTime } from 'luxon';
 import { useAppDispatch, useAppState } from '../store';
-import { backend } from '../config';
 import { regexp } from '@windingtree/org.id-utils';
+import { PersonalInfoRequest } from '../api/PersonalInfoRequest';
 
 const logger = Logger('GuestInfo');
 const defaultValue: PersonalInfo = {
@@ -37,20 +37,8 @@ export const GuestInfo = () => {
       if (checkout === undefined) {
         throw Error('Something went wrong');
       }
-      const passengers = {
-        T1: {
-          firstnames: [value.firstname],
-          lastnames: [value.lastname],
-          contactInformation: [value.email, value.phone],
-          birthdate: value.birthdate,
-          type: 'ADT'
-        }
-      };
+      await axios.request(new PersonalInfoRequest(checkout.pricedOffer.offerId, value));
 
-      await axios.post(
-        `${backend.url}/offers/${checkout.pricedOffer.offerId}/pii`,
-        passengers
-      );
       dispatch({
         type: 'SET_CHECKOUT',
         payload: {

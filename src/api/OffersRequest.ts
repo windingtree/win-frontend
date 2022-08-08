@@ -1,8 +1,8 @@
+import type { Accommodation, Offer } from '../types/offers';
 import { LatLngTuple } from 'leaflet';
 import { SearchParams } from '../store/types';
 import { backend } from '../config';
 import { Request } from '.';
-import { Accommodation, Offer } from '../types/offers';
 
 export interface Location {
   lat: number;
