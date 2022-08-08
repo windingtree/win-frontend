@@ -1,4 +1,4 @@
-export interface Request<Response, EncodedResponse = any> {
+export interface Request {
   readonly contentType?: string;
   readonly headers?: object;
   readonly method?: 'get' | 'post';

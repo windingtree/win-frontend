@@ -2,6 +2,7 @@ import { LatLngTuple } from 'leaflet';
 import { SearchParams } from '../store/types';
 import { backend } from '../config';
 import { Request } from '.';
+import { Accommodation, Offer } from '../types/offers';
 
 export interface Location {
   lat: number;
@@ -10,7 +11,8 @@ export interface Location {
 }
 
 export interface OffersResponse {
-  data: any;
+  accomodations: Accommodation[];
+  offers: Offer[];
 }
 
 export enum PassengerType {
@@ -24,7 +26,7 @@ export interface Passenger {
   childrenAges?: number[];
 }
 
-export interface Accommodation {
+export interface RequestAccommodation {
   location: Location;
   arrival: string;
   departure: string;
@@ -32,11 +34,11 @@ export interface Accommodation {
 }
 
 export interface OffersBody {
-  accommodation: Accommodation;
+  accommodation: RequestAccommodation;
   passengers: Passenger[];
 }
 
-export class OffersRequest implements Request<OffersResponse> {
+export class OffersRequest implements Request {
   public readonly url: string;
   public readonly data: OffersBody;
   public readonly method = 'post';

@@ -8,7 +8,7 @@ import { PricePlansReferences } from 'src/types/offers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import axios from 'axios';
 import { MessageBox } from './MessageBox';
-import { OffersRequest } from '../api/OffersRequest';
+import { OffersRequest, OffersResponse } from '../api/OffersRequest';
 
 const logger = Logger('Results');
 const defaultCenter: LatLngTuple = [51.505, -0.09];
@@ -39,13 +39,12 @@ export const Results: React.FC<{
       if (searchParams === undefined) {
         throw new Error('searchParams must be provided');
       }
-      const res = await axios.request(new OffersRequest(center, searchParams));
+      const res = await axios.request<OffersResponse>(
+        new OffersRequest(center, searchParams)
+      );
 
       if (res.data === undefined) {
         throw Error('Something went wrong');
-      }
-      if (res.data.length === 0) {
-        throw Error('Could not find place');
       }
 
       const accommodations = res.data.offers;
@@ -126,6 +125,13 @@ export const Results: React.FC<{
         <Box>
           <MessageBox loading type="info" show={loading}>
             One moment...
+          </MessageBox>
+          <MessageBox
+            loading
+            type="info"
+            show={!loading && !error && filteredFacilities.length === 0}
+          >
+            Could not find place
           </MessageBox>
           <MessageBox type="error" show={!!error}>
             {error}
