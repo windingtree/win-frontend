@@ -1,6 +1,9 @@
 /* eslint-disable no-case-declarations */
 import type { Action } from './actions';
 import type { State, GenericStateRecord } from './types';
+import Logger from '../utils/logger';
+
+const logger = Logger('recordsReducer');
 
 export const recordsReducer = (state: State, action: Action): State => {
   let records: GenericStateRecord[];
@@ -66,6 +69,7 @@ export const recordsReducer = (state: State, action: Action): State => {
         return state;
     }
   } catch (error) {
+    logger.error(error);
     return state;
   }
 };

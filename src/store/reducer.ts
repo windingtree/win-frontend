@@ -5,10 +5,11 @@ import { useReducer } from 'react';
 import { web3ModalReducer } from './web3ModalReducer';
 import { cryptoReducer } from './cryptoReducer';
 import { recordsReducer } from './recordsReducer';
+import { searchReducer } from './searchReducer';
 import { getState, storageReducer } from './localStorage';
 import Logger from '../utils/logger';
 
-const logger = Logger('Reducer');
+const logger = Logger('mainReducer');
 
 export const mainReducer = (state: State, action: Action): State => {
   const type = action.type;
@@ -21,30 +22,16 @@ export const mainReducer = (state: State, action: Action): State => {
           ...state,
           isConnecting: action.payload
         };
-      case 'SET_STATIC_PROVIDER':
-        return {
-          ...state,
-          staticProvider: action.payload
-        };
       case 'SET_ACCOUNT':
         return {
           ...state,
           account: action.payload
         };
-      case 'SET_SERVICE_PROVIDER':
-        return {
-          ...state,
-          serviceProviderDataDomain: action.payload
-        };
-      case 'SET_SEARCH_PARAMS':
-        return {
-          ...state,
-          searchParams: action.payload
-        };
       default:
         return state;
     }
   } catch (error) {
+    logger.error(error);
     return state;
   }
 };
@@ -77,6 +64,7 @@ export const useAppReducer = () => {
     combineReducers([
       mainReducer,
       web3ModalReducer,
+      searchReducer,
       cryptoReducer,
       recordsReducer,
       storageReducer() // Always must be the last

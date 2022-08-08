@@ -15,7 +15,7 @@ export const Facility = () => {
 
   const facilityOffers = useMemo(
     () =>
-      facility !== undefined
+      facility !== undefined && offers !== undefined
         ? offers.filter((offer) => offer.pricePlansReferences[facility.id] !== undefined)
         : null,
     [offers, facility]

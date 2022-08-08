@@ -1,7 +1,5 @@
-import type { TypedDataDomain } from '@ethersproject/abstract-signer';
-import type { Facility, Offer } from '../types/offers';
+import type { Accommodation, Offer, PricedOffer } from '../types/offers';
 import type { NetworkInfo, CryptoAsset } from '../config';
-import type { StaticProvider } from '../hooks/useRpcProvider';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
@@ -12,6 +10,9 @@ export interface GenericStateRecord {
   id: string;
   [key: string]: unknown;
 }
+
+export type OfferRecord = Offer & GenericStateRecord;
+export type FacilityRecord = Accommodation & GenericStateRecord;
 
 export interface Location {
   coordinates: number[];
@@ -60,15 +61,18 @@ export interface CheckInOutPolicy {
   checkOutTime: `${number}:${number}:${number}`;
   checkInTime: `${number}:${number}:${number}`;
 }
+export interface PersonalInfo {
+  firstname: string;
+  lastname: string;
+  birthdate: Date | null;
+  email: string;
+  phone: string;
+}
 
 export interface CheckOut {
-  id?: string;
-  spaceId: string;
+  pricedOffer: PricedOffer;
+  personalInfo?: PersonalInfo;
   facilityId: string;
-  from: string;
-  to: string;
-  roomsNumber: number;
-  timestamp: number;
 }
 
 export interface SearchParams {
@@ -82,14 +86,12 @@ export interface SearchParams {
 
 export interface State {
   isConnecting: boolean;
-  staticProvider?: StaticProvider;
   provider?: Web3ModalProvider;
   signIn?: Web3ModalSignInFunction;
   signOut?: Web3ModalSignOutFunction;
   account?: string;
-  serviceProviderDataDomain?: TypedDataDomain;
-  facilities: Facility[];
-  offers: Offer[];
+  facilities: FacilityRecord[];
+  offers: OfferRecord[];
   authentication: {
     token?: string;
     timestamp: number;

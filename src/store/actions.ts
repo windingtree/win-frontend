@@ -1,6 +1,4 @@
-import type { TypedDataDomain } from '@ethersproject/abstract-signer';
 import type { NetworkInfo, CryptoAsset } from '../config';
-import type { StaticProvider } from '../hooks/useRpcProvider';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
@@ -11,11 +9,6 @@ import type { CheckOut, GenericStateRecord, SearchParams } from './types';
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';
   payload: boolean;
-}
-
-export interface SetStaticProviderAction {
-  type: 'SET_STATIC_PROVIDER';
-  payload?: StaticProvider;
 }
 
 export interface SetProviderAction {
@@ -61,11 +54,6 @@ export interface ResetRecordAction {
   };
 }
 
-export interface SetServiceProvider {
-  type: 'SET_SERVICE_PROVIDER';
-  payload: TypedDataDomain | undefined;
-}
-
 export interface SetAuthenticationTokenAction {
   type: 'SET_AUTHENTICATION_TOKEN';
   payload: {
@@ -99,7 +87,6 @@ export type Action =
   | SetCheckOutAction
   | SetAuthenticationTokenAction
   | SetConnectingAction
-  | SetStaticProviderAction
   | SetProviderAction
   | SetWeb3ModalSignInAction
   | SetWeb3ModalSignOutAction
@@ -108,5 +95,4 @@ export type Action =
   | SetSelectedAsset
   | SetRecordAction
   | RemoveRecordAction
-  | ResetRecordAction
-  | SetServiceProvider;
+  | ResetRecordAction;

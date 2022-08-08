@@ -1,5 +1,8 @@
 import type { Action } from './actions';
 import type { State } from './types';
+import Logger from '../utils/logger';
+
+const logger = Logger('cryptoReducer');
 
 export const web3ModalReducer = (state: State, action: Action): State => {
   const type = action.type;
@@ -25,6 +28,7 @@ export const web3ModalReducer = (state: State, action: Action): State => {
         return state;
     }
   } catch (error) {
+    logger.error(error);
     return state;
   }
 };
