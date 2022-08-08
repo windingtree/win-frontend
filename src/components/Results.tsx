@@ -43,11 +43,11 @@ export const Results: React.FC<{
         new OffersRequest(center, searchParams)
       );
 
-      if (res.data === undefined) {
+      if (res.data === undefined || res.data.data === undefined || res.data.data.derbySoft.data === undefined) {
         throw Error('Something went wrong');
       }
 
-      const accommodations = res.data.offers;
+      const accommodations = res.data.data.derbySoft.data.accomodations;
       Object.keys(accommodations).map((key) =>
         dispatch({
           type: 'SET_RECORD',
@@ -60,7 +60,7 @@ export const Results: React.FC<{
           }
         })
       );
-      const offers = res.data.offers;
+      const offers = res.data.data.derbySoft.data.offers;
       const ids: string[] = [];
       Object.keys(offers).map((key) => {
         const priceRef: PricePlansReferences = offers[key].pricePlansReferences;

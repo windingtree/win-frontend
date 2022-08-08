@@ -7,12 +7,27 @@ import { Accommodation, Offer } from '../types/offers';
 export interface Location {
   lat: number;
   lon: number;
-  radius: 2000;
+  radius: number;
+}
+
+export interface ResponseData {
+  accomodations: Accommodation[];
+  offers: Offer[];
+}
+
+export interface Response {
+  data: ResponseData;
+  status: number;
+  message:string;
+}
+
+export interface Data {
+  rooms: Response;
+  derbySoft: Response;
 }
 
 export interface OffersResponse {
-  accomodations: Accommodation[];
-  offers: Offer[];
+  data: Data;
 }
 
 export enum PassengerType {
