@@ -30,8 +30,8 @@ export const Results: React.FC<{
     [facilities, facilityIds]
   );
 
-  const handleResults: () => Promise<LatLngTuple | undefined> = useCallback(async () => {
-    logger.info('requst results');
+  const handleResults = useCallback(async () => {
+    logger.info('Init results fetch');
     setLoading(true);
     setError(undefined);
 
@@ -42,12 +42,17 @@ export const Results: React.FC<{
       const res = await axios.request<OffersResponse>(
         new OffersRequest(center, searchParams)
       );
-
-      if (res.data === undefined || res.data.data === undefined || res.data.data.derbySoft.data === undefined) {
-        throw Error('Something went wrong');
+      if (
+        res.data === undefined ||
+        res.data.data === undefined ||
+        res.data.data.derbySoft.data === undefined
+      ) {
+        throw Error('Data undefiend');
       }
-
       const accommodations = res.data.data.derbySoft.data.accomodations;
+      if (accommodations === undefined) {
+        throw Error('accommodations undefined');
+      }
       Object.keys(accommodations).map((key) =>
         dispatch({
           type: 'SET_RECORD',
@@ -61,11 +66,13 @@ export const Results: React.FC<{
         })
       );
       const offers = res.data.data.derbySoft.data.offers;
+      if (offers === undefined) {
+        throw Error('offers undefined');
+      }
       const ids: string[] = [];
       Object.keys(offers).map((key) => {
         const priceRef: PricePlansReferences = offers[key].pricePlansReferences;
         Object.keys(priceRef).map((r) => ids.push(r));
-
         dispatch({
           type: 'SET_RECORD',
           payload: {
@@ -79,11 +86,7 @@ export const Results: React.FC<{
       });
       setFacilityIds([...ids]);
       setLoading(false);
-      logger.info('map successfully mocked');
-
-      setLoading(false);
-      logger.info('map successfully fetched');
-      return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
+      logger.info('Results successfully fetched');
     } catch (error) {
       logger.error(error);
       const message = (error as Error).message || 'Unknown Search error';

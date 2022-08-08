@@ -18,7 +18,7 @@ export interface ResponseData {
 export interface Response {
   data: ResponseData;
   status: number;
-  message:string;
+  message: string;
 }
 
 export interface Data {
