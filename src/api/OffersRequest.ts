@@ -3,6 +3,41 @@ import { LatLngTuple } from 'leaflet';
 import { SearchParams } from '../store/types';
 import { backend } from '../config';
 import { Request } from '.';
+import type { AnySchema } from '@windingtree/org.id-utils/dist/object';
+
+export const SearchParamsSchema: AnySchema = {
+  allOf: [
+    {
+      $ref: '#/definitions/OneReference'
+    }
+  ],
+  definitions: {
+    OneReference: {
+      type: 'object',
+      properties: {
+        place: {
+          type: 'string'
+        },
+        arrival: {
+          type: 'string'
+        },
+        departure: {
+          type: 'string'
+        },
+        roomCount: {
+          type: 'number'
+        },
+        children: {
+          type: 'number'
+        },
+        adults: {
+          type: 'number'
+        }
+      },
+      required: ['place', 'arrival', 'departure', 'roomCount', 'children', 'adults']
+    }
+  }
+};
 
 export interface Location {
   lat: number;

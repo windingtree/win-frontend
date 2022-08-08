@@ -8,7 +8,8 @@ import { PricePlansReferences } from 'src/types/offers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import axios from 'axios';
 import { MessageBox } from './MessageBox';
-import { OffersRequest, OffersResponse } from '../api/OffersRequest';
+import { OffersRequest, OffersResponse, SearchParamsSchema } from '../api/OffersRequest';
+import { object } from '@windingtree/org.id-utils';
 
 const logger = Logger('Results');
 const defaultCenter: LatLngTuple = [51.505, -0.09];
@@ -39,6 +40,14 @@ export const Results: React.FC<{
       if (searchParams === undefined) {
         throw new Error('searchParams must be provided');
       }
+      const validateSearchParams = object.validateWithSchemaOrRef(
+        SearchParamsSchema,
+        '',
+        searchParams
+      );
+      if (validateSearchParams !== null) {
+        throw new Error('Invalid searchParams');
+      }
       const res = await axios.request<OffersResponse>(
         new OffersRequest(center, searchParams)
       );
@@ -47,7 +56,7 @@ export const Results: React.FC<{
         res.data.data === undefined ||
         res.data.data.derbySoft.data === undefined
       ) {
-        throw Error('Data undefiend');
+        throw Error('Unable to get offers request response');
       }
       const accommodations = res.data.data.derbySoft.data.accomodations;
       if (accommodations === undefined) {
