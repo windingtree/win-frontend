@@ -103,7 +103,8 @@ export const PaymentCard = ({
     [costError, asset, tokenAllowance, permitSignature]
   );
   const permitBlocked = useMemo(
-    () => permitSignature !== undefined ||
+    () =>
+      permitSignature !== undefined ||
       tokenAllowance.gte(payment.value) ||
       isAccountContract,
     [permitSignature, tokenAllowance, isAccountContract]
@@ -111,10 +112,8 @@ export const PaymentCard = ({
   const allowanceBlocked = useMemo(
     () =>
       !permitBlocked ||
-      (
-        (asset && !asset.native && tokenAllowance.gte(payment.value)) ||
-        permitSignature !== undefined
-      ),
+      (asset && !asset.native && tokenAllowance.gte(payment.value)) ||
+      permitSignature !== undefined,
     [asset, tokenAllowance, permitSignature, permitBlocked]
   );
 
@@ -128,27 +127,24 @@ export const PaymentCard = ({
     setTxStarted(undefined);
   };
 
-  useEffect(
-    () => {
-      const checkIsAccount = async () => {
-        try {
-          if (provider && account) {
-            const code = await provider.getCode(account);
-            const isContract = code !== '0x';
-            logger.debug('isAccountContract', isContract);
-            setIsAccountContract(isContract);
-          } else {
-            setIsAccountContract(false);
-          }
-        } catch(err) {
-          logger.error(err);
+  useEffect(() => {
+    const checkIsAccount = async () => {
+      try {
+        if (provider && account) {
+          const code = await provider.getCode(account);
+          const isContract = code !== '0x';
+          logger.debug('isAccountContract', isContract);
+          setIsAccountContract(isContract);
+        } else {
           setIsAccountContract(false);
         }
-      };
-      checkIsAccount();
-    },
-    [provider, account]
-  );
+      } catch (err) {
+        logger.error(err);
+        setIsAccountContract(false);
+      }
+    };
+    checkIsAccount();
+  }, [provider, account]);
 
   useEffect(() => {
     if (!assetsCurrencies.includes(payment.currency)) {
@@ -424,11 +420,7 @@ export const PaymentCard = ({
                 label="Approve the tokens"
                 onClick={approveTokens}
                 disabled={allowanceBlocked}
-                icon={
-                  isTxStarted === 'approve'
-                    ? <Spinner />
-                    : undefined
-                }
+                icon={isTxStarted === 'approve' ? <Spinner /> : undefined}
                 reverse
               />
             )}
@@ -447,11 +439,7 @@ export const PaymentCard = ({
               label="Pay"
               onClick={makePayment}
               disabled={paymentBlocked}
-              icon={
-                isTxStarted === 'pay'
-                  ? <Spinner />
-                  : undefined
-              }
+              icon={isTxStarted === 'pay' ? <Spinner /> : undefined}
               reverse
             />
           </Box>
