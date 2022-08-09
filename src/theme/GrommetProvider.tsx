@@ -2,7 +2,10 @@ import { Grommet } from 'grommet';
 import breakpoints from './breakpoints';
 import { setConfiguration } from 'react-grid-system';
 
-setConfiguration({ breakpoints: Object.values(breakpoints) });
+setConfiguration({
+  breakpoints: Object.values(breakpoints),
+  containerWidths: [9999, 9999, 9999, 9999, 9999, 9999]
+});
 
 const theme = {
   global: {
