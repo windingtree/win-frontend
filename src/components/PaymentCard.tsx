@@ -85,6 +85,8 @@ export const PaymentCard = ({
   const tokenAllowance = useAllowance(tokenContract, account, asset);
   const [balance, setBalance] = useState<BigNumber>(BN.from(0));
   const [permitSignature, setPermitSignature] = useState<Signature | undefined>();
+  const [isAccountContract, setIsAccountContract] = useState<boolean>(false);
+  const [isTxStarted, setTxStarted] = useState<'approve' | 'pay' | undefined>();
   const [costError, setCostError] = useState<string | undefined>();
   const [permitError, setPermitError] = useState<string | undefined>();
   const [approvalError, setApprovalError] = useState<string | undefined>();
@@ -93,21 +95,27 @@ export const PaymentCard = ({
   const paymentBlocked = useMemo(
     () =>
       !!costError ||
+      isTxStarted !== undefined ||
       (asset &&
         !asset.native &&
         tokenAllowance.lt(payment.value) &&
         permitSignature === undefined),
     [costError, asset, tokenAllowance, permitSignature]
   );
+  const permitBlocked = useMemo(
+    () => permitSignature !== undefined ||
+      tokenAllowance.gte(payment.value) ||
+      isAccountContract,
+    [permitSignature, tokenAllowance, isAccountContract]
+  );
   const allowanceBlocked = useMemo(
     () =>
-      (asset && !asset.native && tokenAllowance.gte(payment.value)) ||
-      permitSignature !== undefined,
-    [asset, tokenAllowance, permitSignature]
-  );
-  const permitBlocked = useMemo(
-    () => permitSignature !== undefined || tokenAllowance.gte(payment.value),
-    [permitSignature, tokenAllowance]
+      !permitBlocked ||
+      (
+        (asset && !asset.native && tokenAllowance.gte(payment.value)) ||
+        permitSignature !== undefined
+      ),
+    [asset, tokenAllowance, permitSignature, permitBlocked]
   );
 
   const resetState = () => {
@@ -117,7 +125,30 @@ export const PaymentCard = ({
     setApprovalError(undefined);
     setPaymentError(undefined);
     setTxHash(undefined);
+    setTxStarted(undefined);
   };
+
+  useEffect(
+    () => {
+      const checkIsAccount = async () => {
+        try {
+          if (provider && account) {
+            const code = await provider.getCode(account);
+            const isContract = code !== '0x';
+            logger.debug('isAccountContract', isContract);
+            setIsAccountContract(isContract);
+          } else {
+            setIsAccountContract(false);
+          }
+        } catch(err) {
+          logger.error(err);
+          setIsAccountContract(false);
+        }
+      };
+      checkIsAccount();
+    },
+    [provider, account]
+  );
 
   useEffect(() => {
     if (!assetsCurrencies.includes(payment.currency)) {
@@ -214,6 +245,7 @@ export const PaymentCard = ({
     try {
       setApprovalError(undefined);
       setTxHash(undefined);
+      setTxStarted('approve');
 
       if (tokenContract && asset) {
         const tx = await tokenContract.approve(asset.address, payment.value);
@@ -222,11 +254,13 @@ export const PaymentCard = ({
         const receipt = await tx.wait();
         logger.debug('Approval receipt', receipt);
       }
+      setTxStarted(undefined);
     } catch (err) {
       logger.error(err);
       setApprovalError(
         err.message ? err.message.split('[')[0] : 'Unknown tokens approval error'
       );
+      setTxStarted(undefined);
     }
   }, [tokenContract, asset, payment]);
 
@@ -234,6 +268,7 @@ export const PaymentCard = ({
     try {
       setPaymentError(undefined);
       setTxHash(undefined);
+      setTxStarted('pay');
 
       if (winPayContract && asset && account) {
         let tx: ContractTransaction;
@@ -305,6 +340,7 @@ export const PaymentCard = ({
       setPaymentError(
         err.message ? err.message.split('[')[0] : 'Unknown payment signature error'
       );
+      setTxStarted(undefined);
     }
   }, [winPayContract, asset, account, permitSignature]);
 
@@ -381,20 +417,26 @@ export const PaymentCard = ({
             </Text>
           </Box>
           <Box direction="row" gap="small">
-            {!asset.native && (
+            {!allowanceBlocked && !asset.native && (
               <Button
                 secondary
                 size="small"
-                label="Approve tokens"
+                label="Approve the tokens"
                 onClick={approveTokens}
                 disabled={allowanceBlocked}
+                icon={
+                  isTxStarted === 'approve'
+                    ? <Spinner />
+                    : undefined
+                }
+                reverse
               />
             )}
-            {asset.permit && (
+            {!permitBlocked && asset.permit && (
               <Button
                 secondary
                 size="small"
-                label="Permit"
+                label="Permit the tokens"
                 onClick={createPermit}
                 disabled={permitBlocked}
               />
@@ -405,11 +447,17 @@ export const PaymentCard = ({
               label="Pay"
               onClick={makePayment}
               disabled={paymentBlocked}
+              icon={
+                isTxStarted === 'pay'
+                  ? <Spinner />
+                  : undefined
+              }
+              reverse
             />
           </Box>
         </CardFooter>
       </Card>
-      <MessageBox type="info" show={!!txHash}>
+      <MessageBox type="info" show={!!txHash} loading={isTxStarted !== undefined}>
         <Text>
           Transaction hash:&nbsp;
           <ExternalLink href={`${network?.blockExplorer}/tx/${txHash}`} target="_blank">
