@@ -4,7 +4,6 @@ import { Button, Box, Card, CardHeader, CardBody, CardFooter } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Logger from '../utils/logger';
-import { PricePlansReferences } from 'src/types/offers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import axios from 'axios';
 import { MessageBox } from './MessageBox';
@@ -80,7 +79,7 @@ export const Results: React.FC<{
       }
       const ids: string[] = [];
       Object.keys(offers).map((key) => {
-        const priceRef: PricePlansReferences = offers[key].pricePlansReferences;
+        const priceRef= offers[key].pricePlansReferences;
         Object.keys(priceRef).map((r) => ids.push(r));
         dispatch({
           type: 'SET_RECORD',
@@ -154,7 +153,7 @@ export const Results: React.FC<{
             <Card key={facility.id} pad="small" background={'white'}>
               <CardHeader>{facility.name}</CardHeader>
               <CardBody pad={'small'}>
-                {facility.description.substring(0, 80) + '...'}
+                {facility.description && facility.description.substring(0, 80) + '...'}
               </CardBody>
               <CardFooter justify="end">
                 <Button

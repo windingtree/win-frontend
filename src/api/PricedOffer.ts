@@ -1,4 +1,4 @@
-import type { PricedOffer } from '../types/offers';
+import type { PricedOffer } from '@windingtree/glider-types/types/derbysoft';
 import { backend } from '../config';
 import { Request } from '.';
 

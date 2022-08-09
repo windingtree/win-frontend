@@ -1,4 +1,4 @@
-import type { Accommodation, Offer, PricedOffer } from '../types/offers';
+import type { Accommodation, Offer, PricedOffer } from '@windingtree/glider-types/types/derbysoft';
 import type { NetworkInfo, CryptoAsset } from '../config';
 import type {
   Web3ModalProvider,
