@@ -97,7 +97,11 @@ export const MapBox: React.FC<{
         <ZoomControl position="bottomleft" />
         {facilities && facilities.length > 0
           ? facilities.map((f) => (
-              <Marker key={f.id} icon={pinIcon} position={f.location.coordinates}>
+              <Marker
+                key={f.id}
+                icon={pinIcon}
+                position={[f.location.coordinates[1], f.location.coordinates[0]]}
+              >
                 <Popup>
                   {f.name} <br /> Easily customizable.
                 </Popup>
