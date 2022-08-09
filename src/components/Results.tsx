@@ -102,16 +102,16 @@ export const Results: React.FC<{
       setError(message);
       setLoading(false);
     }
-  }, [searchParams]);
+  }, [center, searchParams, dispatch]);
 
   useEffect(() => {
-    logger.info(center);
+    logger.info('init results requset', center);
     if (center[0] === defaultCenter[0] && center[1] === defaultCenter[1]) {
       return;
     } else {
       handleResults();
     }
-  }, [center, dispatch]);
+  }, [center]);
 
   if (filteredFacilities.length === 0 || searchParams === undefined) {
     return null;
