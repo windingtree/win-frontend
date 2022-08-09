@@ -58,7 +58,7 @@ export const Results: React.FC<{
       ) {
         throw Error('Unable to get offers request response');
       }
-      const accommodations = res.data.data.derbySoft.data.accomodations;
+      const accommodations = res.data.data.derbySoft.data.accommodations;
       if (accommodations === undefined) {
         throw Error('accommodations undefined');
       }
