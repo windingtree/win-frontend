@@ -1,4 +1,7 @@
 // @todo Remove eslint disable tag when interface will be defined properly
+
+import { LatLngTuple } from 'leaflet';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Passengers {}
 
@@ -57,8 +60,8 @@ export interface ContactInformation {
 }
 
 export interface Location {
-  lat: number;
-  long: number;
+  coordinates: LatLngTuple;
+  type?: string;
 }
 
 export interface Amenity {

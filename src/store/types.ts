@@ -14,11 +14,6 @@ export interface GenericStateRecord {
 export type OfferRecord = Offer & GenericStateRecord;
 export type FacilityRecord = Accommodation & GenericStateRecord;
 
-export interface Location {
-  coordinates: number[];
-  type: string;
-}
-
 export interface Address {
   addressLine: string[];
   country: string;

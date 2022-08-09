@@ -100,7 +100,7 @@ export const MapBox: React.FC<{
               <Marker
                 key={f.id}
                 icon={pinIcon}
-                position={[f.location.lat, f.location.long]}
+                position={[f.location.coordinates[1], f.location.coordinates[0]]}
               >
                 <Popup>
                   {f.name} <br /> Easily customizable.
