@@ -14,7 +14,11 @@ import { Legal } from './pages/Legal';
 import { Security } from './pages/Security';
 import { Developers } from './pages/Developers';
 import { Checkout } from './pages/Checkout';
+<<<<<<< HEAD
 import { FourOhFour } from './pages/404';
+=======
+import { GuestInfo } from './pages/GuestInfo';
+>>>>>>> upstream/main
 
 export interface ProtectedProps {
   component: ReactNode;
@@ -106,6 +110,10 @@ export const pagesRoutesConfig: Routes = [
     element: <FourOhFour />,
     title: 'FourOhFour',
     label: '404'
+    path: '/guest-info',
+    element: <GuestInfo />,
+    title: 'Guest Info',
+    label: 'Guest Info'
   }
 ];
 

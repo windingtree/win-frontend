@@ -27,10 +27,13 @@ export interface PricePlansReferences {
 }
 
 export interface Offer {
-  id: string;
   expiration: Date;
   price: Price;
   pricePlansReferences: PricePlansReferences;
+}
+
+export interface PricedOffer extends Offer {
+  offerId: string;
 }
 
 export interface Offers {
@@ -110,10 +113,6 @@ export interface Accommodation {
   rating: number;
   checkinoutPolicy: CheckinoutPolicy;
   otherPolicies: string[];
-}
-
-export interface Facility extends Accommodation {
-  id: string;
 }
 
 export interface Accommodations {

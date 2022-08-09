@@ -4,12 +4,12 @@ import { Button, Box, Card, CardHeader, CardBody, CardFooter } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Logger from '../utils/logger';
-import mockOffers from '../mocks/all-offers-by-latlng.json';
 import { PricePlansReferences } from 'src/types/offers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import axios from 'axios';
 import { MessageBox } from './MessageBox';
-import { backend } from '../config';
+import { OffersRequest, OffersResponse, SearchParamsSchema } from '../api/OffersRequest';
+import { object } from '@windingtree/org.id-utils';
 
 const logger = Logger('Results');
 const defaultCenter: LatLngTuple = [51.505, -0.09];
@@ -21,8 +21,8 @@ export const Results: React.FC<{
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { winWidth } = useWindowsDimension();
-  const [facilityIds, setFacilityIds] = useState<string[]>([]);
 
+  const [facilityIds, setFacilityIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
 
@@ -31,8 +31,8 @@ export const Results: React.FC<{
     [facilities, facilityIds]
   );
 
-  const handleResults: () => Promise<LatLngTuple | undefined> = useCallback(async () => {
-    logger.info('requst results');
+  const handleResults = useCallback(async () => {
+    logger.info('Init results fetch');
     setLoading(true);
     setError(undefined);
 
@@ -40,84 +40,62 @@ export const Results: React.FC<{
       if (searchParams === undefined) {
         throw new Error('searchParams must be provided');
       }
-
-      const body = {
-        accommodation: {
-          location: {
-            lon: center[1],
-            lat: center[0],
-            radius: 20000
-          },
-          arrival: searchParams.arrival,
-          departure: searchParams.departure,
-          roomCount: searchParams.roomCount
-        },
-        passengersƒ: [
-          {
-            type: 'ADT',
-            count: searchParams.adults
-          },
-          {
-            type: 'CHD',
-            count: searchParams.children,
-            childrenAges: [13]
+      const validateSearchParams = object.validateWithSchemaOrRef(
+        SearchParamsSchema,
+        '',
+        searchParams
+      );
+      if (validateSearchParams !== null) {
+        throw new Error('Invalid searchParams');
+      }
+      const res = await axios.request<OffersResponse>(
+        new OffersRequest(center, searchParams)
+      );
+      if (
+        res.data === undefined ||
+        res.data.data === undefined ||
+        res.data.data.derbySoft.data === undefined
+      ) {
+        throw Error('Unable to get offers request response');
+      }
+      const accommodations = res.data.data.derbySoft.data.accomodations;
+      if (accommodations === undefined) {
+        throw Error('accommodations undefined');
+      }
+      Object.keys(accommodations).map((key) =>
+        dispatch({
+          type: 'SET_RECORD',
+          payload: {
+            name: 'facilities',
+            record: {
+              id: key,
+              ...accommodations[key]
+            }
           }
-        ]
-      };
-      // @todo remove mocks
-      const mocks = true;
-      if (mocks) {
-        const accommodations = mockOffers.data.accommodations;
-        Object.keys(accommodations).map((key) =>
-          dispatch({
-            type: 'SET_RECORD',
-            payload: {
-              name: 'facilities',
-              record: {
-                id: key,
-                ...accommodations[key]
-              }
+        })
+      );
+      const offers = res.data.data.derbySoft.data.offers;
+      if (offers === undefined) {
+        throw Error('offers undefined');
+      }
+      const ids: string[] = [];
+      Object.keys(offers).map((key) => {
+        const priceRef: PricePlansReferences = offers[key].pricePlansReferences;
+        Object.keys(priceRef).map((r) => ids.push(r));
+        dispatch({
+          type: 'SET_RECORD',
+          payload: {
+            name: 'offers',
+            record: {
+              id: key,
+              ...offers[key]
             }
-          })
-        );
-        const offers = mockOffers.data.offers;
-        const ids: string[] = [];
-        Object.keys(offers).map((key) => {
-          const priceRef: PricePlansReferences = offers[key].pricePlansReferences;
-          Object.keys(priceRef).map((r) => ids.push(r));
-
-          dispatch({
-            type: 'SET_RECORD',
-            payload: {
-              name: 'offers',
-              record: {
-                id: key,
-                ...offers[key]
-              }
-            }
-          });
+          }
         });
-        setFacilityIds([...ids]);
-        setLoading(false);
-        logger.info('map successfully mocked');
-        return;
-      }
-      const res = await axios.request({
-        url: backend.url + '/derby-soft/offers/search',
-        method: 'POST',
-        data: body
       });
-
-      if (res.data === undefined) {
-        throw Error('Something went wrong');
-      }
-      if (res.data.length === 0) {
-        throw Error('Could not find place');
-      }
-
+      setFacilityIds([...ids]);
       setLoading(false);
-      logger.info('map successfully fetched');
-      return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
+      logger.info('Results successfully fetched');
     } catch (error) {
       logger.error(error);
       const message = (error as Error).message || 'Unknown Search error';
@@ -159,6 +137,13 @@ export const Results: React.FC<{
         <Box>
           <MessageBox loading type="info" show={loading}>
             One moment...
+          </MessageBox>
+          <MessageBox
+            loading
+            type="info"
+            show={!loading && !error && filteredFacilities.length === 0}
+          >
+            Could not find place
           </MessageBox>
           <MessageBox type="error" show={!!error}>
             {error}

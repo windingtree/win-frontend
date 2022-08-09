@@ -4,18 +4,28 @@ import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '../layouts/MainLayout';
 import { WinPay } from '../components/WinPay';
 import Logger from '../utils/logger';
+import { useAppState } from '../store';
 
 const logger = Logger('Checkout');
 
 export const Checkout = () => {
   const navigate = useNavigate();
+  const { checkout } = useAppState();
 
   return (
     <MainLayout
       breadcrumbs={[
         {
-          label: 'Home',
+          label: 'Search',
           path: '/'
+        },
+        {
+          label: 'Facility',
+          path: '/facilities/' + checkout?.facilityId
+        },
+        {
+          label: 'Guest Info',
+          path: '/guest-info'
         }
       ]}
     >
