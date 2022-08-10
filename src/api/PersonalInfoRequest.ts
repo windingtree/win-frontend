@@ -21,7 +21,7 @@ export class PersonalInfoRequest implements Request {
   public readonly body: PersonalInfoBody;
 
   public constructor(offerId: string, personalInfo: PersonalInfo) {
-    this.url = `${backend.url}/offers/${offerId}/pii`;
+    this.url = `${backend.url}/api/offers/${offerId}/pii`;
     this.body = {
       T1: {
         firstnames: [personalInfo.firstname],

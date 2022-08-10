@@ -1,4 +1,4 @@
-import type { RoomType } from './../types/offers';
+import type { Roomtypes } from '@windingtree/glider-types/types/derbysoft';
 import type { OfferRecord } from './../store/types';
 import { Box, Text, Image, Grid, Button, Notification, Carousel, Spinner } from 'grommet';
 import { useNavigate } from 'react-router-dom';
@@ -46,7 +46,7 @@ const ResponsiveArea = (
 };
 
 export const RoomCard: React.FC<{
-  room: RoomType;
+  room: Roomtypes;
   roomId: string;
   offer: OfferRecord;
   facilityId: string;
@@ -120,12 +120,14 @@ export const RoomCard: React.FC<{
           <Text size="xxlarge" margin={{ bottom: 'xsmall' }}>
             {room.name}
           </Text>
-          <Text size="medium" margin={{ bottom: 'xsmall' }}>
-            {room.maximumOccupancy.adults}{' '}
-            {room.maximumOccupancy.adults > 1 ? 'adults' : 'adult'},{' '}
-            {room.maximumOccupancy.children}{' '}
-            {room.maximumOccupancy.children > 1 ? 'children' : 'child'}
-          </Text>
+          {room.maximumOccupancy &&
+            <Text size="medium" margin={{ bottom: 'xsmall' }}>
+              {room.maximumOccupancy.adults}{' '}
+              {room.maximumOccupancy.adults !== undefined && room.maximumOccupancy.adults > 1 ? 'adults' : 'adult'},{' '}
+              {room.maximumOccupancy.children}{' '}
+              {room.maximumOccupancy.children !== undefined && room.maximumOccupancy.children > 1 ? 'children' : 'child'}
+            </Text>
+          }
         </Box>
         <Box direction="column" justify="start" gridArea="main">
           <Text size="large">{room.description}</Text>

@@ -1,15 +1,21 @@
 import type { LatLngTuple } from 'leaflet';
 import { useAppState, useAppDispatch } from '../store';
-import { Button, Box, Card, CardHeader, CardBody, CardFooter } from 'grommet';
-import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Box } from 'grommet';
+import {
+  createRef,
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 import Logger from '../utils/logger';
-import { PricePlansReferences } from 'src/types/offers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import axios from 'axios';
 import { MessageBox } from './MessageBox';
 import { OffersRequest, OffersResponse, SearchParamsSchema } from '../api/OffersRequest';
 import { object } from '@windingtree/org.id-utils';
+import { SearchResult } from './SearchResult';
 
 const logger = Logger('Results');
 const defaultCenter: LatLngTuple = [51.505, -0.09];
@@ -18,13 +24,13 @@ export const Results: React.FC<{
   center: LatLngTuple;
 }> = ({ center }) => {
   const { facilities, searchParams } = useAppState();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { winWidth } = useWindowsDimension();
 
   const [facilityIds, setFacilityIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
+  const [selectedFaciltyId, setSelectedFacilityId] = useState<undefined | string>();
 
   const filteredFacilities = useMemo(
     () => facilities.filter((f) => facilityIds.includes(f.id)),
@@ -82,7 +88,7 @@ export const Results: React.FC<{
       
       const ids: string[] = [];
       Object.keys(offers).map((key) => {
-        const priceRef: PricePlansReferences = offers[key].pricePlansReferences;
+        const priceRef= offers[key].pricePlansReferences;
         Object.keys(priceRef).map((r) => ids.push(r));
         dispatch({
           type: 'SET_RECORD',
@@ -115,6 +121,29 @@ export const Results: React.FC<{
     }
   }, [center]);
 
+  const searchResultsRefs = useMemo(
+    () =>
+      filteredFacilities.reduce((refs, facility) => {
+        const ref = createRef<HTMLDivElement>();
+        return { ...refs, [facility.id]: ref };
+      }, {}),
+    [filteredFacilities]
+  );
+
+  const handleFacilitySelection = (facilityId: string) => {
+    setSelectedFacilityId(facilityId);
+  };
+
+  useEffect(() => {
+    // scroll to searchResult
+    searchResultsRefs && selectedFaciltyId && searchResultsRefs[selectedFaciltyId]?.current?.scrollIntoView();
+  }, [selectedFaciltyId, searchResultsRefs]);
+
+  const resultsContainerStyle: CSSProperties = {
+    paddingLeft: 20,
+    paddingRight: 20
+  };
+
   if (filteredFacilities.length === 0 || searchParams === undefined) {
     return null;
   }
@@ -130,7 +159,7 @@ export const Results: React.FC<{
         width: winWidth < 900 ? '100%' : '25rem',
         maxWidth: '100%',
         height: winWidth < 900 ? '45%' : '90%',
-        right: 0,
+        left: 20,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0)'
       }}
@@ -151,20 +180,15 @@ export const Results: React.FC<{
             {error}
           </MessageBox>
         </Box>
-        <Box gap="0.5rem" flex={false}>
-          {filteredFacilities.map((facility) => (
-            <Card key={facility.id} pad="small" background={'white'}>
-              <CardHeader>{facility.name}</CardHeader>
-              <CardBody pad={'small'}>
-                {facility.description.substring(0, 80) + '...'}
-              </CardBody>
-              <CardFooter justify="end">
-                <Button
-                  label="book"
-                  onClick={() => navigate(`/facility/${facility.id}`)}
-                />
-              </CardFooter>
-            </Card>
+        <Box gap="0.5rem" flex={false} style={resultsContainerStyle}>
+          {filteredFacilities.map((facility, idx) => (
+            <SearchResult
+              key={facility.id}
+              facility={facility}
+              isSelected={facility.id === selectedFaciltyId}
+              onSelect={handleFacilitySelection}
+              ref={searchResultsRefs[idx]}
+            />
           ))}
         </Box>
       </Box>

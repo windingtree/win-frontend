@@ -1,7 +1,7 @@
 import { Text, Image } from 'grommet';
 import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
-import type { Media } from '../../types/offers';
+import type { Media } from '@windingtree/glider-types/types/derbysoft';
 
 const Container = styled.div`
   display: flex;

@@ -1,4 +1,4 @@
-import type { Accommodation, Offer, PricedOffer } from '../types/offers';
+import type { Accommodation, OfferResult, PricedOffer } from '@windingtree/glider-types/types/derbysoft';
 import type { NetworkInfo, CryptoAsset } from '../config';
 import type {
   Web3ModalProvider,
@@ -11,7 +11,7 @@ export interface GenericStateRecord {
   [key: string]: unknown;
 }
 
-export type OfferRecord = Offer & GenericStateRecord;
+export type OfferRecord = OfferResult & GenericStateRecord;
 export type FacilityRecord = Accommodation & GenericStateRecord;
 
 export interface Address {

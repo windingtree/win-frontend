@@ -1,4 +1,4 @@
-import type { PricedOffer } from '../types/offers';
+import type { PricedOffer } from '@windingtree/glider-types/types/derbysoft';
 import { backend } from '../config';
 import { Request } from '.';
 
@@ -15,6 +15,6 @@ export class PricedOfferRequest implements Request {
   public readonly method = 'post';
 
   public constructor(offerId: string) {
-    this.url = `${backend.url}/offers/${offerId}/price`;
+    this.url = `${backend.url}/api/offers/${offerId}/price`;
   }
 }

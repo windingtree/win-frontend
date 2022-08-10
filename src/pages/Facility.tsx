@@ -16,7 +16,11 @@ export const Facility = () => {
   const facilityOffers = useMemo(
     () =>
       facility !== undefined && offers !== undefined
-        ? offers.filter((offer) => offer.pricePlansReferences[facility.id] !== undefined)
+        ? offers.filter(
+            (offer) =>
+              offer.pricePlansReferences &&
+              offer.pricePlansReferences[facility.id] !== undefined
+          )
         : null,
     [offers, facility]
   );
@@ -34,19 +38,29 @@ export const Facility = () => {
         <Box overflow="hidden">
           <FacilityIntroduction facility={facility} />
 
-          {facilityOffers?.map((offer) => {
-            return (
-              <RoomCard
-                key={offer?.id}
-                facilityId={facility?.id}
-                offer={offer}
-                room={
-                  facility.roomTypes[offer.pricePlansReferences[facility.id].roomType]
-                }
-                roomId={offer.pricePlansReferences[facility.id].roomType}
-              />
-            );
-          })}
+          {facilityOffers &&
+            facilityOffers.length > 0 &&
+            facilityOffers.map(
+              (offer) =>
+                facility.roomTypes &&
+                offer.pricePlansReferences &&
+                offer.pricePlansReferences[facility.id] &&
+                offer.pricePlansReferences[facility.id].roomType !== undefined && (
+                  <RoomCard
+                    key={offer.id}
+                    facilityId={facility.id}
+                    offer={offer}
+                    room={
+                      facility.roomTypes[
+                        // @todo review after the Derbysoft Proxy types fixes
+                        offer.pricePlansReferences[facility.id].roomType as string
+                      ]
+                    }
+                    // @todo review after the Derbysoft Proxy types fixes
+                    roomId={offer.pricePlansReferences[facility.id].roomType as string}
+                  />
+                )
+            )}
         </Box>
       )}
     </MainLayout>
