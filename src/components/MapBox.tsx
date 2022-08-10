@@ -96,23 +96,22 @@ export const MapBox: React.FC<{
         />
         <ZoomControl position="bottomleft" />
         {facilities && facilities.length > 0
-          ? facilities
-              .filter(f => f.location && f.location.circle)
-              .map(
-                f => f.location && f.location.circle
-                  ? (
-                    <Marker
-                      key={f.id}
-                      icon={pinIcon}
-                      position={[f.location.circle.lat, f.location.circle.long]}
-                    >
-                      <Popup>
-                        {f.name} <br /> Easily customizable.
-                      </Popup>
-                    </Marker>
-                  )
-                  : null
-              )
+          ? facilities.map(
+              (f) => f.location &&
+                f.location.lat !== undefined &&
+                f.location.long !== undefined &&
+                (
+                  <Marker
+                    key={f.id}
+                    icon={pinIcon}
+                    position={[f.location.lat, f.location.long]}
+                  >
+                    <Popup>
+                      {f.name} <br /> Easily customizable.
+                    </Popup>
+                  </Marker>
+                )
+            )
           : null}
       </MapContainer>
     ),

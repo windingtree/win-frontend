@@ -1,4 +1,4 @@
-import type { Accommodation, Offer } from '@windingtree/glider-types/types/derbysoft';
+import type { Accommodation, OfferResult } from '@windingtree/glider-types/types/derbysoft';
 import { LatLngTuple } from 'leaflet';
 import { SearchParams } from '../store/types';
 import { backend } from '../config';
@@ -46,8 +46,8 @@ export interface Location {
 }
 
 export interface ResponseData {
-  accomodations: Accommodation[];
-  offers: Offer[];
+  accommodations: Accommodation[];
+  offers: OfferResult[];
 }
 
 export interface Response {
@@ -100,7 +100,7 @@ export class OffersRequest implements Request {
         location: {
           lon: Number(center[1]),
           lat: Number(center[0]),
-          radius: 2000
+          radius: 20000
         },
         arrival: searchParams.arrival,
         departure: searchParams.departure,
@@ -110,13 +110,15 @@ export class OffersRequest implements Request {
         {
           type: PassengerType.adult,
           count: searchParams.adults
-        },
-        {
-          type: PassengerType.child,
-          count: searchParams.children,
-          childrenAges: [13]
         }
       ]
     };
+    if (searchParams.children > 0) {
+      this.data.passengers.push({
+        type: PassengerType.child,
+        count: searchParams.children,
+        childrenAges: Array.from({ length: searchParams.children }, () => 13)
+      });
+    }
   }
 }
