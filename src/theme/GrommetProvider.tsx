@@ -1,5 +1,5 @@
 import { Grommet } from 'grommet';
-import breakpoints from './breakpoints';
+import breakpoints, { getBreakpointsInCss } from './breakpoints';
 import { setConfiguration } from 'react-grid-system';
 
 setConfiguration({
@@ -9,6 +9,7 @@ setConfiguration({
 });
 
 const theme = {
+  breakpoints: getBreakpointsInCss(),
   global: {
     colors: {
       brand: '#61dfaf'
@@ -17,6 +18,23 @@ const theme = {
       family: 'Inter',
       size: '1rem',
       height: '1.1rem'
+    },
+    breakpoints: {
+      xsmall: {
+        value: breakpoints.xsmall
+      },
+      small: {
+        value: breakpoints.small
+      },
+      medium: {
+        value: breakpoints.medium
+      },
+      large: {
+        value: breakpoints.large
+      },
+      xlarge: {
+        value: breakpoints.xlarge
+      }
     }
   }
 };

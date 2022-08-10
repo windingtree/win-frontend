@@ -75,9 +75,11 @@ export const Results: React.FC<{
         })
       );
       const offers = res.data.data.derbySoft.data.offers;
+
       if (offers === undefined) {
         throw Error('offers undefined');
       }
+      
       const ids: string[] = [];
       Object.keys(offers).map((key) => {
         const priceRef: PricePlansReferences = offers[key].pricePlansReferences;
