@@ -64,8 +64,7 @@ export interface PersonalInfo {
   phone: string;
 }
 
-export interface CheckOut {
-  pricedOffer: PricedOffer;
+export interface CheckOut extends PricedOffer {
   personalInfo?: PersonalInfo;
   facilityId: string;
 }

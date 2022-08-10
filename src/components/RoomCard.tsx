@@ -74,7 +74,7 @@ export const RoomCard: React.FC<{
         type: 'SET_CHECKOUT',
         payload: {
           facilityId,
-          pricedOffer: res.data.data.pricedOffer
+          ...res.data.data
         }
       });
 
