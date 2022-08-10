@@ -119,10 +119,6 @@ export const Results: React.FC<{
     }
   }, [center]);
 
-  if (filteredFacilities.length === 0 || searchParams === undefined) {
-    return null;
-  }
-
   const searchResultsRefs = useMemo(
     () =>
       filteredFacilities.reduce((refs, facility) => {
@@ -138,13 +134,17 @@ export const Results: React.FC<{
 
   useEffect(() => {
     // scroll to searchResult
-    selectedFaciltyId && searchResultsRefs[selectedFaciltyId]?.current?.scrollIntoView();
+    searchResultsRefs && selectedFaciltyId && searchResultsRefs[selectedFaciltyId]?.current?.scrollIntoView();
   }, [selectedFaciltyId, searchResultsRefs]);
 
   const resultsContainerStyle: CSSProperties = {
     paddingLeft: 20,
     paddingRight: 20
   };
+
+  if (filteredFacilities.length === 0 || searchParams === undefined) {
+    return null;
+  }
 
   return (
     <Box
