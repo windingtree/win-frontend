@@ -81,12 +81,14 @@ export const Results: React.FC<{
         })
       );
       const offers = res.data.data.derbySoft.data.offers;
+
       if (offers === undefined) {
         throw Error('offers undefined');
       }
+      
       const ids: string[] = [];
       Object.keys(offers).map((key) => {
-        const priceRef= offers[key].pricePlansReferences;
+        const priceRef = offers[key].pricePlansReferences;
         Object.keys(priceRef).map((r) => ids.push(r));
         dispatch({
           type: 'SET_RECORD',
@@ -134,7 +136,9 @@ export const Results: React.FC<{
 
   useEffect(() => {
     // scroll to searchResult
-    searchResultsRefs && selectedFaciltyId && searchResultsRefs[selectedFaciltyId]?.current?.scrollIntoView();
+    searchResultsRefs &&
+      selectedFaciltyId &&
+      searchResultsRefs[selectedFaciltyId]?.current?.scrollIntoView();
   }, [selectedFaciltyId, searchResultsRefs]);
 
   const resultsContainerStyle: CSSProperties = {
