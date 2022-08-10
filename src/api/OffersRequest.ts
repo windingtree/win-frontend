@@ -1,4 +1,7 @@
-import type { Accommodation, OfferResult } from '@windingtree/glider-types/types/derbysoft';
+import type {
+  Accommodation,
+  OfferResult
+} from '@windingtree/glider-types/types/derbysoft';
 import { LatLngTuple } from 'leaflet';
 import { SearchParams } from '../store/types';
 import { backend } from '../config';

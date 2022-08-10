@@ -30,6 +30,7 @@ export const GuestInfo = () => {
   const [error, setError] = useState<undefined | string>();
 
   const handleSubmit = useCallback(async () => {
+    logger.info('submit user data', checkout);
     try {
       setError(undefined);
       setLoading(true);
@@ -38,11 +39,11 @@ export const GuestInfo = () => {
         throw Error('Priced offer undefined');
       }
 
-      if (!checkout.pricedOffer.offerId) {
+      if (!checkout.offerId) {
         throw Error('Priced offer offerId not defined');
       }
 
-      await axios.request(new PersonalInfoRequest(checkout.pricedOffer.offerId, value));
+      await axios.request(new PersonalInfoRequest(checkout.offerId, value));
 
       dispatch({
         type: 'SET_CHECKOUT',
@@ -53,13 +54,13 @@ export const GuestInfo = () => {
       });
 
       logger.info('Guest info sent successfully');
-      navigate('/checkout/' + checkout.pricedOffer.offerId);
+      navigate('/checkout/' + checkout.offerId);
     } catch (error) {
       const message = (error as Error).message || 'Unknown useAuthRequest error';
       setLoading(false);
       setError(message);
     }
-  }, [value]);
+  }, [value, checkout]);
 
   return (
     <MainLayout
@@ -92,7 +93,7 @@ export const GuestInfo = () => {
               label="First Name"
               required
               validate={{
-                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)*$/g,
+                regexp: /^[a-z ,.'-]+$/i,
                 message: 'Only a-z, A-Z chars',
                 status: 'error'
               }}
@@ -105,7 +106,7 @@ export const GuestInfo = () => {
               label="Last Name"
               required
               validate={{
-                regexp: /^[a-zA-Z]+(?:\s+[a-zA-Z]+)*$/g,
+                regexp: /^[a-z ,.'-]+$/i,
                 message: 'Only a-z, A-Z chars',
                 status: 'error'
               }}
@@ -113,8 +114,8 @@ export const GuestInfo = () => {
               <TextInput id="lastname" name="lastname" />
             </FormField>
             <FormField
-              name="birthday"
-              htmlFor="birthday"
+              name="birthdate"
+              htmlFor="birthdate"
               label="Date of birth"
               required
               validate={{
@@ -128,8 +129,8 @@ export const GuestInfo = () => {
                   bounds: ['01/01/1900', DateTime.now().toFormat('dd/mm/yyyy')]
                 }}
                 format="dd/mm/yyyy"
-                name="birthday"
-                id="birthday"
+                name="birthdate"
+                id="birthdate"
               />
             </FormField>
             <FormField

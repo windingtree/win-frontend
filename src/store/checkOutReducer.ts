@@ -1,0 +1,24 @@
+import type { Action } from './actions';
+import type { State } from './types';
+import Logger from '../utils/logger';
+
+const logger = Logger('checkoutReducer');
+
+export const checkOutReducer = (state: State, action: Action): State => {
+  const type = action.type;
+
+  try {
+    switch (type) {
+      case 'SET_CHECKOUT':
+        return {
+          ...state,
+          checkout: action.payload
+        };
+      default:
+        return state;
+    }
+  } catch (error) {
+    logger.error(error);
+    return state;
+  }
+};

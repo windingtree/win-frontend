@@ -74,7 +74,7 @@ export const RoomCard: React.FC<{
         type: 'SET_CHECKOUT',
         payload: {
           facilityId,
-          pricedOffer: res.data.data.pricedOffer
+          ...res.data.data
         }
       });
 
@@ -120,14 +120,20 @@ export const RoomCard: React.FC<{
           <Text size="xxlarge" margin={{ bottom: 'xsmall' }}>
             {room.name}
           </Text>
-          {room.maximumOccupancy &&
+          {room.maximumOccupancy && (
             <Text size="medium" margin={{ bottom: 'xsmall' }}>
               {room.maximumOccupancy.adults}{' '}
-              {room.maximumOccupancy.adults !== undefined && room.maximumOccupancy.adults > 1 ? 'adults' : 'adult'},{' '}
-              {room.maximumOccupancy.children}{' '}
-              {room.maximumOccupancy.children !== undefined && room.maximumOccupancy.children > 1 ? 'children' : 'child'}
+              {room.maximumOccupancy.adults !== undefined &&
+              room.maximumOccupancy.adults > 1
+                ? 'adults'
+                : 'adult'}
+              , {room.maximumOccupancy.children}{' '}
+              {room.maximumOccupancy.children !== undefined &&
+              room.maximumOccupancy.children > 1
+                ? 'children'
+                : 'child'}
             </Text>
-          }
+          )}
         </Box>
         <Box direction="column" justify="start" gridArea="main">
           <Text size="large">{room.description}</Text>

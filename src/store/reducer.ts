@@ -8,6 +8,7 @@ import { recordsReducer } from './recordsReducer';
 import { searchReducer } from './searchReducer';
 import { getState, storageReducer } from './localStorage';
 import Logger from '../utils/logger';
+import { checkOutReducer } from './checkOutReducer';
 
 const logger = Logger('mainReducer');
 
@@ -65,6 +66,7 @@ export const useAppReducer = () => {
       mainReducer,
       web3ModalReducer,
       searchReducer,
+      checkOutReducer,
       cryptoReducer,
       recordsReducer,
       storageReducer() // Always must be the last

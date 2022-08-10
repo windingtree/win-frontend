@@ -3,33 +3,33 @@ import { backend } from '../config';
 import { Request } from '.';
 import { PassengerType } from './OffersRequest';
 
-export interface T1 {
+export interface PersonalInfoBody {
   firstnames: string[];
   lastnames: string[];
   contactInformation: string[];
   birthdate: Date | null;
   type: PassengerType;
-}
-
-export interface PersonalInfoBody {
-  T1: T1;
+  civility: string;
+  gender: string;
 }
 
 export class PersonalInfoRequest implements Request {
   public readonly url: string;
   public readonly method = 'post';
-  public readonly body: PersonalInfoBody;
+  public readonly data: PersonalInfoBody[];
 
   public constructor(offerId: string, personalInfo: PersonalInfo) {
-    this.url = `${backend.url}/api/offers/${offerId}/pii`;
-    this.body = {
-      T1: {
+    this.url = `${backend.url}/api/booking/${offerId}/guests`;
+    this.data = [
+      {
         firstnames: [personalInfo.firstname],
         lastnames: [personalInfo.lastname],
         contactInformation: [personalInfo.email, personalInfo.phone],
         birthdate: personalInfo.birthdate,
+        civility: 'MR',
+        gender: 'Male',
         type: PassengerType.adult
       }
-    };
+    ];
   }
 }
