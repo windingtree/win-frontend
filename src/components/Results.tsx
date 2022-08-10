@@ -129,17 +129,17 @@ export const Results: React.FC<{
         const ref = createRef<HTMLDivElement>();
         return { ...refs, [facility.id]: ref };
       }, {}),
-    []
+    [filteredFacilities]
   );
 
-  const handleFacilitySelection = useCallback((facilityId: string) => {
+  const handleFacilitySelection = (facilityId: string) => {
     setSelectedFacilityId(facilityId);
-  }, []);
+  };
 
   useEffect(() => {
     // scroll to searchResult
     selectedFaciltyId && searchResultsRefs[selectedFaciltyId]?.current?.scrollIntoView();
-  }, [selectedFaciltyId]);
+  }, [selectedFaciltyId, searchResultsRefs]);
 
   const resultsContainerStyle: CSSProperties = {
     paddingLeft: 20,
