@@ -18,24 +18,8 @@ const theme = {
       family: 'Inter',
       size: '1rem',
       height: '1.1rem'
-    },
-    breakpoints: {
-      xsmall: {
-        value: breakpoints.xsmall
-      },
-      small: {
-        value: breakpoints.small
-      },
-      medium: {
-        value: breakpoints.medium
-      },
-      large: {
-        value: breakpoints.large
-      },
-      xlarge: {
-        value: breakpoints.xlarge
-      }
     }
+    // TODO: Include the breakoints according the strucure of grommet.
   }
 };
 
