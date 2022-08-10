@@ -16,7 +16,6 @@ import { MessageBox } from './MessageBox';
 import { OffersRequest, OffersResponse, SearchParamsSchema } from '../api/OffersRequest';
 import { object } from '@windingtree/org.id-utils';
 import { SearchResult } from './SearchResult';
-import { uuid4 } from '@windingtree/org.id-utils/dist/uid';
 
 const logger = Logger('Results');
 const defaultCenter: LatLngTuple = [51.505, -0.09];
@@ -33,13 +32,10 @@ export const Results: React.FC<{
   const [error, setError] = useState<undefined | string>();
   const [selectedFaciltyId, setSelectedFacilityId] = useState<undefined | string>();
 
-  const filteredFacilities = useMemo(() => {
-    const allFacilities = facilities.filter((f) => facilityIds.includes(f.id));
-    const mergedFacilitites = allFacilities.concat(
-      facilities.map((facility) => ({ ...facility, id: uuid4() }))
-    );
-    return mergedFacilitites;
-  }, [facilities, facilityIds]);
+  const filteredFacilities = useMemo(
+    () => facilities.filter((f) => facilityIds.includes(f.id)),
+    [facilities, facilityIds]
+  );
 
   const handleResults = useCallback(async () => {
     logger.info('Init results fetch');
