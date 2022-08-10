@@ -35,8 +35,13 @@ export const GuestInfo = () => {
       setLoading(true);
 
       if (checkout === undefined) {
-        throw Error('Something went wrong');
+        throw Error('Priced offer undefined');
       }
+
+      if (!checkout.pricedOffer.offerId) {
+        throw Error('Priced offer offerId not defined');
+      }
+
       await axios.request(new PersonalInfoRequest(checkout.pricedOffer.offerId, value));
 
       dispatch({
