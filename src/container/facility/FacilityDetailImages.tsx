@@ -8,7 +8,7 @@ const DetailImage = styled(Image)`
   object-fit: cover;
 `;
 
-export const FacilityDetailImages = () => {
+export const FacilityDetailImages = ({ images }) => {
   return (
     <Box
       style={{
@@ -22,15 +22,15 @@ export const FacilityDetailImages = () => {
       <Box
         style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '8px' }}
       >
-        <DetailImage src="https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" />
-        <DetailImage src="https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" />
+        <DetailImage src={images[0].url} />
+        <DetailImage src={images[1].url} />
       </Box>
 
       <Box
         style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '8px' }}
       >
-        <DetailImage src="https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" />
-        <DetailImage src="https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" />
+        <DetailImage src={images[2].url} />
+        <DetailImage src={images[3].url} />
       </Box>
     </Box>
   );

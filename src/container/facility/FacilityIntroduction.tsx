@@ -1,6 +1,7 @@
 import { Text, Image } from 'grommet';
 import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
+import type { Media } from '../../types/offers';
 
 const Container = styled.div`
   display: flex;
@@ -21,15 +22,28 @@ const FacilityMainImage = styled(Image)`
   object-fit: cover;
 `;
 
-export const FacilityIntroduction = ({ facility }) => (
-  <>
-    <Text weight={500} size="2rem">
-      {facility.name}
-    </Text>
+const sortByLargestImage = (images: Media[]) => {
+  const compareImages = (itemOne: Media, itemTwo: Media) => {
+    return itemTwo.width - itemOne.width;
+  };
+  const sortedImages = images.sort(compareImages);
+  return sortedImages;
+};
 
-    <Container>
-      <FacilityMainImage src="https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" />
-      <FacilityDetailImages />
-    </Container>
-  </>
-);
+export const FacilityIntroduction = ({ facility }) => {
+  const sortedImages = sortByLargestImage(facility?.media);
+  const [mainImage, ...rest] = sortedImages;
+
+  return (
+    <>
+      <Text weight={500} size="2rem" margin={{ bottom: '8px' }}>
+        {facility.name}
+      </Text>
+
+      <Container>
+        <FacilityMainImage src={mainImage?.url} />
+        <FacilityDetailImages images={rest} />
+      </Container>
+    </>
+  );
+};

@@ -81,8 +81,8 @@ export interface Policies {
 
 export interface Media {
   type: string;
-  height: string;
-  width: string;
+  height: number;
+  width: number;
   url: string;
 }
 
