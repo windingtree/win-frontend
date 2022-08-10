@@ -21,7 +21,6 @@ export const Facility = () => {
     [offers, facility]
   );
 
-  console.log(facility);
   return (
     <MainLayout
       breadcrumbs={[
