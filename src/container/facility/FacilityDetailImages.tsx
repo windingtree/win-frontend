@@ -11,24 +11,18 @@ const DetailImage = styled(Image)`
 export const FacilityDetailImages = ({ images }) => {
   return (
     <Box
+      direction="row"
       style={{
-        flex: '50%',
-        display: 'flex',
         gap: '8px',
-
-        flexDirection: 'row'
+        flex: '50%'
       }}
     >
-      <Box
-        style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '8px' }}
-      >
+      <Box direction="column" width="100%" style={{ gap: '8px' }}>
         <DetailImage src={images[0].url} />
         <DetailImage src={images[1].url} />
       </Box>
 
-      <Box
-        style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '8px' }}
-      >
+      <Box direction="column" width="100%" style={{ gap: '8px' }}>
         <DetailImage src={images[2].url} />
         <DetailImage src={images[3].url} />
       </Box>
