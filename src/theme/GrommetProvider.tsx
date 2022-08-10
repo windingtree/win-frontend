@@ -19,7 +19,7 @@ const theme = {
       size: '1rem',
       height: '1.1rem'
     }
-    // Include the breakoints according the strucure of grommet.
+    // TODO: Include the breakoints according the strucure of grommet.
   }
 };
 
