@@ -44,7 +44,7 @@ export const Checkout = () => {
           }}
           onSuccess={(result) => {
             logger.debug(`Payment result:`, result);
-            navigate('/');
+            navigate('/bookings/confirmation');
           }}
         />
       </Box>
