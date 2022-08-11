@@ -15,6 +15,7 @@ import { Security } from './pages/Security';
 import { Developers } from './pages/Developers';
 import { Checkout } from './pages/Checkout';
 import { GuestInfo } from './pages/GuestInfo';
+import { BookingConfirmation } from './pages/BookingConfirmation';
 
 export interface ProtectedProps {
   component: ReactNode;
@@ -57,6 +58,12 @@ export const pagesRoutesConfig: Routes = [
     path: '/bookings',
     element: <Bookings />,
     title: 'Bookings',
+    label: 'Bookings'
+  },
+  {
+    path: '/bookings/confirmation',
+    element: <BookingConfirmation />,
+    title: 'Booking confirmation',
     label: 'Bookings'
   },
   {

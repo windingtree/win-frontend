@@ -18,7 +18,12 @@ export const MainLayout = ({ children, breadcrumbs, kind }: MainLayoutProps) => 
   const { isConnecting } = useAppState();
 
   return (
-    <Page height={{ min: '75vh' }} margin={{ bottom: '1rem' }} kind={kind ?? 'narrow'}>
+    <Page
+      height={{ min: '100vh' }}
+      margin={{ bottom: '1rem' }}
+      kind={kind ?? 'narrow'}
+      style={{ position: 'relative' }}
+    >
       <Header />
       <PageContent
         width="100%"
