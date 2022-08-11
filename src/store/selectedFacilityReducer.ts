@@ -2,7 +2,7 @@ import type { Action } from './actions';
 import type { State } from './types';
 import Logger from '../utils/logger';
 
-const logger = Logger('searchReducer');
+const logger = Logger('selectedFacilityReducer');
 
 export const selectedFacilityReducer = (state: State, action: Action): State => {
   const type = action.type;
