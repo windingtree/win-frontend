@@ -91,7 +91,7 @@ export const Results: React.FC<{
       if (offers === undefined) {
         throw Error('offers undefined');
       }
-      
+
       const ids: string[] = [];
       Object.keys(offers).map((key) => {
         const priceRef = offers[key].pricePlansReferences;
