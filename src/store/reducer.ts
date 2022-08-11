@@ -44,8 +44,7 @@ const initialState: State = {
   offers: [],
   authentication: {
     timestamp: 0
-  },
-  selectedFacilityId: undefined
+  }
 };
 
 export const combineReducers =
