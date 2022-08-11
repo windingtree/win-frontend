@@ -36,9 +36,9 @@ export const Checkout = () => {
           <WinPay
             payment={{
               currency: 'USD', //checkout.offer.price.currency should be passed
-              value: utils.parseEther('1.5'),
+              value: utils.parseEther(checkout.offer.price.public.toString()),
               expiration: Math.ceil(Date.now() / 1000) + 500000000,
-              providerId: utils.id(checkout.facilityId),
+              providerId: utils.keccak256(utils.formatBytes32String('win_win_provider')),
               serviceId: utils.id(checkout.offerId)
             }}
             onSuccess={(result) => {
