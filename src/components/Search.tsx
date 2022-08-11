@@ -9,6 +9,7 @@ import { MessageBox } from './MessageBox';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { useAppDispatch, useAppState } from '../store';
 import { CoordinatesRequest, CoordinatesResponse } from '../api/CoordinatesRequest';
+import { useAccomodationsAndOffers } from 'src/hooks/useAccomodationsAndOffers';
 
 const logger = Logger('Search');
 const today = DateTime.local().toISO();
@@ -67,6 +68,14 @@ export const Search: React.FC<{
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
 
+  const { refetch } = useAccomodationsAndOffers({
+    date: checkInCheckOut,
+    adultCount: numAdults,
+    childrenCount: numChildren,
+    location: 'Berlin',
+    roomCount: numSpacesReq
+  });
+
   const handleMapSearch: () => Promise<LatLngTuple | undefined> =
     useCallback(async () => {
       logger.info('requst map');
@@ -102,31 +111,9 @@ export const Search: React.FC<{
       }
     }, [searchParams, dispatch]);
 
-  const handleSubmit = useCallback(async () => {
-    if (searchValue === '') {
-      throw Error('Place field should not be empty');
-    }
-
-    dispatch({
-      type: 'SET_SEARCH_PARAMS',
-      payload: {
-        place: searchValue,
-        arrival: checkInCheckOut[0],
-        departure: checkInCheckOut[1],
-        roomCount: numSpacesReq,
-        children: numChildren,
-        adults: numAdults
-      }
-    });
-  }, [
-    dispatch,
-    searchValue,
-    checkInCheckOut,
-    numSpacesReq,
-    numAdults,
-    numChildren,
-    navigate
-  ]);
+  const handleSubmit = () => {
+    refetch();
+  };
 
   const handleDateChange = ({ value }: { value: string[] }) => {
     const checkInisInPast =
@@ -239,7 +226,7 @@ export const Search: React.FC<{
             />
           </FormField>
           <Box alignSelf="center" pad={{ vertical: 'small', horizontal: 'xsmall' }}>
-            <Button type="submit" label="Search..." />
+            <Button type="submit" label="Search" />
           </Box>
         </Grid>
         <MessageBox loading type="info" show={loading}>
