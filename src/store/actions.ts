@@ -28,7 +28,7 @@ export interface SetWeb3ModalSignOutAction {
 
 export interface SetAccountAction {
   type: 'SET_ACCOUNT';
-  payload: string | undefined;
+  payload?: string;
 }
 
 export interface SetRecordAction {
@@ -89,7 +89,7 @@ export interface SetSelectedFacilityId {
 
 export interface ResetSelectedFacilityId {
   type: 'RESET_SELECTED_FACILITY_ID';
-  payload: undefined;
+  payload?: undefined;
 }
 
 export type Action =
