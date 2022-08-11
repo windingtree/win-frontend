@@ -1,8 +1,15 @@
 import { Text, Image } from 'grommet';
 import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
-//TODO: Replace this by types of @windingtree/glider-types supports this
-import type { Media } from '../../types/offers';
+
+// import type { Media } from '@windingtree/glider-types/types/derbysoft';
+// @todo Replace the direct Media definition when @windingtree/glider-types supports this
+export interface Media {
+  type: string;
+  height: number;
+  width: number;
+  url: string;
+}
 
 const Container = styled.div`
   display: flex;
