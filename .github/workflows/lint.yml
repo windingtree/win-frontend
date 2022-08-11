@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,5 +21,4 @@ jobs:
         node-version: 16
 
     - run: yarn
-    - run: yarn build
     - run: npx eslint --max-warnings=0 ./src/

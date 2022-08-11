@@ -21,12 +21,10 @@ jobs:
       - name: Setup Node.js runtime
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 16
 
-      - name: Setup prereqs
-        run: |
-          npm install -g yarn
-          yarn install
+      - name: Setup dependencies
+        run: yarn
 
       - name: Build dapp
         env:
