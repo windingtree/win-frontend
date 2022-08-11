@@ -9,6 +9,7 @@ import { searchReducer } from './searchReducer';
 import { getState, storageReducer } from './localStorage';
 import Logger from '../utils/logger';
 import { checkOutReducer } from './checkOutReducer';
+import { selectedFacilityReducer } from './selectedFacilityReducer';
 
 const logger = Logger('mainReducer');
 
@@ -43,7 +44,8 @@ const initialState: State = {
   offers: [],
   authentication: {
     timestamp: 0
-  }
+  },
+  selectedFacilityId: undefined
 };
 
 export const combineReducers =
@@ -69,6 +71,7 @@ export const useAppReducer = () => {
       checkOutReducer,
       cryptoReducer,
       recordsReducer,
+      selectedFacilityReducer,
       storageReducer() // Always must be the last
     ]),
     {

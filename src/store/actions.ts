@@ -82,6 +82,16 @@ export interface SetSearchParams {
   payload: SearchParams;
 }
 
+export interface SetSelectedFacilityId {
+  type: 'SET_SELECTED_FACILITY_ID';
+  payload: string;
+}
+
+export interface ResetSelectedFacilityId {
+  type: 'RESET_SELECTED_FACILITY_ID';
+  payload: undefined;
+}
+
 export type Action =
   | SetSearchParams
   | SetCheckOutAction
@@ -95,4 +105,6 @@ export type Action =
   | SetSelectedAsset
   | SetRecordAction
   | RemoveRecordAction
-  | ResetRecordAction;
+  | ResetRecordAction
+  | SetSelectedFacilityId
+  | ResetSelectedFacilityId;

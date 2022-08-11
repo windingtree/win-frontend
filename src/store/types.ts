@@ -99,4 +99,5 @@ export interface State {
   selectedAsset?: CryptoAsset;
   searchParams?: SearchParams;
   [key: string]: unknown | GenericStateRecord[];
+  selectedFacilityId: string | undefined;
 }
