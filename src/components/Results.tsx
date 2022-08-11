@@ -38,10 +38,9 @@ export const Results: React.FC<{
 
   useEffect(() => {
     dispatch({
-      type: "RESET_SELECTED_FACILITY_ID",
-      payload: undefined
-    })
-  }, []);
+      type: 'RESET_SELECTED_FACILITY_ID'
+    });
+  }, [dispatch]);
 
   const handleResults = useCallback(async () => {
     logger.info('Init results fetch');
@@ -136,12 +135,15 @@ export const Results: React.FC<{
     [filteredFacilities]
   );
 
-  const handleFacilitySelection = (facilityId: string) => {
-    dispatch({
-      type: "SET_SELECTED_FACILITY_ID",
-      payload: facilityId
-    });
-  };
+  const handleFacilitySelection = useCallback(
+    (facilityId: string) => {
+      dispatch({
+        type: 'SET_SELECTED_FACILITY_ID',
+        payload: facilityId
+      });
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     // scroll to searchResult
