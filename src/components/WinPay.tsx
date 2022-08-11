@@ -19,7 +19,7 @@ const logger = Logger('WinPay');
 export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
   const dispatch = useAppDispatch();
   const { provider, account, selectedNetwork, selectedAsset } = useAppState();
-  logger.info('payment', payment)
+  logger.info('payment', payment);
 
   const setNetwork = useCallback(
     (network: NetworkInfo) =>
