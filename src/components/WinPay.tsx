@@ -7,16 +7,19 @@ import { useAppDispatch, useAppState } from '../store';
 import { SignInButton, SignOutButton } from './Web3Modal';
 import { NetworkSelector } from './NetworkSelector';
 import { AssetSelector } from './AssetSelector';
+import Logger from '../utils/logger';
 import { PaymentCard } from './PaymentCard';
 
 export interface WinPayProps {
   payment: Payment;
   onSuccess: (result: PaymentSuccess) => void;
 }
+const logger = Logger('WinPay');
 
 export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
   const dispatch = useAppDispatch();
   const { provider, account, selectedNetwork, selectedAsset } = useAppState();
+  logger.info('payment', payment)
 
   const setNetwork = useCallback(
     (network: NetworkInfo) =>
