@@ -9,7 +9,7 @@ import { MessageBox } from './MessageBox';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { useAppDispatch, useAppState } from '../store';
 import { CoordinatesRequest, CoordinatesResponse } from '../api/CoordinatesRequest';
-import { useAccomodationsAndOffers } from 'src/hooks/useAccomodationsAndOffers';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 
 const logger = Logger('Search');
 const today = DateTime.local().toISO();
@@ -51,6 +51,7 @@ export const Search: React.FC<{
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   open: boolean;
 }> = ({ onSubmit, setOpen, open }) => {
+  // TODO: check where we used to navigate for
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { winWidth } = useWindowsDimension();
@@ -65,10 +66,7 @@ export const Search: React.FC<{
   const [numAdults, setNumAdults] = useState<number>(1);
   const [numChildren, setNumChildren] = useState<number>(0);
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<undefined | string>();
-
-  const { refetch } = useAccomodationsAndOffers({
+  const { refetch, isLoading, error } = useAccommodationsAndOffers({
     date: checkInCheckOut,
     adultCount: numAdults,
     childrenCount: numChildren,
@@ -76,40 +74,40 @@ export const Search: React.FC<{
     roomCount: numSpacesReq
   });
 
-  const handleMapSearch: () => Promise<LatLngTuple | undefined> =
-    useCallback(async () => {
-      logger.info('requst map');
-      setLoading(true);
-      setError(undefined);
+  // const handleMapSearch: () => Promise<LatLngTuple | undefined> =
+  //   useCallback(async () => {
+  //     logger.info('requst map');
+  //     setLoading(true);
+  //     setError(undefined);
 
-      try {
-        if (searchParams === undefined) {
-          setLoading(false);
-          return;
-        }
-        const res = await axios.request<CoordinatesResponse>(
-          new CoordinatesRequest(searchParams?.place)
-        );
+  //     try {
+  //       if (searchParams === undefined) {
+  //         setLoading(false);
+  //         return;
+  //       }
+  //       const res = await axios.request<CoordinatesResponse>(
+  //         new CoordinatesRequest(searchParams?.place)
+  //       );
 
-        if (res.data === undefined) {
-          throw Error('Something went wrong');
-        }
-        if (res.data[0].length === 0) {
-          throw Error('Could not find place');
-        }
+  //       if (res.data === undefined) {
+  //         throw Error('Something went wrong');
+  //       }
+  //       if (res.data[0].length === 0) {
+  //         throw Error('Could not find place');
+  //       }
 
-        onSubmit([Number(res.data[0].lat), Number(res.data[0].lon)]);
-        setOpen(false);
-        setLoading(false);
-        logger.info('map successfully fetched');
-        return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
-      } catch (error) {
-        logger.error(error);
-        const message = (error as Error).message || 'Unknown Search error';
-        setError(message);
-        setLoading(false);
-      }
-    }, [searchParams, dispatch]);
+  //       onSubmit([Number(res.data[0].lat), Number(res.data[0].lon)]);
+  //       setOpen(false);
+  //       setLoading(false);
+  //       logger.info('map successfully fetched');
+  //       return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
+  //     } catch (error) {
+  //       logger.error(error);
+  //       const message = (error as Error).message || 'Unknown Search error';
+  //       setError(message);
+  //       setLoading(false);
+  //     }
+  //   }, [searchParams, dispatch]);
 
   const handleSubmit = () => {
     refetch();
@@ -137,9 +135,9 @@ export const Search: React.FC<{
     setNumChildren(searchParams?.children ?? 0);
   }, [searchParams]);
 
-  useEffect(() => {
-    handleMapSearch();
-  }, [searchParams, handleMapSearch]);
+  // useEffect(() => {
+  //   handleMapSearch();
+  // }, [searchParams, handleMapSearch]);
 
   return (
     <Box
@@ -229,11 +227,11 @@ export const Search: React.FC<{
             <Button type="submit" label="Search" />
           </Box>
         </Grid>
-        <MessageBox loading type="info" show={loading}>
+        <MessageBox loading type="info" show={isLoading}>
           loading...
         </MessageBox>
         <MessageBox type="error" show={!!error}>
-          {error}
+          Something went wrong. Try again.
         </MessageBox>
       </Form>
     </Box>

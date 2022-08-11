@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
 //TODO: Replace this by types of @windingtree/glider-types supports this
 import type { Media } from '../../types/offers';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useParams } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -24,21 +26,26 @@ const FacilityMainImage = styled(Image)`
 `;
 
 const sortByLargestImage = (images: Media[]) => {
+  if (!images?.length) return null;
   const compareImages = (itemOne: Media, itemTwo: Media) => {
     return itemTwo.width - itemOne.width;
   };
-  const sortedImages = images.sort(compareImages);
+  const sortedImages = images?.sort(compareImages);
   return sortedImages;
 };
 
-export const FacilityIntroduction = ({ facility }) => {
-  const sortedImages = sortByLargestImage(facility?.media);
+export const FacilityIntroduction = () => {
+  const { getAccommodationById } = useAccommodationsAndOffers({});
+  const { id } = useParams();
+  const accommodation = getAccommodationById(id);
+  //TODO: define what to do if we don't have the images
+  const sortedImages = sortByLargestImage(accommodation?.media);
   const [mainImage, ...rest] = sortedImages;
 
   return (
     <>
       <Text weight={500} size="2rem" margin={{ bottom: '8px' }}>
-        {facility.name}
+        {accommodation?.name}
       </Text>
 
       <Container>

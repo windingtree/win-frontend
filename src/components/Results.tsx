@@ -16,6 +16,7 @@ import { MessageBox } from './MessageBox';
 import { OffersRequest, OffersResponse, SearchParamsSchema } from '../api/OffersRequest';
 import { object } from '@windingtree/org.id-utils';
 import { SearchResult } from './SearchResult';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 
 const logger = Logger('Results');
 const defaultCenter: LatLngTuple = [51.505, -0.09];
@@ -23,7 +24,8 @@ const defaultCenter: LatLngTuple = [51.505, -0.09];
 export const Results: React.FC<{
   center: LatLngTuple;
 }> = ({ center }) => {
-  const { facilities, searchParams } = useAppState();
+  // const { facilities } = useAppState();
+  const { accommodations, offers } = useAccommodationsAndOffers({});
   const dispatch = useAppDispatch();
   const { winWidth } = useWindowsDimension();
 
@@ -32,104 +34,96 @@ export const Results: React.FC<{
   const [error, setError] = useState<undefined | string>();
   const [selectedFaciltyId, setSelectedFacilityId] = useState<undefined | string>();
 
-  const filteredFacilities = useMemo(
-    () => facilities.filter((f) => facilityIds.includes(f.id)),
-    [facilities, facilityIds]
-  );
+  // const filteredFacilities = useMemo(
+  //   () => facilities.filter((f) => facilityIds.includes(f.id)),
+  //   [facilities, facilityIds]
+  // );
 
-  console.log(searchParams);
+  // const handleResults = useCallback(async () => {
+  // logger.info('Init results fetch');
+  // setLoading(true);
+  // setError(undefined);
 
-  const handleResults = useCallback(async () => {
-    logger.info('Init results fetch');
-    setLoading(true);
-    setError(undefined);
+  // try {
+  //   if (searchParams === undefined) {
+  //     throw new Error('searchParams must be provided');
+  //   }
+  //   const validateSearchParams = object.validateWithSchemaOrRef(
+  //     SearchParamsSchema,
+  //     '',
+  //     searchParams
+  //   );
+  //   if (validateSearchParams !== null) {
+  //     throw new Error('Invalid searchParams');
+  //   }
+  //   const res = await axios.request<OffersResponse>(
+  //     new OffersRequest(center, searchParams)
+  //   );
+  //   if (
+  //
+  //     res.data === undefined ||
+  //     res.data.data === undefined ||
+  //     res.data.data.derbySoft.data === undefined
+  //   ) {
+  //     throw Error('Unable to get offers request response');
+  //   }
+  //   const accommodations = res.data.data.derbySoft.data.accommodations;
+  //   if (accommodations === undefined) {
+  //     throw Error('accommodations undefined');
+  //   }
+  //   Object.keys(accommodations).map((key) =>
+  //     dispatch({
+  //       type: 'SET_RECORD',
+  //       payload: {
+  //         name: 'facilities',
+  //         record: {
+  //           id: key,
+  //           ...accommodations[key]
+  //         }
+  //       }
+  //     })
+  //   );
+  //   const offers = res.data.data.derbySoft.data.offers;
 
-    try {
-      if (searchParams === undefined) {
-        throw new Error('searchParams must be provided');
-      }
-      const validateSearchParams = object.validateWithSchemaOrRef(
-        SearchParamsSchema,
-        '',
-        searchParams
-      );
-      if (validateSearchParams !== null) {
-        throw new Error('Invalid searchParams');
-      }
-      const res = await axios.request<OffersResponse>(
-        new OffersRequest(center, searchParams)
-      );
-      if (
-        res.data === undefined ||
-        res.data.data === undefined ||
-        res.data.data.derbySoft.data === undefined
-      ) {
-        throw Error('Unable to get offers request response');
-      }
-      const accommodations = res.data.data.derbySoft.data.accommodations;
-      if (accommodations === undefined) {
-        throw Error('accommodations undefined');
-      }
-      Object.keys(accommodations).map((key) =>
-        dispatch({
-          type: 'SET_RECORD',
-          payload: {
-            name: 'facilities',
-            record: {
-              id: key,
-              ...accommodations[key]
-            }
-          }
-        })
-      );
-      const offers = res.data.data.derbySoft.data.offers;
+  //   if (offers === undefined) {
+  //     throw Error('offers undefined');
+  //   }
 
-      if (offers === undefined) {
-        throw Error('offers undefined');
-      }
+  //   const ids: string[] = [];
+  //   Object.keys(offers).map((key) => {
+  //     const priceRef = offers[key].pricePlansReferences;
+  //     Object.keys(priceRef).map((r) => ids.push(r));
+  //     dispatch({
+  //       type: 'SET_RECORD',
+  //       payload: {
+  //         name: 'offers',
+  //         record: {
+  //           id: key,
+  //           ...offers[key]
+  //         }
+  //       }
+  //     });
+  //   });
 
-      const ids: string[] = [];
-      Object.keys(offers).map((key) => {
-        const priceRef = offers[key].pricePlansReferences;
-        Object.keys(priceRef).map((r) => ids.push(r));
-        dispatch({
-          type: 'SET_RECORD',
-          payload: {
-            name: 'offers',
-            record: {
-              id: key,
-              ...offers[key]
-            }
-          }
-        });
-      });
-      setFacilityIds([...ids]);
-      setLoading(false);
-      logger.info('Results successfully fetched');
-    } catch (error) {
-      logger.error(error);
-      const message = (error as Error).message || 'Unknown Search error';
-      setError(message);
-      setLoading(false);
-    }
-  }, [center, searchParams, dispatch]);
+  //   setFacilityIds([...ids]);
+  // }, [center, searchParams, dispatch]);
 
-  useEffect(() => {
-    logger.info('init results requset', center);
-    if (center[0] === defaultCenter[0] && center[1] === defaultCenter[1]) {
-      return;
-    } else {
-      handleResults();
-    }
-  }, [center]);
+  // useEffect(() => {
+  //   logger.info('init results requset', center);
+  //   if (center[0] === defaultCenter[0] && center[1] === defaultCenter[1]) {
+  //     return;
+  //   } else {
+  //     handleResults();
+  //   }
+  // }, [center]);
 
   const searchResultsRefs = useMemo(
     () =>
-      filteredFacilities.reduce((refs, facility) => {
+      accommodations?.reduce((refs, facility) => {
         const ref = createRef<HTMLDivElement>();
         return { ...refs, [facility.id]: ref };
       }, {}),
-    [filteredFacilities]
+    [accommodations]
   );
 
   const handleFacilitySelection = (facilityId: string) => {
@@ -148,9 +142,10 @@ export const Results: React.FC<{
     paddingRight: 20
   };
 
-  if (filteredFacilities.length === 0 || searchParams === undefined) {
-    return null;
-  }
+  //TODO: determin when to show, and when to to show facilities.
+  // if (filteredFacilities.length === 0 || searchParams === undefined) {
+  //   return null;
+  // }
 
   return (
     <Box
@@ -176,7 +171,7 @@ export const Results: React.FC<{
           <MessageBox
             loading
             type="info"
-            show={!loading && !error && filteredFacilities.length === 0}
+            show={!loading && !error && accommodations?.length === 0}
           >
             Could not find place
           </MessageBox>
@@ -185,7 +180,7 @@ export const Results: React.FC<{
           </MessageBox>
         </Box>
         <Box gap="0.5rem" flex={false} style={resultsContainerStyle}>
-          {filteredFacilities.map((facility, idx) => (
+          {accommodations?.map((facility, idx) => (
             <SearchResult
               key={facility.id}
               facility={facility}
