@@ -98,6 +98,6 @@ export interface State {
   selectedNetwork?: NetworkInfo;
   selectedAsset?: CryptoAsset;
   searchParams?: SearchParams;
+  selectedFacilityId?: string;
   [key: string]: unknown | GenericStateRecord[];
-  selectedFacilityId: string | undefined;
 }
