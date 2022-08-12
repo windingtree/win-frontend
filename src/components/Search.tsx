@@ -1,7 +1,16 @@
 import type { LatLngTuple } from 'leaflet';
 import axios from 'axios';
 import { DateTime } from 'luxon';
-import { Box, Button, DateInput, Form, FormField, Grid, TextInput } from 'grommet';
+import {
+  Box,
+  Button,
+  DateInput,
+  DropButton,
+  Form,
+  FormField,
+  Grid,
+  TextInput
+} from 'grommet';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logger from '../utils/logger';
@@ -14,19 +23,23 @@ const logger = Logger('Search');
 const today = DateTime.local().toISO();
 const tomorrow = DateTime.local().plus({ days: 1 }).toISO();
 
+const prarseAdults = (count) => (count === 1 ? `${count} adult` : `${count} adults`);
+const prarseChildren = (count) => (count === 1 ? `${count} child` : `${count} children`);
+const prarseRooms = (count) => (count === 1 ? `${count} room` : `${count} rooms`);
+
 export const ResponsiveTopGrid = (winWidth: number) => {
   if (winWidth >= 1300) {
-    return ['50%', '50%'];
+    return ['5fr', '3fr', '4fr', '2fr'];
   } else if (winWidth >= 1000) {
-    return ['50%', '50%'];
+    return ['5fr', '3fr', '4fr', '2fr'];
   } else if (winWidth >= 768) {
-    return ['50%', '50%'];
+    return ['1fr', '1fr'];
   } else if (winWidth >= 600) {
-    return ['40%', '60%'];
+    return ['1fr', '1fr'];
   } else if (winWidth <= 500) {
-    return ['40%', '60%'];
+    return ['1fr'];
   } else if (winWidth <= 400) {
-    return ['40%', '60%'];
+    return ['1fr'];
   }
 };
 export const ResponsiveBottomGrid = (winWidth: number) => {
@@ -47,9 +60,7 @@ export const ResponsiveBottomGrid = (winWidth: number) => {
 export const Search: React.FC<{
   onSubmit: React.Dispatch<React.SetStateAction<LatLngTuple>>;
   center: LatLngTuple;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  open: boolean;
-}> = ({ onSubmit, setOpen, open }) => {
+}> = ({ onSubmit }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { winWidth } = useWindowsDimension();
@@ -90,7 +101,6 @@ export const Search: React.FC<{
         }
 
         onSubmit([Number(res.data[0].lat), Number(res.data[0].lon)]);
-        setOpen(false);
         setLoading(false);
         logger.info('map successfully fetched');
         return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
@@ -118,6 +128,7 @@ export const Search: React.FC<{
         adults: numAdults
       }
     });
+    navigate('/search');
   }, [
     dispatch,
     searchValue,
@@ -155,38 +166,26 @@ export const Search: React.FC<{
   }, [searchParams, handleMapSearch]);
 
   return (
-    <Box
-      pad="medium"
-      style={{
-        position: 'absolute',
-        zIndex: `${open ? '2' : '-1'}`,
-
-        width: winWidth > 900 ? '33rem' : '100%',
-        maxWidth: '100%',
-        left: 0,
-        top: '10%'
-      }}
-    >
-      <Form
-        style={{
-          background: 'white',
-          padding: '0.75rem',
-          borderRadius: '0.5rem'
-        }}
-        onSubmit={() => handleSubmit()}
-      >
-        {/* <Button onClick={() => setOpen(false)} alignSelf="end" icon={<Close size="medium" />} /> */}
-        <Grid columns={ResponsiveTopGrid(winWidth)} responsive={true}>
-          <FormField label="Place">
+    <Box alignSelf="center">
+      <Form onSubmit={() => handleSubmit()}>
+        <Grid
+          margin={{ horizontal: 'large' }}
+          gap="small"
+          align="center"
+          columns={ResponsiveTopGrid(winWidth)}
+          responsive={true}
+        >
+          <FormField margin="0">
             <TextInput
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="type here"
+              placeholder="Where are you going"
             />
           </FormField>
-          <FormField label="Date">
+          <FormField margin="0">
             <DateInput
               buttonProps={{
+                placeholder: 'check-in check-out',
                 label: `${DateTime.fromISO(checkInCheckOut[0]).toFormat(
                   'dd.MM.yy'
                 )}-${DateTime.fromISO(checkInCheckOut[1]).toFormat('dd.MM.yy')}`,
@@ -211,35 +210,48 @@ export const Search: React.FC<{
               onChange={({ value }) => handleDateChange({ value } as { value: string[] })}
             />
           </FormField>
-        </Grid>
-        <Grid columns={'25%'} responsive={true}>
-          <FormField label="Spaces">
-            <TextInput
-              value={numSpacesReq}
-              type="number"
-              disabled
-              onChange={(e) => setNumSpacesReq(Number(e.target.value))}
-              placeholder="type here"
-            />
-          </FormField>
-          <FormField label="Adults">
-            <TextInput
-              value={numAdults}
-              type="number"
-              onChange={(e) => setNumAdults(Number(e.target.value))}
-              placeholder="type here"
-            />
-          </FormField>
-          <FormField label="Children">
-            <TextInput
-              value={numChildren}
-              type="number"
-              onChange={(e) => setNumChildren(Number(e.target.value))}
-              placeholder="type here"
-            />
-          </FormField>
-          <Box alignSelf="center" pad={{ vertical: 'small', horizontal: 'xsmall' }}>
-            <Button type="submit" label="Search..." />
+
+          <DropButton
+            label={`
+              ${prarseAdults(numAdults)} 
+              ${prarseChildren(numChildren)} 
+              ${prarseRooms(numSpacesReq)}
+            `}
+            dropContent={
+              <Box>
+                <FormField label="Spaces">
+                  <TextInput
+                    value={numSpacesReq}
+                    type="number"
+                    min={1}
+                    disabled
+                    onChange={(e) => setNumSpacesReq(Number(e.target.value))}
+                    placeholder="type here"
+                  />
+                </FormField>
+                <FormField label="Adults">
+                  <TextInput
+                    min={1}
+                    value={numAdults}
+                    type="number"
+                    onChange={(e) => setNumAdults(Number(e.target.value))}
+                    placeholder="type here"
+                  />
+                </FormField>
+                <FormField label="Children">
+                  <TextInput
+                    min={0}
+                    value={numChildren}
+                    type="number"
+                    onChange={(e) => setNumChildren(Number(e.target.value))}
+                    placeholder="type here"
+                  />
+                </FormField>
+              </Box>
+            }
+          />
+          <Box alignSelf="center">
+            <Button type="submit" label="Search" />
           </Box>
         </Grid>
         <MessageBox loading type="info" show={loading}>
