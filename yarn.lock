@@ -4931,10 +4931,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@windingtree/glider-types@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-1.4.0.tgz#d73a1a71856a35cb092592857a607eae001d600a"
-  integrity sha512-W1Qc7Z07rpss/5twWkXGtCKA2klS4ogK7hih2e8phuQHwe5KxvlQpA0Aq4HHbzIjJp8U8AQwtrES+ZaX7m7K7Q==
+"@windingtree/glider-types@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-1.5.0.tgz#c29122cc2265d9839998ba59c680ef7770f8dc20"
+  integrity sha512-9d9rbd+p1VycqhloGjE3KPayLdUzYYIQgjLGwUMa+4OJfeRCAn6+Hr6MFO4J8QZwI/b+t3giXXiGJlT26u9Ebw==
 
 "@windingtree/org.id-utils@^1.0.0-beta.47":
   version "1.0.0-beta.47"

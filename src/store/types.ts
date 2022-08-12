@@ -1,7 +1,7 @@
 import type {
   Accommodation,
-  OfferResult,
-  PricedOffer
+  Offer,
+  PricedOfferResponse
 } from '@windingtree/glider-types/types/derbysoft';
 import type { NetworkInfo, CryptoAsset } from '../config';
 import type {
@@ -15,7 +15,7 @@ export interface GenericStateRecord {
   [key: string]: unknown;
 }
 
-export type OfferRecord = OfferResult & GenericStateRecord;
+export type OfferRecord = Offer & GenericStateRecord;
 export type FacilityRecord = Accommodation & GenericStateRecord;
 
 export interface Address {
@@ -68,7 +68,7 @@ export interface PersonalInfo {
   phone: string;
 }
 
-export interface CheckOut extends PricedOffer {
+export interface CheckOut extends PricedOfferResponse {
   personalInfo?: PersonalInfo;
   facilityId: string;
 }
