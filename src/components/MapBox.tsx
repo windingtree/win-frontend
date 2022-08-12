@@ -1,20 +1,32 @@
-import type { Map, LatLngTuple } from 'leaflet';
+import { Map, LatLngTuple, Icon } from 'leaflet';
 import { Box } from 'grommet';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
-import L from 'leaflet';
-import { useAppState } from '../store';
+import { useAppDispatch, useAppState } from '../store';
+import { AccommodationLocation } from '@windingtree/glider-types/types/derbysoft';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import { FacilityRecord } from '../store/types';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
 
-const pinIcon = new L.Icon({
-  iconUrl: require('../images/pin.svg'),
-  iconRetinaUrl: require('../images/pin.svg'),
-  iconSize: new L.Point(20, 20),
-  className: 'leaflet-div-icon'
+// const pinIcon = new L.Icon({
+//   iconUrl: require('../images/pin.svg'),
+//   iconRetinaUrl: require('../images/pin.svg'),
+//   iconSize: new L.Point(20, 20),
+//   className: 'leaflet-div-icon'
+// });
+
+const pinIcon = new Icon({
+  iconUrl: icon,
+  iconSize: [25, 40]
 });
+
+// TO-BE-REMOVED: interface for workaround on coordinates
+interface ModAccomodationLocation extends AccommodationLocation {
+  coordinates: LatLngTuple;
+}
 
 const MapSettings: React.FC<{
   center: LatLngTuple;
@@ -68,11 +80,53 @@ const MapSettings: React.FC<{
   return null;
 };
 
+const getCoordinates = (facility: FacilityRecord): LatLngTuple | undefined => {
+  let coordinates: LatLngTuple | undefined = undefined;
+
+  if ((facility.location as ModAccomodationLocation).coordinates) {
+    // should be reversed
+    coordinates = [
+      ...(facility.location as ModAccomodationLocation).coordinates
+    ].reverse() as LatLngTuple;
+  } else if (
+    facility.location &&
+    facility.location.lat !== undefined &&
+    facility.location.long !== undefined
+  ) {
+    coordinates = [facility.location.lat, facility.location.long];
+  }
+
+  return coordinates;
+};
+
 export const MapBox: React.FC<{
   center: LatLngTuple;
 }> = ({ center }) => {
   const [map, setMap] = useState<Map | null>(null);
-  const { facilities } = useAppState();
+  const { facilities, selectedFacilityId } = useAppState();
+  const dispatch = useAppDispatch();
+
+  const selectFacility = (facilityId: string) => {
+    dispatch({
+      type: 'SET_SELECTED_FACILITY_ID',
+      payload: facilityId
+    });
+  };
+
+  useEffect(() => {
+    // scroll to facility when selectedFacilityId changes
+    if (selectedFacilityId) {
+      const facility = facilities.find((fac) => fac.id === selectedFacilityId);
+      if (facility) {
+        const coordinates = getCoordinates(facility);
+        if (coordinates) {
+          map?.setView({ lat: coordinates[0], lng: coordinates[1] }, map.getZoom(), {
+            animate: true
+          });
+        }
+      }
+    }
+  }, [selectedFacilityId]);
 
   const displayMap = useMemo(
     () => (
@@ -96,22 +150,24 @@ export const MapBox: React.FC<{
         />
         <ZoomControl position="bottomleft" />
         {facilities && facilities.length > 0
-          ? facilities.map(
-              (f) =>
-                f.location &&
-                f.location.lat !== undefined &&
-                f.location.long !== undefined && (
-                  <Marker
-                    key={f.id}
-                    icon={pinIcon}
-                    position={[f.location.lat, f.location.long]}
-                  >
-                    <Popup>
-                      {f.name} <br /> Easily customizable.
-                    </Popup>
-                  </Marker>
-                )
-            )
+          ? facilities.map((f) => {
+              const coordinates = getCoordinates(f);
+
+              return coordinates ? (
+                <Marker
+                  key={f.id}
+                  icon={pinIcon}
+                  position={coordinates}
+                  eventHandlers={{
+                    click: () => selectFacility(f.id)
+                  }}
+                >
+                  <Popup>
+                    {f.name} <br /> Easily customizable.
+                  </Popup>
+                </Marker>
+              ) : null;
+            })
           : null}
       </MapContainer>
     ),

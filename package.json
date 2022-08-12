@@ -10,7 +10,7 @@
     "storybook": "start-storybook -p 6006 -s public",
     "commit": "git-cz -S",
     "lint": "npx eslint . --ext .ts,.tsx && npx prettier -c .",
-    "prettier": "npx prettier -w ./docs ./src ./README.md"
+    "prettier": "npx prettier -w ./docs ./src ./README.md ./.eslintrc"
   },
   "eslintConfig": {
     "extends": [
@@ -69,7 +69,7 @@
     "@walletconnect/web3-provider": "^1.8.0",
     "@windingtree/org.id-utils": "^1.0.0-beta.47",
     "@windingtree/win-pay": "^1.1.0",
-    "@windingtree/glider-types": "^1.4.0",
+    "@windingtree/glider-types": "^1.5.0",
     "axios": "^0.27.2",
     "babel-plugin-named-exports-order": "^0.0.2",
     "buffer": "^6.0.3",

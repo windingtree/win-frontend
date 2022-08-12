@@ -16,6 +16,7 @@ import { Developers } from './pages/Developers';
 import { Checkout } from './pages/Checkout';
 import { GuestInfo } from './pages/GuestInfo';
 import { BookingConfirmation } from './pages/BookingConfirmation';
+import { Search } from './pages/Search';
 
 export interface ProtectedProps {
   component: ReactNode;
@@ -113,6 +114,12 @@ export const pagesRoutesConfig: Routes = [
     element: <GuestInfo />,
     title: 'Guest Info',
     label: 'Guest Info'
+  },
+  {
+    path: '/search',
+    element: <Search />,
+    title: 'Search',
+    label: 'Search'
   }
 ];
 

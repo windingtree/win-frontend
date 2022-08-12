@@ -1,4 +1,4 @@
-import type { Roomtypes } from '@windingtree/glider-types/types/derbysoft';
+import type { RoomTypes } from '@windingtree/glider-types/types/derbysoft';
 import type { OfferRecord } from './../store/types';
 import { Box, Text, Image, Grid, Button, Notification, Carousel, Spinner } from 'grommet';
 import { useNavigate } from 'react-router-dom';
@@ -46,7 +46,7 @@ const ResponsiveArea = (
 };
 
 export const RoomCard: React.FC<{
-  room: Roomtypes;
+  room: RoomTypes;
   roomId: string;
   offer: OfferRecord;
   facilityId: string;

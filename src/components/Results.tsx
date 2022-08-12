@@ -23,19 +23,24 @@ const defaultCenter: LatLngTuple = [51.505, -0.09];
 export const Results: React.FC<{
   center: LatLngTuple;
 }> = ({ center }) => {
-  const { facilities, searchParams } = useAppState();
+  const { facilities, searchParams, selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
   const { winWidth } = useWindowsDimension();
 
   const [facilityIds, setFacilityIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
-  const [selectedFaciltyId, setSelectedFacilityId] = useState<undefined | string>();
 
   const filteredFacilities = useMemo(
     () => facilities.filter((f) => facilityIds.includes(f.id)),
     [facilities, facilityIds]
   );
+
+  useEffect(() => {
+    dispatch({
+      type: 'RESET_SELECTED_FACILITY_ID'
+    });
+  }, [dispatch]);
 
   const handleResults = useCallback(async () => {
     logger.info('Init results fetch');
@@ -130,16 +135,22 @@ export const Results: React.FC<{
     [filteredFacilities]
   );
 
-  const handleFacilitySelection = (facilityId: string) => {
-    setSelectedFacilityId(facilityId);
-  };
+  const handleFacilitySelection = useCallback(
+    (facilityId: string) => {
+      dispatch({
+        type: 'SET_SELECTED_FACILITY_ID',
+        payload: facilityId
+      });
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     // scroll to searchResult
     searchResultsRefs &&
-      selectedFaciltyId &&
-      searchResultsRefs[selectedFaciltyId]?.current?.scrollIntoView();
-  }, [selectedFaciltyId, searchResultsRefs]);
+      selectedFacilityId &&
+      searchResultsRefs[selectedFacilityId]?.current?.scrollIntoView();
+  }, [selectedFacilityId, searchResultsRefs]);
 
   const resultsContainerStyle: CSSProperties = {
     paddingLeft: 20,
@@ -187,7 +198,7 @@ export const Results: React.FC<{
             <SearchResult
               key={facility.id}
               facility={facility}
-              isSelected={facility.id === selectedFaciltyId}
+              isSelected={facility.id === selectedFacilityId}
               onSelect={handleFacilitySelection}
               ref={searchResultsRefs[idx]}
             />

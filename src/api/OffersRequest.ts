@@ -1,6 +1,6 @@
 import type {
   Accommodation,
-  OfferResult
+  Offer
 } from '@windingtree/glider-types/types/derbysoft';
 import { LatLngTuple } from 'leaflet';
 import { SearchParams } from '../store/types';
@@ -50,7 +50,7 @@ export interface Location {
 
 export interface ResponseData {
   accommodations: Accommodation[];
-  offers: OfferResult[];
+  offers: Offer[];
 }
 
 export interface Response {
