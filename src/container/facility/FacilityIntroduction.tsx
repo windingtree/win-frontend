@@ -1,15 +1,7 @@
+import type { Photo } from '@windingtree/glider-types/types/derbysoft';
 import { Text, Image } from 'grommet';
 import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
-
-// import type { Media } from '@windingtree/glider-types/types/derbysoft';
-// @todo Replace the direct Media definition when @windingtree/glider-types supports this
-export interface Media {
-  type: string;
-  height: number;
-  width: number;
-  url: string;
-}
 
 const Container = styled.div`
   display: flex;
@@ -30,8 +22,8 @@ const FacilityMainImage = styled(Image)`
   object-fit: cover;
 `;
 
-const sortByLargestImage = (images: Media[]) => {
-  const compareImages = (itemOne: Media, itemTwo: Media) => {
+const sortByLargestImage = (images: Photo[]) => {
+  const compareImages = (itemOne: Photo, itemTwo: Photo) => {
     return itemTwo.width - itemOne.width;
   };
   const sortedImages = images.sort(compareImages);
