@@ -2,44 +2,17 @@ import type { LatLngTuple } from 'leaflet';
 import { useAppState } from '../store';
 import { MainLayout } from '../layouts/MainLayout';
 import { Search } from '../components/Search';
-import { MapBox } from '../components/MapBox';
-import { Box, Button, ResponsiveContext } from 'grommet';
-import { useContext, useState } from 'react';
-import { Results } from '../components/Results';
-import { Search as ISearch, Close } from 'grommet-icons';
+import { useState } from 'react';
 
 const defaultCenter: LatLngTuple = [51.505, -0.09];
 
 export const Home = () => {
   const { isConnecting } = useAppState();
   const [center, setCenter] = useState<LatLngTuple>(defaultCenter);
-  const [open, setOpen] = useState<boolean>(true);
-  const size = useContext(ResponsiveContext);
 
   return (
-    <MainLayout kind="full">
-      {!isConnecting && (
-        <Box pad="0" style={{ position: 'relative' }}>
-          <Button
-            margin={size}
-            style={{
-              position: 'absolute',
-              zIndex: '1',
-              alignSelf: 'center',
-              background: 'white',
-              borderRadius: '0.5rem',
-              boxShadow:
-                'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'
-            }}
-            onClick={() => setOpen(!open)}
-            justify="end"
-            icon={open ? <Close size={size} /> : <ISearch size={size} />}
-          />
-          <Search open={open} setOpen={setOpen} center={center} onSubmit={setCenter} />
-          <Results center={center} />
-          <MapBox center={center} />
-        </Box>
-      )}
+    <MainLayout>
+      {!isConnecting && <Search center={center} onSubmit={setCenter} />}
     </MainLayout>
   );
 };
