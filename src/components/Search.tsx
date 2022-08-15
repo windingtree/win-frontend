@@ -3,15 +3,10 @@ import axios from 'axios';
 import { DateTime } from 'luxon';
 import { Box, Button, DateInput, Form, FormField, Grid, TextInput } from 'grommet';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Logger from '../utils/logger';
 import { MessageBox } from './MessageBox';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
-import { useAppDispatch, useAppState } from '../store';
-import { CoordinatesRequest, CoordinatesResponse } from '../api/CoordinatesRequest';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 
-const logger = Logger('Search');
 const today = DateTime.local().toISO();
 const tomorrow = DateTime.local().plus({ days: 1 }).toISO();
 
@@ -46,17 +41,13 @@ export const ResponsiveBottomGrid = (winWidth: number) => {
   }
 };
 export const Search: React.FC<{
-  onSubmit: React.Dispatch<React.SetStateAction<LatLngTuple>>;
-  center: LatLngTuple;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   open: boolean;
-}> = ({ onSubmit, setOpen, open }) => {
-  // TODO: check where we used to navigate for
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+}> = ({ open }) => {
   const { winWidth } = useWindowsDimension();
-  const { searchParams } = useAppState();
 
+  /**
+   * State values in relation to the form
+   */
   const [searchValue, setSearchValue] = useState<string>('');
   const [checkInCheckOut, setCheckInCheckOut] = useState<[string, string]>([
     today,
@@ -65,53 +56,6 @@ export const Search: React.FC<{
   const [numSpacesReq, setNumSpacesReq] = useState<number>(1);
   const [numAdults, setNumAdults] = useState<number>(1);
   const [numChildren, setNumChildren] = useState<number>(0);
-
-  const { refetch, isLoading, error } = useAccommodationsAndOffers({
-    date: checkInCheckOut,
-    adultCount: numAdults,
-    childrenCount: numChildren,
-    location: 'Berlin',
-    roomCount: numSpacesReq
-  });
-
-  // const handleMapSearch: () => Promise<LatLngTuple | undefined> =
-  //   useCallback(async () => {
-  //     logger.info('requst map');
-  //     setLoading(true);
-  //     setError(undefined);
-
-  //     try {
-  //       if (searchParams === undefined) {
-  //         setLoading(false);
-  //         return;
-  //       }
-  //       const res = await axios.request<CoordinatesResponse>(
-  //         new CoordinatesRequest(searchParams?.place)
-  //       );
-
-  //       if (res.data === undefined) {
-  //         throw Error('Something went wrong');
-  //       }
-  //       if (res.data[0].length === 0) {
-  //         throw Error('Could not find place');
-  //       }
-
-  //       onSubmit([Number(res.data[0].lat), Number(res.data[0].lon)]);
-  //       setOpen(false);
-  //       setLoading(false);
-  //       logger.info('map successfully fetched');
-  //       return [res.data[0].lat, res.data[0].lon] as unknown as LatLngTuple;
-  //     } catch (error) {
-  //       logger.error(error);
-  //       const message = (error as Error).message || 'Unknown Search error';
-  //       setError(message);
-  //       setLoading(false);
-  //     }
-  //   }, [searchParams, dispatch]);
-
-  const handleSubmit = () => {
-    refetch();
-  };
 
   const handleDateChange = ({ value }: { value: string[] }) => {
     const checkInisInPast =
@@ -124,20 +68,20 @@ export const Search: React.FC<{
     ]);
   };
 
-  useEffect(() => {
-    setSearchValue(searchParams?.place ?? '');
-    setCheckInCheckOut([
-      searchParams?.arrival ?? today,
-      searchParams?.departure ?? tomorrow
-    ]);
-    setNumSpacesReq(searchParams?.roomCount ?? 1);
-    setNumAdults(searchParams?.adults ?? 1);
-    setNumChildren(searchParams?.children ?? 0);
-  }, [searchParams]);
+  /**
+   * State in relation to quering the data.
+   */
+  const { refetch, isLoading, error } = useAccommodationsAndOffers({
+    date: checkInCheckOut,
+    adultCount: numAdults,
+    childrenCount: numChildren,
+    location: 'Berlin',
+    roomCount: numSpacesReq
+  });
 
-  // useEffect(() => {
-  //   handleMapSearch();
-  // }, [searchParams, handleMapSearch]);
+  const handleSubmit = () => {
+    refetch();
+  };
 
   return (
     <Box

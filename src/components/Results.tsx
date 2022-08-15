@@ -18,104 +18,10 @@ import { object } from '@windingtree/org.id-utils';
 import { SearchResult } from './SearchResult';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 
-const logger = Logger('Results');
-const defaultCenter: LatLngTuple = [51.505, -0.09];
-
-export const Results: React.FC<{
-  center: LatLngTuple;
-}> = ({ center }) => {
-  // const { facilities } = useAppState();
-  const { accommodations, offers } = useAccommodationsAndOffers({});
-  const dispatch = useAppDispatch();
+export const Results: React.FC = () => {
+  const { accommodations, error, isFetching } = useAccommodationsAndOffers({});
   const { winWidth } = useWindowsDimension();
-
-  const [facilityIds, setFacilityIds] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<undefined | string>();
   const [selectedFaciltyId, setSelectedFacilityId] = useState<undefined | string>();
-
-  // const filteredFacilities = useMemo(
-  //   () => facilities.filter((f) => facilityIds.includes(f.id)),
-  //   [facilities, facilityIds]
-  // );
-
-  // const handleResults = useCallback(async () => {
-  // logger.info('Init results fetch');
-  // setLoading(true);
-  // setError(undefined);
-
-  // try {
-  //   if (searchParams === undefined) {
-  //     throw new Error('searchParams must be provided');
-  //   }
-  //   const validateSearchParams = object.validateWithSchemaOrRef(
-  //     SearchParamsSchema,
-  //     '',
-  //     searchParams
-  //   );
-  //   if (validateSearchParams !== null) {
-  //     throw new Error('Invalid searchParams');
-  //   }
-  //   const res = await axios.request<OffersResponse>(
-  //     new OffersRequest(center, searchParams)
-  //   );
-  //   if (
-  //
-  //     res.data === undefined ||
-  //     res.data.data === undefined ||
-  //     res.data.data.derbySoft.data === undefined
-  //   ) {
-  //     throw Error('Unable to get offers request response');
-  //   }
-  //   const accommodations = res.data.data.derbySoft.data.accommodations;
-  //   if (accommodations === undefined) {
-  //     throw Error('accommodations undefined');
-  //   }
-  //   Object.keys(accommodations).map((key) =>
-  //     dispatch({
-  //       type: 'SET_RECORD',
-  //       payload: {
-  //         name: 'facilities',
-  //         record: {
-  //           id: key,
-  //           ...accommodations[key]
-  //         }
-  //       }
-  //     })
-  //   );
-  //   const offers = res.data.data.derbySoft.data.offers;
-
-  //   if (offers === undefined) {
-  //     throw Error('offers undefined');
-  //   }
-
-  //   const ids: string[] = [];
-  //   Object.keys(offers).map((key) => {
-  //     const priceRef = offers[key].pricePlansReferences;
-  //     Object.keys(priceRef).map((r) => ids.push(r));
-  //     dispatch({
-  //       type: 'SET_RECORD',
-  //       payload: {
-  //         name: 'offers',
-  //         record: {
-  //           id: key,
-  //           ...offers[key]
-  //         }
-  //       }
-  //     });
-  //   });
-
-  //   setFacilityIds([...ids]);
-  // }, [center, searchParams, dispatch]);
-
-  // useEffect(() => {
-  //   logger.info('init results requset', center);
-  //   if (center[0] === defaultCenter[0] && center[1] === defaultCenter[1]) {
-  //     return;
-  //   } else {
-  //     handleResults();
-  //   }
-  // }, [center]);
 
   const searchResultsRefs = useMemo(
     () =>
@@ -142,7 +48,7 @@ export const Results: React.FC<{
     paddingRight: 20
   };
 
-  //TODO: determin when to show, and when to to show facilities.
+  //TODO: determine when to show, and when to to show facilities.
   // if (filteredFacilities.length === 0 || searchParams === undefined) {
   //   return null;
   // }
@@ -165,21 +71,23 @@ export const Results: React.FC<{
     >
       <Box flex={true} overflow="auto">
         <Box>
-          <MessageBox loading type="info" show={loading}>
+          <MessageBox loading type="info" show={true}>
             One moment...
           </MessageBox>
           <MessageBox
             loading
             type="info"
-            show={!loading && !error && accommodations?.length === 0}
+            show={!isFetching && !error && accommodations?.length === 0}
           >
             Could not find place
           </MessageBox>
           <MessageBox type="error" show={!!error}>
-            {error}
+            {/* Make it typesafe:https://tanstack.com/query/v4/docs/typescript */}
+            {error && 'Something went wrong '}
           </MessageBox>
         </Box>
         <Box gap="0.5rem" flex={false} style={resultsContainerStyle}>
+          {/* Currenlty we are displaying accomdations, but this may need to be changed to offers */}
           {accommodations?.map((facility, idx) => (
             <SearchResult
               key={facility.id}

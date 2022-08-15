@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
 import L from 'leaflet';
-import { useAppState } from '../store';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -68,17 +68,18 @@ const MapSettings: React.FC<{
   return null;
 };
 
-export const MapBox: React.FC<{
-  center: LatLngTuple;
-}> = ({ center }) => {
+export const MapBox: React.FC = () => {
   const [map, setMap] = useState<Map | null>(null);
-  const { facilities } = useAppState();
+  const { accommodations, coordinates } = useAccommodationsAndOffers({});
+  const normalizedCoordinates = coordinates
+    ? [coordinates.lat, coordinates.lon]
+    : [51.505, -0.09];
 
   const displayMap = useMemo(
     () => (
       <MapContainer
         zoomControl={false}
-        center={center}
+        center={normalizedCoordinates}
         zoom={defaultZoom}
         style={{
           height: '100vh',
@@ -95,8 +96,8 @@ export const MapBox: React.FC<{
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ZoomControl position="bottomleft" />
-        {facilities && facilities.length > 0
-          ? facilities.map(
+        {accommodations && accommodations.length > 0
+          ? accommodations.map(
               (f) =>
                 f.location &&
                 f.location.lat !== undefined &&
@@ -115,12 +116,12 @@ export const MapBox: React.FC<{
           : null}
       </MapContainer>
     ),
-    [center, facilities]
+    [normalizedCoordinates, accommodations]
   );
 
   return (
     <Box>
-      {map ? <MapSettings center={center} map={map} /> : null}
+      {map ? <MapSettings center={normalizedCoordinates} map={map} /> : null}
       {displayMap}
     </Box>
   );

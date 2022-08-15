@@ -40,7 +40,7 @@ export const FacilityIntroduction = () => {
   const accommodation = getAccommodationById(id);
   //TODO: define what to do if we don't have the images
   const sortedImages = sortByLargestImage(accommodation?.media);
-  const [mainImage, ...rest] = sortedImages;
+  // const [mainImage, ...rest] = sortedImages;
 
   return (
     <>
@@ -49,8 +49,8 @@ export const FacilityIntroduction = () => {
       </Text>
 
       <Container>
-        <FacilityMainImage src={mainImage?.url} />
-        <FacilityDetailImages images={rest} />
+        {/* <FacilityMainImage src={mainImage?.url} />
+        <FacilityDetailImages images={rest} /> */}
       </Container>
     </>
   );

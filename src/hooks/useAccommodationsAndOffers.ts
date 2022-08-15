@@ -70,7 +70,7 @@ async function fetchAccommodationsAndOffers({
   const accommodations = data?.data?.derbySoft?.data?.accommodations;
   const offers = data?.data?.derbySoft?.data?.offers;
 
-  return { accommodations, offers };
+  return { accommodations, offers, coordinates: normalizedCordinates };
 }
 
 //TODO: return active accomodations
@@ -78,8 +78,9 @@ const getActiveAccommodations = (accommodation, offers) => {
   return [];
 };
 
+// HOOK
 export const useAccommodationsAndOffers = (props: SearchType) => {
-  const { data, refetch, error, isLoading } = useQuery(
+  const { data, refetch, error, isLoading, isFetching } = useQuery(
     ['search-accommodations'],
     async () => {
       const result = await fetchAccommodationsAndOffers({
@@ -94,8 +95,9 @@ export const useAccommodationsAndOffers = (props: SearchType) => {
     }
   );
 
-  const accommodations = data?.accommodations;
-  const offers = data?.offers && Object.values(data.offers);
+  const accommodations =
+    (data?.accommodations && Object.values(data.accommodations)) || [];
+  const offers = (data?.offers && Object.values(data.offers)) || [];
 
   const getAccommodationById = (id) => {
     if (!id) return null;
@@ -107,25 +109,27 @@ export const useAccommodationsAndOffers = (props: SearchType) => {
     return selectedAccommodation;
   };
 
-  const getOffersByAccommodationId = (id) => {
-    if (!id) return null;
+  const getOffersById = (accommodationId) => {
+    if (!accommodationId) return null;
 
     const matchedOffers = offers?.filter((offer) => {
-      return id === offer?.accomodation?.id;
+      return accommodationId === offer?.accomodation?.id;
     });
 
     return matchedOffers;
   };
 
   return {
-    getOffersByAccommodationId,
+    getOffersById,
     getAccommodationById,
-    accommodations: accommodations,
+    accommodations,
     activeAccommodations: getActiveAccommodations(accommodations, offers),
-    offers: data?.offers,
+    coordinates: data?.coordinates,
+    offers: offers,
     refetch,
     data,
     error,
-    isLoading
+    isLoading,
+    isFetching
   };
 };
