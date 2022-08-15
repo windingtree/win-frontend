@@ -74,6 +74,8 @@ export const RoomCard: React.FC<{
         type: 'SET_CHECKOUT',
         payload: {
           facilityId,
+          provider: offer.provider,
+          serviceId: offer.serviceId,
           ...res.data.data
         }
       });
@@ -143,7 +145,9 @@ export const RoomCard: React.FC<{
             {numberOfDays} nights, {roomsNumber} room{roomsNumber > 1 ? 's' : ''}
           </Text>
           <Button
-            label={'Book for $$$ xDAI'}
+            label={`Book for ~ ${Number(offer.price?.public).toFixed(2)} ${
+              offer.price?.currency
+            }`}
             onClick={() => handleBook()}
             icon={loading ? <Spinner /> : undefined}
           />

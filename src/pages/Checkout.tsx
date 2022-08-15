@@ -1,4 +1,4 @@
-import { Box, Text } from 'grommet';
+import { Box } from 'grommet';
 import { utils } from 'ethers';
 import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '../layouts/MainLayout';
@@ -11,6 +11,17 @@ const logger = Logger('Checkout');
 export const Checkout = () => {
   const navigate = useNavigate();
   const { checkout } = useAppState();
+
+  const isValid =
+    checkout !== undefined &&
+    checkout.offerId !== undefined &&
+    checkout.offer !== undefined &&
+    checkout.offer.price !== undefined &&
+    checkout.offer.price.currency !== undefined &&
+    checkout.offer.price.public !== undefined &&
+    checkout.serviceId !== undefined &&
+    checkout.provider !== undefined &&
+    checkout.offer.expiration !== undefined;
 
   return (
     <MainLayout
@@ -30,23 +41,21 @@ export const Checkout = () => {
       ]}
     >
       <Box align="center" overflow="hidden">
-        <Text weight={500} size="2rem" margin="small">
-          Checkout
-        </Text>
-
-        <WinPay
-          payment={{
-            currency: 'USD',
-            value: utils.parseEther('1.5'),
-            expiration: Math.ceil(Date.now() / 1000) + 500000000,
-            providerId: utils.keccak256(utils.formatBytes32String('win_win_provider')),
-            serviceId: utils.id(`test_payment_${Math.random().toString()}`)
-          }}
-          onSuccess={(result) => {
-            logger.debug(`Payment result:`, result);
-            navigate('/bookings/confirmation');
-          }}
-        />
+        {isValid && (
+          <WinPay
+            payment={{
+              currency: 'USD', //checkout.offer.price.currency should be passed
+              value: utils.parseEther(checkout.offer.price.public.toString()),
+              expiration: Math.ceil(Date.now() / 1000) + 500000000,
+              providerId: String(checkout.provider),
+              serviceId: utils.id(String(checkout.serviceId))
+            }}
+            onSuccess={(result) => {
+              logger.debug(`Payment result:`, result);
+              navigate('/bookings/confirmation');
+            }}
+          />
+        )}
       </Box>
     </MainLayout>
   );
