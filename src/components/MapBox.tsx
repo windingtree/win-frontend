@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
 import L from 'leaflet';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;

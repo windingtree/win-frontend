@@ -1,11 +1,9 @@
-import type { LatLngTuple } from 'leaflet';
-import axios from 'axios';
 import { DateTime } from 'luxon';
 import { Box, Button, DateInput, Form, FormField, Grid, TextInput } from 'grommet';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MessageBox } from './MessageBox';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 
 const today = DateTime.local().toISO();
 const tomorrow = DateTime.local().plus({ days: 1 }).toISO();
@@ -46,9 +44,9 @@ export const Search: React.FC<{
   const { winWidth } = useWindowsDimension();
 
   /**
-   * State values in relation to the form
+   * Smart logic in relation to the form.
    */
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
   const [checkInCheckOut, setCheckInCheckOut] = useState<[string, string]>([
     today,
     tomorrow
@@ -69,13 +67,13 @@ export const Search: React.FC<{
   };
 
   /**
-   * State in relation to quering the data.
+   * Smart logic in relation to quering the data.
    */
-  const { refetch, isLoading, error } = useAccommodationsAndOffers({
+  const { refetch, isFetching, error } = useAccommodationsAndOffers({
     date: checkInCheckOut,
     adultCount: numAdults,
     childrenCount: numChildren,
-    location: 'Berlin',
+    location,
     roomCount: numSpacesReq
   });
 
@@ -104,12 +102,12 @@ export const Search: React.FC<{
         }}
         onSubmit={() => handleSubmit()}
       >
-        {/* <Button onClick={() => setOpen(false)} alignSelf="end" icon={<Close size="medium" />} /> */}
         <Grid columns={ResponsiveTopGrid(winWidth)} responsive={true}>
+          {/* TODO: Include form validation if there is an empty string for the location */}
           <FormField label="Place">
             <TextInput
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
               placeholder="type here"
             />
           </FormField>
@@ -171,7 +169,7 @@ export const Search: React.FC<{
             <Button type="submit" label="Search" />
           </Box>
         </Grid>
-        <MessageBox loading type="info" show={isLoading}>
+        <MessageBox loading type="info" show={isFetching}>
           loading...
         </MessageBox>
         <MessageBox type="error" show={!!error}>

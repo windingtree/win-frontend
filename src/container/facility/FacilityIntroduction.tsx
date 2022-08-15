@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
 //TODO: Replace this by types of @windingtree/glider-types supports this
 import type { Media } from '../../types/offers';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { useParams } from 'react-router-dom';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 
 const Container = styled.div`
   display: flex;

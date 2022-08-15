@@ -1,22 +1,9 @@
-import type { LatLngTuple } from 'leaflet';
-import { useAppState, useAppDispatch } from '../store';
 import { Box } from 'grommet';
-import {
-  createRef,
-  CSSProperties,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState
-} from 'react';
-import Logger from '../utils/logger';
+import { createRef, CSSProperties, useEffect, useMemo, useState } from 'react';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
-import axios from 'axios';
 import { MessageBox } from './MessageBox';
-import { OffersRequest, OffersResponse, SearchParamsSchema } from '../api/OffersRequest';
-import { object } from '@windingtree/org.id-utils';
 import { SearchResult } from './SearchResult';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 
 export const Results: React.FC = () => {
   const { accommodations, error, isFetching } = useAccommodationsAndOffers({});
@@ -36,8 +23,8 @@ export const Results: React.FC = () => {
     setSelectedFacilityId(facilityId);
   };
 
+  // scroll to searchResult
   useEffect(() => {
-    // scroll to searchResult
     searchResultsRefs &&
       selectedFaciltyId &&
       searchResultsRefs[selectedFaciltyId]?.current?.scrollIntoView();
@@ -48,10 +35,9 @@ export const Results: React.FC = () => {
     paddingRight: 20
   };
 
-  //TODO: determine when to show, and when to to show facilities.
-  // if (filteredFacilities.length === 0 || searchParams === undefined) {
-  //   return null;
-  // }
+  if (!accommodations || accommodations.length === 0) {
+    return null;
+  }
 
   return (
     <Box

@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { RoomCard } from 'src/components/RoomCard';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 
 export const FacilityOffers = () => {
   const { getAccommodationById, getOffersById } = useAccommodationsAndOffers({});

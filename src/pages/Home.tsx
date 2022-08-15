@@ -9,7 +9,7 @@ import { Search as ISearch, Close } from 'grommet-icons';
 export const Home = () => {
   const [open, setOpen] = useState<boolean>(true);
   const size = useContext(ResponsiveContext);
-
+  //TODO: put the Search, Results and MapBox in a container folder
   return (
     <MainLayout kind="full">
       <Box pad="0" style={{ position: 'relative' }}>
@@ -28,6 +28,7 @@ export const Home = () => {
           justify="end"
           icon={open ? <Close size={size} /> : <ISearch size={size} />}
         />
+
         <Search open={open} />
         <Results />
         <MapBox />
