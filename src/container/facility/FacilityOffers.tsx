@@ -11,21 +11,19 @@ export const FacilityOffers = () => {
   const matchedOffers = getOffersById(offers, id);
 
   return matchedOffers?.map((offer) => {
+    //TODO: revise whether we maybe want to restructure the data in such a way that is more intuitive
+    // pricePlanReferences has a key that refers to the accommodationId, which can be confusing.
     const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
-    // get the id ofer the roomTypes of the offer
-
-    console.log('offer', offer);
     const roomId = accommodationOfOffer?.roomType;
-
-    // get the room by passing the id of the roomTypes to the roomTypes of accommodations
     const rooms = accommodation?.roomTypes;
+    const matchedRoomWithOffer = rooms[roomId];
 
     return (
       <RoomCard
         key={offer.id}
         facilityId={id}
         offer={offer}
-        room={rooms[0]}
+        room={matchedRoomWithOffer}
         roomId={roomId}
       />
     );

@@ -17,6 +17,7 @@ type SearchType = {
 };
 
 export const useAccommodationsAndOffers = (props: SearchType) => {
+  console.log(process.env);
   const { data, refetch, error, isLoading, isFetching } = useQuery(
     ['search-accommodations'],
     async () => {

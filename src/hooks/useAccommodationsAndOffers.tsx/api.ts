@@ -18,8 +18,8 @@ export async function fetchAccommodationsAndOffers({
    * Coordinates are used to query the accommodations.
    */
   const { data: coordinatesData } = await axios
-    //TODO: include endpoint in .env
-    .get(`   https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
+    //TODO: include endpoint in .env or config
+    .get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
     .catch((_) => {
       throw new Error('Unexpected response when retrieving coordinates');
     });
