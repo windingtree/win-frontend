@@ -48,7 +48,7 @@ export const Checkout = () => {
               value: utils.parseEther(checkout.offer.price.public.toString()),
               expiration: Math.ceil(Date.now() / 1000) + 500000000,
               providerId: String(checkout.provider),
-              serviceId: utils.id(String(checkout.serviceId))
+              serviceId: String(checkout.serviceId)
             }}
             onSuccess={(result) => {
               logger.debug(`Payment result:`, result);
