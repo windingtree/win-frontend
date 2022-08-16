@@ -213,8 +213,8 @@ export const Search: React.FC<{
 
           <DropButton
             label={`
-              ${prarseAdults(numAdults)} 
-              ${prarseChildren(numChildren)} 
+              ${prarseAdults(numAdults)}
+              ${prarseChildren(numChildren)}
               ${prarseRooms(numSpacesReq)}
             `}
             dropContent={

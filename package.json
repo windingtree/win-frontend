@@ -44,6 +44,9 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.3",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/material": "^5.10.0",
     "@storybook/addon-actions": "^6.5.9",
     "@storybook/addon-essentials": "^6.5.9",
     "@storybook/addon-interactions": "^6.5.9",
@@ -67,9 +70,9 @@
     "@types/react-dom": "^18.0.6",
     "@types/styled-components": "^5.1.25",
     "@walletconnect/web3-provider": "^1.8.0",
+    "@windingtree/glider-types": "^1.5.0",
     "@windingtree/org.id-utils": "^1.0.0-beta.47",
     "@windingtree/win-pay": "^1.1.0",
-    "@windingtree/glider-types": "^1.5.0",
     "axios": "^0.27.2",
     "babel-plugin-named-exports-order": "^0.0.2",
     "buffer": "^6.0.3",
@@ -90,6 +93,7 @@
     "react": "^18.2.0",
     "react-blockies": "^1.4.1",
     "react-dom": "^18.2.0",
+    "react-grid-system": "^8.1.6",
     "react-image-gallery": "1.2.8",
     "react-leaflet": "^4.0.0",
     "react-router-dom": "^6.3.0",
@@ -101,8 +105,7 @@
     "url": "^0.11.0",
     "uuid": "8.3.2",
     "web-vitals": "^3.0.0-rc.0",
-    "web3modal": "^1.9.8",
-    "react-grid-system": "^8.1.6"
+    "web3modal": "^1.9.8"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"
