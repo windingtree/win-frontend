@@ -1,11 +1,6 @@
 import axios from 'axios';
 import { getPassengersBody } from './helpers';
 
-export enum PassengerType {
-  child = 'CHD',
-  adult = 'ADT'
-}
-
 export async function fetchAccommodationsAndOffers({
   location,
   date,
@@ -50,20 +45,11 @@ export async function fetchAccommodationsAndOffers({
     },
 
     //TODO: include children
-    passengers: [
-      {
-        type: PassengerType.adult,
-        count: adultCount
-      }
-      // {
-      //   type: PassengerType.child,
-      //   count: 1
-      // }
-    ]
+    passengers: passengersBody
   };
 
   //TODO: include url in env
-  const uri = `https://test-win-backend-api.win.so/api/derby-soft/offers/search`;
+  const uri = `${process.env.REACT_APP_API_URL}/api/derby-soft/offers/search`;
   const { data } = await axios.post(uri, derbySoftBody).catch((_) => {
     throw new Error('Unexpected response when retrieving accomodations and offers');
   });

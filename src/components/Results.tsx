@@ -77,7 +77,7 @@ export const Results: React.FC = () => {
           </MessageBox>
           <MessageBox type="error" show={!!error}>
             {/* Make it typesafe:https://tanstack.com/query/v4/docs/typescript */}
-            {error && 'Something went wrong '}
+            {(error as Error) && 'Something went wrong '}
           </MessageBox>
         </Box>
         <Box gap="0.5rem" flex={false} style={resultsContainerStyle}>

@@ -106,8 +106,9 @@ export const MapBox: React.FC = () => {
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
 
+  // TODO: replace this with activeAccommodations
   const { accommodations, coordinates } = useAccommodationsAndOffers({});
-  const normalizedCoordinates = coordinates
+  const normalizedCoordinates: LatLngTuple = coordinates
     ? [coordinates.lat, coordinates.lon]
     : [51.505, -0.09];
 

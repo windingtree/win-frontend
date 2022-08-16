@@ -1,5 +1,4 @@
-import type { RoomTypes } from '@windingtree/glider-types/types/derbysoft';
-import type { OfferRecord } from './../store/types';
+import type { Offer, RoomTypes } from '@windingtree/glider-types/types/derbysoft';
 import { Box, Text, Image, Grid, Button, Notification, Carousel, Spinner } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store';
@@ -48,7 +47,7 @@ const ResponsiveArea = (
 export const RoomCard: React.FC<{
   room: RoomTypes;
   roomId: string;
-  offer: OfferRecord;
+  offer: Offer;
   facilityId: string;
 }> = ({ offer, facilityId, room }) => {
   const { winWidth } = useWindowsDimension();
@@ -68,7 +67,7 @@ export const RoomCard: React.FC<{
       setLoading(true);
 
       const res = await axios.request<PricedOfferResponse>(
-        new PricedOfferRequest(offer.id)
+        new PricedOfferRequest(offer.id as string)
       );
       dispatch({
         type: 'SET_CHECKOUT',

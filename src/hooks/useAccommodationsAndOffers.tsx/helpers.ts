@@ -1,9 +1,14 @@
-export enum PassengerType {
+import { Accommodation, Offer } from '@windingtree/glider-types/types/derbysoft';
+
+enum PassengerType {
   child = 'CHD',
   adult = 'ADT'
 }
 
-export const getActiveAccommodations = (accommodations, offers) => {
+export const getActiveAccommodations = (
+  accommodations: Accommodation[],
+  offers: Offer[]
+) => {
   if (!accommodations || !offers) return [];
 
   const idsActiveAccomodations = offers?.map((offer) => {
@@ -14,13 +19,13 @@ export const getActiveAccommodations = (accommodations, offers) => {
   const uniqueIdsActiveAccomodations = [...new Set(idsActiveAccomodations)];
 
   const activeAccommodations = accommodations.filter((accommodation) => {
-    return uniqueIdsActiveAccomodations?.includes(accommodation.id);
+    return uniqueIdsActiveAccomodations?.includes(accommodation.id as string);
   });
 
   return activeAccommodations;
 };
 
-export const normalizeAccommodations = (accommodations) => {
+export const normalizeAccommodations = (accommodations: Accommodation[]) => {
   if (!accommodations) return [];
 
   const normalizedData = Object.entries(accommodations).map(([key, value]) => ({
@@ -31,18 +36,26 @@ export const normalizeAccommodations = (accommodations) => {
   return normalizedData;
 };
 
-export const getPassengersBody = (adultCount, childrenCount) => {
-  const adults = [
-    {
-      type: PassengerType.adult,
-      count: adultCount
-    }
-  ];
+export const getPassengersBody = (adultCount: number, childrenCount: number) => {
+  const adults = {
+    type: PassengerType.adult,
+    count: adultCount
+  };
+  const passengers = [adults];
 
-  return adults;
+  if (childrenCount && childrenCount != 0) {
+    const children = {
+      type: PassengerType.child,
+      count: childrenCount,
+      childrenAges: Array.from({ length: childrenCount }, () => 13)
+    };
+    passengers.push(children);
+  }
+
+  return passengers;
 };
 
-export const getOffersById = (offers, accommodationId) => {
+export const getOffersById = (offers: Offer[], accommodationId: string) => {
   if (!accommodationId) return null;
 
   const matchedOffers = offers?.filter((offer) => {

@@ -185,7 +185,7 @@ export const Search: React.FC = () => {
           loading...
         </MessageBox>
         <MessageBox type="error" show={!!error}>
-          {error && 'Something went wrong'}
+          {(error as Error) && 'Something went wrong'}
         </MessageBox>
       </Form>
     </Box>

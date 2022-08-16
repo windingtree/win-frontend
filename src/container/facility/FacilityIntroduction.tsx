@@ -1,7 +1,7 @@
 import { Text, Image } from 'grommet';
 import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
-import type { Photo } from '@windingtree/glider-types/types/derbysoft';
+import type { Photo, Accommodation } from '@windingtree/glider-types/types/derbysoft';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 
@@ -36,9 +36,9 @@ const sortByLargestImage = (images: Photo[]) => {
 };
 
 export const FacilityIntroduction = () => {
-  const { getAccommodationById, accommodations } = useAccommodationsAndOffers({});
+  const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
   const { id } = useParams();
-  const accommodation = getAccommodationById(accommodations, id);
+  const accommodation: Accommodation = getAccommodationById(accommodations, id);
   const sortedImages = sortByLargestImage(accommodation?.media);
   const [mainImage, ...rest] = sortedImages;
 
