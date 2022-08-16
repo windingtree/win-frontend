@@ -50,10 +50,10 @@ export const Faq = () => {
       ]}
     >
       <Accordion>
-        {faq.map((q) => (
-          <AccordionPanel label={q.question}>
-            {q.answers.map((a) => (
-              <Box pad="medium" background="light-2">
+        {faq.map((q, fIndex) => (
+          <AccordionPanel key={fIndex} label={q.question}>
+            {q.answers.map((a, aIndex) => (
+              <Box key={aIndex} pad="medium" background="light-2">
                 <Text>{a}</Text>
               </Box>
             ))}

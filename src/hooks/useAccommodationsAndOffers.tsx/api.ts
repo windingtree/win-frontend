@@ -54,11 +54,11 @@ export async function fetchAccommodationsAndOffers({
       {
         type: PassengerType.adult,
         count: adultCount
-      },
-      {
-        type: PassengerType.child,
-        count: 1
       }
+      // {
+      //   type: PassengerType.child,
+      //   count: 1
+      // }
     ]
   };
 

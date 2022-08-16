@@ -1,14 +1,26 @@
 import { Box } from 'grommet';
-import { createRef, CSSProperties, useEffect, useMemo, useState } from 'react';
+import { createRef, CSSProperties, useCallback, useEffect, useMemo } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { MessageBox } from './MessageBox';
 import { SearchResult } from './SearchResult';
+import { useAppState, useAppDispatch } from '../store';
 
 export const Results: React.FC = () => {
   const { accommodations, error, isFetching } = useAccommodationsAndOffers({});
   const { winWidth } = useWindowsDimension();
-  const [selectedFaciltyId, setSelectedFacilityId] = useState<undefined | string>();
+  const { selectedFacilityId } = useAppState();
+  const dispatch = useAppDispatch();
+
+  const handleFacilitySelection = useCallback(
+    (facilityId: string) => {
+      dispatch({
+        type: 'SET_SELECTED_FACILITY_ID',
+        payload: facilityId
+      });
+    },
+    [dispatch]
+  );
 
   const searchResultsRefs = useMemo(
     () =>
@@ -19,16 +31,12 @@ export const Results: React.FC = () => {
     [accommodations]
   );
 
-  const handleFacilitySelection = (facilityId: string) => {
-    setSelectedFacilityId(facilityId);
-  };
-
   // scroll to searchResult
   useEffect(() => {
     searchResultsRefs &&
-      selectedFaciltyId &&
-      searchResultsRefs[selectedFaciltyId]?.current?.scrollIntoView();
-  }, [selectedFaciltyId, searchResultsRefs]);
+      selectedFacilityId &&
+      searchResultsRefs[selectedFacilityId]?.current?.scrollIntoView();
+  }, [selectedFacilityId, searchResultsRefs]);
 
   const resultsContainerStyle: CSSProperties = {
     paddingLeft: 20,
@@ -78,7 +86,7 @@ export const Results: React.FC = () => {
             <SearchResult
               key={facility.id}
               facility={facility}
-              isSelected={facility.id === selectedFaciltyId}
+              isSelected={facility.id === selectedFacilityId}
               onSelect={handleFacilitySelection}
               ref={searchResultsRefs[idx]}
             />

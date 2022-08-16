@@ -15,6 +15,8 @@ import { Security } from './pages/Security';
 import { Developers } from './pages/Developers';
 import { Checkout } from './pages/Checkout';
 import { GuestInfo } from './pages/GuestInfo';
+import { BookingConfirmation } from './pages/BookingConfirmation';
+import { Search } from './pages/Search';
 
 export interface ProtectedProps {
   component: ReactNode;
@@ -57,6 +59,12 @@ export const pagesRoutesConfig: Routes = [
     path: '/bookings',
     element: <Bookings />,
     title: 'Bookings',
+    label: 'Bookings'
+  },
+  {
+    path: '/bookings/confirmation',
+    element: <BookingConfirmation />,
+    title: 'Booking confirmation',
     label: 'Bookings'
   },
   {
@@ -106,6 +114,12 @@ export const pagesRoutesConfig: Routes = [
     element: <GuestInfo />,
     title: 'Guest Info',
     label: 'Guest Info'
+  },
+  {
+    path: '/search',
+    element: <Search />,
+    title: 'Search',
+    label: 'Search'
   }
 ];
 
