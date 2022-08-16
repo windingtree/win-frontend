@@ -1,41 +1,43 @@
 export enum PassengerType {
-  child = 'CHD',
-  adult = 'ADT'
-}
+    child = 'CHD',
+    adult = 'ADT'
+  }
 
-export const getActiveAccommodations = (accommodations, offers) => {
-  if (!accommodations || !offers) return [];
+  export const getActiveAccommodations = (accommodations, offers) => {
+    if (!accommodations || !offers) return [];
 
-  const idsActiveAccomodations = offers?.map((offer) => {
-    const accommodationId = Object.keys(offer?.pricePlansReferences)[0];
-    return accommodationId;
-  });
+    const idsActiveAccomodations = offers?.map((offer) => {
+      const accommodationId = Object.keys(offer?.pricePlansReferences)[0];
+      return accommodationId;
+    });
 
-  const uniqueIdsActiveAccomodations = [...new Set(idsActiveAccomodations)];
+    const uniqueIdsActiveAccomodations = [...new Set(idsActiveAccomodations)];
 
-  const activeAccommodations = accommodations.filter((accommodation) => {
-    return uniqueIdsActiveAccomodations?.includes(accommodation.id);
-  });
+    const activeAccommodations = accommodations.filter((accommodation) => {
+      return uniqueIdsActiveAccomodations?.includes(accommodation.id);
+    });
 
-  return activeAccommodations;
-};
+    return activeAccommodations;
+  };
 
-export const normalizeAccommodations = (accommodations) => {
-  if (!accommodations) return [];
+  export const normalizeAccommodations = (accommodations) => {
+    if (!accommodations) return [];
 
-  const normalizedData = Object.entries(accommodations).map(([key, value]) => ({
-    id: key,
-    ...value
-  }));
+    const normalizedData = Object.entries(accommodations).map(([key, value]) => ({
+      id: key,
+      ...value
+    }));
 
-  return normalizedData;
-};
+    return normalizedData;
+  };
 
-export const getPassengersBody = (adultCount, childrenCount) => {
-  const adults = [
-    {
-      type: PassengerType.adult,
-      count: adultCount
-    }
-  ];
-};
+  export const getPassengersBody = (adultCount, childrenCount) => {
+    const adults = [
+      {
+        type: PassengerType.adult,
+        count: adultCount
+      }
+    ];
+
+    if (childrenCount)
+  };
