@@ -1,7 +1,6 @@
 import { Text, Image } from 'grommet';
 import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
-//TODO: Replace this by types of @windingtree/glider-types supports this
 import type { Photo } from '@windingtree/glider-types/types/derbysoft';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
@@ -26,21 +25,22 @@ const FacilityMainImage = styled(Image)`
 `;
 
 const sortByLargestImage = (images: Photo[]) => {
-  if (!images?.length) return null;
+  if (!images?.length) return [];
+
   const compareImages = (itemOne: Photo, itemTwo: Photo) => {
     return itemTwo.width - itemOne.width;
   };
+
   const sortedImages = images?.sort(compareImages);
   return sortedImages;
 };
 
 export const FacilityIntroduction = () => {
-  const { getAccommodationById } = useAccommodationsAndOffers({});
+  const { getAccommodationById, accommodations } = useAccommodationsAndOffers({});
   const { id } = useParams();
-  const accommodation = getAccommodationById(id);
-  //TODO: define what to do if we don't have the images
+  const accommodation = getAccommodationById(accommodations, id);
   const sortedImages = sortByLargestImage(accommodation?.media);
-  // const [mainImage, ...rest] = sortedImages;
+  const [mainImage, ...rest] = sortedImages;
 
   return (
     <>
@@ -49,8 +49,8 @@ export const FacilityIntroduction = () => {
       </Text>
 
       <Container>
-        {/* <FacilityMainImage src={mainImage?.url} />
-        <FacilityDetailImages images={rest} /> */}
+        <FacilityMainImage src={mainImage?.url} />
+        <FacilityDetailImages images={rest} />
       </Container>
     </>
   );

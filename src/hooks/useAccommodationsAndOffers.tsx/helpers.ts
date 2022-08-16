@@ -41,3 +41,24 @@ export const getPassengersBody = (adultCount, childrenCount) => {
 
   return adults;
 };
+
+export const getOffersById = (offers, accommodationId) => {
+  if (!accommodationId) return null;
+
+  const matchedOffers = offers?.filter((offer) => {
+    if (!offer?.pricePlansReferences) {
+      console.warn('Unexpected data structure for Offers');
+    }
+    return accommodationId === Object.keys(offer?.pricePlansReferences)[0];
+  });
+
+  return matchedOffers;
+};
+
+export const getAccommodationById = (accommodations, id) => {
+  if (!id) return null;
+
+  const selectedAccommodation = accommodations?.find((accommodation) => accommodation.id);
+
+  return selectedAccommodation;
+};

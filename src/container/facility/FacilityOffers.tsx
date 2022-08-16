@@ -3,29 +3,31 @@ import { RoomCard } from 'src/components/RoomCard';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 
 export const FacilityOffers = () => {
-  const { getAccommodationById, getOffersById } = useAccommodationsAndOffers({});
+  const { getAccommodationById, getOffersById, offers, accommodations } =
+    useAccommodationsAndOffers({});
   //TODO: refer to the correct type
   const { id } = useParams();
-  const accommodation = getAccommodationById(id);
-  const offers = getOffersById(id);
+  const accommodation = getAccommodationById(accommodations, id);
+  const matchedOffers = getOffersById(offers, id);
 
-  return <div> jo</div>;
+  return matchedOffers?.map((offer) => {
+    const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
+    // get the id ofer the roomTypes of the offer
 
-  //   return offers?.map((offer) => {
-  //     return (
-  //       <RoomCard
-  //         key={offer.id}
-  //         facilityId={id}
-  //         offer={offer}
-  //         room={
-  //           accommodation.roomTypes[
-  //             // @todo review after the Derbysoft Proxy types fixes
-  //             offer.pricePlansReferences[id].roomType as string
-  //           ]
-  //         }
-  //         // @todo review after the Derbysoft Proxy types fixes
-  //         roomId={offer.pricePlansReferences[id].roomType as string}
-  //       />
-  //     );
-  //   });
+    console.log('offer', offer);
+    const roomId = accommodationOfOffer?.roomType;
+
+    // get the room by passing the id of the roomTypes to the roomTypes of accommodations
+    const rooms = accommodation?.roomTypes;
+
+    return (
+      <RoomCard
+        key={offer.id}
+        facilityId={id}
+        offer={offer}
+        room={rooms[0]}
+        roomId={roomId}
+      />
+    );
+  });
 };
