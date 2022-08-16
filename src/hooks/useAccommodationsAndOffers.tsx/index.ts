@@ -7,7 +7,6 @@ import {
   getOffersById
 } from './helpers';
 
-// TODO: mention that it is an object or undefined
 type SearchType = {
   location?: string;
   date?: [string, string];

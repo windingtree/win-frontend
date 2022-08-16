@@ -7,7 +7,7 @@ import { SearchResult } from './SearchResult';
 import { useAppState, useAppDispatch } from '../store';
 
 export const Results: React.FC = () => {
-  const { accommodations, error, isFetching } = useAccommodationsAndOffers({});
+  const { accommodations, error, isFetching } = useAccommodationsAndOffers();
   const { winWidth } = useWindowsDimension();
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
