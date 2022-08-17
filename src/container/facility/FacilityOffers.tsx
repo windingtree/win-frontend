@@ -1,7 +1,7 @@
-import { Offer } from '@windingtree/glider-types/types/derbysoft';
 import { useParams } from 'react-router-dom';
 import { RoomCard } from 'src/components/RoomCard';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { OfferRecord } from 'src/store/types';
 
 export const FacilityOffers = () => {
   const { getAccommodationById, getOffersById, offers, accommodations } =
@@ -9,7 +9,7 @@ export const FacilityOffers = () => {
   const params = useParams();
   const id: string = params.id as string;
   const accommodation = getAccommodationById(accommodations, id);
-  const matchedOffers: Offer[] = getOffersById(offers, id) as Offer[];
+  const matchedOffers: OfferRecord[] = getOffersById(offers, id) as OfferRecord[];
 
   return (
     <>

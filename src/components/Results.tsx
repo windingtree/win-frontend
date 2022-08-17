@@ -65,7 +65,7 @@ export const Results: React.FC = () => {
     >
       <Box flex={true} overflow="auto">
         <Box>
-          <MessageBox loading type="info" show={true}>
+          <MessageBox loading type="info" show={isFetching}>
             One moment...
           </MessageBox>
           <MessageBox
@@ -76,12 +76,11 @@ export const Results: React.FC = () => {
             Could not find place
           </MessageBox>
           <MessageBox type="error" show={!!error}>
-            {/* Make it typesafe:https://tanstack.com/query/v4/docs/typescript */}
             {(error as Error) && 'Something went wrong '}
           </MessageBox>
         </Box>
         <Box gap="0.5rem" flex={false} style={resultsContainerStyle}>
-          {/* Currenlty we are displaying accomdations, but this may need to be changed to offers */}
+          {/* TODO: Currenlty we are displaying all accomdations, but this may need to be changed to only the accommodations with offers */}
           {accommodations?.map((facility, idx) => (
             <SearchResult
               key={facility.id}
