@@ -25,36 +25,25 @@ interface Props extends IProps {
   links?: SocialLinks;
 }
 
-export default function SocialsButton({
-  initialColor = false,
-  links = {},
-  sx,
-  ...other
-}: Props) {
+export default function SocialsButton({ initialColor = false, sx, ...other }: Props) {
   const SOCIALS = [
     {
-      name: 'FaceBook',
-      icon: 'eva:facebook-fill',
-      socialColor: '#1877F2',
-      path: links.facebook || '#facebook-link'
+      name: 'Discord',
+      icon: 'ic:outline-discord',
+      socialColor: '#7289da',
+      path: 'https://discord.gg/RWqqzT3Gf8'
     },
     {
-      name: 'Instagram',
-      icon: 'ant-design:instagram-filled',
-      socialColor: '#E02D69',
-      path: links.instagram || '#instagram-link'
-    },
-    {
-      name: 'Linkedin',
-      icon: 'eva:linkedin-fill',
-      socialColor: '#007EBB',
-      path: links.linkedin || '#linkedin-link'
+      name: 'Youtube',
+      icon: 'mdi:youtube',
+      socialColor: '#c4302b',
+      path: 'https://youtube.com/windingtree'
     },
     {
       name: 'Twitter',
       icon: 'eva:twitter-fill',
       socialColor: '#00AAEC',
-      path: links.twitter || '#twitter-link'
+      path: 'https://twitter.com/windingtree'
     }
   ];
 

@@ -23,10 +23,7 @@ const LINKS = [
   },
   {
     headline: 'Contact',
-    children: [
-      { name: 'support@minimals.cc', href: '#' },
-      { name: 'Los Angeles, 359  Hidden Valley Road', href: '#' }
-    ]
+    children: [{ name: 'info@windingtree.com', href: '#' }]
   }
 ];
 
