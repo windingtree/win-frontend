@@ -1,12 +1,12 @@
-import { MainLayout } from '../layouts/MainLayout';
 import { Search as CSearch } from '../components/Search';
 import { MapBox } from '../components/MapBox';
 import { Box } from 'grommet';
 import { Results } from '../components/Results';
+import MainLayout from 'src/layouts/main';
 
 export const Search = () => {
   return (
-    <MainLayout kind="full">
+    <MainLayout childrenBelowHeader={false}>
       <Box style={{ position: 'relative' }}>
         <Results />
         <MapBox />

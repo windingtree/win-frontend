@@ -1,8 +1,8 @@
 import { useAppState } from '../store';
-import { MainLayout } from '../layouts/MainLayout';
 import { Box, Spinner } from 'grommet';
 import { useMemo } from 'react';
 import { MessageBox } from 'src/components/MessageBox';
+import MainLayout from 'src/layouts/main';
 
 const tokens = [];
 

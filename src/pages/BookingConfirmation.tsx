@@ -1,9 +1,9 @@
-import { MainLayout } from '../layouts/MainLayout';
+import MainLayout from 'src/layouts/main';
 import { Box, Text } from 'grommet';
 
 export const BookingConfirmation = () => {
   return (
-    <MainLayout kind="full">
+    <MainLayout>
       <Box align="center" width="100%">
         <Box style={{ maxWidth: '480px' }}>
           <Text margin={{ bottom: '8px' }} size="xlarge">

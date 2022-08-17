@@ -1,7 +1,7 @@
 import type { PersonalInfo } from '../store/types';
 import { Box, FormField, TextInput, DateInput, Form, Button } from 'grommet';
 import { useNavigate } from 'react-router-dom';
-import { MainLayout } from '../layouts/MainLayout';
+import MainLayout from 'src/layouts/main';
 import Logger from '../utils/logger';
 import { useCallback, useState } from 'react';
 import axios from 'axios';
@@ -64,16 +64,17 @@ export const GuestInfo = () => {
 
   return (
     <MainLayout
-      breadcrumbs={[
-        {
-          label: 'Search',
-          path: '/'
-        },
-        {
-          label: 'Facility',
-          path: '/facilities/' + checkout?.facilityId
-        }
-      ]}
+    //TODO: check with designer whether breadcrumbs are still needed.
+    // breadcrumbs={[
+    //   {
+    //     label: 'Search',
+    //     path: '/'
+    //   },
+    //   {
+    //     label: 'Facility',
+    //     path: '/facilities/' + checkout?.facilityId
+    //   }
+    // ]}
     >
       <Box align="center" overflow="hidden">
         <Box width="large" margin="small">
