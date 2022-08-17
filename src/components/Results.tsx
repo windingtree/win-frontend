@@ -76,7 +76,9 @@ export const Results: React.FC = () => {
             Could not find place
           </MessageBox>
           <MessageBox type="error" show={!!error}>
-            {(error as Error) && 'Something went wrong '}
+            {(error as Error) && (error as Error).message
+              ? (error as Error).message
+              : 'Something went wrong '}
           </MessageBox>
         </Box>
         <Box gap="0.5rem" flex={false} style={resultsContainerStyle}>
