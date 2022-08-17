@@ -1,5 +1,4 @@
 import type { RoomTypes } from '@windingtree/glider-types/types/derbysoft';
-import type { OfferRecord } from './../store/types';
 import { Box, Text, Image, Grid, Button, Notification, Carousel, Spinner } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store';
@@ -9,6 +8,7 @@ import Logger from '../utils/logger';
 import axios from 'axios';
 import { MessageBox } from './MessageBox';
 import { PricedOfferRequest, PricedOfferResponse } from '../api/PricedOffer';
+import type { OfferRecord } from 'src/store/types';
 
 const logger = Logger('RoomCard');
 
@@ -111,32 +111,32 @@ export const RoomCard: React.FC<{
       >
         <Box gridArea="img" fill>
           <Carousel fill>
-            {room.media?.map((img, i) => (
+            {room?.media?.map((img, i) => (
               <Image key={i} fit="cover" src={img.url} />
             ))}
           </Carousel>
         </Box>
         <Box gridArea="header">
           <Text size="xxlarge" margin={{ bottom: 'xsmall' }}>
-            {room.name}
+            {room?.name}
           </Text>
-          {room.maximumOccupancy && (
+          {room?.maximumOccupancy && (
             <Text size="medium" margin={{ bottom: 'xsmall' }}>
-              {room.maximumOccupancy.adults}{' '}
-              {room.maximumOccupancy.adults !== undefined &&
-              room.maximumOccupancy.adults > 1
+              {room?.maximumOccupancy?.adults}{' '}
+              {room?.maximumOccupancy?.adults !== undefined &&
+              room?.maximumOccupancy?.adults > 1
                 ? 'adults'
                 : 'adult'}
-              , {room.maximumOccupancy.children}{' '}
-              {room.maximumOccupancy.children !== undefined &&
-              room.maximumOccupancy.children > 1
+              , {room?.maximumOccupancy?.children}{' '}
+              {room?.maximumOccupancy?.children !== undefined &&
+              room?.maximumOccupancy?.children > 1
                 ? 'children'
                 : 'child'}
             </Text>
           )}
         </Box>
         <Box direction="column" justify="start" gridArea="main">
-          <Text size="large">{room.description}</Text>
+          <Text size="large">{room?.description}</Text>
         </Box>
         <Box direction="row" justify="between" align="center" gridArea="action">
           <Text size="large">

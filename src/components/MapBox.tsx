@@ -3,10 +3,12 @@ import { Box } from 'grommet';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
-import { useAppDispatch, useAppState } from '../store';
-import { AccommodationLocation } from '@windingtree/glider-types/types/derbysoft';
 import icon from 'leaflet/dist/images/marker-icon.png';
-import { FacilityRecord } from '../store/types';
+
+import { AccommodationLocation } from '@windingtree/glider-types/types/derbysoft';
+import { useAppDispatch, useAppState } from '../store';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { FacilityRecord } from 'src/store/types';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -99,12 +101,16 @@ const getCoordinates = (facility: FacilityRecord): LatLngTuple | undefined => {
   return coordinates;
 };
 
-export const MapBox: React.FC<{
-  center: LatLngTuple;
-}> = ({ center }) => {
+export const MapBox: React.FC = () => {
   const [map, setMap] = useState<Map | null>(null);
-  const { facilities, selectedFacilityId } = useAppState();
+  const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
+
+  // TODO: replace this with activeAccommodations
+  const { accommodations, coordinates } = useAccommodationsAndOffers({});
+  const normalizedCoordinates: LatLngTuple = coordinates
+    ? [coordinates.lat, coordinates.lon]
+    : [51.505, -0.09];
 
   const selectFacility = (facilityId: string) => {
     dispatch({
@@ -116,7 +122,7 @@ export const MapBox: React.FC<{
   useEffect(() => {
     // scroll to facility when selectedFacilityId changes
     if (selectedFacilityId) {
-      const facility = facilities.find((fac) => fac.id === selectedFacilityId);
+      const facility = accommodations.find((fac) => fac.id === selectedFacilityId);
       if (facility) {
         const coordinates = getCoordinates(facility);
         if (coordinates) {
@@ -132,7 +138,7 @@ export const MapBox: React.FC<{
     () => (
       <MapContainer
         zoomControl={false}
-        center={center}
+        center={normalizedCoordinates}
         zoom={defaultZoom}
         style={{
           height: '100vh',
@@ -149,34 +155,35 @@ export const MapBox: React.FC<{
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ZoomControl position="bottomleft" />
-        {facilities && facilities.length > 0
-          ? facilities.map((f) => {
-              const coordinates = getCoordinates(f);
-
-              return coordinates ? (
-                <Marker
-                  key={f.id}
-                  icon={pinIcon}
-                  position={coordinates}
-                  eventHandlers={{
-                    click: () => selectFacility(f.id)
-                  }}
-                >
-                  <Popup>
-                    {f.name} <br /> Easily customizable.
-                  </Popup>
-                </Marker>
-              ) : null;
-            })
+        {accommodations && accommodations.length > 0
+          ? accommodations.map(
+              (f) =>
+                f.location &&
+                f.location.lat !== undefined &&
+                f.location.long !== undefined && (
+                  <Marker
+                    key={f.id}
+                    icon={pinIcon}
+                    position={[f.location.lat, f.location.long]}
+                    eventHandlers={{
+                      click: () => selectFacility(f.id)
+                    }}
+                  >
+                    <Popup>
+                      {f.name} <br /> Easily customizable.
+                    </Popup>
+                  </Marker>
+                )
+            )
           : null}
       </MapContainer>
     ),
-    [center, facilities]
+    [normalizedCoordinates, accommodations]
   );
 
   return (
     <Box>
-      {map ? <MapSettings center={center} map={map} /> : null}
+      {map ? <MapSettings center={normalizedCoordinates} map={map} /> : null}
       {displayMap}
     </Box>
   );

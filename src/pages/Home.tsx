@@ -1,18 +1,14 @@
-import type { LatLngTuple } from 'leaflet';
-import { useAppState } from '../store';
 import { MainLayout } from '../layouts/MainLayout';
 import { Search } from '../components/Search';
-import { useState } from 'react';
-
-const defaultCenter: LatLngTuple = [51.505, -0.09];
+import { Box } from 'grommet';
 
 export const Home = () => {
-  const { isConnecting } = useAppState();
-  const [center, setCenter] = useState<LatLngTuple>(defaultCenter);
-
   return (
-    <MainLayout>
-      {!isConnecting && <Search center={center} onSubmit={setCenter} />}
+    <MainLayout kind="full">
+      <Box pad="0" style={{ position: 'relative' }}>
+        {/* Navigate to search page after click on search */}
+        <Search />
+      </Box>
     </MainLayout>
   );
 };

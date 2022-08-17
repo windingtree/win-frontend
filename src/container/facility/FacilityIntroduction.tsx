@@ -1,7 +1,9 @@
-import type { Photo } from '@windingtree/glider-types/types/derbysoft';
 import { Text, Image } from 'grommet';
 import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
+import type { Photo, Accommodation } from '@windingtree/glider-types/types/derbysoft';
+import { useParams } from 'react-router-dom';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -23,21 +25,27 @@ const FacilityMainImage = styled(Image)`
 `;
 
 const sortByLargestImage = (images: Photo[]) => {
+  if (!images?.length) return [];
+
   const compareImages = (itemOne: Photo, itemTwo: Photo) => {
     return itemTwo.width - itemOne.width;
   };
-  const sortedImages = images.sort(compareImages);
+
+  const sortedImages = images?.sort(compareImages);
   return sortedImages;
 };
 
-export const FacilityIntroduction = ({ facility }) => {
-  const sortedImages = sortByLargestImage(facility?.media);
+export const FacilityIntroduction = () => {
+  const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
+  const { id } = useParams();
+  const accommodation: Accommodation = getAccommodationById(accommodations, id);
+  const sortedImages = sortByLargestImage(accommodation?.media);
   const [mainImage, ...rest] = sortedImages;
 
   return (
     <>
       <Text weight={500} size="2rem" margin={{ bottom: '8px' }}>
-        {facility.name}
+        {accommodation?.name}
       </Text>
 
       <Container>
