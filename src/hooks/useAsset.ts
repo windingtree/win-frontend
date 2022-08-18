@@ -3,7 +3,7 @@ import type {
   MockERC20,
   MockWrappedERC20
 } from '@windingtree/win-pay/dist/typechain';
-import type { CryptoAsset } from '../config';
+import type { CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect } from 'react';
 import {
   Asset__factory,

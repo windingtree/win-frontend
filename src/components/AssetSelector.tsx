@@ -1,4 +1,4 @@
-import type { NetworkInfo, CryptoAsset } from '../config';
+import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import type { Payment } from './PaymentCard';
 import { useEffect, useMemo, useState } from 'react';
 import { Select } from 'grommet';

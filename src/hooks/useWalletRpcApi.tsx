@@ -1,4 +1,4 @@
-import type { NetworkInfo } from '../config';
+import type { NetworkInfo } from '@windingtree/win-commons/dist/types';
 import type { Web3ModalProvider } from './useWeb3Modal';
 import { useCallback } from 'react';
 import Logger from '../utils/logger';
