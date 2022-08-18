@@ -48,9 +48,9 @@ const FabButtonAnimate = forwardRef<HTMLButtonElement, Props>(
             color: theme.palette[color].contrastText,
             bgcolor: theme.palette[color].main,
             '&:hover': {
-              bgcolor: theme.palette[color].dark,
+              bgcolor: theme.palette[color].dark
             },
-            ...sx,
+            ...sx
           }}
           {...other}
         >
@@ -73,17 +73,17 @@ type AnimateWrapProp = {
 
 const varSmall = {
   hover: { scale: 1.07 },
-  tap: { scale: 0.97 },
+  tap: { scale: 0.97 }
 };
 
 const varMedium = {
   hover: { scale: 1.06 },
-  tap: { scale: 0.98 },
+  tap: { scale: 0.98 }
 };
 
 const varLarge = {
   hover: { scale: 1.05 },
-  tap: { scale: 0.99 },
+  tap: { scale: 0.99 }
 };
 
 function AnimateWrap({ size, children, sxWrap }: AnimateWrapProp) {
@@ -98,7 +98,7 @@ function AnimateWrap({ size, children, sxWrap }: AnimateWrapProp) {
       variants={(isSmall && varSmall) || (isLarge && varLarge) || varMedium}
       sx={{
         display: 'inline-flex',
-        ...sxWrap,
+        ...sxWrap
       }}
     >
       {children}

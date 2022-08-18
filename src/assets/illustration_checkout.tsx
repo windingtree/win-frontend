@@ -18,7 +18,12 @@ function CheckOutIllustration({ ...other }: BoxProps) {
 
   return (
     <Box {...other}>
-      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 200 200">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="100%"
+        height="100%"
+        viewBox="0 0 200 200"
+      >
         <path
           fill="#FBCDBE"
           d="M169.677 104.722a5.342 5.342 0 006.376-3.122 5.347 5.347 0 00-2.349-6.7l-11.345-12.87-9.595 2.073 13.496 13.219a5.309 5.309 0 00-.019 4.498 5.301 5.301 0 001.396 1.832c.593.502 1.29.867 2.04 1.07z"

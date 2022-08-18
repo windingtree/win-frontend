@@ -16,7 +16,7 @@ interface ArrowStyleProps extends IconButtonProps {
 }
 
 const ArrowStyle = styled(IconButtonAnimate, {
-  shouldForwardProp: (prop) => prop !== 'filled',
+  shouldForwardProp: (prop) => prop !== 'filled'
 })<ArrowStyleProps>(({ filled, theme }) => ({
   width: BUTTON_SIZE,
   height: BUTTON_SIZE,
@@ -26,7 +26,7 @@ const ArrowStyle = styled(IconButtonAnimate, {
   alignItems: 'center',
   justifyContent: 'center',
   '&:hover': {
-    color: theme.palette.text.primary,
+    color: theme.palette.text.primary
   },
   ...(filled && {
     opacity: 0.48,
@@ -36,9 +36,9 @@ const ArrowStyle = styled(IconButtonAnimate, {
     '&:hover': {
       opacity: 1,
       color: theme.palette.common.white,
-      backgroundColor: theme.palette.grey[900],
-    },
-  }),
+      backgroundColor: theme.palette.grey[900]
+    }
+  })
 }));
 
 // ----------------------------------------------------------------------
@@ -68,7 +68,7 @@ export default function CarouselArrows({
     position: 'absolute',
     mt: -2.5,
     top: '50%',
-    zIndex: 9,
+    zIndex: 9
   } as const;
 
   if (children) {
@@ -112,7 +112,7 @@ const leftIcon = (customIcon?: IconifyIcon | string, isRTL?: boolean) => (
       width: 20,
       height: 20,
       transform: ' scaleX(-1)',
-      ...(isRTL && { transform: ' scaleX(1)' }),
+      ...(isRTL && { transform: ' scaleX(1)' })
     }}
   />
 );
@@ -123,7 +123,7 @@ const rightIcon = (customIcon?: IconifyIcon | string, isRTL?: boolean) => (
     sx={{
       width: 20,
       height: 20,
-      ...(isRTL && { transform: ' scaleX(-1)' }),
+      ...(isRTL && { transform: ' scaleX(-1)' })
     }}
   />
 );

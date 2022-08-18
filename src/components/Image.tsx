@@ -5,7 +5,16 @@ import { Box, BoxProps, SxProps } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export type ImageRato = '4/3' | '3/4' | '6/4' | '4/6' | '16/9' | '9/16' | '21/9' | '9/21' | '1/1';
+export type ImageRato =
+  | '4/3'
+  | '3/4'
+  | '6/4'
+  | '4/6'
+  | '16/9'
+  | '9/16'
+  | '21/9'
+  | '9/21'
+  | '1/1';
 
 type IProps = BoxProps & LazyLoadImageProps;
 
@@ -40,9 +49,9 @@ export default function Image({
             bottom: 0,
             lineHeight: 0,
             position: 'absolute',
-            backgroundSize: 'cover !important',
+            backgroundSize: 'cover !important'
           },
-          ...sx,
+          ...sx
         }}
       >
         <Box
@@ -65,7 +74,7 @@ export default function Image({
         display: 'block',
         overflow: 'hidden',
         '& .wrapper': { width: 1, height: 1, backgroundSize: 'cover !important' },
-        ...sx,
+        ...sx
       }}
     >
       <Box
@@ -92,6 +101,6 @@ function getRatio(ratio = '1/1') {
     '9/16': 'calc(100% / 9 * 16)',
     '21/9': 'calc(100% / 21 * 9)',
     '9/21': 'calc(100% / 9 * 21)',
-    '1/1': '100%',
+    '1/1': '100%'
   }[ratio];
 }

@@ -10,7 +10,7 @@ type RootStyleProps = {
 };
 
 const RootStyle = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'rounded',
+  shouldForwardProp: (prop) => prop !== 'rounded'
 })<RootStyleProps>(({ rounded }) => ({
   display: 'flex',
   listStyle: 'none',
@@ -20,17 +20,17 @@ const RootStyle = styled(Box, {
     width: 18,
     height: 18,
     opacity: 0.32,
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   '& li.slick-active': {
     opacity: 1,
     ...(rounded && {
       '& .dotActive': {
         width: 16,
-        borderRadius: 6,
-      },
-    }),
-  },
+        borderRadius: 6
+      }
+    })
+  }
 }));
 
 const DotWrapStyle = styled('div')(() => ({
@@ -38,7 +38,7 @@ const DotWrapStyle = styled('div')(() => ({
   height: '100%',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'center'
 }));
 
 const DotStyle = styled('span')(({ theme }) => ({
@@ -47,8 +47,8 @@ const DotStyle = styled('span')(({ theme }) => ({
   borderRadius: '50%',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.short,
-  }),
+    duration: theme.transitions.duration.short
+  })
 }));
 
 // ----------------------------------------------------------------------
@@ -75,10 +75,10 @@ export default function CarouselDots(props?: Props) {
         <DotStyle
           className="dotActive"
           sx={{
-            bgcolor: color || 'primary.main',
+            bgcolor: color || 'primary.main'
           }}
         />
       </DotWrapStyle>
-    ),
+    )
   };
 }

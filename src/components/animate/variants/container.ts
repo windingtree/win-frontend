@@ -15,14 +15,14 @@ export const varContainer = (props?: Props) => {
     animate: {
       transition: {
         staggerChildren: staggerIn,
-        delayChildren: delayIn,
-      },
+        delayChildren: delayIn
+      }
     },
     exit: {
       transition: {
         staggerChildren: staggerOut,
-        staggerDirection: -1,
-      },
-    },
+        staggerDirection: -1
+      }
+    }
   };
 };

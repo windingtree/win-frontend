@@ -20,7 +20,7 @@ export default function TextAnimate({ text, variants, sx, ...other }: TextAnimat
         typography: 'h1',
         overflow: 'hidden',
         display: 'inline-flex',
-        ...sx,
+        ...sx
       }}
       {...other}
     >

@@ -26,7 +26,13 @@ function MaintenanceIllustration({ ...other }: BoxProps) {
         <BackgroundIllustration />
 
         <defs>
-          <linearGradient id="linearGradient-2" x1=".004%" x2="100.003%" y1="49.995%" y2="49.995%">
+          <linearGradient
+            id="linearGradient-2"
+            x1=".004%"
+            x2="100.003%"
+            y1="49.995%"
+            y2="49.995%"
+          >
             <stop offset="0%" stopColor="#FFC444" />
             <stop offset="100%" stopColor="#F36F56" />
           </linearGradient>

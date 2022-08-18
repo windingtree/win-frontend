@@ -16,14 +16,14 @@ const RootStyle = styled(Box)(({ theme }) => ({
   right: theme.spacing(2),
   color: theme.palette.common.white,
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.grey[900], 0.48),
+  backgroundColor: alpha(theme.palette.grey[900], 0.48)
 }));
 
 const ArrowStyle = styled(IconButton)(({ theme }) => ({
   padding: 6,
   opacity: 0.48,
   color: theme.palette.common.white,
-  '&:hover': { opacity: 1 },
+  '&:hover': { opacity: 1 }
 }));
 
 // ----------------------------------------------------------------------
@@ -73,7 +73,7 @@ const leftIcon = (customIcon?: IconifyIcon | string, isRTL?: boolean) => (
       width: 20,
       height: 20,
       transform: ' scaleX(-1)',
-      ...(isRTL && { transform: ' scaleX(1)' }),
+      ...(isRTL && { transform: ' scaleX(1)' })
     }}
   />
 );
@@ -84,7 +84,7 @@ const rightIcon = (customIcon?: IconifyIcon | string, isRTL?: boolean) => (
     sx={{
       width: 20,
       height: 20,
-      ...(isRTL && { transform: ' scaleX(-1)' }),
+      ...(isRTL && { transform: ' scaleX(-1)' })
     }}
   />
 );

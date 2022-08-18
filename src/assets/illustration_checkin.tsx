@@ -18,7 +18,12 @@ function CheckInIllustration({ ...other }: BoxProps) {
 
   return (
     <Box {...other}>
-      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 200 200">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="100%"
+        height="100%"
+        viewBox="0 0 200 200"
+      >
         <path
           fill={PRIMARY_MAIN}
           d="M129.948 130.751a4.977 4.977 0 00-4.865 3.938h6.937v17.409h-6.937a4.973 4.973 0 009.839-1.036v-15.337a4.97 4.97 0 00-3.071-4.595 4.97 4.97 0 00-1.903-.379z"
