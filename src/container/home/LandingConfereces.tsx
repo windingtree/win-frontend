@@ -54,21 +54,16 @@ const conferences: ItemProps[] = [
   }
 ];
 
-export default function ConferenceCarousel({ sx }: Props) {
+export default function LandingConfereces({ sx }: Props) {
   return (
-    <Grid item xs={12}>
+    <Grid sx={{ pb: 5 }} container xs={12}>
       <Box sx={{ p: 1, position: 'relative' }}>
         <Typography textAlign="center" variant="h3">
           Upcoming conferences
         </Typography>
       </Box>
 
-      <Grid
-        sx={{ py: 5, ...sx }}
-        display="flex"
-        direction="row"
-        justifyContent="space-between"
-      >
+      <Grid container spacing={4}>
         {conferences.map((item) => (
           <ConferenceItem key={item.id} item={item} />
         ))}
@@ -85,21 +80,21 @@ function ConferenceItem({ item }: ConferenceItemProps) {
   const { name, date, url, image } = item;
 
   return (
-    <Card
-      sx={{ pb: 1, mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral', width: 300 }}
-    >
-      <Box sx={{ px: 5, pt: 5, pb: 2, position: 'relative' }}>
-        <Image src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />
-      </Box>
-      <Typography textAlign="center" variant="subtitle2">
-        {name}
-      </Typography>
-      <Typography textAlign="center">{date}</Typography>
-      <Stack direction="row" justifyContent="center">
-        <Button href={url} variant="outlined">
-          More detains
-        </Button>
-      </Stack>
-    </Card>
+    <Grid item xs={6} md={3} lg={3}>
+      <Card sx={{ pb: 1, mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
+        <Box sx={{ px: 2, pt: 2, pb: 1, position: 'relative' }}>
+          <Image src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />
+        </Box>
+        <Typography textAlign="center" variant="subtitle2">
+          {name}
+        </Typography>
+        <Typography textAlign="center">{date}</Typography>
+        <Stack direction="row" justifyContent="center">
+          <Button href={url} variant="outlined">
+            More detains
+          </Button>
+        </Stack>
+      </Card>
+    </Grid>
   );
 }

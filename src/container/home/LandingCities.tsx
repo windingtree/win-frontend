@@ -44,19 +44,12 @@ const cities = [
   }
 ];
 
-export default function CityCarousel({ sx }: Props) {
+export default function LandingCities({ sx }: Props) {
   return (
-    <Grid item xs={12}>
-      <Grid
-        sx={{ py: 5, ...sx }}
-        display="flex"
-        direction="row"
-        justifyContent="space-between"
-      >
-        {cities.map((item) => (
-          <CityItem key={item.id} item={item} />
-        ))}
-      </Grid>
+    <Grid sx={{ pb: 5 }} container spacing={4}>
+      {cities.map((item) => (
+        <CityItem key={item.id} item={item} />
+      ))}
     </Grid>
   );
 }
@@ -69,15 +62,15 @@ function CityItem({ item }: CityItemProps) {
   const { city, image } = item;
 
   return (
-    <Card
-      sx={{ pb: 1, mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral', width: 300 }}
-    >
-      <Box sx={{ p: 1, position: 'relative' }}>
-        <Image src={image} ratio="3/4" sx={{ borderRadius: 1.5 }} />
-      </Box>
-      <Typography textAlign="center" variant="subtitle1">
-        {city}
-      </Typography>
-    </Card>
+    <Grid item xs={6} md={3} lg={3}>
+      <Card sx={{ pb: 1, borderRadius: 2, bgcolor: 'background.neutral' }}>
+        <Box sx={{ p: 1, position: 'relative' }}>
+          <Image src={image} ratio="3/4" sx={{ borderRadius: 1.5 }} />
+        </Box>
+        <Typography textAlign="center" variant="subtitle1">
+          {city}
+        </Typography>
+      </Card>
+    </Grid>
   );
 }
