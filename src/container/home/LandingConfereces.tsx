@@ -14,11 +14,6 @@ type ItemProps = {
   latlon?: number[];
 };
 
-interface Props extends BoxProps {
-  title?: string;
-  subheader?: string;
-}
-
 const conferences: ItemProps[] = [
   {
     id: '1',
@@ -54,7 +49,7 @@ const conferences: ItemProps[] = [
   }
 ];
 
-export default function LandingConfereces({ sx }: Props) {
+export default function LandingConfereces() {
   return (
     <Grid sx={{ pb: 5 }} container xs={12}>
       <Box sx={{ p: 1, position: 'relative' }}>

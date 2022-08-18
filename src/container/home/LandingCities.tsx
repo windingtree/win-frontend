@@ -12,11 +12,6 @@ type ItemProps = {
   latlon: number[];
 };
 
-interface Props extends BoxProps {
-  title?: string;
-  subheader?: string;
-}
-
 const cities = [
   {
     id: '1',
@@ -44,7 +39,7 @@ const cities = [
   }
 ];
 
-export default function LandingCities({ sx }: Props) {
+export default function LandingCities() {
   return (
     <Grid sx={{ pb: 5 }} container spacing={4}>
       {cities.map((item) => (
