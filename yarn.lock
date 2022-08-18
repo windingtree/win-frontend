@@ -5170,6 +5170,13 @@
     axios "0.24.0"
     ethers "5.5.3"
 
+"@windingtree/win-commons@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.2.1.tgz#08216bd69ded3b79cc5ff23c5bb831b50adbdd8f"
+  integrity sha512-mX45BfvZJWyehxShqR3FmfaV9z2GtPfypJ4qGpNHK6oxWW/kJ7nwmET1gkMKCbcwFwQ+7XdSthFWs9/znsMhPA==
+  dependencies:
+    ethers "^5.6.9"
+
 "@windingtree/win-pay@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.1.0.tgz#742568dfd54c49539addc77ebd755190d0d7e5d9"

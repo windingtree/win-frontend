@@ -1,5 +1,5 @@
 import type { WinPay } from '@windingtree/win-pay/dist/typechain';
-import type { NetworkInfo } from '../config';
+import type { NetworkInfo } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect } from 'react';
 import { WinPay__factory } from '@windingtree/win-pay/dist/typechain';
 import { Web3ModalProvider } from './useWeb3Modal';

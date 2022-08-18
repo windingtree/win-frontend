@@ -3,7 +3,7 @@ import type {
   Offer,
   PricedOfferResponse
 } from '@windingtree/glider-types/types/derbysoft';
-import type { NetworkInfo, CryptoAsset } from '../config';
+import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,

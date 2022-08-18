@@ -1,6 +1,6 @@
 import type { BigNumber } from 'ethers';
 import type { MockERC20, MockWrappedERC20 } from '@windingtree/win-pay/dist/typechain';
-import type { CryptoAsset } from '../config';
+import type { CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { useCallback, useState } from 'react';
 import { BigNumber as BN } from 'ethers';
 import { usePoller } from './usePoller';
