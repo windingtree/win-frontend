@@ -10,10 +10,7 @@ export const Search = () => {
       <Box style={{ position: 'relative' }}>
         <Results />
         <MapBox />
-        <Box
-          background="white"
-          style={{ position: 'absolute', bottom: 20, alignSelf: 'center', zIndex: 1 }}
-        >
+        <Box style={{ position: 'absolute', bottom: 32, alignSelf: 'center', zIndex: 1 }}>
           <SearchForm />
         </Box>
       </Box>
