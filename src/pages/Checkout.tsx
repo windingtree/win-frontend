@@ -1,7 +1,7 @@
 import { Box } from 'grommet';
 import { utils } from 'ethers';
 import { useNavigate } from 'react-router-dom';
-import { MainLayout } from '../layouts/MainLayout';
+import MainLayout from 'src/layouts/main';
 import { WinPay } from '../components/WinPay';
 import Logger from '../utils/logger';
 import { useAppState } from '../store';
@@ -25,20 +25,21 @@ export const Checkout = () => {
 
   return (
     <MainLayout
-      breadcrumbs={[
-        {
-          label: 'Search',
-          path: '/'
-        },
-        {
-          label: 'Facility',
-          path: '/facilities/' + checkout?.facilityId
-        },
-        {
-          label: 'Guest Info',
-          path: '/guest-info'
-        }
-      ]}
+    //TODO: check with designer whether breadcrumbs are still needed.
+    // breadcrumbs={[
+    //   {
+    //     label: 'Search',
+    //     path: '/'
+    //   },
+    //   {
+    //     label: 'Facility',
+    //     path: '/facilities/' + checkout?.facilityId
+    //   },
+    //   {
+    //     label: 'Guest Info',
+    //     path: '/guest-info'
+    //   }
+    // ]}
     >
       <Box align="center" overflow="hidden">
         {isValid && (

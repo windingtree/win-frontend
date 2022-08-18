@@ -1,4 +1,4 @@
-import { MainLayout } from '../layouts/MainLayout';
+import MainLayout from 'src/layouts/main';
 import { Accordion, AccordionPanel, Box, Text } from 'grommet';
 const faq = [
   {
@@ -42,12 +42,12 @@ const faq = [
 export const Faq = () => {
   return (
     <MainLayout
-      breadcrumbs={[
-        {
-          label: 'Home',
-          path: '/'
-        }
-      ]}
+    // breadcrumbs={[
+    //   {
+    //     label: 'Home',
+    //     path: '/'
+    //   }
+    // ]}
     >
       <Accordion>
         {faq.map((q, fIndex) => (

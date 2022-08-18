@@ -46,6 +46,7 @@
     "@commitlint/config-conventional": "^17.0.3",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
+    "@iconify/react": "^3.2.2",
     "@mui/material": "^5.10.0",
     "@storybook/addon-actions": "^6.5.9",
     "@storybook/addon-essentials": "^6.5.9",
