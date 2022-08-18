@@ -96,6 +96,7 @@
     "react-blockies": "^1.4.1",
     "react-dom": "^18.2.0",
     "react-grid-system": "^8.1.6",
+    "react-hook-form": "^7.34.2",
     "react-image-gallery": "1.2.8",
     "react-leaflet": "^4.0.0",
     "react-router-dom": "^6.3.0",

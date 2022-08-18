@@ -1,4 +1,4 @@
-import { Search as CSearch } from '../components/Search';
+import { SearchForm } from 'src/containers/search/SearchForm';
 import { MapBox } from '../components/MapBox';
 import { Box } from 'grommet';
 import { Results } from '../components/Results';
@@ -14,7 +14,7 @@ export const Search = () => {
           background="white"
           style={{ position: 'absolute', bottom: 20, alignSelf: 'center', zIndex: 1 }}
         >
-          <CSearch />
+          <SearchForm />
         </Box>
       </Box>
     </MainLayout>

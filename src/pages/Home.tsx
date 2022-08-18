@@ -1,13 +1,13 @@
 import MainLayout from 'src/layouts/main';
-import { Search } from '../components/Search';
 import { Box } from 'grommet';
+import { SearchForm } from 'src/containers/search/SearchForm';
 
 export const Home = () => {
   return (
     <MainLayout>
       <Box pad="0" style={{ position: 'relative' }}>
         {/* Navigate to search page after click on search */}
-        <Search />
+        <SearchForm />
       </Box>
     </MainLayout>
   );
