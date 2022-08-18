@@ -6,24 +6,26 @@ import SocialsButton from 'src/components/SocialButton';
 
 const LINKS = [
   {
-    headline: 'Minimal',
+    headline: 'win.so',
     children: [
       //TODO: replace this by using the Routes config fas the source of truth
-      { name: 'About us', href: '/about' },
-      { name: 'Contact us', href: '/contact' },
+      { name: 'About', href: '/about' },
       { name: 'FAQs', href: '/faq' }
     ]
   },
   {
     headline: 'Legal',
     children: [
-      { name: 'Terms and Condition', href: '#' },
-      { name: 'Privacy Policy', href: '#' }
+      { name: 'Terms and Conditions', href: '/terms' },
+      { name: 'Privacy Policy', href: '/privacy' }
     ]
   },
   {
     headline: 'Contact',
-    children: [{ name: 'info@windingtree.com', href: '#' }]
+    children: [
+      { name: 'hi@windingtree.com', href: '#' },
+      { name: 'Newsletter', href: '#' },
+    ]
   }
 ];
 
@@ -46,9 +48,9 @@ export default function MainFooter() {
             <Logo sx={{ mx: { xs: 'auto', md: 'inherit' } }} />
           </Grid>
 
-          <Grid item xs={8} md={3}>
+          <Grid item xs={12} md={5}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              win.so is a a decentralized travel booking website.
+              win.so is a decentralized travel booking website powered by <a href="https://windingtree.com">Winding Tree</a>
             </Typography>
 
             <Stack
@@ -62,7 +64,7 @@ export default function MainFooter() {
 
           <Grid item xs={12} md={7}>
             <Stack
-              spacing={5}
+              spacing={3}
               direction={{ xs: 'column', md: 'row' }}
               justifyContent="space-between"
             >
