@@ -1,4 +1,4 @@
-import { Box, Card, BoxProps, Typography, Grid } from '@mui/material';
+import { Box, Card, Typography, Grid } from '@mui/material';
 import Image from '../../components/Image';
 import berlin from '../../images/berlin.jpeg';
 import bogota from '../../images/bogota.jpeg';
