@@ -1,10 +1,12 @@
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAccommodationsAndOffers } from './api';
 import {
   getAccommodationById,
   getActiveAccommodations,
   normalizeAccommodations,
-  getOffersById
+  getOffersById,
+  normalizeOffers
 } from './helpers';
 
 type SearchType = {
@@ -32,8 +34,11 @@ export const useAccommodationsAndOffers = (props: SearchType) => {
     { enabled: false }
   );
 
-  const accommodations = normalizeAccommodations(data?.accommodations);
-  const offers = (data?.offers && Object.values(data.offers)) || [];
+  const accommodations = useMemo(
+    () => normalizeAccommodations(data?.accommodations),
+    [data]
+  );
+  const offers = useMemo(() => normalizeOffers(data?.offers), [data]);
 
   return {
     getOffersById,

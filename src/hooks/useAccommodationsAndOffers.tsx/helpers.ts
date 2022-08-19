@@ -36,6 +36,17 @@ export const normalizeAccommodations = (accommodations: Accommodation[]) => {
   return normalizedData;
 };
 
+export const normalizeOffers = (offer: Offer[]) => {
+  if (!offer) return [];
+
+  const normalizedData = Object.entries(offer).map(([key, value]) => ({
+    id: key,
+    ...value
+  }));
+
+  return normalizedData;
+};
+
 export const getPassengersBody = (adultCount: number, childrenCount: number) => {
   const adults = {
     type: PassengerType.adult,
