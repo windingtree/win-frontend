@@ -1,5 +1,25 @@
+import { OffersSearchResponse, Offer, Accommodation } from '@windingtree/glider-types/types/win';
 import axios from 'axios';
 import { getPassengersBody } from './helpers';
+
+export interface Coordinates {
+  lat: number;
+  lon: number;
+}
+
+export interface FetchAccommodationsAndOffersProps {
+  location: string;
+  date: string[],
+  roomCount: number;
+  adultCount: number;
+  childrenCount: number;
+}
+
+export interface AccommodationsAndOffersResponse {
+  accommodations: Record<string, Accommodation>;
+  offers: Record<string, Offer>;
+  coordinates: Coordinates;
+}
 
 export async function fetchAccommodationsAndOffers({
   location,
@@ -7,7 +27,7 @@ export async function fetchAccommodationsAndOffers({
   roomCount,
   adultCount,
   childrenCount
-}) {
+}: FetchAccommodationsAndOffersProps): Promise<AccommodationsAndOffersResponse> {
   /**
    * Query the coordinates based on the location input of the user.
    * Coordinates are used to query the accommodations.
@@ -16,17 +36,17 @@ export async function fetchAccommodationsAndOffers({
     //TODO: include endpoint in .env or config
     .get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
     .catch((_) => {
-      throw new Error('Unexpected response when retrieving coordinates');
+      throw new Error(`Unable to get coordinates for location: ${location}`);
     });
 
-  const coordinates = coordinatesData?.[0];
+  const coordinates = coordinatesData[0];
 
   if (!coordinates) {
-    throw new Error('Unexpected response when retrieving coordinates');
+    throw new Error('Coordinates not found in the OSM response');
   }
 
-  const normalizedCordinates = {
-    lat: Number(coordinates?.lat),
+  const normalizedCoordinates: Coordinates = {
+    lat: Number(coordinates.lat),
     lon: Number(coordinates.lon)
   };
 
@@ -35,13 +55,12 @@ export async function fetchAccommodationsAndOffers({
   const derbySoftBody = {
     accommodation: {
       location: {
-        lon: normalizedCordinates.lon,
-        lat: normalizedCordinates.lat,
+        ...normalizedCoordinates,
         radius: 20000
       },
       arrival: date[0],
       departure: date[1],
-      roomCount: roomCount
+      roomCount
     },
 
     //TODO: include children
@@ -50,16 +69,20 @@ export async function fetchAccommodationsAndOffers({
 
   //TODO: include url in env
   const uri = `${process.env.REACT_APP_API_URL}/api/derby-soft/offers/search`;
-  const { data } = await axios.post(uri, derbySoftBody).catch((_) => {
-    throw new Error('Unexpected response when retrieving accomodations and offers');
+  const { data } = await axios.post<OffersSearchResponse>(uri, derbySoftBody).catch((_) => {
+    throw new Error('Unexpected response when retrieving accommodations and offers');
   });
 
-  if (!data?.data?.derbySoft) {
-    throw new Error('Unexpected response when retrieving accomodations and offers');
+  if (!data.data) {
+    throw new Error('Invalid API response');
   }
 
-  const accommodations = data?.data?.derbySoft?.data?.accommodations;
-  const offers = data?.data?.derbySoft?.data?.offers;
+  if (!data.data.derbySoft) {
+    throw new Error('Unexpected response when retrieving accommodations and offers');
+  }
 
-  return { accommodations, offers, coordinates: normalizedCordinates };
+  const accommodations = data.data.derbySoft.data.accommodations;
+  const offers = data.data.derbySoft.data.offers;
+
+  return { accommodations, offers, coordinates: normalizedCoordinates };
 }
