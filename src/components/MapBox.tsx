@@ -26,7 +26,7 @@ const pinIcon = new Icon({
 });
 
 // TO-BE-REMOVED: interface for workaround on coordinates
-interface ModAccomodationLocation extends AccommodationLocation {
+interface ModAccommodationLocation extends AccommodationLocation {
   coordinates: LatLngTuple;
 }
 
@@ -85,17 +85,19 @@ const MapSettings: React.FC<{
 const getCoordinates = (facility: FacilityRecord): LatLngTuple | undefined => {
   let coordinates: LatLngTuple | undefined = undefined;
 
-  if ((facility.location as ModAccomodationLocation).coordinates) {
+  if ((facility.location as ModAccommodationLocation).coordinates) {
     // should be reversed
     coordinates = [
-      ...(facility.location as ModAccomodationLocation).coordinates
+      ...(facility.location as ModAccommodationLocation).coordinates
     ].reverse() as LatLngTuple;
   } else if (
     facility.location &&
-    facility.location.lat !== undefined &&
-    facility.location.long !== undefined
+    facility.location.coordinates
   ) {
-    coordinates = [facility.location.lat, facility.location.long];
+    coordinates = [
+      facility.location.coordinates[0],
+      facility.location.coordinates[1]
+    ];
   }
 
   return coordinates;
@@ -107,7 +109,7 @@ export const MapBox: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // TODO: replace this with activeAccommodations
-  const { accommodations, coordinates } = useAccommodationsAndOffers({});
+  const { accommodations, coordinates } = useAccommodationsAndOffers();
   const normalizedCoordinates: LatLngTuple = coordinates
     ? [coordinates.lat, coordinates.lon]
     : [51.505, -0.09];
@@ -159,12 +161,11 @@ export const MapBox: React.FC = () => {
           ? accommodations.map(
               (f) =>
                 f.location &&
-                f.location.lat !== undefined &&
-                f.location.long !== undefined && (
+                f.location.coordinates && (
                   <Marker
                     key={f.id}
                     icon={pinIcon}
-                    position={[f.location.lat, f.location.long]}
+                    position={[f.location.coordinates[0], f.location.coordinates[1]]}
                     eventHandlers={{
                       click: () => selectFacility(f.id)
                     }}

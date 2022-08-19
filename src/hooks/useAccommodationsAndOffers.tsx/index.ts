@@ -1,39 +1,43 @@
 import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { fetchAccommodationsAndOffers } from './api';
 import {
   getAccommodationById,
   getActiveAccommodations,
   normalizeAccommodations,
+  normalizeOffers,
   getOffersById
 } from './helpers';
 
-type SearchType = {
-  location?: string;
-  date?: [string, string];
-  roomCount?: number;
-  adultCount?: number;
-  childrenCount?: number;
-} | void;
+export interface SearchType {
+  location: string;
+  date: [string, string];
+  roomCount: number;
+  adultCount: number;
+  childrenCount: number;
+}
 
-export const useAccommodationsAndOffers = (props: SearchType) => {
+export const useAccommodationsAndOffers = (props: SearchType | void) => {
   const { data, refetch, error, isLoading, isFetching } = useQuery(
     ['search-accommodations'],
     async () => {
-      const result = await fetchAccommodationsAndOffers({
-        location: props?.location,
-        date: props?.date,
-        roomCount: props?.roomCount,
-        adultCount: props?.adultCount,
-        childrenCount: props?.childrenCount
-      });
-
-      return result;
+      if (!props) {
+        return;
+      }
+      return await fetchAccommodationsAndOffers(props);
     },
     { enabled: false }
   );
 
-  const accommodations = normalizeAccommodations(data?.accommodations);
-  const offers = (data?.offers && Object.values(data.offers)) || [];
+  const accommodations = useMemo(
+    () => normalizeAccommodations(data?.accommodations),
+    [data]
+  );
+
+  const offers = useMemo(
+    () => (data?.offers && normalizeOffers(data.offers)) || [],
+    [data]
+  );
 
   return {
     getOffersById,
