@@ -1,6 +1,7 @@
 import { Box } from 'grommet';
 import { utils } from 'ethers';
 import { useNavigate } from 'react-router-dom';
+import { DateTime } from 'luxon';
 import MainLayout from 'src/layouts/main';
 import { WinPay } from '../components/WinPay';
 import Logger from '../utils/logger';
@@ -45,9 +46,9 @@ export const Checkout = () => {
         {isValid && (
           <WinPay
             payment={{
-              currency: 'USD', //checkout.offer.price.currency should be passed
+              currency: checkout.offer.price.currency,
               value: utils.parseEther(checkout.offer.price.public.toString()),
-              expiration: Math.ceil(Date.now() / 1000) + 500000000,
+              expiration: DateTime.fromISO(checkout.offer.expiration).toSeconds(),
               providerId: String(checkout.provider),
               serviceId: String(checkout.serviceId)
             }}
