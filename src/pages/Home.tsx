@@ -2,7 +2,7 @@ import MainLayout from 'src/layouts/main';
 import { Search } from '../components/Search';
 import { Grid, Container } from '@mui/material';
 import LandingCities from '../container/home/LandingCities';
-import LandingConfereces from '../container/home/LandingConfereces';
+import LandingConferences from '../container/home/LandingConferences';
 
 export const Home = () => {
   return (
@@ -12,7 +12,7 @@ export const Home = () => {
           <Search />
         </Grid>
         <LandingCities />
-        <LandingConfereces />
+        <LandingConferences />
       </Container>
     </MainLayout>
   );

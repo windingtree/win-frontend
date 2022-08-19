@@ -1,9 +1,9 @@
 import { Box, Card, Typography, Grid } from '@mui/material';
 import Image from '../../components/Image';
-import berlin from '../../images/berlin.jpeg';
-import bogota from '../../images/bogota.jpeg';
-import sydney from '../../images/sydney.jpeg';
-import taipei from '../../images/taipei.jpeg';
+import berlin from '../../images/cities/berlin.jpeg';
+import bogota from '../../images/cities/bogota.jpeg';
+import sydney from '../../images/cities/sydney.jpeg';
+import taipei from '../../images/cities/taipei.jpeg';
 
 type ItemProps = {
   id: string;
@@ -21,7 +21,7 @@ const cities = [
   },
   {
     id: '2',
-    city: 'Bogota',
+    city: 'Bogotá',
     image: bogota,
     latlon: [4.6534649, -74.0836453]
   },
@@ -41,11 +41,20 @@ const cities = [
 
 export default function LandingCities() {
   return (
-    <Grid sx={{ pb: 5 }} container spacing={4}>
-      {cities.map((item) => (
-        <CityItem key={item.id} item={item} />
-      ))}
+    <Grid sx={{ pb: 5 }} container xs={12}>
+      <Box sx={{ p: 1, position: 'relative' }}>
+        <Typography textAlign="center" variant="h3">
+          Cities in the spotlight
+        </Typography>
+      </Box>
+
+      <Grid container spacing={4}>
+        {cities.map((item) => (
+          <CityItem key={item.id} item={item} />
+        ))}
+      </Grid>
     </Grid>
+
   );
 }
 
