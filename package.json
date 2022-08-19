@@ -70,6 +70,7 @@
     "@types/react": "^18.0.15",
     "@types/react-blockies": "^1.4.1",
     "@types/react-dom": "^18.0.6",
+    "@types/react-lazy-load-image-component": "1.5.2",
     "@types/styled-components": "^5.1.25",
     "@walletconnect/web3-provider": "^1.8.0",
     "@windingtree/glider-types": "^1.5.0",
@@ -98,6 +99,7 @@
     "react-dom": "^18.2.0",
     "react-grid-system": "^8.1.6",
     "react-image-gallery": "1.2.8",
+    "react-lazy-load-image-component": "^1.5.5",
     "react-leaflet": "^4.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
@@ -108,7 +110,11 @@
     "url": "^0.11.0",
     "uuid": "8.3.2",
     "web-vitals": "^3.0.0-rc.0",
-    "web3modal": "^1.9.8"
+    "web3modal": "^1.9.8",
+    "@iconify/react": "^3.2.2",
+    "change-case": "^4.1.2",
+    "date-fns": "^2.29.1",
+    "framer-motion": "^7.2.0"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"
