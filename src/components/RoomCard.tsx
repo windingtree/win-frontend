@@ -1,4 +1,4 @@
-import type { RoomTypes } from '@windingtree/glider-types/types/derbysoft';
+import type { RoomTypes, PricedOfferResponse } from '@windingtree/glider-types/types/win';
 import { Box, Text, Image, Grid, Button, Notification, Carousel, Spinner } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store';
@@ -7,7 +7,7 @@ import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import Logger from '../utils/logger';
 import axios from 'axios';
 import { MessageBox } from './MessageBox';
-import { PricedOfferRequest, PricedOfferResponse } from '../api/PricedOffer';
+import { PricedOfferRequest } from '../api/PricedOffer';
 import type { OfferRecord } from 'src/store/types';
 
 const logger = Logger('RoomCard');
@@ -70,16 +70,22 @@ export const RoomCard: React.FC<{
       const res = await axios.request<PricedOfferResponse>(
         new PricedOfferRequest(offer.id)
       );
-      dispatch({
-        type: 'SET_CHECKOUT',
-        payload: {
-          facilityId,
-          ...res.data.data
-        }
-      });
 
-      logger.info('Get priced offer successfully');
-      navigate('/guest-info');
+      if (res.data.data) {
+        dispatch({
+          type: 'SET_CHECKOUT',
+          payload: {
+            facilityId,
+            ...res.data.data
+          }
+        });
+
+        logger.info('Get priced offer successfully');
+        navigate('/guest-info');
+      } else {
+        console.log('What???');
+      }
+
     } catch (error) {
       const message = (error as Error).message || 'Unknown useAuthRequest error';
       setLoading(false);
