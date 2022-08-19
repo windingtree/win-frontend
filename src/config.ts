@@ -28,16 +28,14 @@ if (!process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL === '') {
 
 let mode: AppMode;
 
-switch (process.env.NODE_ENV) {
-  case 'production':
+switch (process.env.REACT_APP_MODE) {
+  case 'prod':
     mode = AppMode.prod;
     break;
-  case 'development':
+  case 'dev':
     mode = AppMode.dev;
     break;
-  case 'test':
-    mode = AppMode.stage;
-    break;
+  case 'stage':
   default:
     mode = AppMode.stage;
 }
