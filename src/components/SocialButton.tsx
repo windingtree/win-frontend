@@ -67,7 +67,7 @@ export default function SocialsButton({ initialColor = false, sx, ...other }: Pr
       name: 'Github',
       icon: 'akar-icons:github-fill',
       socialColor: '#c4302b',
-      path: 'github.com/windingtree/'
+      path: 'https://github.com/windingtree/'
     },
   ];
 
@@ -76,7 +76,7 @@ export default function SocialsButton({ initialColor = false, sx, ...other }: Pr
       {SOCIALS.map((social) => {
         const { name, icon, path, socialColor } = social;
         return (
-          <Link key={name} href={path}>
+          <Link key={name} href={path} target="_blank" rel="noopener">
             <Tooltip title={name} placement="top">
               <IconButton
                 color="inherit"
