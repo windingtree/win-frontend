@@ -4,10 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import MainLayout from 'src/layouts/main';
 import { WinPay } from '../components/WinPay';
-import Logger from '../utils/logger';
 import { useAppState } from '../store';
+import { expirationGap } from '../config';
+import Logger from '../utils/logger';
 
 const logger = Logger('Checkout');
+
+export const normalizeExpiration = (expirationDate: string): number =>
+  Math.ceil(DateTime.fromISO(expirationDate).toSeconds()) - expirationGap;
 
 export const Checkout = () => {
   const navigate = useNavigate();
@@ -48,7 +52,7 @@ export const Checkout = () => {
             payment={{
               currency: checkout.offer.price.currency,
               value: utils.parseEther(checkout.offer.price.public.toString()),
-              expiration: DateTime.fromISO(checkout.offer.expiration).toSeconds(),
+              expiration: normalizeExpiration(checkout.offer.expiration),
               providerId: String(checkout.provider),
               serviceId: String(checkout.serviceId)
             }}
