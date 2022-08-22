@@ -34,7 +34,10 @@ export const useAccommodationsAndOffers = (props: SearchType | void) => {
     [data]
   );
 
-  const accommodations = useMemo(() => allAccommodations.filter(a => a.offers.length > 0), [allAccommodations]);
+  const accommodations = useMemo(
+    () => allAccommodations.filter((a) => a.offers.length > 0),
+    [allAccommodations]
+  );
 
   const offers = useMemo(
     () => (data?.offers && normalizeOffers(data.offers)) || [],

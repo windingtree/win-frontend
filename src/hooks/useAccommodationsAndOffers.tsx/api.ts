@@ -9,7 +9,7 @@ export interface Coordinates {
 
 export interface FetchAccommodationsAndOffersProps {
   location: string;
-  date: string[],
+  date: string[];
   roomCount: number;
   adultCount: number;
   childrenCount: number;
