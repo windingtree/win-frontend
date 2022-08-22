@@ -4,8 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
 import icon from 'leaflet/dist/images/marker-icon.png';
-
-import { AccommodationLocation } from '@windingtree/glider-types/types/derbysoft';
 import { useAppDispatch, useAppState } from '../store';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { FacilityRecord } from 'src/store/types';
@@ -24,11 +22,6 @@ const pinIcon = new Icon({
   iconUrl: icon,
   iconSize: [25, 40]
 });
-
-// TO-BE-REMOVED: interface for workaround on coordinates
-interface ModAccommodationLocation extends AccommodationLocation {
-  coordinates: LatLngTuple;
-}
 
 const MapSettings: React.FC<{
   center: LatLngTuple;
@@ -85,20 +78,7 @@ const MapSettings: React.FC<{
 const getCoordinates = (facility: FacilityRecord): LatLngTuple | undefined => {
   let coordinates: LatLngTuple | undefined = undefined;
 
-  if ((facility.location as ModAccommodationLocation).coordinates) {
-    // should be reversed
-    coordinates = [
-      ...(facility.location as ModAccommodationLocation).coordinates
-    ].reverse() as LatLngTuple;
-  } else if (
-    facility.location &&
-    facility.location.coordinates
-  ) {
-    coordinates = [
-      facility.location.coordinates[0],
-      facility.location.coordinates[1]
-    ];
-  }
+  coordinates = [...(facility.location.coordinates || [])].reverse() as LatLngTuple;
 
   return coordinates;
 };
@@ -165,7 +145,7 @@ export const MapBox: React.FC = () => {
                   <Marker
                     key={f.id}
                     icon={pinIcon}
-                    position={[f.location.coordinates[0], f.location.coordinates[1]]}
+                    position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
                       click: () => selectFacility(f.id)
                     }}

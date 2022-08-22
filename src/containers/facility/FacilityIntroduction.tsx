@@ -1,9 +1,10 @@
 import { Text, Image } from 'grommet';
 import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
-import type { Photo, Accommodation } from '@windingtree/glider-types/types/derbysoft';
 import { useParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
+import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
+import { MediaItem } from '@windingtree/glider-types/types/win';
 
 const Container = styled.div`
   display: flex;
@@ -24,11 +25,11 @@ const FacilityMainImage = styled(Image)`
   object-fit: cover;
 `;
 
-const sortByLargestImage = (images: Photo[]) => {
+const sortByLargestImage = (images: MediaItem[]) => {
   if (!images?.length) return [];
 
-  const compareImages = (itemOne: Photo, itemTwo: Photo) => {
-    return itemTwo.width - itemOne.width;
+  const compareImages = (itemOne: MediaItem, itemTwo: MediaItem) => {
+    return Number(itemTwo.width) - Number(itemOne.width);
   };
 
   const sortedImages = images?.sort(compareImages);
@@ -38,8 +39,11 @@ const sortByLargestImage = (images: Photo[]) => {
 export const FacilityIntroduction = () => {
   const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
   const { id } = useParams();
-  const accommodation: Accommodation = getAccommodationById(accommodations, id);
-  const sortedImages = sortByLargestImage(accommodation?.media);
+  const accommodation: AccommodationWithId | null = getAccommodationById(
+    accommodations,
+    String(id)
+  );
+  const sortedImages = sortByLargestImage(accommodation?.media ?? []);
   const [mainImage, ...rest] = sortedImages;
 
   return (

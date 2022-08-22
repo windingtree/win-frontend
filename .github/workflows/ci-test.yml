@@ -36,6 +36,7 @@ jobs:
           REACT_APP_MODE: development
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
+          REACT_APP_EXPIRATION_GAP: ${{ secrets.REACT_APP_EXPIRATION_GAP }}
         run: |
           rm -rf ./build
           yarn build

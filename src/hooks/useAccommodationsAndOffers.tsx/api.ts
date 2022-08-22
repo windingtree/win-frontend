@@ -1,4 +1,4 @@
-import { OffersSearchResponse, Offer, Accommodation } from '@windingtree/glider-types/types/win';
+import { SearchResults, Offer, Accommodation } from '@windingtree/glider-types/types/win';
 import axios from 'axios';
 import { getPassengersBody } from './helpers';
 
@@ -9,7 +9,7 @@ export interface Coordinates {
 
 export interface FetchAccommodationsAndOffersProps {
   location: string;
-  date: string[],
+  date: string[];
   roomCount: number;
   adultCount: number;
   childrenCount: number;
@@ -68,21 +68,17 @@ export async function fetchAccommodationsAndOffers({
   };
 
   //TODO: include url in env
-  const uri = `${process.env.REACT_APP_API_URL}/api/derby-soft/offers/search`;
-  const { data } = await axios.post<OffersSearchResponse>(uri, derbySoftBody).catch((_) => {
+  const uri = `${process.env.REACT_APP_API_URL}/api/hotels/offers/search`;
+  const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch((_) => {
     throw new Error('Unexpected response when retrieving accommodations and offers');
   });
 
-  if (!data.data) {
+  if (!data) {
     throw new Error('Invalid API response');
   }
 
-  if (!data.data.derbySoft) {
-    throw new Error('Unexpected response when retrieving accommodations and offers');
-  }
-
-  const accommodations = data.data.derbySoft.data.accommodations;
-  const offers = data.data.derbySoft.data.offers;
+  const accommodations = data.accommodations;
+  const offers = data.offers;
 
   return { accommodations, offers, coordinates: normalizedCoordinates };
 }

@@ -8,6 +8,7 @@ enum PassengerType {
 
 export interface AccommodationWithId extends Accommodation {
   id: string;
+  offers: OfferRecord[];
 }
 
 export const getActiveAccommodations = (
@@ -30,15 +31,26 @@ export const getActiveAccommodations = (
   return activeAccommodations;
 };
 
-export const normalizeAccommodations = (accommodations: Record<string, Accommodation> | undefined): AccommodationWithId[] => {
+export const normalizeAccommodations = (
+  accommodations: Record<string, Accommodation> | undefined,
+  offers: Record<string, Offer> | undefined
+): AccommodationWithId[] => {
   if (!accommodations) return [];
+  const normalizedOffers = offers ? normalizeOffers(offers) : [];
+  const normalizedAccommodations = Object.entries(
+    accommodations
+  ).map<AccommodationWithId>(([key, value]) => {
+    const filteredOffers = normalizedOffers.filter(
+      (offer) => key in offer.pricePlansReferences
+    );
+    return {
+      id: key,
+      ...value,
+      offers: filteredOffers
+    };
+  });
 
-  const normalizedData = Object.entries(accommodations).map<AccommodationWithId>(([key, value]) => ({
-    id: key,
-    ...value
-  }));
-
-  return normalizedData;
+  return normalizedAccommodations;
 };
 
 export const normalizeOffers = (offers: Record<string, Offer>): OfferRecord[] => {
@@ -71,22 +83,27 @@ export const getPassengersBody = (adultCount: number, childrenCount: number) => 
   return passengers;
 };
 
-export const getOffersById = (offers: OfferRecord[], accommodationId: string): OfferRecord[] => {
+export const getOffersById = (
+  offers: OfferRecord[],
+  accommodationId: string
+): OfferRecord[] => {
   if (!accommodationId) return [];
 
-  const matchedOffers = offers.filter(
-    offer => {
-      return accommodationId === Object.keys(offer.pricePlansReferences)[0];
-    }
-  );
+  const matchedOffers = offers.filter((offer) => {
+    return accommodationId === Object.keys(offer.pricePlansReferences)[0];
+  });
 
   return matchedOffers;
 };
 
-export const getAccommodationById = (accommodations, id) => {
+export const getAccommodationById = (
+  accommodations: AccommodationWithId[],
+  id: string
+): AccommodationWithId | null => {
   if (!id) return null;
 
-  const selectedAccommodation = accommodations?.find((accommodation) => accommodation.id);
+  const selectedAccommodation =
+    accommodations?.find((accommodation) => accommodation.id) ?? null;
 
   return selectedAccommodation;
 };
