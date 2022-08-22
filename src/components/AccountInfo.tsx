@@ -1,6 +1,6 @@
 import Blockies from 'react-blockies';
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Popover, Typography } from '@mui/material';
+import { Box, Popover, Typography, Button } from '@mui/material';
 import { useState, useMemo, useCallback, useRef } from 'react';
 import { centerEllipsis, copyToClipboard } from '../utils/strings';
 import { useAppState } from 'src/store';
@@ -26,12 +26,9 @@ export const AccountInfo = () => {
     [account]
   );
 
-  const handleClose = useCallback(
-    () => {
-      setOpen(false);
-    },
-    []
-  );
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   if (!account) {
     return null;
@@ -57,22 +54,25 @@ export const AccountInfo = () => {
         </Typography>
       </Box>
 
-
-      {/* {notification && (
-        <Notification toast title="Copied to clipboard" status="normal" />
-      )} */}
       <Popover
-        // id={id}
+        id="account_control"
         open={open}
         onClose={handleClose}
+        anchorEl={boxRef.current}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
         }}
-        anchorEl={boxRef.current}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
       >
-        <Typography color="primary" variant="body2">
+        <Typography color="primary" variant="body1">
           {account}
+        </Typography>
+        <Typography color="primary" variant="body2">
+          This component not finished yet.
         </Typography>
       </Popover>
     </Box>
