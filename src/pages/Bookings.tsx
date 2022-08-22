@@ -1,41 +1,33 @@
 import { useAppState } from '../store';
-import { Box, Spinner } from 'grommet';
-import { useMemo } from 'react';
-import { MessageBox } from 'src/components/MessageBox';
-import MainLayout from 'src/layouts/main';
-
-const tokens = [];
+import { Box } from '@mui/material';
+import { useMemo, useState } from 'react';
+import { MessageBox } from '../../src/components/MessageBox';
+import MainLayout from '../../src/layouts/main';
+import { useBookingsAuth } from '../hooks/useBookingsAuth';
 
 export const Bookings = () => {
-  const { isConnecting } = useAppState();
-
-  const isLoading = useMemo(() => false, []);
-  const isError = useMemo(() => false, []);
+  const { walletAuth } = useAppState();
+  const { login, logout } = useBookingsAuth();
+  const [isLogin, setLogin] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>();
+  const isLoggedIn = useMemo(
+    () => !!walletAuth,
+    [walletAuth]
+  );
 
   return (
     <MainLayout>
-      {!isConnecting && (
-        <Box>
-          <MessageBox type="info" show={isLoading}>
-            <Box direction="row">
-              <Box margin={{ right: 'small ' }}>
-                Tokens data is loading. Please wait..&nbsp;
-              </Box>
-              <Spinner color="black" />
-            </Box>
-          </MessageBox>
+      {!isLoggedIn &&
+        <>
+        </>
+      }
 
-          <MessageBox type="info" show={!isLoading && (!tokens || tokens.length === 0)}>
-            <Box>Tokens list is empty. It is a time to book a stay!</Box>
-          </MessageBox>
-
-          <MessageBox type="error" show={!!isError}>
-            <Box>{isError}</Box>
-          </MessageBox>
-
-          <Box direction="column">{/* token cards list */}</Box>
-        </Box>
-      )}
+      <MessageBox type="info" loading show={isLogin}>
+        Authorization in process
+      </MessageBox>
+      <MessageBox type="error" show={!!error}>
+        <Box>{error}</Box>
+      </MessageBox>
     </MainLayout>
   );
 };
