@@ -1,30 +1,35 @@
 import { Settings } from 'luxon';
 import { config } from '@windingtree/win-commons';
 
-// Configure the time zone
-Settings.defaultZone = config.defaultZone;
-
 export enum AppMode {
   dev = 'dev',
   stage = 'stage',
   prod = 'prod'
 }
 
-// currency the asset is pegged to
-export const assetsCurrencies = config.assetsCurrencies;
-
 export interface Api {
   key: string;
   url: string;
 }
 
-if (!process.env.REACT_APP_API_KEY || process.env.REACT_APP_API_KEY === '') {
-  throw new Error('REACT_APP_API_KEY must be provided in the ENV');
-}
+export const checkEnvVariables = (vars: string[]): void =>
+  vars.forEach((variable) => {
+    if (!process.env[variable] || process.env[variable] === '') {
+      throw new Error(`${variable} must be provided in the ENV`);
+    }
+  });
 
-if (!process.env.REACT_APP_API_URL || process.env.REACT_APP_API_URL === '') {
-  throw new Error('REACT_APP_API_URL must be provided in the ENV');
-}
+checkEnvVariables([
+  'REACT_APP_API_KEY',
+  'REACT_APP_API_URL',
+  'REACT_APP_EXPIRATION_GAP'
+]);
+
+// Configure the time zone
+Settings.defaultZone = config.defaultZone;
+
+// currency the asset is pegged to
+export const assetsCurrencies = config.assetsCurrencies;
 
 let mode: AppMode;
 
@@ -48,3 +53,5 @@ export const backend = Object.freeze({
   key: process.env.REACT_APP_API_KEY,
   url: process.env.REACT_APP_API_URL
 });
+
+export const expirationGap = Number(process.env.REACT_APP_EXPIRATION_GAP);

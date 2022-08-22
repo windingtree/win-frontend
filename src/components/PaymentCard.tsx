@@ -66,8 +66,6 @@ export const PaymentCard = ({
 }: PaymentCardProps) => {
   const { watchAsset } = useWalletRpcApi(provider, allowedNetworks);
   const [account, setAccount] = useState<string | undefined>();
-  // const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
-  // const [notification, setNotification] = useState<boolean>(false);
   const { winPayContract } = useWinPay(provider, network);
   const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
   const tokenAllowance = useAllowance(tokenContract, account, asset);
@@ -205,6 +203,13 @@ export const PaymentCard = ({
       setPermitError(undefined);
 
       if (provider && asset && tokenContract && account) {
+        logger.debug('Payment params:', {
+          tokenContract,
+          account,
+          asset: asset.address,
+          value: payment.value,
+          expiration: payment.expiration
+        });
         const signature = await createPermitSignature(
           provider.getSigner() as unknown as Wallet,
           tokenContract,
