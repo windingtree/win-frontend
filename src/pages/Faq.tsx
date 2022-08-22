@@ -1,4 +1,4 @@
-import { FaqAccordion } from '../container/FaqAccordion';
+import { FaqAccordion } from 'src/containers/FaqAccordion';
 import MainLayout from '../layouts/main';
 
 export const Faq = () => {

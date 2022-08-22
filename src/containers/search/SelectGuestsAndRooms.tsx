@@ -37,7 +37,6 @@ export const SelectGuestsAndRooms = () => {
             size="small"
             name="roomCount"
             type="number"
-            defaultValue={1}
             InputProps={{
               inputMode: 'numeric',
               inputProps: {

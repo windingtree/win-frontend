@@ -7,8 +7,6 @@ export const RHFDateRangePicker = ({ name, minDate }) => {
   const primaryColors = theme.palette.primary;
   const { control } = useFormContext();
 
-  //TODO: make the name variable
-  //TODO: include minDate
   return (
     <Controller
       name={name}
