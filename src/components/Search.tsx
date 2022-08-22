@@ -9,10 +9,11 @@ import {
   Grid,
   TextInput
 } from 'grommet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MessageBox } from './MessageBox';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const today = DateTime.local().toISO();
 const tomorrow = DateTime.local().plus({ days: 1 }).toISO();
@@ -51,20 +52,31 @@ export const ResponsiveBottomGrid = (winWidth: number) => {
     return ['100%'];
   }
 };
-export const Search: React.FC = () => {
+export const Search: React.FC<{ onSubmit?: () => void }> = ({ onSubmit }) => {
   const { winWidth } = useWindowsDimension();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   /**
    * Smart logic in relation to the form.
    */
   const [location, setLocation] = useState<string>('');
-  const [checkInCheckOut, setCheckInCheckOut] = useState<[string, string]>([
-    today,
-    tomorrow
-  ]);
+  const [checkInCheckOut, setCheckInCheckOut] = useState<[string, string]>([today, tomorrow]);
   const [numSpacesReq, setNumSpacesReq] = useState<number>(1);
   const [numAdults, setNumAdults] = useState<number>(1);
   const [numChildren, setNumChildren] = useState<number>(0);
+
+  useEffect(() => {
+    setCheckInCheckOut([
+      searchParams.get('checkIn') || today,
+      searchParams.get('checkOut') || tomorrow
+    ])
+    setLocation(searchParams.get('location') || '')
+    setNumSpacesReq(Number(searchParams.get('numSpacesReq') || 1))
+    setNumAdults(Number(searchParams.get('numAdults') || 1))
+    setNumChildren(Number(searchParams.get('numChildren') || 0))
+    console.log('searchparams', searchParams)
+  }, [searchParams])
 
   const handleDateChange = ({ value }: { value: string[] }) => {
     const checkInisInPast =
@@ -90,6 +102,15 @@ export const Search: React.FC = () => {
 
   const handleSubmit = () => {
     refetch();
+    const query = new URLSearchParams([
+      ['checkIn', String(checkInCheckOut[0])],
+      ['checkOut', String(checkInCheckOut[1])],
+      ['numAdults', String(numAdults)],
+      ['numChildren', String(numChildren)],
+      ['location', String(location)],
+      ['numSpacesReq', String(numSpacesReq)],
+    ]);
+    navigate(`/search?${query}`)
   };
 
   return (
