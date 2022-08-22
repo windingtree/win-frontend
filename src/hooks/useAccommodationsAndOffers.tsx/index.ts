@@ -30,7 +30,7 @@ export const useAccommodationsAndOffers = (props: SearchType | void) => {
   );
 
   const accommodations = useMemo(
-    () => normalizeAccommodations(data?.accommodations),
+    () => normalizeAccommodations(data?.accommodations, data?.offers),
     [data]
   );
 
