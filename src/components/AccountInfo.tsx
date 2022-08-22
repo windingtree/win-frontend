@@ -1,6 +1,6 @@
 import Blockies from 'react-blockies';
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Popover, Typography, Button } from '@mui/material';
+import { Box, Popover, Typography } from '@mui/material';
 import { useState, useMemo, useCallback, useRef } from 'react';
 import { centerEllipsis, copyToClipboard } from '../utils/strings';
 import { useAppState } from 'src/store';
