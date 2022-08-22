@@ -38,6 +38,7 @@ import { fileURLToPath } from 'url';
 import { styled } from '@mui/system';
 import { endDateDisplay, startDateDisplay } from './helpers';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
+import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 
 // const today = DateTime.local().toISO();
 // const tomorrow = DateTime.local().plus({ days: 1 }).toISO();
@@ -225,7 +226,6 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   paddingBottom: theme.spacing(1),
   display: 'flex',
   justifyContent: 'center',
-  boxShadow: `0 8px 16px 0 ${theme.palette.grey['400']}`,
   backgroundColor: theme.palette.background.default,
   [theme.breakpoints.up('md')]: {
     borderRadius: 10,
@@ -236,62 +236,6 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   }
 }));
 
-const Persons = () => {
-  const FIELD_WIDTH = '60px';
-  return (
-    <Stack spacing={2} p={4}>
-      <Stack direction="row" justifyContent="space-between">
-        <Box>
-          <Typography fontWeight="bold">Adults</Typography>
-          <Typography variant="caption">18 years or older</Typography>
-        </Box>
-        <Box width={FIELD_WIDTH}>
-          <RHFTextField
-            size="small"
-            name="adultCount"
-            type="number"
-            // TODO: display nummers
-            InputProps={{
-              inputMode: 'numeric',
-              inputProps: {
-                min: 1
-              }
-            }}
-          />
-        </Box>
-      </Stack>
-
-      <Stack direction="row" justifyContent="space-between">
-        <Box>
-          <Typography fontWeight="bold">Rooms</Typography>
-          <Typography variant="caption">Select number of rooms.</Typography>
-        </Box>
-        <Box width={FIELD_WIDTH}>
-          <RHFTextField
-            size="small"
-            name="roomCount"
-            type="number"
-            defaultValue={1}
-            InputProps={{
-              inputMode: 'numeric',
-              inputProps: {
-                min: 1
-              }
-            }}
-          />
-        </Box>
-      </Stack>
-      <Stack direction="row" justifyContent="space-between">
-        <Box>
-          <Typography fontWeight="bold">Children</Typography>
-          <Typography variant="caption">
-            We don&apos;t support booking with children yet.
-          </Typography>
-        </Box>
-      </Stack>
-    </Stack>
-  );
-};
 type FormValuesProps = {
   location: string;
   roomCount: number;
@@ -340,7 +284,8 @@ export const SearchForm: React.FC = () => {
 
   const values = watch();
   const { roomCount, adultCount, dateRange } = values;
-  //TODO: connect it to the actually query
+  //TODO: connect it to the actually query + use debounce
+  //TODO: make sure it can be reused on the home and search page
   const onSubmit = async (data: FormValuesProps) => {
     console.log(data);
   };
@@ -353,6 +298,7 @@ export const SearchForm: React.FC = () => {
   const fontSize = theme.typography.body2.fontSize;
 
   return (
+    //TODO: includ error and loading state
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Popover
         id="popover-date-range"
@@ -368,7 +314,7 @@ export const SearchForm: React.FC = () => {
           horizontal: 'center'
         }}
       >
-        <RHFDateRangePicker name="dateRange" />
+        <RHFDateRangePicker name="dateRange" minDate={new Date()} />
       </Popover>
 
       <Popover
@@ -385,7 +331,7 @@ export const SearchForm: React.FC = () => {
           horizontal: 'left'
         }}
       >
-        <Persons />
+        <SelectGuestsAndRooms />
       </Popover>
       {/* TODO: make sure it also looks good on mobile */}
       <ToolbarStyle ref={formRef}>
