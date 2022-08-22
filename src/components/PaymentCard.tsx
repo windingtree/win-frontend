@@ -1,5 +1,9 @@
 import type { Web3ModalProvider } from '../hooks/useWeb3Modal';
-import type { NetworkInfo, CryptoAsset, AssetCurrency } from '@windingtree/win-commons/dist/types';
+import type {
+  NetworkInfo,
+  CryptoAsset,
+  AssetCurrency
+} from '@windingtree/win-commons/dist/types';
 import type {
   BigNumber,
   Wallet,

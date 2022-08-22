@@ -32,6 +32,10 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
     );
     const handleSelect = useCallback(() => onSelect(facility.id), []);
 
+    if (facility.offers.length < 1) {
+      return null;
+    }
+
     return (
       <Paper
         ref={ref}

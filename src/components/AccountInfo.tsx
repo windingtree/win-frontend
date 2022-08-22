@@ -16,15 +16,12 @@ export const AccountInfo = () => {
   const [open, setOpen] = useState<boolean>(false);
   const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
 
-  const handleOpen = useCallback(
-    () => {
-      setOpen(true);
-      if (account) {
-        copyToClipboard(account);
-      }
-    },
-    [account]
-  );
+  const handleOpen = useCallback(() => {
+    setOpen(true);
+    if (account) {
+      copyToClipboard(account);
+    }
+  }, [account]);
 
   const handleClose = () => {
     setOpen(false);
@@ -40,7 +37,7 @@ export const AccountInfo = () => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
       }}
       marginRight={theme.spacing(5)}
       onClick={handleOpen}
@@ -61,11 +58,11 @@ export const AccountInfo = () => {
         anchorEl={boxRef.current}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'left'
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'left',
+          horizontal: 'left'
         }}
       >
         <Typography color="primary" variant="body1">
@@ -77,4 +74,4 @@ export const AccountInfo = () => {
       </Popover>
     </Box>
   );
-}
+};

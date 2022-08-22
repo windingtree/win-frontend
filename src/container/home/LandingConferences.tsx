@@ -4,7 +4,7 @@ import Image from '../../components/Image';
 import dappcon22 from '../../images/conferences/dappcon22.jpg';
 import blockchaineurope2022 from '../../images/conferences/blockchaineurope2022.png';
 import devcon6 from '../../images/conferences/devcon6.jpeg';
-import ethdownunder from '../../images/conferences/ethdownunder.png'
+import ethdownunder from '../../images/conferences/ethdownunder.png';
 //import sydney from '../../images/sydney.jpeg';
 //import taipei from '../../images/taipei.jpeg';
 
@@ -49,7 +49,7 @@ const conferences: ItemProps[] = [
     url: 'https://ethdownunder.com/',
     date: '1-4  December'
     // latlon: [-33.8698439, 151.208284],
-  },/*
+  } /*
   {
     name: 'ETHTaipei',
     location: 'Taipei',
@@ -92,14 +92,16 @@ function ConferenceItem({ item }: ConferenceItemProps) {
           <Image src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />
         </Box>
         <Typography textAlign="center" variant="subtitle2">
-          <Link href={url} target='_blank' rel='nopener'>{name}</Link>
+          <Link href={url} target="_blank" rel="nopener">
+            {name}
+          </Link>
         </Typography>
         <Stack direction="row" justifyContent="center" spacing={1}>
-          <Iconify icon='uiw:date' sx={{ width: 20, height: 20 }} />
+          <Iconify icon="uiw:date" sx={{ width: 20, height: 20 }} />
           <Typography textAlign="center">{date}</Typography>
         </Stack>
         <Stack direction="row" justifyContent="center" spacing={1}>
-          <Iconify icon='bxs:map-pin' sx={{ width: 20, height: 20 }} />
+          <Iconify icon="bxs:map-pin" sx={{ width: 20, height: 20 }} />
           <Typography textAlign="center">{location}</Typography>
         </Stack>
         <Stack direction="row" justifyContent="center">

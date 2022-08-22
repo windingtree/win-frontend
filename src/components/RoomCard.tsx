@@ -85,7 +85,6 @@ export const RoomCard: React.FC<{
       } else {
         console.log('What???');
       }
-
     } catch (error) {
       const message = (error as Error).message || 'Unknown useAuthRequest error';
       setLoading(false);
