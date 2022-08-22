@@ -29,10 +29,12 @@ export const useAccommodationsAndOffers = (props: SearchType | void) => {
     { enabled: false }
   );
 
-  const accommodations = useMemo(
+  const allAccommodations = useMemo(
     () => normalizeAccommodations(data?.accommodations, data?.offers),
     [data]
   );
+
+  const accommodations = useMemo(() => allAccommodations.filter(a => a.offers.length > 0), [allAccommodations]);
 
   const offers = useMemo(
     () => (data?.offers && normalizeOffers(data.offers)) || [],

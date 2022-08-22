@@ -21,9 +21,9 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
     const navigate = useNavigate();
     const selectedStyle: CSSProperties = isSelected
       ? {
-          position: 'relative',
-          left: 10
-        }
+        position: 'relative',
+        left: 10
+      }
       : {};
 
     const prices = useMemo(
@@ -31,6 +31,10 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
       [facility]
     );
     const handleSelect = useCallback(() => onSelect(facility.id), []);
+
+    if (facility.offers.length < 1) {
+      return null
+    }
 
     return (
       <Paper
