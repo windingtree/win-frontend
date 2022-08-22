@@ -13,7 +13,6 @@
 // import { MessageBox } from './MessageBox';
 // import { useWindowsDimension } from '../hooks/useWindowsDimension';
 // import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { DateRange } from 'react-date-range';
 
 import {
   Box,
@@ -26,17 +25,19 @@ import {
   TextField,
   useTheme,
   Toolbar,
-  Divider
+  Divider,
+  useMediaQuery
 } from '@mui/material';
 import { FormProvider, RHFSelect, RHFTextField } from 'src/components/hook-form';
 import { Controller, useForm, useFormContext } from 'react-hook-form';
-import { format } from 'date-fns';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
 import { getRandomValues } from 'crypto';
 import { fileURLToPath } from 'url';
 import { styled } from '@mui/system';
+import { endDateDisplay, startDateDisplay } from './helpers';
+import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 
 // const today = DateTime.local().toISO();
 // const tomorrow = DateTime.local().plus({ days: 1 }).toISO();
@@ -219,37 +220,21 @@ import { styled } from '@mui/system';
 // };
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
+  width: '100%',
+  paddingTop: theme.spacing(1),
+  paddingBottom: theme.spacing(1),
   display: 'flex',
   justifyContent: 'center',
-  borderRadius: 10,
   boxShadow: `0 8px 16px 0 ${theme.palette.grey['400']}`,
   backgroundColor: theme.palette.background.default,
   [theme.breakpoints.up('md')]: {
-    minWidth: 570
+    borderRadius: 10,
+    width: 'auto',
+    padding: 0,
+    minWidth: 570,
+    maxWidth: 600
   }
 }));
-
-const DatePicker = () => {
-  const theme = useTheme();
-  const primaryColors = theme.palette.primary;
-  const { control } = useFormContext();
-
-  return (
-    <Controller
-      name="dateRange"
-      control={control}
-      render={({ field: { value, onChange }, fieldState: { error } }) => (
-        <DateRange
-          editableDateInputs={true}
-          onChange={(newValue) => onChange([newValue.selection])}
-          moveRangeOnFirstSelection={false}
-          ranges={value}
-          rangeColors={[primaryColors.main, primaryColors.lighter, primaryColors.darker]}
-        />
-      )}
-    />
-  );
-};
 
 const Persons = () => {
   const FIELD_WIDTH = '60px';
@@ -265,6 +250,7 @@ const Persons = () => {
             size="small"
             name="adultCount"
             type="number"
+            // TODO: display nummers
             InputProps={{
               inputMode: 'numeric',
               inputProps: {
@@ -315,81 +301,19 @@ type FormValuesProps = {
 const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={12} />;
 
 export const SearchForm: React.FC = () => {
-  /**
-   * Logic in relation to the dates
-   */
   const theme = useTheme();
-  const primaryColors = theme.palette.primary;
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: null,
-      endDate: null,
-      key: 'selection'
-    }
-  ]);
-
-  const formatDisplayDate = (date) => {
-    const dayNumber = format(date, 'dd');
-    const dayName = format(date, 'EEEE');
-    const shortendDayName = dayName.slice(0, 3);
-    const month = format(date, 'LLLL');
-    const shortendMonth = month.slice(0, 3);
-
-    const displayedDate = `${shortendDayName}, ${shortendMonth} ${dayNumber}`;
-    return displayedDate;
-  };
-
-  const startDateDisplay = () => {
-    const startDate = dateRange[0].startDate;
-
-    if (!startDate) return 'Check-in';
-
-    return formatDisplayDate(startDate);
-  };
-
-  const endDateDisplay = () => {
-    const startDate = dateRange[0].endDate;
-
-    if (!startDate) return 'Check-out';
-
-    return formatDisplayDate(startDate);
-  };
 
   /**
-   * Logic in relation to the date popover
+   * Logic in relation to the popovers
    */
-  const formRef = React.useRef<HTMLDivElement>();
-  const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
-
-  const handleOpenDatePopOver = () => {
-    setAnchorEl(formRef.current);
-  };
-
-  const handleCloseDatePopOver = () => {
-    setAnchorEl(null);
-  };
-  const isDatePopoverOpen = Boolean(anchorEl);
-  const idDatePopover = isDatePopoverOpen ? 'date-popover' : undefined;
-
-  /**
-   * Logic in relation to the persons popover
-   */
-
+  const formRef = useRef<HTMLDivElement>();
+  const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLDivElement | null>(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = React.useState<HTMLDivElement | null>(null);
-
-  const handleOpenGuestsPopover = () => {
-    setGuestsAnchorEl(formRef.current);
-  };
-
-  const handleCloseGuestsPopover = () => {
-    setGuestsAnchorEl(null);
-  };
-
+  const isDatePopoverOpen = Boolean(dateRangeAnchorEl);
   const isGuestsPopoverOpen = Boolean(guestsAnchorEl);
-  const idGuestsPopover = isDatePopoverOpen ? 'guests-popover' : undefined;
 
   /**
-   * Handling the form
+   * Logic in relation to handling the form
    */
   const defaultValues = {
     location: '',
@@ -415,71 +339,68 @@ export const SearchForm: React.FC = () => {
   } = methods;
 
   const values = watch();
-
-  const { roomCount, adultCount } = values;
-
-  const roomText = roomCount === 1 ? 'room' : 'rooms';
-  const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
-
+  const { roomCount, adultCount, dateRange } = values;
+  //TODO: connect it to the actually query
   const onSubmit = async (data: FormValuesProps) => {
     console.log(data);
   };
 
+  /**
+   * Logic in relation to styling and textual UI
+   */
+  const roomText = roomCount === 1 ? 'room' : 'rooms';
+  const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
   const fontSize = theme.typography.body2.fontSize;
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Popover
-        id={idDatePopover}
+        id="popover-date-range"
         open={isDatePopoverOpen}
-        anchorEl={anchorEl}
-        onClose={handleCloseDatePopOver}
+        anchorEl={dateRangeAnchorEl}
+        onClose={() => setDateRangeAnchorEl(null)}
         anchorOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'center'
         }}
         transformOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'center'
         }}
       >
-        {/* <DateRange
-            editableDateInputs={true}
-            onChange={(item) => setDateRange([item.selection])}
-            moveRangeOnFirstSelection={false}
-            ranges={dateRange}
-            rangeColors={[
-              primaryColors.main,
-              primaryColors.lighter,
-              primaryColors.darker
-            ]}
-          /> */}
-
-        <DatePicker />
+        <RHFDateRangePicker name="dateRange" />
       </Popover>
 
       <Popover
-        id={idGuestsPopover}
+        id="popover-guest-and-rooms"
         open={isGuestsPopoverOpen}
         anchorEl={guestsAnchorEl}
-        onClose={handleCloseGuestsPopover}
+        onClose={() => setGuestsAnchorEl(null)}
         anchorOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'center'
         }}
         transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center'
+          vertical: 'top',
+          horizontal: 'left'
         }}
       >
         <Persons />
       </Popover>
-      <ToolbarStyle ref={formRef} aria-describedby={idDatePopover}>
+      {/* TODO: make sure it also looks good on mobile */}
+      <ToolbarStyle ref={formRef}>
         <Stack
-          fullWidth
+          direction={{ xs: 'column', md: 'row' }}
+          alignItems="center"
           spacing={1}
-          direction="row"
-          divider={<Divider orientation="vertical" flexItem />}
+          divider={
+            <Divider
+              orientation={
+                useMediaQuery(theme.breakpoints.down('md')) ? 'horizontal' : 'vertical'
+              }
+              flexItem
+            />
+          }
         >
           <RHFTextField
             variant="standard"
@@ -497,7 +418,7 @@ export const SearchForm: React.FC = () => {
           />
           <Box>
             <Button
-              onClick={handleOpenDatePopOver}
+              onClick={() => setDateRangeAnchorEl(formRef.current)}
               size="small"
               variant="text"
               sx={{
@@ -506,7 +427,7 @@ export const SearchForm: React.FC = () => {
               }}
               color="inherit"
             >
-              {startDateDisplay()} — {endDateDisplay()}
+              {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
             </Button>
           </Box>
 
@@ -516,7 +437,7 @@ export const SearchForm: React.FC = () => {
                 whiteSpace: 'nowrap',
                 ...theme.typography.body2
               }}
-              onClick={handleOpenGuestsPopover}
+              onClick={() => setGuestsAnchorEl(formRef.current)}
               size="small"
               variant="text"
               color="inherit"

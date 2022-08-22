@@ -1,8 +1,21 @@
 import { SearchForm } from 'src/containers/search/SearchForm';
 import { MapBox } from '../components/MapBox';
-import { Box } from 'grommet';
 import { Results } from '../components/Results';
 import MainLayout from 'src/layouts/main';
+import { Box, styled } from '@mui/material';
+import { HEADER } from 'src/config/componentSizes';
+
+const SearchBox = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  top: HEADER.MOBILE_HEIGHT,
+  width: '100%',
+  [theme.breakpoints.up('md')]: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    top: HEADER.MAIN_DESKTOP_HEIGHT + 16
+  }
+}));
 
 export const Search = () => {
   return (
@@ -10,9 +23,9 @@ export const Search = () => {
       <Box style={{ position: 'relative' }}>
         <Results />
         <MapBox />
-        <Box style={{ position: 'absolute', bottom: 32, alignSelf: 'center', zIndex: 1 }}>
+        <SearchBox>
           <SearchForm />
-        </Box>
+        </SearchBox>
       </Box>
     </MainLayout>
   );
