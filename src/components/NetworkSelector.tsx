@@ -1,4 +1,4 @@
-import type { NetworkInfo } from '../config';
+import type { NetworkInfo } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Select, Spinner } from 'grommet';
 import { allowedNetworks, getNetworkInfo } from '../config';

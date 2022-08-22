@@ -10,6 +10,7 @@ import { Logo } from 'src/components/Logo';
 import useOffSetTop from 'src/hooks/useOffsetTop';
 import useResponsive from 'src/hooks/useResponsive';
 import { HEADER } from 'src/config/componentSizes';
+import { AccountInfo } from 'src/components/AccountInfo';
 
 const BLUR = 8;
 
@@ -71,6 +72,8 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
             <Logo />
 
             <Box sx={{ flexGrow: 1 }} />
+
+            <AccountInfo />
 
             {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />}
 

@@ -1,9 +1,9 @@
 import type {
   Accommodation,
   Offer,
-  PricedOfferResponse
-} from '@windingtree/glider-types/types/derbysoft';
-import type { NetworkInfo, CryptoAsset } from '../config';
+  PricedOffer
+} from '@windingtree/glider-types/types/win';
+import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
@@ -68,7 +68,7 @@ export interface PersonalInfo {
   phone: string;
 }
 
-export interface CheckOut extends PricedOfferResponse {
+export interface CheckOut extends PricedOffer {
   personalInfo?: PersonalInfo;
   facilityId: string;
 }

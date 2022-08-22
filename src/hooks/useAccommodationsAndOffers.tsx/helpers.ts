@@ -1,8 +1,13 @@
-import { Accommodation, Offer } from '@windingtree/glider-types/types/derbysoft';
+import { Accommodation, Offer } from '@windingtree/glider-types/types/win';
+import { OfferRecord } from 'src/store/types';
 
 enum PassengerType {
   child = 'CHD',
   adult = 'ADT'
+}
+
+export interface AccommodationWithId extends Accommodation {
+  id: string;
 }
 
 export const getActiveAccommodations = (
@@ -11,24 +16,35 @@ export const getActiveAccommodations = (
 ) => {
   if (!accommodations || !offers) return [];
 
-  const idsActiveAccomodations = offers?.map((offer) => {
-    const accommodationId = Object.keys(offer?.pricePlansReferences)[0];
+  const idsActiveAccommodations = offers?.map((offer) => {
+    const accommodationId = Object.keys(offer.pricePlansReferences)[0];
     return accommodationId;
   });
 
-  const uniqueIdsActiveAccomodations = [...new Set(idsActiveAccomodations)];
+  const uniqueIdsActiveAccommodations = [...new Set(idsActiveAccommodations)];
 
   const activeAccommodations = accommodations.filter((accommodation) => {
-    return uniqueIdsActiveAccomodations?.includes(accommodation.id as string);
+    return uniqueIdsActiveAccommodations.includes(accommodation.id as string);
   });
 
   return activeAccommodations;
 };
 
-export const normalizeAccommodations = (accommodations: Accommodation[]) => {
+export const normalizeAccommodations = (accommodations: Record<string, Accommodation> | undefined): AccommodationWithId[] => {
   if (!accommodations) return [];
 
-  const normalizedData = Object.entries(accommodations).map(([key, value]) => ({
+  const normalizedData = Object.entries(accommodations).map<AccommodationWithId>(([key, value]) => ({
+    id: key,
+    ...value
+  }));
+
+  return normalizedData;
+};
+
+export const normalizeOffers = (offers: Record<string, Offer>): OfferRecord[] => {
+  if (!offers) return [];
+
+  const normalizedData = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
     id: key,
     ...value
   }));
@@ -55,15 +71,14 @@ export const getPassengersBody = (adultCount: number, childrenCount: number) => 
   return passengers;
 };
 
-export const getOffersById = (offers: Offer[], accommodationId: string) => {
-  if (!accommodationId) return null;
+export const getOffersById = (offers: OfferRecord[], accommodationId: string): OfferRecord[] => {
+  if (!accommodationId) return [];
 
-  const matchedOffers = offers?.filter((offer) => {
-    if (!offer?.pricePlansReferences) {
-      console.warn('Unexpected data structure for Offers');
+  const matchedOffers = offers.filter(
+    offer => {
+      return accommodationId === Object.keys(offer.pricePlansReferences)[0];
     }
-    return accommodationId === Object.keys(offer?.pricePlansReferences)[0];
-  });
+  );
 
   return matchedOffers;
 };

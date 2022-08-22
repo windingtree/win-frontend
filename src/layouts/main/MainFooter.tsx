@@ -6,24 +6,42 @@ import SocialsButton from 'src/components/SocialButton';
 
 const LINKS = [
   {
-    headline: 'Minimal',
+    headline: 'win.so',
     children: [
       //TODO: replace this by using the Routes config fas the source of truth
-      { name: 'About us', href: '/about' },
-      { name: 'Contact us', href: '/contact' },
-      { name: 'FAQs', href: '/faq' }
+      {
+        name: 'About',
+        href: '/about'
+      },
+      { 
+        name: 'Frequently Asked Questions',
+        href: '/faq'
+      }
     ]
   },
   {
     headline: 'Legal',
     children: [
-      { name: 'Terms and Condition', href: '#' },
-      { name: 'Privacy Policy', href: '#' }
+      { name: 'Terms and Conditions', href: '/terms' },
+      { name: 'Privacy Policy', href: '/privacy' }
     ]
   },
   {
     headline: 'Contact',
-    children: [{ name: 'info@windingtree.com', href: '#' }]
+    children: [
+      { 
+        name: 'hi@windingtree.com',
+        href: 'mailto:hi@windingtree.com',
+        external: true
+      },
+      { 
+        name: 'Newsletter',
+        href: 'https://win.us11.list-manage.com/subscribe?u=4bee30e4f48a27acab75b9ef7&id=f0fcc18337',
+        target: '_blank',
+        rel: 'noopener',
+        external: true
+      },
+    ]
   }
 ];
 
@@ -46,9 +64,16 @@ export default function MainFooter() {
             <Logo sx={{ mx: { xs: 'auto', md: 'inherit' } }} />
           </Grid>
 
-          <Grid item xs={8} md={3}>
+          <Grid item xs={12} md={5}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              win.so is a a decentralized travel booking website.
+              WIN.so is a decentralized travel booking website powered by&nbsp;
+              <Link 
+                href='https://windingtree.com'
+                underline="hover"
+                target='_blank'
+                rel='noopener'>
+                  Winding Tree
+                </Link>
             </Typography>
 
             <Stack
@@ -62,7 +87,7 @@ export default function MainFooter() {
 
           <Grid item xs={12} md={7}>
             <Stack
-              spacing={5}
+              spacing={3}
               direction={{ xs: 'column', md: 'row' }}
               justifyContent="space-between"
             >
@@ -75,11 +100,14 @@ export default function MainFooter() {
                   {list.children.map((link) => (
                     <Link
                       to={link.href}
+                      href={link.href}
                       key={link.name}
                       color="inherit"
                       variant="body2"
-                      component={RouterLink}
+                      component={link.external? Link : RouterLink}
                       sx={{ display: 'block' }}
+                      rel={link.rel}
+                      target={link.target}
                     >
                       {link.name}
                     </Link>

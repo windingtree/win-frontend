@@ -1,5 +1,5 @@
 import type { Web3ModalProvider } from '../hooks/useWeb3Modal';
-import type { NetworkInfo, CryptoAsset, AssetCurrency } from '../config';
+import type { NetworkInfo, CryptoAsset, AssetCurrency } from '@windingtree/win-commons/dist/types';
 import type {
   BigNumber,
   Wallet,
@@ -9,8 +9,6 @@ import type {
 } from 'ethers';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { utils, BigNumber as BN } from 'ethers';
-import Blockies from 'react-blockies';
-import styled from 'styled-components';
 import {
   Card,
   CardHeader,
@@ -18,7 +16,6 @@ import {
   CardFooter,
   Text,
   Box,
-  Notification,
   Spinner,
   Button,
   Image
@@ -30,7 +27,7 @@ import { useAsset } from '../hooks/useAsset';
 import { useWalletRpcApi } from '../hooks/useWalletRpcApi';
 import { useAllowance } from 'src/hooks/useAllowance';
 import { useWinPay } from '../hooks/useWinPay';
-import { centerEllipsis, copyToClipboard, formatCost } from '../utils/strings';
+import { centerEllipsis, formatCost } from '../utils/strings';
 import { allowedNetworks, assetsCurrencies } from '../config';
 import { MessageBox } from './MessageBox';
 import { ExternalLink } from './ExternalLink';
@@ -60,15 +57,6 @@ export interface PaymentCardProps {
   onSuccess: (result: PaymentSuccess) => void;
 }
 
-const AccountIcon = styled(Blockies)`
-  border-radius: 50%;
-`;
-
-const AccountHash = styled(Text)`
-  margin: 0 8px;
-  cursor: pointer;
-`;
-
 export const PaymentCard = ({
   provider,
   network,
@@ -78,8 +66,8 @@ export const PaymentCard = ({
 }: PaymentCardProps) => {
   const { watchAsset } = useWalletRpcApi(provider, allowedNetworks);
   const [account, setAccount] = useState<string | undefined>();
-  const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
-  const [notification, setNotification] = useState<boolean>(false);
+  // const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
+  // const [notification, setNotification] = useState<boolean>(false);
   const { winPayContract } = useWinPay(provider, network);
   const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
   const tokenAllowance = useAllowance(tokenContract, account, asset);
@@ -383,27 +371,10 @@ export const PaymentCard = ({
           )}
         </CardHeader>
         <CardBody pad="small">
-          {!account && <Spinner />}
-          {account && (
-            <Box
-              direction="row"
-              align="center"
-              style={{ boxShadow: 'none' }}
-              onClick={() => {
-                copyToClipboard(account);
-                setNotification(true);
-                setTimeout(() => setNotification(false), 1500);
-              }}
-            >
-              <AccountIcon seed={account} size={7} scale={4} />
-              <AccountHash size="small">
-                {shortAccount} ({Number(utils.formatEther(balance)).toFixed(2)}{' '}
-                {asset.symbol})
-              </AccountHash>
-              {notification && (
-                <Notification toast title="Copied to clipboard" status="normal" />
-              )}
-            </Box>
+          {account && balance && (
+            <Text>
+              Your balance: {Number(utils.formatEther(balance)).toFixed(2)} {asset.symbol}
+            </Text>
           )}
         </CardBody>
         <CardFooter pad="small">
