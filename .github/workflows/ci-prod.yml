@@ -13,7 +13,7 @@ on:
 
 jobs:
   deploy:
-    name: "Update test env"
+    name: "Update production env"
     runs-on: ubuntu-latest
     environment:
       name: production
