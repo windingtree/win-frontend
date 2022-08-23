@@ -103,7 +103,7 @@ export const getAccommodationById = (
   if (!id) return null;
 
   const selectedAccommodation =
-    accommodations?.find((accommodation) => accommodation.id) ?? null;
+    accommodations.find((accommodation) => accommodation.id === id) ?? null;
 
   return selectedAccommodation;
 };

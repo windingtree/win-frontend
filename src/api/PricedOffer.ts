@@ -6,6 +6,6 @@ export class PricedOfferRequest implements Request {
   public readonly method = 'post';
 
   public constructor(offerId: string) {
-    this.url = `${backend.url}/api/derby-soft/offers/${offerId}/price`;
+    this.url = `${backend.url}/api/hotels/offers/${offerId}/price`;
   }
 }
