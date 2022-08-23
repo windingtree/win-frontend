@@ -2,7 +2,11 @@ import { useTheme } from '@mui/material';
 import { DateRange } from 'react-date-range';
 import { Controller, useFormContext } from 'react-hook-form';
 
-export const RHFDateRangePicker = ({ name, minDate }) => {
+type RHFDateRangePickerProps = {
+  name: string;
+  minDate?: Date;
+};
+export const RHFDateRangePicker = ({ name, minDate }: RHFDateRangePickerProps) => {
   const theme = useTheme();
   const primaryColors = theme.palette.primary;
   const { control } = useFormContext();
@@ -11,7 +15,7 @@ export const RHFDateRangePicker = ({ name, minDate }) => {
     <Controller
       name={name}
       control={control}
-      render={({ field: { value, onChange }, fieldState: { error } }) => (
+      render={({ field: { value, onChange } }) => (
         <DateRange
           minDate={minDate}
           editableDateInputs={true}

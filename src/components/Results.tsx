@@ -65,20 +65,12 @@ export const Results: React.FC = () => {
     >
       <Box flex={true} overflow="auto">
         <Box>
-          <MessageBox loading type="info" show={isFetching}>
-            One moment...
-          </MessageBox>
           <MessageBox
             loading
             type="info"
             show={!isFetching && !error && accommodations?.length === 0}
           >
             Could not find place
-          </MessageBox>
-          <MessageBox type="error" show={!!error}>
-            {(error as Error) && (error as Error).message
-              ? (error as Error).message
-              : 'Something went wrong '}
           </MessageBox>
         </Box>
         <Box gap="0.5rem" flex={false} style={resultsContainerStyle}>

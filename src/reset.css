@@ -73,6 +73,10 @@ img {
   border-style: none;
 }
 
+input[type='number']::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
 button,
 input,
 optgroup,

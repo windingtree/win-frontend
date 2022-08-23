@@ -46,6 +46,7 @@
     "@commitlint/config-conventional": "^17.0.3",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
+    "@hookform/resolvers": "^2.9.7",
     "@iconify/react": "^3.2.2",
     "@mui/lab": "^5.0.0-alpha.95",
     "@mui/material": "^5.10.0",
@@ -117,7 +118,8 @@
     "url": "^0.11.0",
     "uuid": "8.3.2",
     "web-vitals": "^3.0.0-rc.0",
-    "web3modal": "^1.9.8"
+    "web3modal": "^1.9.8",
+    "yup": "^0.32.11"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"

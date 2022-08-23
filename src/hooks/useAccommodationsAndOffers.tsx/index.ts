@@ -14,14 +14,16 @@ export interface SearchType {
   date: [string, string];
   roomCount: number;
   adultCount: number;
-  childrenCount: number;
+  childrenCount?: number;
 }
 
 export const useAccommodationsAndOffers = (props: SearchType | void) => {
+  console.log(props);
   const { data, refetch, error, isLoading, isFetching } = useQuery(
     ['search-accommodations'],
     async () => {
       if (!props) {
+        console.log('props', props);
         return;
       }
       return await fetchAccommodationsAndOffers(props);

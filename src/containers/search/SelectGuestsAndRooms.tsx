@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { RHFTextField } from 'src/components/hook-form';
 
 export const SelectGuestsAndRooms = () => {
-  const FIELD_WIDTH = '60px';
+  const FIELD_WIDTH = '80px';
   return (
     <Stack spacing={2} p={4}>
       <Stack direction="row" justifyContent="space-between">
@@ -14,9 +14,8 @@ export const SelectGuestsAndRooms = () => {
           <RHFTextField
             size="small"
             name="adultCount"
-            type="number"
-            // TODO: display nummers
             InputProps={{
+              type: 'number',
               inputMode: 'numeric',
               inputProps: {
                 min: 1
