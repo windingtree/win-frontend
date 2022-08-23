@@ -24,7 +24,6 @@ export const FacilityOffers = () => {
             facilityId={id}
             offer={offer}
             room={matchedRoomWithOffer}
-            roomId={roomId}
           />
         );
       })}

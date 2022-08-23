@@ -39,13 +39,16 @@ export const normalizeAccommodations = (
   const normalizedOffers = offers ? normalizeOffers(offers) : [];
   const normalizedAccommodations = Object.entries(
     accommodations
-  ).map<AccommodationWithId>(([key, value]) => {
-    const filteredOffers = normalizedOffers.filter(
-      (offer) => key in offer.pricePlansReferences
+  ).map<AccommodationWithId>(([keyA, valueA]) => {
+    const filteredOffers: OfferRecord[] = normalizedOffers.filter((offer) =>
+      Object.entries(offer.pricePlansReferences)
+        .map(([, valueP]) => valueP.accommodation === keyA)
+        .includes(true)
     );
+
     return {
-      id: key,
-      ...value,
+      id: keyA,
+      ...valueA,
       offers: filteredOffers
     };
   });
@@ -103,7 +106,7 @@ export const getAccommodationById = (
   if (!id) return null;
 
   const selectedAccommodation =
-    accommodations?.find((accommodation) => accommodation.id) ?? null;
+    accommodations.find((accommodation) => accommodation.id === id) ?? null;
 
   return selectedAccommodation;
 };

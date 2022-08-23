@@ -1,0 +1,59 @@
+name: ci-production
+
+on:
+  # Triggers the workflow on push events only.
+  push:
+    # Production deploys happen only when a commit has the git tag "latest".
+    # We check for branch "main" below; see line 20.
+    tags:
+      - 'latest'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: "Update production env"
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js runtime
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Setup dependencies
+        run: yarn
+
+      - name: Build dapp
+        env:
+          NODE_OPTIONS: --max_old_space_size=8192
+          BROWSER: none
+          HTTPS: true
+          REACT_APP_LOG_LEVEL: info
+          NODE_ENV: development
+          REACT_APP_MODE: development
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
+          REACT_APP_EXPIRATION_GAP: ${{ secrets.REACT_APP_EXPIRATION_GAP }}
+        run: |
+          rm -rf ./build
+          yarn build
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './build'
+          production-branch: main
+          production-deploy: true
+          enable-pull-request-comment: false
+          enable-commit-comment: false
+          overwrites-pull-request-comment: false
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
