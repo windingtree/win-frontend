@@ -13,7 +13,7 @@ const LINKS = [
         name: 'About',
         href: '/about'
       },
-      { 
+      {
         name: 'Frequently Asked Questions',
         href: '/faq'
       }
@@ -29,18 +29,18 @@ const LINKS = [
   {
     headline: 'Contact',
     children: [
-      { 
+      {
         name: 'hi@windingtree.com',
         href: 'mailto:hi@windingtree.com',
         external: true
       },
-      { 
+      {
         name: 'Newsletter',
         href: 'https://win.us11.list-manage.com/subscribe?u=4bee30e4f48a27acab75b9ef7&id=f0fcc18337',
         target: '_blank',
         rel: 'noopener',
         external: true
-      },
+      }
     ]
   }
 ];
@@ -67,13 +67,14 @@ export default function MainFooter() {
           <Grid item xs={12} md={5}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
               WIN.so is a decentralized travel booking website powered by&nbsp;
-              <Link 
-                href='https://windingtree.com'
+              <Link
+                href="https://windingtree.com"
                 underline="hover"
-                target='_blank'
-                rel='noopener'>
-                  Winding Tree
-                </Link>
+                target="_blank"
+                rel="noopener"
+              >
+                Winding Tree
+              </Link>
             </Typography>
 
             <Stack
@@ -104,7 +105,7 @@ export default function MainFooter() {
                       key={link.name}
                       color="inherit"
                       variant="body2"
-                      component={link.external? Link : RouterLink}
+                      component={link.external ? Link : RouterLink}
                       sx={{ display: 'block' }}
                       rel={link.rel}
                       target={link.target}

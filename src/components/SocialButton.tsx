@@ -68,7 +68,7 @@ export default function SocialsButton({ initialColor = false, sx, ...other }: Pr
       icon: 'akar-icons:github-fill',
       socialColor: '#c4302b',
       path: 'https://github.com/windingtree/'
-    },
+    }
   ];
 
   return (

@@ -19,11 +19,7 @@ export const checkEnvVariables = (vars: string[]): void =>
     }
   });
 
-checkEnvVariables([
-  'REACT_APP_API_KEY',
-  'REACT_APP_API_URL',
-  'REACT_APP_EXPIRATION_GAP'
-]);
+checkEnvVariables(['REACT_APP_API_KEY', 'REACT_APP_API_URL', 'REACT_APP_EXPIRATION_GAP']);
 
 // Configure the time zone
 Settings.defaultZone = config.defaultZone;

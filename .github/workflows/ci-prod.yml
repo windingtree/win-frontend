@@ -1,19 +1,22 @@
-name: ci-test
+name: ci-production
 
 on:
   # Triggers the workflow on push events only.
   push:
-    branches: [ main ]
+    # Production deploys happen only when a commit has the git tag "latest".
+    # We check for branch "main" below; see line 20.
+    tags:
+      - 'latest'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: "Update test env"
+    name: "Update production env"
     runs-on: ubuntu-latest
     environment:
-      name: test
+      name: production
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3

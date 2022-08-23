@@ -78,9 +78,7 @@ const MapSettings: React.FC<{
 const getCoordinates = (facility: FacilityRecord): LatLngTuple | undefined => {
   let coordinates: LatLngTuple | undefined = undefined;
 
-  coordinates = [
-    ...facility.location.coordinates || []
-  ].reverse() as LatLngTuple;
+  coordinates = [...(facility.location.coordinates || [])].reverse() as LatLngTuple;
 
   return coordinates;
 };
