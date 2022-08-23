@@ -1,5 +1,5 @@
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import type { WalletAuthResponse } from '@windingtree/glider-types/types/win';
+import type { BookingsAuthResponse } from '@windingtree/glider-types/types/win';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
@@ -95,7 +95,7 @@ export interface ResetSelectedFacilityId {
 
 export interface SetWalletAuthAction {
   type: 'SET_WALLET_AUTH';
-  payload?: WalletAuthResponse;
+  payload?: BookingsAuthResponse;
 }
 
 export type Action =
