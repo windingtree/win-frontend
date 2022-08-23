@@ -13,7 +13,7 @@
 // import { MessageBox } from './MessageBox';
 // import { useWindowsDimension } from '../hooks/useWindowsDimension';
 // import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import {
   Box,
   Button,
@@ -26,7 +26,9 @@ import {
   useTheme,
   Toolbar,
   Divider,
-  useMediaQuery
+  useMediaQuery,
+  FormHelperText,
+  Alert
 } from '@mui/material';
 import { FormProvider, RHFSelect, RHFTextField } from 'src/components/hook-form';
 import { Controller, useForm, useFormContext } from 'react-hook-form';
@@ -39,6 +41,7 @@ import { styled } from '@mui/system';
 import { endDateDisplay, startDateDisplay } from './helpers';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
+import { LoadingButton } from '@mui/lab';
 
 // const today = DateTime.local().toISO();
 // const tomorrow = DateTime.local().plus({ days: 1 }).toISO();
@@ -231,8 +234,7 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
     borderRadius: 10,
     width: 'auto',
     padding: 0,
-    minWidth: 570,
-    maxWidth: 600
+    minWidth: 650
   }
 }));
 
@@ -276,18 +278,23 @@ export const SearchForm: React.FC = () => {
     defaultValues
   });
 
-  const {
-    watch,
-    handleSubmit,
-    formState: { isSubmitting }
-  } = methods;
+  const { watch, handleSubmit } = methods;
 
   const values = watch();
-  const { roomCount, adultCount, dateRange } = values;
-  //TODO: connect it to the actually query + use debounce
+  const { roomCount, adultCount, dateRange, location } = values;
+
+  //TODO: check whether the date is properly passed.
+  const { refetch, isFetching, error } = useAccommodationsAndOffers({
+    date: [dateRange.startDate, dateRange.endDate],
+    adultCount,
+    location,
+    roomCount
+  });
+
+  //TODO: connect it to the actually query
   //TODO: make sure it can be reused on the home and search page
   const onSubmit = async (data: FormValuesProps) => {
-    console.log(data);
+    refetch();
   };
 
   /**
@@ -297,8 +304,8 @@ export const SearchForm: React.FC = () => {
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
   const fontSize = theme.typography.body2.fontSize;
 
+  //TODO: how error message when not all propreties have been filled.
   return (
-    //TODO: includ error and loading state
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Popover
         id="popover-date-range"
@@ -333,66 +340,95 @@ export const SearchForm: React.FC = () => {
       >
         <SelectGuestsAndRooms />
       </Popover>
-      {/* TODO: make sure it also looks good on mobile */}
-      <ToolbarStyle ref={formRef}>
-        <Stack
-          direction={{ xs: 'column', md: 'row' }}
-          alignItems="center"
-          spacing={1}
-          divider={
-            <Divider
-              orientation={
-                useMediaQuery(theme.breakpoints.down('md')) ? 'horizontal' : 'vertical'
-              }
-              flexItem
+      <Stack direction="column">
+        <ToolbarStyle ref={formRef}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            alignItems="center"
+            spacing={1}
+            divider={
+              <Divider
+                orientation={
+                  useMediaQuery(theme.breakpoints.down('md')) ? 'horizontal' : 'vertical'
+                }
+                flexItem
+              />
+            }
+          >
+            <RHFTextField
+              variant="standard"
+              placeholder="Where are you going?"
+              name="location"
+              inputProps={{
+                style: {
+                  fontSize,
+                  textAlign: useMediaQuery(theme.breakpoints.down('md'))
+                    ? 'center'
+                    : 'left'
+                }
+              }} // the change is here
+              InputProps={{
+                disableUnderline: true,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LocationIcon />
+                  </InputAdornment>
+                )
+              }}
             />
-          }
-        >
-          <RHFTextField
-            variant="standard"
-            placeholder="Where are you going?"
-            name="location"
-            InputProps={{
-              style: { fontSize },
-              disableUnderline: true,
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LocationIcon />
-                </InputAdornment>
-              )
-            }}
-          />
-          <Box>
-            <Button
-              onClick={() => setDateRangeAnchorEl(formRef.current)}
-              size="small"
-              variant="text"
-              sx={{
-                whiteSpace: 'nowrap',
-                ...theme.typography.body2
-              }}
-              color="inherit"
-            >
-              {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
-            </Button>
-          </Box>
+            <Box>
+              <Button
+                onClick={() => setDateRangeAnchorEl(formRef.current)}
+                size="small"
+                variant="text"
+                sx={{
+                  whiteSpace: 'nowrap',
+                  ...theme.typography.body2
+                }}
+                color="inherit"
+              >
+                {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
+              </Button>
+            </Box>
 
-          <Box>
-            <Button
-              sx={{
-                whiteSpace: 'nowrap',
-                ...theme.typography.body2
-              }}
-              onClick={() => setGuestsAnchorEl(formRef.current)}
-              size="small"
-              variant="text"
-              color="inherit"
-            >
-              {guestDetailsText}
-            </Button>
-          </Box>
-        </Stack>
-      </ToolbarStyle>
+            <Box>
+              <Button
+                sx={{
+                  whiteSpace: 'nowrap',
+                  ...theme.typography.body2
+                }}
+                onClick={() => setGuestsAnchorEl(formRef.current)}
+                size="small"
+                variant="text"
+                color="inherit"
+              >
+                {guestDetailsText}
+              </Button>
+            </Box>
+            <Box>
+              <LoadingButton
+                type="submit"
+                loading={isFetching}
+                variant="outlined"
+                size="small"
+                sx={{
+                  whiteSpace: 'nowrap',
+                  ...theme.typography.body2
+                }}
+              >
+                Search
+              </LoadingButton>
+            </Box>
+          </Stack>
+        </ToolbarStyle>
+        {error && (
+          <Alert sx={{ display: 'flex', justifyContent: 'center' }} severity="error">
+            {(error as Error) && (error as Error).message
+              ? (error as Error).message
+              : 'Something went wrong '}
+          </Alert>
+        )}
+      </Stack>
     </FormProvider>
   );
 };
