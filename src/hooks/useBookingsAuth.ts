@@ -1,43 +1,58 @@
-import { WalletAuthResponse } from '@windingtree/glider-types/types/win'
+import type { BookingsAuthRequest, BookingsAuthResponse, BookingsAuthSecretResponse } from '@windingtree/glider-types/types/win'
 import { useCallback } from 'react';
 import axios from 'axios';
-import { useAppDispatch } from '../store';
+import { createAuthSignature } from '@windingtree/win-commons/dist/auth';
+import { useAppDispatch, useAppState } from '../store';
 import { backend } from '../config';
 import Logger from '../utils/logger';
 
 const logger = Logger('useBookingsAuth');
 
 export interface UseBookingsAuthHook {
-  login(
-    chainId: number,
-    signature: string,
-    wallet: string
-  ): Promise<void>;
+  login(): Promise<void>;
   logout(): Promise<void>;
 }
 
 export const useBookingsAuth = (): UseBookingsAuthHook => {
   const dispatch = useAppDispatch();
+  const { account, provider } = useAppState();
 
   const login = useCallback(
-    async (
-      chainId: number,
-      signature: string,
-      wallet: string
-    ) => {
+    async () => {
       try {
-        const res = await axios.post<WalletAuthResponse>(
-          `${backend.url}/wallet/auth`,
+        if (!account || !provider) {
+          throw new Error('Wallet not connected yet');
+        }
+
+        const secretRes = await axios.get<BookingsAuthSecretResponse>(
+          `${backend.url}/api/bookings/auth/secret`
+        );
+
+        logger.debug('Auth secret', secretRes);
+
+        const secret = secretRes.data.secret;
+
+        if (!secret) {
+          throw new Error('Invalid auth secret');
+        }
+
+        const chainId = (await provider.getNetwork()).chainId;
+        const wallet = await provider.getSigner().getAddress();
+        const signature = await createAuthSignature(provider, secret);
+
+        const authRes = await axios.post<BookingsAuthResponse>(
+          `${backend.url}/api/bookings/auth`,
           {
             chainId,
             signature,
+            secret,
             wallet
-          }
+          } as BookingsAuthRequest
         );
 
-        logger.debug('Auth response', res);
+        logger.debug('Auth response', authRes);
 
-        const payload = res.data;
+        const payload = authRes.data;
 
         if (!payload) {
           throw new Error('Invalid auth response');
@@ -54,7 +69,7 @@ export const useBookingsAuth = (): UseBookingsAuthHook => {
         );
       }
     },
-    [dispatch]
+    [dispatch, account, provider]
   );
 
   const logout = useCallback(
