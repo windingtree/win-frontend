@@ -18,7 +18,7 @@ export interface SearchType {
 }
 
 export const useAccommodationsAndOffers = (props: SearchType | void) => {
-  const { data, refetch, error, isLoading, isFetching } = useQuery(
+  const { data, refetch, error, isLoading, isFetching, isFetched, dataUpdatedAt } = useQuery(
     ['search-accommodations'],
     async () => {
       if (!props) {
@@ -55,6 +55,8 @@ export const useAccommodationsAndOffers = (props: SearchType | void) => {
     data,
     error,
     isLoading,
-    isFetching
+    isFetching,
+    isFetched,
+    dataUpdatedAt
   };
 };

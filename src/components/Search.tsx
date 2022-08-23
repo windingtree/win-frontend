@@ -61,22 +61,13 @@ export const Search: React.FC<{ onSubmit?: () => void }> = ({ onSubmit }) => {
    * Smart logic in relation to the form.
    */
   const [location, setLocation] = useState<string>('');
-  const [checkInCheckOut, setCheckInCheckOut] = useState<[string, string]>([today, tomorrow]);
+  const [checkInCheckOut, setCheckInCheckOut] = useState<[string, string]>([
+    today,
+    tomorrow
+  ]);
   const [numSpacesReq, setNumSpacesReq] = useState<number>(1);
   const [numAdults, setNumAdults] = useState<number>(1);
   const [numChildren, setNumChildren] = useState<number>(0);
-
-  useEffect(() => {
-    setCheckInCheckOut([
-      searchParams.get('checkIn') || today,
-      searchParams.get('checkOut') || tomorrow
-    ])
-    setLocation(searchParams.get('location') || '')
-    setNumSpacesReq(Number(searchParams.get('numSpacesReq') || 1))
-    setNumAdults(Number(searchParams.get('numAdults') || 1))
-    setNumChildren(Number(searchParams.get('numChildren') || 0))
-    console.log('searchparams', searchParams)
-  }, [searchParams])
 
   const handleDateChange = ({ value }: { value: string[] }) => {
     const checkInisInPast =
@@ -92,13 +83,31 @@ export const Search: React.FC<{ onSubmit?: () => void }> = ({ onSubmit }) => {
   /**
    * Smart logic in relation to quering the data.
    */
-  const { refetch, isFetching, error } = useAccommodationsAndOffers({
+  const { refetch, isFetching, isLoading, error, isFetched, dataUpdatedAt } = useAccommodationsAndOffers({
     date: checkInCheckOut,
     adultCount: numAdults,
     childrenCount: numChildren,
-    location,
+    location: searchParams.get('location') || location,
     roomCount: numSpacesReq
   });
+
+  useEffect(() => {
+    setCheckInCheckOut([
+      searchParams.get('checkIn') || today,
+      searchParams.get('checkOut') || tomorrow
+    ]);
+    setLocation(searchParams.get('location') || '');
+    setNumSpacesReq(Number(searchParams.get('numSpacesReq') || 1));
+    setNumAdults(Number(searchParams.get('numAdults') || 1));
+    setNumChildren(Number(searchParams.get('numChildren') || 0));
+  }, [searchParams]);
+
+  // useEffect(() => {
+  //   console.log('BING-1', location)
+  //   if (!isFetching) {
+  //     console.log('BINGO')
+  //   }
+  // }, [isFetched, isFetching, searchParams]);
 
   const handleSubmit = () => {
     refetch();
@@ -108,9 +117,9 @@ export const Search: React.FC<{ onSubmit?: () => void }> = ({ onSubmit }) => {
       ['numAdults', String(numAdults)],
       ['numChildren', String(numChildren)],
       ['location', String(location)],
-      ['numSpacesReq', String(numSpacesReq)],
+      ['numSpacesReq', String(numSpacesReq)]
     ]);
-    navigate(`/search?${query}`)
+    navigate(`/search?${query}`);
   };
 
   return (
