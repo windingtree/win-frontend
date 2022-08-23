@@ -1,5 +1,4 @@
 import { Accommodation, Offer } from '@windingtree/glider-types/types/win';
-import { DateTime } from 'luxon';
 import { OfferRecord } from 'src/store/types';
 
 enum PassengerType {
