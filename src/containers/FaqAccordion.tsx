@@ -5,6 +5,7 @@ import {
   AccordionSummary,
   Typography
 } from '@mui/material';
+import { useState } from 'react';
 import Iconify from '../components/Iconify';
 
 const ExpandIcon = () => (
@@ -19,7 +20,7 @@ const faq = [
   },
   {
     question: 'What is Winding Tree?',
-    answers:
+    answer:
       'Winding Tree is one of the first blockchain startups have been building a decentralized marketplace for the travel industry since 2017. Winding tree is a non-profit open source organization gradually transforming into a DAO.'
   },
   {
@@ -98,11 +99,22 @@ const faq = [
 ];
 
 export const FaqAccordion = () => {
+  const [expanded, setExpanded] = useState<number>();
+
+  const handleChange =
+    (panel: number) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : undefined);
+    };
+
   return (
     <Container sx={{ mb: 5 }}>
       <Typography variant="h3">FAQ</Typography>
       {faq.map((q, fIndex) => (
-        <Accordion key={fIndex}>
+        <Accordion
+          key={fIndex}
+          expanded={expanded === fIndex}
+          onChange={handleChange(fIndex)}
+        >
           <AccordionSummary sx={{ pr: 2 }} expandIcon={<ExpandIcon />}>
             <Typography variant="subtitle1">{q.question}</Typography>
           </AccordionSummary>
