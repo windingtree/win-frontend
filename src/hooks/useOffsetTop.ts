@@ -3,11 +3,9 @@ import { useState, useEffect } from 'react';
 export default function useOffSetTop(top: number) {
   const [offsetTop, setOffSetTop] = useState(false);
   const isTop = top || 100;
-  console.log('hellosdf');
 
   useEffect(() => {
     window.onscroll = () => {
-      console.log('hello wrold');
       if (window.pageYOffset > isTop) {
         setOffSetTop(true);
       } else {

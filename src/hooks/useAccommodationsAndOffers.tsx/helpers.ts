@@ -47,8 +47,8 @@ export const normalizeAccommodations = (
     );
 
     return {
-      id: keyA,
       ...valueA,
+      id: keyA,
       offers: filteredOffers
     };
   });

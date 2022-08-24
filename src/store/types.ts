@@ -1,7 +1,8 @@
 import type {
   Accommodation,
   Offer,
-  PricedOffer
+  PricedOffer,
+  BookingsAuthResponse
 } from '@windingtree/glider-types/types/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import type {
@@ -99,5 +100,6 @@ export interface State {
   selectedAsset?: CryptoAsset;
   searchParams?: SearchParams;
   selectedFacilityId?: string;
+  walletAuth?: BookingsAuthResponse;
   [key: string]: unknown | GenericStateRecord[];
 }
