@@ -8,7 +8,7 @@ export const Home = () => {
   return (
     <MainLayout>
       <Container maxWidth="xl">
-        <SearchForm navigateAfterSearch={true} />
+        <SearchForm />
         <LandingCities />
         <LandingConferences />
       </Container>
