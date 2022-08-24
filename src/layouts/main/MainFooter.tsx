@@ -16,6 +16,13 @@ const LINKS = [
       {
         name: 'Frequently Asked Questions',
         href: '/faq'
+      },
+      {
+        name: 'Feedback 💚',
+        href: 'https://winwindao.typeform.com/win-feedback',
+        target: '_blank',
+        rel: 'noopener',
+        external: true
       }
     ]
   },
@@ -23,7 +30,7 @@ const LINKS = [
     headline: 'Legal',
     children: [
       { name: 'Terms and Conditions', href: '/terms' },
-      { name: 'Privacy Policy', href: '/privacy' }
+      { name: 'Privacy and Cookie Policy', href: '/privacy' }
     ]
   },
   {
@@ -64,7 +71,7 @@ export default function MainFooter() {
             <Logo sx={{ mx: { xs: 'auto', md: 'inherit' } }} />
           </Grid>
 
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={6}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
               WIN.so is a decentralized travel booking website powered by&nbsp;
               <Link
@@ -86,7 +93,7 @@ export default function MainFooter() {
             </Stack>
           </Grid>
 
-          <Grid item xs={12} md={7}>
+          <Grid item xs={12} md={6}>
             <Stack
               spacing={3}
               direction={{ xs: 'column', md: 'row' }}
