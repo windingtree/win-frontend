@@ -81,7 +81,7 @@ export const getPassengersBody = (
     const children = {
       type: PassengerType.child,
       count: childrenCount,
-      childrenAges: Array.from({ length: childrenCount }, () => 13)
+      childrenAges: Array.from({ length: childrenCount }, () => 12)
     };
     passengers.push(children);
   }

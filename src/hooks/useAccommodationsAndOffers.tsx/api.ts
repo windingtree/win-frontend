@@ -56,13 +56,14 @@ export async function fetchAccommodationsAndOffers({
       roomCount
     },
 
-    //TODO: include children
     passengers: passengersBody
   };
 
-  //TODO: include url in env
   const uri = `${process.env.REACT_APP_API_URL}/api/hotels/offers/search`;
-  const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch((_) => {
+  const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch((e) => {
+    if (e.response.status === 404) {
+      throw new Error('No accommodations found');
+    }
     throw new Error('Unexpected response when retrieving accommodations and offers');
   });
 
