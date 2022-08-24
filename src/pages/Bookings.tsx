@@ -4,12 +4,12 @@ import { LoadingButton } from '@mui/lab';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { isContract } from '@windingtree/win-commons/dist/multisig';
-import { MessageBox } from '../../src/components/MessageBox';
-import { SignInButton } from '../../src/components/Web3Modal';
-import MainLayout from '../../src/layouts/main';
+import { MessageBox } from '../components/MessageBox';
+import { SignInButton } from '../components/Web3Modal';
+import MainLayout from '../layouts/main';
 import { useBookingsAuth } from '../hooks/useBookingsAuth';
 import { useBookings } from '../hooks/useBookings';
-import Iconify from '../../src/components/Iconify';
+import Iconify from '../components/Iconify';
 
 export const Bookings = () => {
   const theme = useTheme();
@@ -90,7 +90,7 @@ export const Bookings = () => {
           <Grid item>
             <LoadingButton
               loading={isLogin}
-              endIcon={<Iconify icon="ri:login-box-fill" />}
+              endIcon={<Iconify icon="ri:login-box-line" />}
               loadingPosition="end"
               variant="contained"
               disabled={isAccountContract}
