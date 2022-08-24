@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { FormProvider, RHFTextField } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
 import { styled } from '@mui/system';
 import { endDateDisplay, startDateDisplay } from './helpers';
@@ -53,12 +53,18 @@ type FormValuesProps = {
 
 type SearchFormProps = {
   navigateAfterSearch?: boolean;
+  searchAfterInitialRender?: boolean;
 };
 
 const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={12} />;
 
+/**
+ * @param searchAfterInitialRender defines whether a search has to be executed when the component is rendered for the first time.
+ * @param navigateAfterSearch navigates to the search page after a user clicks on the search button.
+ */
 export const SearchForm: React.FC<SearchFormProps> = ({
-  navigateAfterSearch = false
+  navigateAfterSearch = false,
+  searchAfterInitialRender = false
 }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -107,6 +113,9 @@ export const SearchForm: React.FC<SearchFormProps> = ({
   const hasValidationErrors = Object.keys(errors).length != 0;
   const { roomCount, adultCount, dateRange, location } = values;
 
+  /**
+   * Logic in relation to executing the query
+   */
   const { refetch, isFetching, error } = useAccommodationsAndOffers({
     date: [dateRange[0].startDate, dateRange[0].endDate],
     adultCount: Number(adultCount),
@@ -114,9 +123,8 @@ export const SearchForm: React.FC<SearchFormProps> = ({
     roomCount: Number(roomCount)
   });
 
-  const onSubmit = async () => {
-    refetch();
-
+  const onSubmit = useCallback(() => {
+    //TODO: update search params when submitting the form
     if (
       navigateAfterSearch &&
       dateRange[0].startDate !== null &&
@@ -134,8 +142,30 @@ export const SearchForm: React.FC<SearchFormProps> = ({
         pathname: '/search',
         search: `?${createSearchParams(params)}`
       });
+      return;
     }
-  };
+
+    refetch();
+  }, [roomCount, adultCount, dateRange, location, refetch, navigateAfterSearch]);
+
+  /**
+   * Conduct a search on the initial render when conditions are met.
+   */
+  useEffect(() => {
+    if (!searchAfterInitialRender) return;
+
+    const includesAllSearchParams =
+      !!searchParams.get('location') &&
+      !!searchParams.get('endDate') &&
+      !!searchParams.get('startDate') &&
+      !!searchParams.get('roomCount') &&
+      !!searchParams.get('roomCount') &&
+      !!searchParams.get('adultCount');
+
+    if (includesAllSearchParams) {
+      refetch();
+    }
+  }, []);
 
   /**
    * Logic in relation to styling and textual UI
