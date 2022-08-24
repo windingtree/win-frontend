@@ -1,8 +1,5 @@
 import { alpha, styled } from '@mui/material/styles';
 import { Box, AppBar, Toolbar, Container } from '@mui/material';
-
-// import { HEADER } from '../../config';
-
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import navConfig from './MenuConfig';
@@ -72,7 +69,6 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
             <Logo />
 
             <Box sx={{ flexGrow: 1 }} />
-
             <AccountInfo />
 
             {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />}

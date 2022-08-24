@@ -45,8 +45,8 @@ type FormValuesProps = {
   roomCount: number | string;
   adultCount: number | string;
   dateRange: {
-    startDate: string | null;
-    endDate: string | null;
+    startDate: Date | null;
+    endDate: Date | null;
     key: string;
   }[];
 };
@@ -59,13 +59,13 @@ const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={
 
 export const SearchForm: React.FC<SearchFormProps> = ({
   navigateAfterSearch = false
-}: SearchFormProps) => {
+}) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const theme = useTheme();
 
   /**
-   * Logic in relation to the popovers
+   * Logic in relation to the popovers.
    */
   const formRef = useRef<HTMLDivElement>(null);
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -117,11 +117,14 @@ export const SearchForm: React.FC<SearchFormProps> = ({
   const onSubmit = async () => {
     refetch();
 
-    // This is only applied when we search from other pages to the search/map page.
-    if (navigateAfterSearch) {
+    if (
+      navigateAfterSearch &&
+      dateRange[0].startDate !== null &&
+      dateRange[0].endDate !== null
+    ) {
       const params = {
-        roomCount,
-        adultCount,
+        roomCount: roomCount.toString(),
+        adultCount: adultCount.toString(),
         startDate: formatISO(dateRange[0].startDate),
         endDate: formatISO(dateRange[0].endDate),
         location

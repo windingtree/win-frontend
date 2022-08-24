@@ -1,18 +1,11 @@
 import { SearchResults, Offer, Accommodation } from '@windingtree/glider-types/types/win';
 import axios from 'axios';
 import { getPassengersBody } from './helpers';
+import { SearchTypeProps } from '.';
 
 export interface Coordinates {
   lat: number;
   lon: number;
-}
-
-export interface FetchAccommodationsAndOffersProps {
-  location: string;
-  date: string[];
-  roomCount: number;
-  adultCount: number;
-  childrenCount: number;
 }
 
 export interface AccommodationsAndOffersResponse {
@@ -27,7 +20,7 @@ export async function fetchAccommodationsAndOffers({
   roomCount,
   adultCount,
   childrenCount
-}: FetchAccommodationsAndOffersProps): Promise<AccommodationsAndOffersResponse> {
+}: SearchTypeProps): Promise<AccommodationsAndOffersResponse> {
   /**
    * Query the coordinates based on the location input of the user.
    * Coordinates are used to query the accommodations.

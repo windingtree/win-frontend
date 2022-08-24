@@ -67,7 +67,10 @@ export const normalizeOffers = (offers: Record<string, Offer>): OfferRecord[] =>
   return normalizedData;
 };
 
-export const getPassengersBody = (adultCount: number, childrenCount: number) => {
+export const getPassengersBody = (
+  adultCount: number,
+  childrenCount: number | undefined
+) => {
   const adults = {
     type: PassengerType.adult,
     count: adultCount

@@ -9,21 +9,19 @@ import {
   getOffersById
 } from './helpers';
 
-export interface SearchType {
+export interface SearchTypeProps {
   location: string;
-  date: [string, string];
+  date: [Date | null, Date | null];
   roomCount: number;
   adultCount: number;
   childrenCount?: number;
 }
 
-export const useAccommodationsAndOffers = (props: SearchType | void) => {
-  console.log(props);
+export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
   const { data, refetch, error, isLoading, isFetching } = useQuery(
     ['search-accommodations'],
     async () => {
       if (!props) {
-        console.log('props', props);
         return;
       }
       return await fetchAccommodationsAndOffers(props);
