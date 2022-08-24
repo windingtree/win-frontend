@@ -1,9 +1,9 @@
-import { SearchForm } from 'src/containers/search/SearchForm';
 import { MapBox } from '../components/MapBox';
 import { Results } from '../components/Results';
 import MainLayout from 'src/layouts/main';
 import { Box, styled } from '@mui/material';
 import { HEADER } from 'src/config/componentSizes';
+import { SearchForm } from 'src/containers/search/SearchForm';
 
 const SearchBox = styled(Box)(({ theme }) => ({
   position: 'absolute',

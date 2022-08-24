@@ -14,14 +14,19 @@ import {
 } from '@mui/material';
 import { FormProvider, RHFTextField } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
 import { styled } from '@mui/system';
 import { endDateDisplay, startDateDisplay } from './helpers';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 import { LoadingButton } from '@mui/lab';
-import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+  useLocation
+} from 'react-router-dom';
 import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
 
@@ -51,18 +56,17 @@ type FormValuesProps = {
   }[];
 };
 
-type SearchFormProps = {
-  navigateAfterSearch?: boolean;
-};
-
 const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={12} />;
 
-export const SearchForm: React.FC<SearchFormProps> = ({
-  navigateAfterSearch = false
-}) => {
+/**
+ * @param searchAfterInitialRender defines whether a search has to be executed when the component is rendered for the first time.
+ * @param navigateAfterSearch navigates to the search page after a user clicks on the search button.
+ */
+export const SearchForm: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const theme = useTheme();
+  const { pathname, search } = useLocation();
 
   /**
    * Logic in relation to the popovers.
@@ -107,6 +111,9 @@ export const SearchForm: React.FC<SearchFormProps> = ({
   const hasValidationErrors = Object.keys(errors).length != 0;
   const { roomCount, adultCount, dateRange, location } = values;
 
+  /**
+   * Logic in relation to executing the query
+   */
   const { refetch, isFetching, error } = useAccommodationsAndOffers({
     date: [dateRange[0].startDate, dateRange[0].endDate],
     adultCount: Number(adultCount),
@@ -114,14 +121,9 @@ export const SearchForm: React.FC<SearchFormProps> = ({
     roomCount: Number(roomCount)
   });
 
-  const onSubmit = async () => {
-    refetch();
-
-    if (
-      navigateAfterSearch &&
-      dateRange[0].startDate !== null &&
-      dateRange[0].endDate !== null
-    ) {
+  const onSubmit = useCallback(() => {
+    //TODO: update search params when submitting the form
+    if (dateRange[0].startDate !== null && dateRange[0].endDate !== null) {
       const params = {
         roomCount: roomCount.toString(),
         adultCount: adultCount.toString(),
@@ -134,8 +136,28 @@ export const SearchForm: React.FC<SearchFormProps> = ({
         pathname: '/search',
         search: `?${createSearchParams(params)}`
       });
+      return;
     }
-  };
+  }, [roomCount, adultCount, dateRange, location, refetch]);
+
+  /**
+   * Conduct a search on the initial render when conditions are met.
+   */
+  useEffect(() => {
+    if (pathname !== '/search') return;
+
+    const includesAllSearchParams =
+      !!searchParams.get('location') &&
+      !!searchParams.get('endDate') &&
+      !!searchParams.get('startDate') &&
+      !!searchParams.get('roomCount') &&
+      !!searchParams.get('roomCount') &&
+      !!searchParams.get('adultCount');
+
+    if (includesAllSearchParams) {
+      refetch();
+    }
+  }, [search]);
 
   /**
    * Logic in relation to styling and textual UI
