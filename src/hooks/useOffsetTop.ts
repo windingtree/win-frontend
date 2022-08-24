@@ -6,7 +6,6 @@ export default function useOffSetTop(top: number) {
 
   useEffect(() => {
     window.onscroll = () => {
-      console.log('hello wrold');
       if (window.pageYOffset > isTop) {
         setOffSetTop(true);
       } else {

@@ -186,11 +186,9 @@ export const PaymentCard = ({
         let currentBalance: BigNumber;
         if (asset.native) {
           currentBalance = await provider.getBalance(account);
-          // logger.debug('Account balance (native):', currentBalance.toString());
           setBalance(currentBalance);
         } else {
           currentBalance = await tokenContract.balanceOf(account);
-          // logger.debug('Account balance (token):', currentBalance.toString());
           setBalance(currentBalance);
         }
       } else {
