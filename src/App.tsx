@@ -4,7 +4,16 @@ import { GrommetProvider } from './theme/GrommetProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ThemeProvider from './theme/index';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1
+    },
+    mutations: {
+      retry: 1
+    }
+  }
+});
 
 const App = () => (
   <ThemeProvider>

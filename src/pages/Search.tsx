@@ -1,21 +1,32 @@
-import { Search as CSearch } from '../components/Search';
+import { SearchForm } from 'src/containers/search/SearchForm';
 import { MapBox } from '../components/MapBox';
-import { Box } from 'grommet';
 import { Results } from '../components/Results';
 import MainLayout from 'src/layouts/main';
+import { Box, styled } from '@mui/material';
+import { HEADER } from 'src/config/componentSizes';
 
+const SearchBox = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  top: HEADER.MOBILE_HEIGHT,
+  width: '100%',
+  [theme.breakpoints.up('md')]: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    top: HEADER.MAIN_DESKTOP_HEIGHT + 16
+  }
+}));
+
+//TODO: remove the footer
 export const Search = () => {
   return (
     <MainLayout childrenBelowHeader={false}>
       <Box style={{ position: 'relative' }}>
         <Results />
         <MapBox />
-        <Box
-          background="white"
-          style={{ position: 'absolute', bottom: 20, alignSelf: 'center', zIndex: 1 }}
-        >
-          <CSearch />
-        </Box>
+        <SearchBox>
+          <SearchForm />
+        </SearchBox>
       </Box>
     </MainLayout>
   );

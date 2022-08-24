@@ -1,18 +1,11 @@
 import { SearchResults, Offer, Accommodation } from '@windingtree/glider-types/types/win';
 import axios from 'axios';
 import { getPassengersBody } from './helpers';
+import { SearchTypeProps } from '.';
 
 export interface Coordinates {
   lat: number;
   lon: number;
-}
-
-export interface FetchAccommodationsAndOffersProps {
-  location: string;
-  date: string[];
-  roomCount: number;
-  adultCount: number;
-  childrenCount: number;
 }
 
 export interface AccommodationsAndOffersResponse {
@@ -27,7 +20,7 @@ export async function fetchAccommodationsAndOffers({
   roomCount,
   adultCount,
   childrenCount
-}: FetchAccommodationsAndOffersProps): Promise<AccommodationsAndOffersResponse> {
+}: SearchTypeProps): Promise<AccommodationsAndOffersResponse> {
   /**
    * Query the coordinates based on the location input of the user.
    * Coordinates are used to query the accommodations.
@@ -63,13 +56,14 @@ export async function fetchAccommodationsAndOffers({
       roomCount
     },
 
-    //TODO: include children
     passengers: passengersBody
   };
 
-  //TODO: include url in env
   const uri = `${process.env.REACT_APP_API_URL}/api/hotels/offers/search`;
-  const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch((_) => {
+  const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch((e) => {
+    if (e.response.status === 404) {
+      throw new Error('No accommodations found');
+    }
     throw new Error('Unexpected response when retrieving accommodations and offers');
   });
 

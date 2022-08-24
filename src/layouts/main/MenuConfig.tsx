@@ -12,8 +12,8 @@ const menuConfig = [
     path: '/'
   },
   {
-    title: 'Technology',
-    path: '/technology',
+    title: 'Bookings',
+    path: '/bookings',
     icon: <Iconify icon={'eva:bulb-outline'} {...ICON_SIZE} />
   }
 ];
