@@ -30,6 +30,7 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
       ? {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'space-between'
       }
       : {};
 
@@ -91,9 +92,10 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
           <Stack sx={{
             p: 1,
           }}>
-            <Image src={facility.media[0].url} ratio='4/3' sx={{
-              borderRadius: 1.5,
-            }} />
+            <Image src={facility.media[0].url}
+              sx={{
+                borderRadius: 1.5,
+              }} />
           </Stack>
         </Stack>
       </Paper>
