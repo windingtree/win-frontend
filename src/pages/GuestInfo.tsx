@@ -43,6 +43,17 @@ export const GuestInfo = () => {
         throw Error('Priced offer offerId not defined');
       }
 
+      //todo improve typings
+      const date = new Date(value.birthdate as unknown as string);
+      const formattedDate = DateTime.fromObject({
+        year: date.getFullYear(),
+        month: date.getMonth() + 1, //js month starts from 0
+        day: date.getDate(),
+        hour: 0,
+        minute: 0
+      }).setZone('utc');
+      value.birthdate = new Date(formattedDate.toISO());
+
       await axios.request(new PersonalInfoRequest(checkout.offerId, value));
 
       dispatch({
