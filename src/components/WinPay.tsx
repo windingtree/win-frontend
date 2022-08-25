@@ -1,16 +1,14 @@
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import type { Payment, PaymentSuccess } from './PaymentCard';
 import { useCallback } from 'react';
-import { Box, Text } from 'grommet';
-import { formatCost } from '../utils/strings';
+import { Box } from '@mui/material';
 import { useAppDispatch, useAppState } from '../store';
-import { SignInButton, SignOutButton } from './Web3Modal';
 import { NetworkSelector } from './NetworkSelector';
 import { AssetSelector } from './AssetSelector';
 import { PaymentCard } from './PaymentCard';
 
 export interface WinPayProps {
-  payment: Payment;
+  payment?: Payment;
   onSuccess: (result: PaymentSuccess) => void;
 }
 
@@ -36,18 +34,14 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
     [dispatch]
   );
 
+  if (!payment) {
+    return null;
+  }
+
   return (
-    <Box direction="column" gap="small" fill>
-      <Box direction="row" align="right" gap="small">
-        <Box direction="row" align="center">
-          <Text size="middle" weight="bold">
-            {formatCost(payment)}
-          </Text>
-        </Box>
-        {account ? <SignOutButton /> : <SignInButton />}
-      </Box>
+    <Box>
       {account && (
-        <Box direction="column" gap="small" fill>
+        <Box>
           <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
           <AssetSelector
             network={selectedNetwork}

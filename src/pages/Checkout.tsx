@@ -1,12 +1,20 @@
-import { Box } from 'grommet';
 import { utils } from 'ethers';
+import { Container, Grid, Box, CircularProgress, Typography, Card } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
-import MainLayout from 'src/layouts/main';
+import MainLayout from '../layouts/main';
 import { WinPay } from '../components/WinPay';
+import { MessageBox } from '../components/MessageBox';
+import { SignInButton } from '../components/Web3Modal';
+import { CardMediaFallback } from '../components/CardMediaFallback';
+import { formatCost } from '../utils/strings';
 import { useAppState } from '../store';
 import { expirationGap } from '../config';
+import { sortByLargestImage } from '../utils/accommodation';
 import Logger from '../utils/logger';
+import FallbackImage from '../images/hotel-fallback.webp';
 
 const logger = Logger('Checkout');
 
@@ -15,54 +23,91 @@ export const normalizeExpiration = (expirationDate: string): number =>
 
 export const Checkout = () => {
   const navigate = useNavigate();
-  const { checkout } = useAppState();
+  const theme = useTheme();
+  const { checkout, account } = useAppState();
+  const payment = useMemo(
+    () => checkout && ({
+      currency: checkout.offer.price.currency,
+      value: utils.parseEther(checkout.offer.price.public.toString()),
+      expiration: normalizeExpiration(checkout.offer.expiration),
+      providerId: String(checkout.provider),
+      serviceId: String(checkout.serviceId)
+    }),
+    [checkout]
+  );
+  const hotelImage = useMemo(
+    () => checkout && sortByLargestImage(checkout.accommodation.media)[0],
+    [checkout]
+  );
 
-  const isValid =
-    checkout !== undefined &&
-    checkout.offerId !== undefined &&
-    checkout.offer !== undefined &&
-    checkout.offer.price !== undefined &&
-    checkout.offer.price.currency !== undefined &&
-    checkout.offer.price.public !== undefined &&
-    checkout.serviceId !== undefined &&
-    checkout.provider !== undefined &&
-    checkout.offer.expiration !== undefined;
+
+  console.log('@@@',  FallbackImage, checkout);
+
+  if (!checkout || !payment) {
+    return (
+      <MainLayout>
+        <Container sx={{ mb: theme.spacing(5) }}>
+          <CircularProgress />
+        </Container>
+      </MainLayout>
+    );
+  }
 
   return (
-    <MainLayout
-    //TODO: check with designer whether breadcrumbs are still needed.
-    // breadcrumbs={[
-    //   {
-    //     label: 'Search',
-    //     path: '/'
-    //   },
-    //   {
-    //     label: 'Facility',
-    //     path: '/facilities/' + checkout?.facilityId
-    //   },
-    //   {
-    //     label: 'Guest Info',
-    //     path: '/guest-info'
-    //   }
-    // ]}
-    >
-      <Box align="center" overflow="hidden">
-        {isValid && (
-          <WinPay
-            payment={{
-              currency: checkout.offer.price.currency,
-              value: utils.parseEther(checkout.offer.price.public.toString()),
-              expiration: normalizeExpiration(checkout.offer.expiration),
-              providerId: String(checkout.provider),
-              serviceId: String(checkout.serviceId)
-            }}
-            onSuccess={(result) => {
-              logger.debug(`Payment result:`, result);
-              navigate('/bookings/confirmation');
-            }}
-          />
-        )}
-      </Box>
+    <MainLayout>
+      <Container sx={{ mb: theme.spacing(5) }}>
+        <MessageBox type="warn" show={!account}>
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
+          >
+            <Grid item marginRight={theme.spacing(5)}>
+              Please connect your wallet
+            </Grid>
+            <Grid item>
+              <SignInButton />
+            </Grid>
+          </Grid>
+        </MessageBox>
+
+        <Box marginBottom={theme.spacing(5)}>
+          <Typography variant="h3">
+            Your payment value is {formatCost(payment)}
+          </Typography>
+        </Box>
+
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+        >
+          <Grid item marginRight={theme.spacing(5)}>
+            <Card>
+              <CardMediaFallback
+                component="img"
+                height="200"
+                src={hotelImage?.url}
+                fallback={FallbackImage}
+                alt={checkout.accommodation.name}
+              />
+            </Card>
+          </Grid>
+          <Grid item>
+            <Typography>
+              You are paying for stay in {checkout.accommodation.name} from
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <WinPay
+          payment={payment}
+          onSuccess={(result) => {
+            logger.debug(`Payment result:`, result);
+            navigate('/bookings/confirmation');
+          }}
+        />
+      </Container>
     </MainLayout>
   );
 };
