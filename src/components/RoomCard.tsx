@@ -66,9 +66,7 @@ export const RoomCard: React.FC<{
       setError(undefined);
       setLoading(true);
 
-      const res = await axios.request<PricedOffer>(
-        new PricedOfferRequest(offer.id)
-      );
+      const res = await axios.request<PricedOffer>(new PricedOfferRequest(offer.id));
 
       if (res.data) {
         dispatch({
@@ -82,7 +80,7 @@ export const RoomCard: React.FC<{
         logger.info('Get priced offer successfully');
         navigate('/guest-info');
       } else {
-        throw new Error("Somethin went wrong!");
+        throw new Error('Somethin went wrong!');
       }
     } catch (error) {
       const message = (error as Error).message || 'Unknown useAuthRequest error';
