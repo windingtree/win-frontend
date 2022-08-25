@@ -18,9 +18,10 @@ const defaultZoom = 13;
 //   className: 'leaflet-div-icon'
 // });
 
-const pinIcon = new Icon({
+const pinIcon = (props) => new Icon({
   iconUrl: icon,
-  iconSize: [25, 40]
+  iconSize: [25, 40],
+  // color: '#000'
 });
 
 const MapSettings: React.FC<{
@@ -119,7 +120,7 @@ export const MapBox: React.FC = () => {
   const displayMap = useMemo(
     () => (
       <MapContainer
-        zoomControl={false}
+        // zoomControl={false}
         center={normalizedCoordinates}
         zoom={defaultZoom}
         style={{
@@ -136,30 +137,30 @@ export const MapBox: React.FC = () => {
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ZoomControl position="bottomleft" />
+        <ZoomControl position="topright" />
         {accommodations && accommodations.length > 0
           ? accommodations.map(
-              (f) =>
-                f.location &&
-                f.location.coordinates && (
-                  <Marker
-                    key={f.id}
-                    icon={pinIcon}
-                    position={[f.location.coordinates[1], f.location.coordinates[0]]}
-                    eventHandlers={{
-                      click: () => selectFacility(f.id)
-                    }}
-                  >
-                    <Popup>
-                      {f.name} <br /> Easily customizable.
-                    </Popup>
-                  </Marker>
-                )
-            )
+            (f) =>
+              f.location &&
+              f.location.coordinates && (
+                <Marker
+                  key={f.id}
+                  icon={pinIcon(f.id === selectedFacilityId)}
+                  position={[f.location.coordinates[1], f.location.coordinates[0]]}
+                  eventHandlers={{
+                    click: () => selectFacility(f.id)
+                  }}
+                >
+                  <Popup>
+                    {f.name}
+                  </Popup>
+                </Marker>
+              )
+          )
           : null}
       </MapContainer>
     ),
-    [normalizedCoordinates, accommodations]
+    [normalizedCoordinates, accommodations, selectedFacilityId]
   );
 
   return (

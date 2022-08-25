@@ -50,15 +50,16 @@ export const Results: React.FC = () => {
   return (
     <Box
       pad="medium"
+      margin='0'
       fill={true}
       overflow="hidden"
       style={{
         position: 'absolute',
         zIndex: '1',
-        width: winWidth < 900 ? '100%' : '25rem',
+        width: winWidth < 900 ? '100%' : '20rem',
         maxWidth: '100%',
-        height: winWidth < 900 ? '45%' : '90%',
-        left: 20,
+        height: winWidth < 900 ? '40%' : '86%',
+        left: 0,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0)'
       }}
@@ -73,7 +74,7 @@ export const Results: React.FC = () => {
             Could not find place
           </MessageBox>
         </Box>
-        <Box gap="0.5rem" flex={false} style={resultsContainerStyle}>
+        <Box gap="0.5rem" flex={false}>
           {/* TODO: Currenlty we are displaying all accomdations, but this may need to be changed to only the accommodations with offers */}
           {accommodations?.map((facility, idx) => (
             <SearchResult
