@@ -3,7 +3,7 @@ import { Box, AppBar, Toolbar, Container } from '@mui/material';
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import navConfig from './MenuConfig';
-import { Logo } from 'src/components/Logo';
+import { LogoBeta } from 'src/components/Logo';
 import useOffSetTop from 'src/hooks/useOffsetTop';
 import useResponsive from 'src/hooks/useResponsive';
 import { HEADER } from 'src/config/componentSizes';
@@ -66,7 +66,7 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
               justifyContent: 'space-between'
             }}
           >
-            <Logo />
+            <LogoBeta />
 
             <Box sx={{ flexGrow: 1 }} />
             <AccountInfo />

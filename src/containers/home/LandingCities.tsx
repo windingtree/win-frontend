@@ -1,10 +1,19 @@
-import { Box, Card, Typography, Grid } from '@mui/material';
+import { Box, Card, Typography, Grid, useTheme, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Image from '../../components/Image';
 import berlin from '../../images/cities/berlin.jpeg';
 import bogota from '../../images/cities/bogota.jpeg';
 import sydney from '../../images/cities/sydney.jpeg';
 import taipei from '../../images/cities/taipei.jpeg';
+
+const Gradient = styled('div')(() => ({
+  background:
+    'rgba(255, 255, 255, 0) linear-gradient(to bottom, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .1) 40%, rgba(0, 0, 0, .5) 75%, rgba(0, 0, 0, 1) 100%) repeat scroll 0 0',
+  width: '100%',
+  position: 'absolute',
+  height: '200px',
+  bottom: 0
+}));
 
 type ItemProps = {
   id: string;
@@ -70,16 +79,27 @@ type CityItemProps = {
 function CityItem({ item }: CityItemProps) {
   const navigate = useNavigate();
   const { city, image, url } = item;
+  const theme = useTheme();
 
   return (
     <Grid item xs={6} md={3} lg={3}>
-      <Card onClick={() => navigate(url)} sx={{ pb: 1, borderRadius: 2, bgcolor: 'background.neutral' }}>
-        <Box sx={{ p: 1, position: 'relative' }}>
+      <Card onClick={() => navigate(url)}>
+        <Box sx={{ position: 'relative' }}>
           <Image src={image} ratio="3/4" sx={{ borderRadius: 1.5 }} />
+          <Gradient />
+          <Typography
+            textAlign="center"
+            variant="h3"
+            sx={{
+              position: 'absolute',
+              bottom: 16,
+              left: 16,
+              color: theme.palette.grey[0]
+            }}
+          >
+            {city}
+          </Typography>
         </Box>
-        <Typography textAlign="center" variant="subtitle1">
-          {city}
-        </Typography>
       </Card>
     </Grid>
   );
