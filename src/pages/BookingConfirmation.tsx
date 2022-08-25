@@ -21,7 +21,7 @@ export const BookingConfirmation = () => {
             target='_blank'
             rel='noopener'
             >
-              Give Feedback
+              Give us your Feedback 💚
           </Link>
         </Typography>
         

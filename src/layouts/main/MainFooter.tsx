@@ -18,7 +18,7 @@ const LINKS = [
         href: '/faq'
       },
       {
-        name: 'Feedback 💚',
+        name: 'Give us your Feedback 💚',
         href: 'https://winwindao.typeform.com/win-feedback',
         target: '_blank',
         rel: 'noopener',

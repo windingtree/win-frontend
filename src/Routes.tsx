@@ -10,7 +10,8 @@ import { Bookings } from './pages/Bookings';
 import { Faq } from './pages/Faq';
 import { About } from './pages/About';
 import { Contacts } from './pages/Contacts';
-import { Privacy } from './pages/Privacy';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { TermsAndConditions } from './pages/TermsAndConditions';
 import { Security } from './pages/Security';
 import { Developers } from './pages/Developers';
 import { Checkout } from './pages/Checkout';
@@ -87,8 +88,13 @@ export const pagesRoutesConfig: Routes = [
   },
   {
     path: '/privacy',
-    element: <Privacy />,
+    element: <PrivacyPolicy />,
     title: 'Privacy and Cookie Policy',
+  },
+  {
+    path: '/terms',
+    element: <TermsAndConditions />,
+    title: 'Terms and Conditions',
   },
   {
     path: '/contacts',

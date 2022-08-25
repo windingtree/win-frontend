@@ -1,32 +1,16 @@
 import MainLayout from 'src/layouts/main';
-import { Box, Typography, Link } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { ExternallUnsafeLink, ContactEmailLink } from '../components/ExternalUnsafeLink'
 
-const ContactEmailLink = () => {
-  return (
-    <Link href='mailto:hi@windingtree.com' target='_blank'>hi@windingtree.com</Link>
-  )
-}
 
-const ExternallUnsafeLink = ({href}) => {
-  return (
-    <Link
-      href={href}
-      target='_blank'
-      rel='noopener noreferer'
-    >
-      {href}
-    </Link>
-  )
-}
-
-export const Privacy = () => {
+export const PrivacyPolicy = () => {
   return (
     <MainLayout>
       <Box sx={{ width: '100%', maxWidth: 600 }} alignSelf='center'>
       <Typography variant='h3' gutterBottom>
       Privacy and Cookie Policy
       </Typography>
-      <Typography variant='caption'>
+      <Typography variant='caption' gutterBottom>
       Effective Date: August 24, 2022
       </Typography>
       <Typography variant='body1' gutterBottom>
