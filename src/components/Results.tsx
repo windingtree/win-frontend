@@ -1,5 +1,5 @@
 import { Box } from 'grommet';
-import { createRef, CSSProperties, useCallback, useEffect, useMemo } from 'react';
+import { createRef, useCallback, useEffect, useMemo } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { MessageBox } from './MessageBox';
@@ -38,11 +38,6 @@ export const Results: React.FC = () => {
       searchResultsRefs[selectedFacilityId]?.current?.scrollIntoView();
   }, [selectedFacilityId, searchResultsRefs]);
 
-  const resultsContainerStyle: CSSProperties = {
-    paddingLeft: 20,
-    paddingRight: 20
-  };
-
   if (!accommodations || accommodations.length === 0) {
     return null;
   }
@@ -50,7 +45,6 @@ export const Results: React.FC = () => {
   return (
     <Box
       pad="medium"
-      margin='0'
       fill={true}
       overflow="hidden"
       style={{

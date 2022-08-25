@@ -1,7 +1,7 @@
 import { CSSProperties, forwardRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { emptyFunction } from '../utils/common';
-import { Box, Stack, Paper, Typography } from '@mui/material';
+import { Stack, Paper, Typography } from '@mui/material';
 import Image from '../components/Image';
 import Iconify from '../components/Iconify';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
@@ -23,18 +23,17 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
     const { winWidth } = useWindowsDimension();
     const selectedStyle: CSSProperties = isSelected
       ? {
-        position: 'relative',
-      }
+          position: 'relative'
+        }
       : {};
-    const responsiveStyle: CSSProperties = winWidth < 900
-      ? {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-      }
-      : {};
-
-
+    const responsiveStyle: CSSProperties =
+      winWidth < 900
+        ? {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+          }
+        : {};
 
     const prices = useMemo(
       () => facility.offers.map((o) => Number(o.price.public)),
@@ -54,16 +53,9 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
         style={selectedStyle}
         sx={{ borderRadius: 2, bgcolor: 'background.neutral' }}
       >
-        <Stack
-          spacing={1}
-          style={responsiveStyle}
-        >
+        <Stack spacing={1} style={responsiveStyle}>
           <Stack spacing={1} sx={{ p: 2, pb: 1.5 }}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              spacing={1}
-            >
+            <Stack direction="row" justifyContent="space-between" spacing={1}>
               <Typography variant="subtitle1">{facility.name}</Typography>
               <Stack direction="row" alignItems="center">
                 <Typography variant="subtitle1">{facility.rating}</Typography>
@@ -89,13 +81,14 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
             </Stack>
           </Stack>
 
-          <Stack sx={{
-            p: 1,
-          }}>
-            <Image src={facility.media[0].url}
+          <Stack sx={{ p: 1 }}>
+            <Image
+              src={facility.media[0].url}
               sx={{
                 borderRadius: 1.5,
-              }} />
+                maxWidth: winWidth < 900 ? 200 : null
+              }}
+            />
           </Stack>
         </Stack>
       </Paper>

@@ -18,10 +18,9 @@ const defaultZoom = 13;
 //   className: 'leaflet-div-icon'
 // });
 
-const pinIcon = (props) => new Icon({
+const pinIcon = new Icon({
   iconUrl: icon,
-  iconSize: [25, 40],
-  // color: '#000'
+  iconSize: [25, 40]
 });
 
 const MapSettings: React.FC<{
@@ -140,23 +139,21 @@ export const MapBox: React.FC = () => {
         <ZoomControl position="topright" />
         {accommodations && accommodations.length > 0
           ? accommodations.map(
-            (f) =>
-              f.location &&
-              f.location.coordinates && (
-                <Marker
-                  key={f.id}
-                  icon={pinIcon(f.id === selectedFacilityId)}
-                  position={[f.location.coordinates[1], f.location.coordinates[0]]}
-                  eventHandlers={{
-                    click: () => selectFacility(f.id)
-                  }}
-                >
-                  <Popup>
-                    {f.name}
-                  </Popup>
-                </Marker>
-              )
-          )
+              (f) =>
+                f.location &&
+                f.location.coordinates && (
+                  <Marker
+                    key={f.id}
+                    icon={pinIcon}
+                    position={[f.location.coordinates[1], f.location.coordinates[0]]}
+                    eventHandlers={{
+                      click: () => selectFacility(f.id)
+                    }}
+                  >
+                    <Popup>{f.name}</Popup>
+                  </Marker>
+                )
+            )
           : null}
       </MapContainer>
     ),
