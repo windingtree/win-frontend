@@ -17,6 +17,8 @@ export const RHFDateRangePicker = ({ name, minDate }: RHFDateRangePickerProps) =
       control={control}
       render={({ field: { value, onChange } }) => (
         <DateRange
+          startDatePlaceholder="Check-In"
+          endDatePlaceholder="Check-Out"
           minDate={minDate}
           editableDateInputs={true}
           onChange={(newValue) => onChange([newValue.selection])}

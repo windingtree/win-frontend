@@ -32,17 +32,18 @@ import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
-  width: '100%',
-  paddingTop: theme.spacing(1),
-  paddingBottom: theme.spacing(1),
+  zIndex: 2,
+  padding: theme.spacing(2),
   display: 'flex',
   justifyContent: 'center',
+  border: 'none',
+  width: '100%',
   backgroundColor: theme.palette.background.default,
   [theme.breakpoints.up('md')]: {
-    borderRadius: 10,
-    width: 'auto',
-    padding: 0,
-    minWidth: 650
+    width: 'max-content',
+    padding: theme.spacing(2),
+    border: `3px solid ${theme.palette.primary.main}`,
+    borderRadius: 10
   }
 }));
 
@@ -166,7 +167,7 @@ export const SearchForm: React.FC = () => {
    */
   const roomText = roomCount === 1 ? 'room' : 'rooms';
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
-  const fontSize = theme.typography.body2.fontSize;
+  const fontSize = theme.typography.body1.fontSize;
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -203,7 +204,7 @@ export const SearchForm: React.FC = () => {
       >
         <SelectGuestsAndRooms />
       </Popover>
-      <Stack direction="column">
+      <Stack direction="column" alignItems="center">
         <ToolbarStyle ref={formRef}>
           <Stack
             direction={{ xs: 'column', md: 'row' }}
@@ -242,11 +243,11 @@ export const SearchForm: React.FC = () => {
             <Box>
               <Button
                 onClick={() => setDateRangeAnchorEl(formRef.current)}
-                size="small"
+                size="large"
                 variant="text"
                 sx={{
                   whiteSpace: 'nowrap',
-                  ...theme.typography.body2
+                  ...theme.typography.body1
                 }}
                 color="inherit"
               >
@@ -258,10 +259,10 @@ export const SearchForm: React.FC = () => {
               <Button
                 sx={{
                   whiteSpace: 'nowrap',
-                  ...theme.typography.body2
+                  ...theme.typography.body1
                 }}
                 onClick={() => setGuestsAnchorEl(formRef.current)}
-                size="small"
+                size="large"
                 variant="text"
                 color="inherit"
               >
@@ -270,13 +271,14 @@ export const SearchForm: React.FC = () => {
             </Box>
             <Box>
               <LoadingButton
+                disableElevation
                 type="submit"
                 loading={isFetching}
-                variant="outlined"
-                size="small"
+                variant="contained"
+                size="large"
                 sx={{
                   whiteSpace: 'nowrap',
-                  ...theme.typography.body2
+                  ...theme.typography.body1
                 }}
               >
                 Search
