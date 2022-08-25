@@ -10,13 +10,13 @@ import {
   Toolbar,
   Divider,
   useMediaQuery,
-  Alert
+  Alert,
+  styled
 } from '@mui/material';
 import { FormProvider, RHFTextField } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
-import { styled } from '@mui/system';
 import { endDateDisplay, startDateDisplay } from './helpers';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
@@ -29,6 +29,7 @@ import {
 } from 'react-router-dom';
 import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
+import { convertToLocalTime } from 'src/utils/date';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   width: '100%',
@@ -110,12 +111,13 @@ export const SearchForm: React.FC = () => {
   const values = watch();
   const hasValidationErrors = Object.keys(errors).length != 0;
   const { roomCount, adultCount, dateRange, location } = values;
-
+  const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
+  const endDate = dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate);
   /**
    * Logic in relation to executing the query
    */
   const { refetch, isFetching, error } = useAccommodationsAndOffers({
-    date: [dateRange[0].startDate, dateRange[0].endDate],
+    date: [startDate, endDate],
     adultCount: Number(adultCount),
     location: location,
     roomCount: Number(roomCount)
