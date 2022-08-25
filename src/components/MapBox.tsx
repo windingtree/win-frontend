@@ -119,7 +119,7 @@ export const MapBox: React.FC = () => {
   const displayMap = useMemo(
     () => (
       <MapContainer
-        zoomControl={false}
+        // zoomControl={false}
         center={normalizedCoordinates}
         zoom={defaultZoom}
         style={{
@@ -136,7 +136,7 @@ export const MapBox: React.FC = () => {
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ZoomControl position="bottomleft" />
+        <ZoomControl position="topright" />
         {accommodations && accommodations.length > 0
           ? accommodations.map(
               (f) =>
@@ -150,16 +150,14 @@ export const MapBox: React.FC = () => {
                       click: () => selectFacility(f.id)
                     }}
                   >
-                    <Popup>
-                      {f.name} <br /> Easily customizable.
-                    </Popup>
+                    <Popup>{f.name}</Popup>
                   </Marker>
                 )
             )
           : null}
       </MapContainer>
     ),
-    [normalizedCoordinates, accommodations]
+    [normalizedCoordinates, accommodations, selectedFacilityId]
   );
 
   return (
