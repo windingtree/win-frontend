@@ -21,7 +21,12 @@ import { endDateDisplay, startDateDisplay } from './helpers';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 import { LoadingButton } from '@mui/lab';
-import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+  useLocation
+} from 'react-router-dom';
 import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
@@ -52,24 +57,17 @@ type FormValuesProps = {
   }[];
 };
 
-type SearchFormProps = {
-  navigateAfterSearch?: boolean;
-  searchAfterInitialRender?: boolean;
-};
-
 const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={12} />;
 
 /**
  * @param searchAfterInitialRender defines whether a search has to be executed when the component is rendered for the first time.
  * @param navigateAfterSearch navigates to the search page after a user clicks on the search button.
  */
-export const SearchForm: React.FC<SearchFormProps> = ({
-  navigateAfterSearch = false,
-  searchAfterInitialRender = false
-}) => {
+export const SearchForm: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const theme = useTheme();
+  const { pathname, search } = useLocation();
 
   /**
    * Logic in relation to the popovers.
@@ -127,11 +125,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({
 
   const onSubmit = useCallback(() => {
     //TODO: update search params when submitting the form
-    if (
-      navigateAfterSearch &&
-      dateRange[0].startDate !== null &&
-      dateRange[0].endDate !== null
-    ) {
+    if (dateRange[0].startDate !== null && dateRange[0].endDate !== null) {
       const params = {
         roomCount: roomCount.toString(),
         adultCount: adultCount.toString(),
@@ -146,15 +140,13 @@ export const SearchForm: React.FC<SearchFormProps> = ({
       });
       return;
     }
-
-    refetch();
-  }, [roomCount, adultCount, dateRange, location, refetch, navigateAfterSearch]);
+  }, [roomCount, adultCount, dateRange, location, refetch]);
 
   /**
    * Conduct a search on the initial render when conditions are met.
    */
   useEffect(() => {
-    if (!searchAfterInitialRender) return;
+    if (pathname !== '/search') return;
 
     const includesAllSearchParams =
       !!searchParams.get('location') &&
@@ -167,7 +159,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({
     if (includesAllSearchParams) {
       refetch();
     }
-  }, []);
+  }, [search]);
 
   /**
    * Logic in relation to styling and textual UI

@@ -49,13 +49,13 @@ export const useWeb3Modal = (web3ModalConfig: Web3ModalConfig): Web3ModalHook =>
         });
 
         // Subscribe to provider events compatible with EIP-1193 standard
-        // Subscribe to accounts change
+        // Subscribe to chainId change
         web3ModalProvider.on('chainChanged', (chainId: number) => {
           logger.info(`Chain changed: ${chainId}`);
           updateProvider();
         });
 
-        // Subscribe to chainId change
+        // Subscribe to accounts change
         web3ModalProvider.on('accountsChanged', () => {
           logger.info(`Accounts changed`);
           updateProvider();

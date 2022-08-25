@@ -1,15 +1,10 @@
+import { Box, Button, Typography, CircularProgress } from '@mui/material';
+import Iconify from '../components/Iconify';
+import useResponsive from '../hooks/useResponsive';
 import { useAppState } from '../store';
-import { Box, Button, ResponsiveContext, Spinner, Text } from 'grommet';
-import { Login, Logout } from 'grommet-icons';
-import styled from 'styled-components';
-import { useContext } from 'react';
-
-const InnerSpinner = styled(Spinner)`
-  margin-left: 8px;
-`;
 
 export const SignInButton = () => {
-  const size = useContext(ResponsiveContext);
+  const isDesktop = useResponsive('up', 'md');
   const { isConnecting, signIn, provider } = useAppState();
 
   if (!signIn || provider) {
@@ -17,20 +12,26 @@ export const SignInButton = () => {
   }
 
   return (
-    <Button onClick={() => signIn()} disabled={isConnecting}>
-      {() => (
-        <Box direction="row" align="center">
-          {size !== 'small' && <Text>{isConnecting ? 'Connecting' : 'Connect'}</Text>}
-          {size === 'small' && <Login />}
-          {isConnecting && <InnerSpinner />}
-        </Box>
-      )}
+    <Button
+      variant='contained'
+      onClick={() => signIn()} disabled={isConnecting}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center'
+        }}
+      >
+        {isDesktop && <Typography variant="body2">{isConnecting ? 'Connecting' : 'Connect'}</Typography>}
+        {!isDesktop && <Iconify icon="ri:login-box-line" />}
+        {isConnecting && <CircularProgress size={18} color="inherit" />}
+      </Box>
     </Button>
   );
 };
 
 export const SignOutButton = () => {
-  const size = useContext(ResponsiveContext);
+  const isDesktop = useResponsive('up', 'md');
   const { isConnecting, signOut, provider } = useAppState();
 
   if (!signOut || !provider) {
@@ -38,14 +39,20 @@ export const SignOutButton = () => {
   }
 
   return (
-    <Button onClick={() => signOut()} disabled={isConnecting}>
-      {() => (
-        <Box direction="row" align="center">
-          {size !== 'small' && <Text>{isConnecting ? 'Connecting' : 'Disconnect'}</Text>}
-          {size === 'small' && <Logout />}
-          {isConnecting && <InnerSpinner />}
-        </Box>
-      )}
+    <Button
+      variant='contained'
+      onClick={() => signOut()} disabled={isConnecting}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center'
+        }}
+      >
+        {isDesktop && <Typography variant="body2">{isConnecting ? 'Connecting' : 'Disconnect'}</Typography>}
+        {!isDesktop && <Iconify icon="ri:logout-box-line" />}
+        &nbsp;{isConnecting && <CircularProgress size={18} color="inherit" />}
+      </Box>
     </Button>
   );
 };
