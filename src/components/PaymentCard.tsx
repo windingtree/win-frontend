@@ -423,7 +423,7 @@ export const PaymentCard = ({
           </Box>
 
           {account && balance && (
-            <Typography>
+            <Typography marginBottom={theme.spacing(3)}>
               Your balance: {Number(utils.formatEther(balance)).toFixed(2)} {asset.symbol}
             </Typography>
           )}
