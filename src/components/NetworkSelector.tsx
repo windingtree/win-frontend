@@ -1,4 +1,4 @@
-import type { NetworkInfo } from '@windingtree/win-commons/dist/types';
+import { NetworkInfo } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { useTheme } from '@mui/material/styles';

@@ -1,10 +1,10 @@
-import type { Web3ModalProvider } from '../hooks/useWeb3Modal';
-import type {
+import { Web3ModalProvider } from '../hooks/useWeb3Modal';
+import {
   NetworkInfo,
   CryptoAsset,
   AssetCurrency
 } from '@windingtree/win-commons/dist/types';
-import type {
+import {
   BigNumber,
   Wallet,
   Signature,
@@ -23,17 +23,17 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { createPermitSignature } from '@windingtree/win-pay';
+import { MessageBox } from './MessageBox';
+import { ExternalLink } from './ExternalLink';
+import Iconify from '../components/Iconify';
 import { usePoller } from '../hooks/usePoller';
 import { useAsset } from '../hooks/useAsset';
 import { useWalletRpcApi } from '../hooks/useWalletRpcApi';
 import { useAllowance } from 'src/hooks/useAllowance';
 import { useWinPay } from '../hooks/useWinPay';
+import useResponsive from '../hooks/useResponsive';
 import { centerEllipsis, formatCost } from '../utils/strings';
 import { allowedNetworks, assetsCurrencies } from '../config';
-import { MessageBox } from './MessageBox';
-import { ExternalLink } from './ExternalLink';
-import Iconify from '../components/Iconify';
-import useResponsive from '../hooks/useResponsive';
 import Logger from '../utils/logger';
 
 const logger = Logger('PaymentCard');

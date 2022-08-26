@@ -1,6 +1,6 @@
 import Blockies from 'react-blockies';
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Card, CardHeader, CardContent, Popover, Typography, Button, IconButton } from '@mui/material';
+import { Box, Card, CardHeader, CardContent, Paper, Popover, Typography, Button, IconButton } from '@mui/material';
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { centerEllipsis, copyToClipboard } from '../utils/strings';
 import Iconify from '../components/Iconify';
@@ -10,23 +10,26 @@ import { getNetworkInfo } from '../config';
 
 export interface AccountProps {
   account: string;
+  open?: boolean;
 }
 
 const AccountIcon = styled(Blockies)`
   border-radius: 50%;
 `;
 
-export const Account = ({ account }: AccountProps) => {
+export const Account = ({ account, open }: AccountProps) => {
   const theme = useTheme();
   const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
 
   return (
-    <Box
+    <Paper
+      variant='outlined'
       sx={{
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginRight: theme.spacing(5),
+        padding: '3px 4px 2px 4px'
       }}
-      marginRight={theme.spacing(5)}
     >
       <Box marginRight="5px">
         <AccountIcon seed={account} size={7} scale={4} />
@@ -36,7 +39,14 @@ export const Account = ({ account }: AccountProps) => {
           {shortAccount}
         </Typography>
       </Box>
-    </Box>
+      {open !== undefined &&
+        <Iconify
+          color="inherit"
+          icon={`akar-icons:chevron-${open ? 'up' : 'down'}`}
+          marginLeft={theme.spacing(1)}
+        />
+      }
+    </Paper>
   )
 };
 
@@ -98,11 +108,12 @@ export const AccountInfo = () => {
       <Box
         ref={boxRef}
         onClick={handleOpen}
-        style={{
-          cursor: 'pointer'
+        sx={{
+          cursor: 'pointer',
+          borderRadius: '6px'
         }}
       >
-        <Account account={account} />
+        <Account account={account} open={open} />
       </Box>
       <Popover
         id="account_control"

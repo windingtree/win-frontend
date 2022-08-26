@@ -1,5 +1,5 @@
-import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import type { Payment, PaymentSuccess } from './PaymentCard';
+import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
+import { Payment, PaymentSuccess } from './PaymentCard';
 import { useCallback } from 'react';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';

@@ -1,7 +1,7 @@
-import MainLayout from 'src/layouts/main';
 import { useParams } from 'react-router-dom';
 import { Container, Grid, Box, Paper, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import MainLayout from 'src/layouts/main';
 import { ExternalLink } from '../components/ExternalLink';
 import { useAppState } from '../store';
 

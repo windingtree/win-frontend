@@ -1,5 +1,5 @@
-import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import type { Payment } from './PaymentCard';
+import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
+import { Payment } from './PaymentCard';
 import { useEffect, useMemo, useState } from 'react';
 import { Box, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { useTheme } from '@mui/material/styles';

@@ -15,8 +15,8 @@ import { useAppState } from '../store';
 import { expirationGap } from '../config';
 import { sortByLargestImage } from '../utils/accommodation';
 import useResponsive from '../hooks/useResponsive';
-import Logger from '../utils/logger';
 import FallbackImage from '../images/hotel-fallback.webp';
+import Logger from '../utils/logger';
 
 const logger = Logger('Checkout');
 
