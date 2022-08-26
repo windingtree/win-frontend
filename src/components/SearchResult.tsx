@@ -83,7 +83,7 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
 
           <Stack sx={{ p: 1 }}>
             <Image
-              src={facility.media[0].url}
+              src={facility?.media[0]?.url}
               sx={{
                 borderRadius: 1.5,
                 maxWidth: winWidth < 900 ? 200 : null
