@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import { Anchor } from 'grommet';
-import { Share as ShareIcon } from 'grommet-icons';
+import { Chip } from '@mui/material';
+import Iconify from '../components/Iconify';
+import { useTheme } from '@mui/material/styles';
 
 export interface ExternalLinkProps {
   href: string;
@@ -9,12 +10,27 @@ export interface ExternalLinkProps {
   children?: ReactNode;
 }
 
-export const ExternalLink = ({ href, target, label, children }: ExternalLinkProps) => (
-  <Anchor
-    href={href}
-    target={target}
-    label={label || children}
-    icon={<ShareIcon size="small" />}
-    reverse
-  />
-);
+export const ExternalLink = ({ href, target, label, children }: ExternalLinkProps) => {
+  const theme = useTheme();
+
+  return (
+    <Chip
+      component="a"
+      label={label || children}
+      variant="outlined"
+      href={href}
+      target={target}
+      icon={<Iconify
+        color="inherit"
+        icon="cil:external-link"
+        marginLeft={theme.spacing(1)}
+      />}
+      clickable
+      sx={{
+        fontSize: 'inherit',
+        color: 'inherit',
+        textDecoration: 'underline'
+      }}
+    />
+  );
+}

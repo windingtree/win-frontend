@@ -2,10 +2,12 @@ import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/typ
 import type { Payment, PaymentSuccess } from './PaymentCard';
 import { useCallback } from 'react';
 import { Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppState } from '../store';
 import { NetworkSelector } from './NetworkSelector';
 import { AssetSelector } from './AssetSelector';
 import { PaymentCard } from './PaymentCard';
+import useResponsive from '../hooks/useResponsive';
 
 export interface WinPayProps {
   payment?: Payment;
@@ -13,6 +15,8 @@ export interface WinPayProps {
 }
 
 export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
+  const theme = useTheme();
+  const isDesktop = useResponsive('up', 'md');
   const dispatch = useAppDispatch();
   const { provider, account, selectedNetwork, selectedAsset } = useAppState();
 
@@ -39,25 +43,36 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
   }
 
   return (
-    <Box>
-      {account && (
-        <Box>
-          <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
-          <AssetSelector
-            network={selectedNetwork}
-            payment={payment}
-            asset={selectedAsset}
-            onChange={setAsset}
-          />
-          <PaymentCard
-            provider={provider}
-            network={selectedNetwork}
-            asset={selectedAsset}
-            payment={payment}
-            onSuccess={onSuccess}
-          />
-        </Box>
-      )}
-    </Box>
+    <>
+      <Box
+        marginBottom={theme.spacing(5)}
+      >
+        {account && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: isDesktop ? 'row' : 'column',
+              alignItems: isDesktop ? 'center' : 'stretch',
+              gap: theme.spacing(2)
+            }}
+          >
+            <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
+            <AssetSelector
+              network={selectedNetwork}
+              payment={payment}
+              asset={selectedAsset}
+              onChange={setAsset}
+            />
+          </Box>
+        )}
+      </Box>
+      <PaymentCard
+        provider={provider}
+        network={selectedNetwork}
+        asset={selectedAsset}
+        payment={payment}
+        onSuccess={onSuccess}
+      />
+    </>
   );
 };

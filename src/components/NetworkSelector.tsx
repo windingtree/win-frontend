@@ -1,11 +1,12 @@
 import type { NetworkInfo } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect, useCallback } from 'react';
-import { Box, Select, Spinner } from 'grommet';
+import { Box, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import Iconify from '../components/Iconify';
 import { allowedNetworks, getNetworkInfo } from '../config';
 import { useAppState } from '../store';
 import { useNetworkId } from '../hooks/useNetworkId';
 import { useWalletRpcApi } from '../hooks/useWalletRpcApi';
-import { MessageBox } from './MessageBox';
 import Logger from '../utils/logger';
 
 const logger = Logger('NetworkSelector');
@@ -16,11 +17,11 @@ export interface NetworkSelectorProps {
 }
 
 export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
+  const theme = useTheme();
   const { provider } = useAppState();
   const { switchChain } = useWalletRpcApi(provider, allowedNetworks);
-  const [networkId, isLoading, isRightNetwork] = useNetworkId(provider, allowedNetworks);
+  const [networkId,, isRightNetwork] = useNetworkId(provider, allowedNetworks);
   const [network, setNetwork] = useState<NetworkInfo | undefined>(value);
-  const options = [...allowedNetworks];
 
   useEffect(() => {
     const networkCheck = async () => {
@@ -54,18 +55,17 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
   useEffect(() => onChange(network), [network]);
 
   const omNetworkChange = useCallback(
-    async (option: NetworkInfo) => {
+    async (e: SelectChangeEvent) => {
       try {
         if (provider) {
+          const chainId = Number(e.target.value);
           const providerNetwork = await provider.getNetwork();
-          if (providerNetwork.chainId !== option.chainId) {
-            logger.debug(`Request provider to change chain #${option.chainId}`);
-            await switchChain(option.chainId);
-            logger.debug(`Network switched to #${option.chainId}`);
-            setNetwork(option);
-          } else {
-            setNetwork(option);
+          if (providerNetwork.chainId !== chainId) {
+            logger.debug(`Request provider to change chain #${chainId}`);
+            await switchChain(chainId);
+            logger.debug(`Network switched to #${chainId}`);
           }
+          setNetwork(allowedNetworks.filter(n => n.chainId === chainId)[0]);
         }
       } catch (err) {
         logger.error(err);
@@ -75,20 +75,44 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
   );
 
   return (
-    <Box>
-      <MessageBox type="warn" show={!isRightNetwork}>
-        You are connected to a wrong network. Supported networks:{' '}
-        {options.map((n, i) => n.name + (options.length - 1 !== i ? ', ' : ''))}
-      </MessageBox>
-      <Select
-        placeholder="Select network"
-        labelKey="name"
-        valueKey="chainId"
-        options={options}
-        value={network}
-        onChange={({ option }) => omNetworkChange(option)}
-        icon={isLoading ? <Spinner /> : undefined}
-      />
-    </Box>
+    <Select
+      variant="outlined"
+      value={network && isRightNetwork ? network.chainId.toString() : 'none'}
+      onChange={omNetworkChange}
+      sx={{
+        backgroundColor: !isRightNetwork ? 'rgba(255,0,0,0.7)': 'transparent'
+      }}
+    >
+      <MenuItem value="none">
+        <Box
+          color={!isRightNetwork ? 'white' : 'black'}
+          sx={{
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          {!isRightNetwork &&
+            <Iconify
+              color="inherit"
+              icon="codicon:warning"
+              marginRight={theme.spacing(1)}
+            />
+          }
+          <Box>
+            Select network
+          </Box>
+        </Box>
+      </MenuItem>
+      {allowedNetworks.map(
+        (n, index) => (
+          <MenuItem
+            key={index}
+            value={n.chainId.toString()}
+          >
+            {n.name}
+          </MenuItem>
+        )
+      )}
+    </Select>
   );
 };

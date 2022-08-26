@@ -63,7 +63,6 @@ export const AccountInfo = () => {
           const { blockExplorer } = getNetworkInfo(chainId);
           setExplorer(blockExplorer);
         } catch (err) {
-          //
           setExplorer(undefined);
         }
       };

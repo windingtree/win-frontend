@@ -1,8 +1,9 @@
+import { PaymentSuccessCallback } from '../components/PaymentCard';
 import { utils } from 'ethers';
 import { Container, Grid, Box, CircularProgress, Typography, Card } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useMemo } from 'react';
+import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import MainLayout from '../layouts/main';
 import { WinPay } from '../components/WinPay';
@@ -13,6 +14,7 @@ import { formatCost } from '../utils/strings';
 import { useAppState } from '../store';
 import { expirationGap } from '../config';
 import { sortByLargestImage } from '../utils/accommodation';
+import useResponsive from '../hooks/useResponsive';
 import Logger from '../utils/logger';
 import FallbackImage from '../images/hotel-fallback.webp';
 
@@ -24,6 +26,7 @@ export const normalizeExpiration = (expirationDate: string): number =>
 export const Checkout = () => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const isDesktop = useResponsive('up', 'md');
   const { checkout, account } = useAppState();
   const payment = useMemo(
     () => checkout && ({
@@ -40,13 +43,25 @@ export const Checkout = () => {
     [checkout]
   );
 
-
-  console.log('@@@',  FallbackImage, checkout);
+  const onPaymentSuccess = useCallback<PaymentSuccessCallback>(
+    result => {
+      logger.debug(`Payment result:`, result);
+      navigate({
+        pathname: '/bookings/confirmation',
+        search: `?${createSearchParams({
+          tx: result.tx.hash
+        })}`
+      });
+    },
+    []
+  );
 
   if (!checkout || !payment) {
     return (
       <MainLayout>
-        <Container sx={{ mb: theme.spacing(5) }}>
+        <Container sx={{
+          mb: theme.spacing(5)
+        }}>
           <CircularProgress />
         </Container>
       </MainLayout>
@@ -55,7 +70,51 @@ export const Checkout = () => {
 
   return (
     <MainLayout>
-      <Container sx={{ mb: theme.spacing(5) }}>
+      <Container sx={{
+        marginBottom: theme.spacing(5)
+      }}>
+        <Box
+          sx={{
+            marginBottom: isDesktop ? theme.spacing(5) : theme.spacing(3),
+            textAlign: isDesktop ? 'left' : 'center',
+          }}
+        >
+          <Typography variant="h3">
+            Your payment value is {formatCost(payment)}
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: isDesktop ? 'row' : 'column',
+            alignItems: 'center',
+            marginBottom: theme.spacing(5)
+          }}
+        >
+          <Box
+            sx={{
+              marginRight: isDesktop ? theme.spacing(5) : 0,
+              marginBottom: isDesktop ? 0 : theme.spacing(3)
+            }}
+          >
+            <Card>
+              <CardMediaFallback
+                component="img"
+                height="200"
+                src={hotelImage?.url}
+                fallback={FallbackImage}
+                alt={checkout.accommodation.name}
+              />
+            </Card>
+          </Box>
+          <Box>
+            <Typography>
+              You are paying for stay in {checkout.accommodation.name}
+            </Typography>
+          </Box>
+        </Box>
+
         <MessageBox type="warn" show={!account}>
           <Grid
             container
@@ -71,41 +130,9 @@ export const Checkout = () => {
           </Grid>
         </MessageBox>
 
-        <Box marginBottom={theme.spacing(5)}>
-          <Typography variant="h3">
-            Your payment value is {formatCost(payment)}
-          </Typography>
-        </Box>
-
-        <Grid
-          container
-          direction="row"
-          alignItems="center"
-        >
-          <Grid item marginRight={theme.spacing(5)}>
-            <Card>
-              <CardMediaFallback
-                component="img"
-                height="200"
-                src={hotelImage?.url}
-                fallback={FallbackImage}
-                alt={checkout.accommodation.name}
-              />
-            </Card>
-          </Grid>
-          <Grid item>
-            <Typography>
-              You are paying for stay in {checkout.accommodation.name} from
-            </Typography>
-          </Grid>
-        </Grid>
-
         <WinPay
           payment={payment}
-          onSuccess={(result) => {
-            logger.debug(`Payment result:`, result);
-            navigate('/bookings/confirmation');
-          }}
+          onSuccess={onPaymentSuccess}
         />
       </Container>
     </MainLayout>
