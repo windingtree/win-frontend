@@ -1,6 +1,47 @@
 import { useParams } from 'react-router-dom';
 import { RoomCard } from 'src/components/RoomCard';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { styled } from '@mui/material';
+import { Box } from '@mui/material';
+
+interface SearchCriteriaAndResult {
+  rooms?: number;
+  guests: number;
+  startDate: string;
+  nights: number;
+  roomsAvailable?: number;
+}
+
+const FacilityOffersContainer = styled(Box)(() => ({
+  marginBottom: '20px',
+  padding: '20px'
+}));
+
+const FacilityOffersTitle = ({
+  rooms,
+  roomsAvailable,
+  guests,
+  startDate,
+  nights
+}: SearchCriteriaAndResult) => {
+  const Header = styled(Box)(() => ({
+    fontSize: '2rem',
+    fontWeight: 400,
+    marginBottom: '50px'
+  }));
+
+  const SubHeader = styled(Box)(() => ({}));
+
+  return (
+    <Box marginBottom={"20px"}>
+      <Header>Available Rooms</Header>
+      <SubHeader>
+        Results for {rooms || ''} room, {guests} guests, staying from {startDate} for{' '}
+        {nights} nights: {roomsAvailable} rooms available.
+      </SubHeader>
+    </Box>
+  );
+};
 
 export const FacilityOffers = () => {
   const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
@@ -9,7 +50,14 @@ export const FacilityOffers = () => {
   const accommodation = getAccommodationById(accommodations, id);
 
   return (
-    <>
+    <FacilityOffersContainer>
+      <FacilityOffersTitle
+        rooms={1}
+        guests={2}
+        startDate={new Date().toUTCString()}
+        nights={2}
+        roomsAvailable={accommodation?.offers?.length}
+      />
       {accommodation?.offers.map((offer, index) => {
         //TODO: revise whether we maybe want to restructure the data in such a way that is more intuitive
         // pricePlanReferences has a key that refers to the accommodationId, which can be confusing.
@@ -27,6 +75,6 @@ export const FacilityOffers = () => {
           />
         );
       })}
-    </>
+    </FacilityOffersContainer>
   );
 };

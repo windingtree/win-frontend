@@ -65,16 +65,9 @@ const HeaderButton = () => {
       </div>
 
       <div>
-        <Button
-          sx={{
-            marginRight: '10px',
-            padding: '15px 30px',
-            backgroundColor: 'purple',
-            color: 'white'
-          }}
-        >
+        <CtaButton>
           Select Room
-        </Button>
+        </CtaButton>
       </div>
       <HeaderButtonFooter>{"You won't be charged yet"}</HeaderButtonFooter>
     </HeaderButtonContainer>
