@@ -70,7 +70,7 @@ export const Results: React.FC = () => {
         </Box>
         <Box gap="0.5rem" flex={false}>
           {/* TODO: Currenlty we are displaying all accomdations, but this may need to be changed to only the accommodations with offers */}
-          {accommodations?.map((facility, idx) => (
+          {accommodations.map((facility, idx) => (
             <SearchResult
               key={facility.id}
               facility={facility}
