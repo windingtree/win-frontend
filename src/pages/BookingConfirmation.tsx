@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Container, Grid, Box, Paper, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import MainLayout from 'src/layouts/main';
@@ -27,7 +27,7 @@ export const BigBox = ({ children, ...props }) => {
 
 export const BookingConfirmation = () => {
   const theme = useTheme();
-  const { tx } = useParams();
+  const [params] = useSearchParams();
   const { selectedNetwork } = useAppState();
 
   return (
@@ -38,7 +38,7 @@ export const BookingConfirmation = () => {
             <Typography variant="h4" marginBottom={theme.spacing(1)}>
               Your{' '}
               <ExternalLink
-                href={`${selectedNetwork?.blockExplorer}/tx/${tx}`}
+                href={`${selectedNetwork?.blockExplorer}/tx/${params.get('tx')}`}
                 target="_blank"
               >
                 transaction
