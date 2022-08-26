@@ -1,4 +1,6 @@
+import { MediaItem } from '@windingtree/glider-types/types/win';
 import { Box, Image } from 'grommet';
+import { forwardRef } from 'react';
 import styled from 'styled-components';
 
 const DetailImage = styled(Image)`
@@ -8,7 +10,11 @@ const DetailImage = styled(Image)`
   object-fit: cover;
 `;
 
-export const FacilityDetailImages = ({ images }) => {
+interface FacilityDetailImagesProps {
+  images: MediaItem[];
+}
+
+export const FacilityDetailImages = forwardRef<HTMLDivElement, FacilityDetailImagesProps>(({ images }, ref) => {
   return (
     <Box
       direction="row"
@@ -16,6 +22,7 @@ export const FacilityDetailImages = ({ images }) => {
         gap: '8px',
         flex: '50%'
       }}
+      ref={ref}
     >
       <Box direction="column" width="100%" style={{ gap: '8px' }}>
         <DetailImage src={images[0]?.url} />
@@ -28,4 +35,4 @@ export const FacilityDetailImages = ({ images }) => {
       </Box>
     </Box>
   );
-};
+});

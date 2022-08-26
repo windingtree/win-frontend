@@ -65,7 +65,7 @@ const HeaderButton = () => {
       </div>
 
       <div>
-        <CtaButton>
+        <CtaButton onClick={scrollToDetailImages}>
           Select Room
         </CtaButton>
       </div>
@@ -98,14 +98,15 @@ const HeaderTitle = ({ name, address }: { name?: string; address?: string }) => 
   );
 };
 
-export const FacilityIntroduction = () => {
+export const FacilityIntroduction = ({ scrollToDetailImages }: {scrollToDetailImages: () => void}) => {
   const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
   const { id } = useParams();
   const accommodation: AccommodationWithId | null = getAccommodationById(
     accommodations,
     String(id)
   );
-  const sortedImages = sortByLargestImage(accommodation?.media ?? []);
+
+  const sortedImages: MediaItem[] = sortByLargestImage(accommodation?.media ?? []);
   const [mainImage, ...rest] = sortedImages;
   const address = [
     accommodation?.contactInformation?.address?.streetAddress,
@@ -120,12 +121,12 @@ export const FacilityIntroduction = () => {
     <>
       <HeaderContainer>
         <HeaderTitle name={accommodation?.name} address={address} />
-        <HeaderButton />
+        <HeaderButton scrollToDetailImages={scrollToDetailImages}/>
       </HeaderContainer>
 
       <Container>
         <FacilityMainImage src={mainImage?.url} />
-        <FacilityDetailImages images={rest} />
+        <FacilityDetailImages images={rest}/>
       </Container>
     </>
   );

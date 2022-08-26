@@ -3,6 +3,7 @@ import { RoomCard } from 'src/components/RoomCard';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { styled } from '@mui/material';
 import { Box } from '@mui/material';
+import { forwardRef } from 'react';
 
 interface SearchCriteriaAndResult {
   rooms?: number;
@@ -43,14 +44,14 @@ const FacilityOffersTitle = ({
   );
 };
 
-export const FacilityOffers = () => {
+export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
   const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
   const params = useParams();
   const id: string = params.id as string;
   const accommodation = getAccommodationById(accommodations, id);
 
   return (
-    <FacilityOffersContainer>
+    <FacilityOffersContainer ref={ref}>
       <FacilityOffersTitle
         rooms={1}
         guests={2}
@@ -77,4 +78,4 @@ export const FacilityOffers = () => {
       })}
     </FacilityOffersContainer>
   );
-};
+});
