@@ -7,48 +7,48 @@ import { Button, Typography } from '@mui/material';
 import { styled } from '@mui/material';
 import { Box } from '@mui/material';
 
-const Container = styled(Box)(({theme}) => ({
-  display: "flex",
-  flexDirection: "column",
-  width: "100%",
-  height: "720px",
-  gap: "8px",
-  padding: "20px",
+const Container = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  height: '720px',
+  gap: '8px',
+  padding: '20px',
 
-  [theme.breakpoints.up("lg")]: {
-    flexDirection: "row",
-    height: "500px"
+  [theme.breakpoints.up('lg')]: {
+    flexDirection: 'row',
+    height: '500px'
   }
 }));
 
 const HeaderContainer = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  marginBottom: "5px",
-  padding: "20px",
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginBottom: '5px',
+  padding: '20px'
 }));
 
 const HeaderTitleContainer = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center'
 }));
 
 const HeaderButtonContainer = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "end",
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'end'
 }));
 
-const FacilityMainImage = styled("img")(() => ({
-  flex: "50%",
-  overflow: "hidden",
-  objectFit: "cover",
+const FacilityMainImage = styled('img')(() => ({
+  flex: '50%',
+  overflow: 'hidden',
+  objectFit: 'cover'
 }));
 
 const HeaderButtonFooter = styled(Box)(() => ({
-  fontSize: "8px"
+  fontSize: '8px'
 }));
 
 const sortByLargestImage = (images: MediaItem[]) => {
@@ -65,9 +65,11 @@ const sortByLargestImage = (images: MediaItem[]) => {
 const HeaderButton = () => {
   return (
     <HeaderButtonContainer>
-      <Box display={"flex"} alignItems={"end"}>
+      <Box display={'flex'} alignItems={'end'}>
         <Typography>From</Typography>
-        <Typography fontSize={"24px"} marginLeft={"12px"}>$100</Typography>
+        <Typography fontSize={'24px'} marginLeft={'12px'}>
+          $100
+        </Typography>
       </Box>
       <div>
         <Typography>Per Night Per Room</Typography>
@@ -105,11 +107,7 @@ const HeaderTitle = ({ name, address }: { name?: string; address?: string }) => 
     <HeaderTitleContainer>
       <Button sx={{ marginRight: '8px' }}>{'<'}</Button>
       <div>
-        <Typography
-          fontWeight={500}
-          fontSize="2rem"
-          marginBottom={"10px"}      
-        >
+        <Typography fontWeight={500} fontSize="2rem" marginBottom={'10px'}>
           {name}
         </Typography>
         <HotelAddress address={address} />
