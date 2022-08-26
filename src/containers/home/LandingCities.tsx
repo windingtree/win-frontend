@@ -83,7 +83,7 @@ function CityItem({ item }: CityItemProps) {
 
   return (
     <Grid item xs={6} md={3} lg={3}>
-      <Card onClick={() => navigate(url)}>
+      <Card onClick={() => navigate(url)} sx={{ cursor: 'pointer' }}>
         <Box sx={{ position: 'relative' }}>
           <Image src={image} ratio="3/4" sx={{ borderRadius: 1.5 }} />
           <Gradient />
