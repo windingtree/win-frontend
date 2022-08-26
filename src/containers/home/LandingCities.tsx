@@ -49,7 +49,7 @@ const cities = [
     id: '4',
     city: 'Taipei',
     image: taipei,
-    url: 'https://localhost:3000/search?roomCount=1&adultCount=2&startDate=2022-12-02T00%3A00%3A00%2B01%3A00&endDate=2022-12-04T00%3A00%3A00%2B01%3A00&location=taipei',
+    url: '/search?roomCount=1&adultCount=2&startDate=2022-12-02T00%3A00%3A00%2B01%3A00&endDate=2022-12-04T00%3A00%3A00%2B01%3A00&location=taipei',
     latlon: [25.0375198, 121.5636796]
   }
 ];
