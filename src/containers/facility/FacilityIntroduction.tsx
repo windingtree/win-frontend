@@ -1,29 +1,55 @@
-import { Text, Image } from 'grommet';
-import styled from 'styled-components';
 import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { MediaItem } from '@windingtree/glider-types/types/win';
+import { Button, Typography } from '@mui/material';
+import { styled } from '@mui/material';
+import { Box } from '@mui/material';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 720px;
-  gap: 8px;
+const Container = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  height: '720px',
+  gap: '8px',
+  padding: '20px',
 
-  ${({ theme }) => theme.breakpoints.large} {
-    flex-direction: row;
-    height: 500px;
+  [theme.breakpoints.up('lg')]: {
+    flexDirection: 'row',
+    height: '500px'
   }
-`;
+}));
 
-const FacilityMainImage = styled(Image)`
-  flex: 50%;
-  overflow: hidden;
-  object-fit: cover;
-`;
+const HeaderContainer = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginBottom: '5px',
+  padding: '20px'
+}));
+
+const HeaderTitleContainer = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center'
+}));
+
+const HeaderButtonContainer = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'end'
+}));
+
+const FacilityMainImage = styled('img')(() => ({
+  flex: '50%',
+  overflow: 'hidden',
+  objectFit: 'cover'
+}));
+
+const HeaderButtonFooter = styled(Box)(() => ({
+  fontSize: '8px'
+}));
 
 const sortByLargestImage = (images: MediaItem[]) => {
   if (!images?.length) return [];
@@ -36,6 +62,60 @@ const sortByLargestImage = (images: MediaItem[]) => {
   return sortedImages;
 };
 
+const HeaderButton = () => {
+  return (
+    <HeaderButtonContainer>
+      <Box display={'flex'} alignItems={'end'}>
+        <Typography>From</Typography>
+        <Typography fontSize={'24px'} marginLeft={'12px'}>
+          $100
+        </Typography>
+      </Box>
+      <div>
+        <Typography>Per Night Per Room</Typography>
+      </div>
+
+      <div>
+        <Button
+          sx={{
+            marginRight: '10px',
+            padding: '15px 30px',
+            backgroundColor: 'purple',
+            color: 'white'
+          }}
+        >
+          Select Room
+        </Button>
+      </div>
+      <HeaderButtonFooter>{"You won't be charged yet"}</HeaderButtonFooter>
+    </HeaderButtonContainer>
+  );
+};
+
+const HotelAddress = ({ address }: { address?: string }) => {
+  return (
+    <>
+      <div>
+        {address}. See Map {'>'}
+      </div>
+    </>
+  );
+};
+
+const HeaderTitle = ({ name, address }: { name?: string; address?: string }) => {
+  return (
+    <HeaderTitleContainer>
+      <Button sx={{ marginRight: '8px' }}>{'<'}</Button>
+      <div>
+        <Typography fontWeight={500} fontSize="2rem" marginBottom={'10px'}>
+          {name}
+        </Typography>
+        <HotelAddress address={address} />
+      </div>
+    </HeaderTitleContainer>
+  );
+};
+
 export const FacilityIntroduction = () => {
   const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
   const { id } = useParams();
@@ -45,12 +125,21 @@ export const FacilityIntroduction = () => {
   );
   const sortedImages = sortByLargestImage(accommodation?.media ?? []);
   const [mainImage, ...rest] = sortedImages;
+  const address = [
+    accommodation?.contactInformation?.address?.streetAddress,
+    accommodation?.contactInformation?.address?.locality,
+    accommodation?.contactInformation?.address?.premise,
+    accommodation?.contactInformation?.address?.country
+  ]
+    .filter(Boolean)
+    .join(', ');
 
   return (
     <>
-      <Text weight={500} size="2rem" margin={{ bottom: '8px' }}>
-        {accommodation?.name}
-      </Text>
+      <HeaderContainer>
+        <HeaderTitle name={accommodation?.name} address={address} />
+        <HeaderButton />
+      </HeaderContainer>
 
       <Container>
         <FacilityMainImage src={mainImage?.url} />
