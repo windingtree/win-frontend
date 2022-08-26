@@ -6,6 +6,7 @@ import Image from '../components/Image';
 import Iconify from '../components/Iconify';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
+import defaultImage from '../images/cities/berlin.jpeg';
 
 export interface SearchResultProps {
   facility: AccommodationWithId;
@@ -83,7 +84,7 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
 
           <Stack sx={{ p: 1 }}>
             <Image
-              src={facility.media[0].url}
+              src={facility.media[0] !== undefined ? facility.media[0].url : defaultImage}
               sx={{
                 borderRadius: 1.5,
                 maxWidth: winWidth < 900 ? 200 : null
