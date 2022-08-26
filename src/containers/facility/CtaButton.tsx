@@ -1,4 +1,4 @@
-import { Button, SxProps } from "@mui/material"
+import { Button, SxProps } from '@mui/material';
 
 export const ctaButtonStyle: SxProps = {
   padding: '15px 30px',
@@ -6,13 +6,10 @@ export const ctaButtonStyle: SxProps = {
   color: 'white'
 };
 
-export const CtaButton = ({children, ...props}) => {
+export const CtaButton = ({ children, ...props }) => {
   return (
-    <Button
-      sx={ctaButtonStyle}
-      {...props}
-    >
+    <Button sx={ctaButtonStyle} {...props}>
       {children}
     </Button>
-  )
-}
+  );
+};

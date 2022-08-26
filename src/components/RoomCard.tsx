@@ -55,17 +55,17 @@ export const RoomCard: React.FC<{
       setError(message);
     }
   }, [dispatch]);
-  
+
   return (
-    <Box border={"3px solid #AAAAAA"} padding={"20px"} borderRadius={"5px"}>
+    <Box border={'3px solid #AAAAAA'} padding={'20px'} borderRadius={'5px'}>
       <Grid container spacing={5}>
         <Grid item xs={9}>
           <Box>
-            <Typography fontSize={"2rem"} marginBottom={"12px"}>
+            <Typography fontSize={'2rem'} marginBottom={'12px'}>
               {room?.name}
             </Typography>
             {room?.maximumOccupancy && (
-              <Typography fontSize={"1rem"} marginBottom={"6px"}>
+              <Typography fontSize={'1rem'} marginBottom={'6px'}>
                 {`Book your ${room?.name} for `}
                 {room?.maximumOccupancy?.adults}{' '}
                 {room?.maximumOccupancy?.adults !== undefined &&
@@ -80,16 +80,19 @@ export const RoomCard: React.FC<{
               </Typography>
             )}
           </Box>
-          <Box flexDirection={"column"} justifyContent={"start"}>
-            <Typography fontSize={"1rem"}>{room?.description}</Typography>
+          <Box flexDirection={'column'} justifyContent={'start'}>
+            <Typography fontSize={'1rem'}>{room?.description}</Typography>
           </Box>
         </Grid>
-        <Grid item xs={3} alignSelf={"end"}>
-          <Box display={"flex"} flexDirection={"column"} alignItems={"end"} rowGap={"10px"}>
-            <Typography fontSize={"1.5rem"}>
-            {`${
-              offer.price?.currency
-            } ${Number(offer.price?.public).toFixed(2)} `}
+        <Grid item xs={3} alignSelf={'end'}>
+          <Box
+            display={'flex'}
+            flexDirection={'column'}
+            alignItems={'end'}
+            rowGap={'10px'}
+          >
+            <Typography fontSize={'1.5rem'}>
+              {`${offer.price?.currency} ${Number(offer.price?.public).toFixed(2)} `}
             </Typography>
             <Typography>
               {`Price for ${numberOfDays} nights, ${roomsNumber} room(s)`}
@@ -98,22 +101,24 @@ export const RoomCard: React.FC<{
               onClick={() => handleBook()}
               loading={loading}
               sx={ctaButtonStyle}
-            >Book Now</LoadingButton>               
+            >
+              Book Now
+            </LoadingButton>
             <MessageBox type="error" show={!!error}>
               {error}
             </MessageBox>
-          </Box>   
+          </Box>
         </Grid>
       </Grid>
-      
+
       {notification && (
-            <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-              severity="warning"
-            >
-              {notification}
-            </Alert>
-          )}
+        <Alert
+          sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+          severity="warning"
+        >
+          {notification}
+        </Alert>
+      )}
     </Box>
   );
 };

@@ -34,7 +34,7 @@ const FacilityOffersTitle = ({
   const SubHeader = styled(Box)(() => ({}));
 
   return (
-    <Box marginBottom={"20px"}>
+    <Box marginBottom={'20px'}>
       <Header>Available Rooms</Header>
       <SubHeader>
         Results for {rooms || ''} room, {guests} guests, staying from {startDate} for{' '}

@@ -65,9 +65,7 @@ const HeaderButton = () => {
       </div>
 
       <div>
-        <CtaButton onClick={scrollToDetailImages}>
-          Select Room
-        </CtaButton>
+        <CtaButton onClick={scrollToDetailImages}>Select Room</CtaButton>
       </div>
       <HeaderButtonFooter>{"You won't be charged yet"}</HeaderButtonFooter>
     </HeaderButtonContainer>
@@ -98,7 +96,11 @@ const HeaderTitle = ({ name, address }: { name?: string; address?: string }) => 
   );
 };
 
-export const FacilityIntroduction = ({ scrollToDetailImages }: {scrollToDetailImages: () => void}) => {
+export const FacilityIntroduction = ({
+  scrollToDetailImages
+}: {
+  scrollToDetailImages: () => void;
+}) => {
   const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
   const { id } = useParams();
   const accommodation: AccommodationWithId | null = getAccommodationById(
@@ -121,12 +123,12 @@ export const FacilityIntroduction = ({ scrollToDetailImages }: {scrollToDetailIm
     <>
       <HeaderContainer>
         <HeaderTitle name={accommodation?.name} address={address} />
-        <HeaderButton scrollToDetailImages={scrollToDetailImages}/>
+        <HeaderButton scrollToDetailImages={scrollToDetailImages} />
       </HeaderContainer>
 
       <Container>
         <FacilityMainImage src={mainImage?.url} />
-        <FacilityDetailImages images={rest}/>
+        <FacilityDetailImages images={rest} />
       </Container>
     </>
   );

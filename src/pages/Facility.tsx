@@ -10,7 +10,7 @@ import { createRef, useCallback } from 'react';
 export const Facility = () => {
   const detailImagesRef = createRef<HTMLDivElement>();
   const scrollToDetailImages = useCallback(() => {
-    detailImagesRef?.current?.scrollIntoView({behavior: "smooth"});
+    detailImagesRef?.current?.scrollIntoView({ behavior: 'smooth' });
   }, [detailImagesRef]);
 
   const { latestQueryParams } = useAccommodationsAndOffers();

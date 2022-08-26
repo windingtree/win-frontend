@@ -14,25 +14,27 @@ interface FacilityDetailImagesProps {
   images: MediaItem[];
 }
 
-export const FacilityDetailImages = forwardRef<HTMLDivElement, FacilityDetailImagesProps>(({ images }, ref) => {
-  return (
-    <Box
-      direction="row"
-      style={{
-        gap: '8px',
-        flex: '50%'
-      }}
-      ref={ref}
-    >
-      <Box direction="column" width="100%" style={{ gap: '8px' }}>
-        <DetailImage src={images[0]?.url} />
-        <DetailImage src={images[1]?.url} />
-      </Box>
+export const FacilityDetailImages = forwardRef<HTMLDivElement, FacilityDetailImagesProps>(
+  ({ images }, ref) => {
+    return (
+      <Box
+        direction="row"
+        style={{
+          gap: '8px',
+          flex: '50%'
+        }}
+        ref={ref}
+      >
+        <Box direction="column" width="100%" style={{ gap: '8px' }}>
+          <DetailImage src={images[0]?.url} />
+          <DetailImage src={images[1]?.url} />
+        </Box>
 
-      <Box direction="column" width="100%" style={{ gap: '8px' }}>
-        <DetailImage src={images[2]?.url} />
-        <DetailImage src={images[3]?.url} />
+        <Box direction="column" width="100%" style={{ gap: '8px' }}>
+          <DetailImage src={images[2]?.url} />
+          <DetailImage src={images[3]?.url} />
+        </Box>
       </Box>
-    </Box>
-  );
-});
+    );
+  }
+);
