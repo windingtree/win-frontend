@@ -29,13 +29,14 @@ export const Checkout = () => {
   const isDesktop = useResponsive('up', 'md');
   const { checkout, account } = useAppState();
   const payment = useMemo(
-    () => checkout && ({
-      currency: checkout.offer.price.currency,
-      value: utils.parseEther(checkout.offer.price.public.toString()),
-      expiration: normalizeExpiration(checkout.offer.expiration),
-      providerId: String(checkout.provider),
-      serviceId: String(checkout.serviceId)
-    }),
+    () =>
+      checkout && {
+        currency: checkout.offer.price.currency,
+        value: utils.parseEther(checkout.offer.price.public.toString()),
+        expiration: normalizeExpiration(checkout.offer.expiration),
+        providerId: String(checkout.provider),
+        serviceId: String(checkout.serviceId)
+      },
     [checkout]
   );
   const hotelImage = useMemo(
@@ -43,25 +44,24 @@ export const Checkout = () => {
     [checkout]
   );
 
-  const onPaymentSuccess = useCallback<PaymentSuccessCallback>(
-    result => {
-      logger.debug(`Payment result:`, result);
-      navigate({
-        pathname: '/bookings/confirmation',
-        search: `?${createSearchParams({
-          tx: result.tx.hash
-        })}`
-      });
-    },
-    []
-  );
+  const onPaymentSuccess = useCallback<PaymentSuccessCallback>((result) => {
+    logger.debug(`Payment result:`, result);
+    navigate({
+      pathname: '/bookings/confirmation',
+      search: `?${createSearchParams({
+        tx: result.tx.hash
+      })}`
+    });
+  }, []);
 
   if (!checkout || !payment) {
     return (
       <MainLayout>
-        <Container sx={{
-          mb: theme.spacing(5)
-        }}>
+        <Container
+          sx={{
+            mb: theme.spacing(5)
+          }}
+        >
           <CircularProgress />
         </Container>
       </MainLayout>
@@ -70,13 +70,15 @@ export const Checkout = () => {
 
   return (
     <MainLayout>
-      <Container sx={{
-        marginBottom: theme.spacing(5)
-      }}>
+      <Container
+        sx={{
+          marginBottom: theme.spacing(5)
+        }}
+      >
         <Box
           sx={{
             marginBottom: isDesktop ? theme.spacing(5) : theme.spacing(3),
-            textAlign: isDesktop ? 'left' : 'center',
+            textAlign: isDesktop ? 'left' : 'center'
           }}
         >
           <Typography variant="h3">
@@ -116,11 +118,7 @@ export const Checkout = () => {
         </Box>
 
         <MessageBox type="warn" show={!account}>
-          <Grid
-            container
-            direction="row"
-            alignItems="center"
-          >
+          <Grid container direction="row" alignItems="center">
             <Grid item marginRight={theme.spacing(5)}>
               Please connect your wallet
             </Grid>
@@ -130,10 +128,7 @@ export const Checkout = () => {
           </Grid>
         </MessageBox>
 
-        <WinPay
-          payment={payment}
-          onSuccess={onPaymentSuccess}
-        />
+        <WinPay payment={payment} onSuccess={onPaymentSuccess} />
       </Container>
     </MainLayout>
   );

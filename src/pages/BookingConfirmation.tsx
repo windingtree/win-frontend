@@ -19,7 +19,9 @@ export const BigBox = ({ children, ...props }) => {
       }}
       elevation={2}
       {...props}
-    >{children}</Paper>
+    >
+      {children}
+    </Paper>
   );
 };
 
@@ -31,45 +33,50 @@ export const BookingConfirmation = () => {
   return (
     <MainLayout>
       <Container>
-        <Box
-          sx={{ marginBottom: theme.spacing(5) }}
-        >
-          <Box
-            sx={{ marginBottom: theme.spacing(3) }}
-          >
-            <Typography variant='h4' marginBottom={theme.spacing(1)}>
-              Your <ExternalLink href={`${selectedNetwork?.blockExplorer}/tx/${tx}`} target="_blank">
-              transaction
-              </ExternalLink> was successful 🥳
+        <Box sx={{ marginBottom: theme.spacing(5) }}>
+          <Box sx={{ marginBottom: theme.spacing(3) }}>
+            <Typography variant="h4" marginBottom={theme.spacing(1)}>
+              Your{' '}
+              <ExternalLink
+                href={`${selectedNetwork?.blockExplorer}/tx/${tx}`}
+                target="_blank"
+              >
+                transaction
+              </ExternalLink>{' '}
+              was successful 🥳
             </Typography>
-            <Typography variant='h4'>
+            <Typography variant="h4">
               Your booking confirmation will be sent by email
             </Typography>
           </Box>
-          <Typography variant='body1'>
-            Thank you for booking using win.so!
-          </Typography>
-          <Typography variant='body1'>
+          <Typography variant="body1">Thank you for booking using win.so!</Typography>
+          <Typography variant="body1">
             We have reduced xx CO2 emissions so far and we are counting 💚
           </Typography>
-          <Typography variant='body1'>
-            Please redeem one of these Giveaways
-          </Typography>
+          <Typography variant="body1">Please redeem one of these Giveaways</Typography>
         </Box>
         <Grid
           container
           spacing={1}
-          alignItems='stretch'
+          alignItems="stretch"
           maxWidth={500}
           marginBottom={theme.spacing(5)}
         >
           <Grid item xs={12} md={6}>
-            <BigBox onClick={() => {/**/}}>
+            <BigBox
+              onClick={() => {
+                /**/
+              }}
+            >
               Give back 10% of your booking value to offset CO2 emissions
             </BigBox>
           </Grid>
           <Grid item xs={12} md={6}>
-            <BigBox onClick={() => {/**/}}>
+            <BigBox
+              onClick={() => {
+                /**/
+              }}
+            >
               Take 10% of your booking value back in crypto
             </BigBox>
           </Grid>

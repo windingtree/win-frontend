@@ -71,7 +71,7 @@ export const AssetSelector = ({
   const omCurrencyChange = (e: SelectChangeEvent) => {
     try {
       const option = String(e.target.value);
-      const selectedAsset = options.filter(o => o.symbol === option)[0];
+      const selectedAsset = options.filter((o) => o.symbol === option)[0];
       logger.debug(`Token selected #${selectedAsset.name}`);
       setAsset(selectedAsset);
     } catch (err) {
@@ -91,7 +91,7 @@ export const AssetSelector = ({
       <Select
         value={asset ? asset.symbol : 'none'}
         sx={{
-          backgroundColor: !asset ? 'rgba(255,0,0,0.7)': 'transparent'
+          backgroundColor: !asset ? 'rgba(255,0,0,0.7)' : 'transparent'
         }}
         onChange={omCurrencyChange}
       >
@@ -103,28 +103,21 @@ export const AssetSelector = ({
               alignItems: 'center'
             }}
           >
-            {!asset &&
+            {!asset && (
               <Iconify
                 color="inherit"
                 icon="codicon:warning"
                 marginRight={theme.spacing(1)}
               />
-            }
-            <Box>
-              Select token
-            </Box>
+            )}
+            <Box>Select token</Box>
           </Box>
         </MenuItem>
-        {options.map(
-          (option, index) => (
-            <MenuItem
-              key={index}
-              value={option.symbol}
-            >
-              {option.name}
-            </MenuItem>
-          )
-        )}
+        {options.map((option, index) => (
+          <MenuItem key={index} value={option.symbol}>
+            {option.name}
+          </MenuItem>
+        ))}
       </Select>
       <MessageBox type="warn" show={noOptions}>
         {`The selected network does not support payments in ${payment.currency}`}

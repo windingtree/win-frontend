@@ -20,11 +20,9 @@ export const ExternalLink = ({ href, target, label, children }: ExternalLinkProp
       variant="outlined"
       href={href}
       target={target}
-      icon={<Iconify
-        color="inherit"
-        icon="cil:external-link"
-        marginLeft={theme.spacing(1)}
-      />}
+      icon={
+        <Iconify color="inherit" icon="cil:external-link" marginLeft={theme.spacing(1)} />
+      }
       clickable
       sx={{
         fontSize: 'inherit',
@@ -33,4 +31,4 @@ export const ExternalLink = ({ href, target, label, children }: ExternalLinkProp
       }}
     />
   );
-}
+};

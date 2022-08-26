@@ -1,22 +1,32 @@
 import { CardMedia, CardMediaTypeMap } from '@mui/material';
 import { OverrideProps } from '@mui/material/OverridableComponent';
-import { SyntheticEvent, useRef, createRef, useState, useCallback, useEffect } from 'react';
+import {
+  SyntheticEvent,
+  useRef,
+  createRef,
+  useState,
+  useCallback,
+  useEffect
+} from 'react';
 
 export interface FallbackProps {
   component: string;
   fallback: string;
 }
 
-type CardMediaProps<D extends React.ElementType = 'div', P = Record<string, unknown>> = OverrideProps<
-  CardMediaTypeMap<P, D>,
-  D
->;
+type CardMediaProps<
+  D extends React.ElementType = 'div',
+  P = Record<string, unknown>
+> = OverrideProps<CardMediaTypeMap<P, D>, D>;
 
 export type CardMediaFallbackProps = CardMediaProps & FallbackProps;
 
-export const CardMediaFallback = (
-  { fallback, src, image, ...props }: CardMediaFallbackProps
-) => {
+export const CardMediaFallback = ({
+  fallback,
+  src,
+  image,
+  ...props
+}: CardMediaFallbackProps) => {
   const timeout = useRef<NodeJS.Timeout | undefined>();
   const [source, setSource] = useState<string>(image || src || '');
   const resetTimeout = () => clearTimeout(timeout.current);
@@ -29,20 +39,12 @@ export const CardMediaFallback = (
     [fallback]
   );
 
-  useEffect(
-    () => {
-      timeout.current = setTimeout(() => setSource(fallback), 5000);
-      return () => clearTimeout(timeout.current);
-    },
-    [source, fallback]
-  );
+  useEffect(() => {
+    timeout.current = setTimeout(() => setSource(fallback), 5000);
+    return () => clearTimeout(timeout.current);
+  }, [source, fallback]);
 
   return (
-    <CardMedia
-      {...props}
-      src={source}
-      onLoad={resetTimeout}
-      onError={errorHandler}
-    />
+    <CardMedia {...props} src={source} onLoad={resetTimeout} onError={errorHandler} />
   );
 };

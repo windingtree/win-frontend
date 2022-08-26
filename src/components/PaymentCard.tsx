@@ -120,10 +120,7 @@ export const PaymentCard = ({
     setTxStarted(undefined);
   };
 
-  useEffect(
-    () => resetState(),
-    [provider, network, asset, payment]
-  );
+  useEffect(() => resetState(), [provider, network, asset, payment]);
 
   useEffect(() => {
     const checkIsAccount = async () => {
@@ -340,9 +337,7 @@ export const PaymentCard = ({
       }
     } catch (err) {
       logger.error(err);
-      setPaymentError(
-        err.message ? err.message.split('[')[0] : 'Unknown payment error'
-      );
+      setPaymentError(err.message ? err.message.split('[')[0] : 'Unknown payment error');
       setTxStarted(undefined);
     }
   }, [winPayContract, asset, account, permitSignature]);
@@ -381,32 +376,27 @@ export const PaymentCard = ({
               display: 'flex',
               flexDirection: 'row',
               alignItems: isDesktop ? 'flex-start' : 'center',
-              justifyContent: isDesktop ? '' : 'space-between',
+              justifyContent: isDesktop ? '' : 'space-between'
             }}
           >
             <Box
               sx={{
-                flexShrink: 0,
+                flexShrink: 0
               }}
             >
-              <img
-                width="70"
-                height="70"
-                src={asset.image}
-                alt={asset.name}
-              />
+              <img width="70" height="70" src={asset.image} alt={asset.name} />
             </Box>
-            {!asset.native &&
+            {!asset.native && (
               <Box
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'stretch',
+                  alignItems: 'stretch'
                 }}
               >
                 <Button
-                  size='small'
-                  variant='outlined'
+                  size="small"
+                  variant="outlined"
                   onClick={addTokenToWallet}
                   sx={{
                     marginBottom: theme.spacing(1)
@@ -415,19 +405,21 @@ export const PaymentCard = ({
                   {`Add ${asset.symbol} to wallet`}
                 </Button>
                 <Button
-                  size='small'
-                  variant='outlined'
+                  size="small"
+                  variant="outlined"
                   onClick={() => openExplorer(asset.address)}
-                  endIcon={<Iconify
-                    color="inherit"
-                    icon="cil:external-link"
-                    marginLeft={theme.spacing(1)}
-                  />}
+                  endIcon={
+                    <Iconify
+                      color="inherit"
+                      icon="cil:external-link"
+                      marginLeft={theme.spacing(1)}
+                    />
+                  }
                 >
                   {`${asset.symbol} contract`}
                 </Button>
               </Box>
-            }
+            )}
           </Box>
 
           {account && balance && (
@@ -446,30 +438,34 @@ export const PaymentCard = ({
           >
             {!allowanceBlocked && !asset.native && (
               <Button
-                variant='contained'
+                variant="contained"
                 onClick={approveTokens}
                 disabled={allowanceBlocked}
               >
                 Approve the tokens
-                {isTxStarted === 'approve' ? <CircularProgress size="16px" color='inherit' sx={{ ml: theme.spacing(1)}} /> : undefined}
+                {isTxStarted === 'approve' ? (
+                  <CircularProgress
+                    size="16px"
+                    color="inherit"
+                    sx={{ ml: theme.spacing(1) }}
+                  />
+                ) : undefined}
               </Button>
             )}
             {!permitBlocked && asset.permit && (
-              <Button
-                variant='contained'
-                onClick={createPermit}
-                disabled={permitBlocked}
-              >
+              <Button variant="contained" onClick={createPermit} disabled={permitBlocked}>
                 Permit the tokens
               </Button>
             )}
-            <Button
-              variant='contained'
-              onClick={makePayment}
-              disabled={paymentBlocked}
-            >
+            <Button variant="contained" onClick={makePayment} disabled={paymentBlocked}>
               Pay {formatCost(payment, asset.symbol)}
-              {isTxStarted === 'pay' ? <CircularProgress size="16px" color='inherit' sx={{ ml: theme.spacing(1)}} /> : undefined}
+              {isTxStarted === 'pay' ? (
+                <CircularProgress
+                  size="16px"
+                  color="inherit"
+                  sx={{ ml: theme.spacing(1) }}
+                />
+              ) : undefined}
             </Button>
           </Box>
         </CardContent>

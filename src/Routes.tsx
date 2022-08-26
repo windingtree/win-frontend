@@ -89,12 +89,12 @@ export const pagesRoutesConfig: Routes = [
   {
     path: '/privacy',
     element: <PrivacyPolicy />,
-    title: 'Privacy and Cookie Policy',
+    title: 'Privacy and Cookie Policy'
   },
   {
     path: '/terms',
     element: <TermsAndConditions />,
-    title: 'Terms and Conditions',
+    title: 'Terms and Conditions'
   },
   {
     path: '/contacts',

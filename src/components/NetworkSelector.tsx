@@ -20,7 +20,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
   const theme = useTheme();
   const { provider } = useAppState();
   const { switchChain } = useWalletRpcApi(provider, allowedNetworks);
-  const [networkId,, isRightNetwork] = useNetworkId(provider, allowedNetworks);
+  const [networkId, , isRightNetwork] = useNetworkId(provider, allowedNetworks);
   const [network, setNetwork] = useState<NetworkInfo | undefined>(value);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
             await switchChain(chainId);
             logger.debug(`Network switched to #${chainId}`);
           }
-          setNetwork(allowedNetworks.filter(n => n.chainId === chainId)[0]);
+          setNetwork(allowedNetworks.filter((n) => n.chainId === chainId)[0]);
         }
       } catch (err) {
         logger.error(err);
@@ -80,7 +80,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
       value={network && isRightNetwork ? network.chainId.toString() : 'none'}
       onChange={omNetworkChange}
       sx={{
-        backgroundColor: !isRightNetwork ? 'rgba(255,0,0,0.7)': 'transparent'
+        backgroundColor: !isRightNetwork ? 'rgba(255,0,0,0.7)' : 'transparent'
       }}
     >
       <MenuItem value="none">
@@ -91,28 +91,21 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
             alignItems: 'center'
           }}
         >
-          {!isRightNetwork &&
+          {!isRightNetwork && (
             <Iconify
               color="inherit"
               icon="codicon:warning"
               marginRight={theme.spacing(1)}
             />
-          }
-          <Box>
-            Select network
-          </Box>
+          )}
+          <Box>Select network</Box>
         </Box>
       </MenuItem>
-      {allowedNetworks.map(
-        (n, index) => (
-          <MenuItem
-            key={index}
-            value={n.chainId.toString()}
-          >
-            {n.name}
-          </MenuItem>
-        )
-      )}
+      {allowedNetworks.map((n, index) => (
+        <MenuItem key={index} value={n.chainId.toString()}>
+          {n.name}
+        </MenuItem>
+      ))}
     </Select>
   );
 };

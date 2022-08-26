@@ -1,6 +1,16 @@
 import Blockies from 'react-blockies';
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Card, CardHeader, CardContent, Paper, Popover, Typography, Button, IconButton } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardHeader,
+  CardContent,
+  Paper,
+  Popover,
+  Typography,
+  Button,
+  IconButton
+} from '@mui/material';
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { centerEllipsis, copyToClipboard } from '../utils/strings';
 import Iconify from '../components/Iconify';
@@ -23,7 +33,7 @@ export const Account = ({ account, open }: AccountProps) => {
 
   return (
     <Paper
-      variant='outlined'
+      variant="outlined"
       sx={{
         display: 'flex',
         alignItems: 'center',
@@ -39,15 +49,15 @@ export const Account = ({ account, open }: AccountProps) => {
           {shortAccount}
         </Typography>
       </Box>
-      {open !== undefined &&
+      {open !== undefined && (
         <Iconify
           color="inherit"
           icon={`akar-icons:chevron-${open ? 'up' : 'down'}`}
           marginLeft={theme.spacing(1)}
         />
-      }
+      )}
     </Paper>
-  )
+  );
 };
 
 export const AccountInfo = () => {
@@ -57,29 +67,26 @@ export const AccountInfo = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [explorer, setExplorer] = useState<string | undefined>();
   const connectedWith = useMemo(
-    () => provider && provider.provider.isMetaMask ? 'MetaMask' : 'WalletConnect',
+    () => (provider && provider.provider.isMetaMask ? 'MetaMask' : 'WalletConnect'),
     [provider]
   );
 
-  useEffect(
-    () => {
-      const getExplorer = async () => {
-        try {
-          if (!provider) {
-            setExplorer(undefined);
-            return;
-          }
-          const { chainId } = await provider.getNetwork();
-          const { blockExplorer } = getNetworkInfo(chainId);
-          setExplorer(blockExplorer);
-        } catch (err) {
+  useEffect(() => {
+    const getExplorer = async () => {
+      try {
+        if (!provider) {
           setExplorer(undefined);
+          return;
         }
-      };
-      getExplorer();
-    },
-    [provider]
-  );
+        const { chainId } = await provider.getNetwork();
+        const { blockExplorer } = getNetworkInfo(chainId);
+        setExplorer(blockExplorer);
+      } catch (err) {
+        setExplorer(undefined);
+      }
+    };
+    getExplorer();
+  }, [provider]);
 
   const handleOpen = useCallback(() => {
     setOpen(true);
@@ -92,7 +99,7 @@ export const AccountInfo = () => {
     setOpen(false);
   };
 
-  const handleOpenExplorer  = (type: 'address' | 'tx', value: string) => {
+  const handleOpenExplorer = (type: 'address' | 'tx', value: string) => {
     if (!explorer) {
       return;
     }
@@ -132,9 +139,11 @@ export const AccountInfo = () => {
         <Card>
           <CardHeader
             title="Account"
-            action={<IconButton onClick={handleClose}>
-              <Iconify icon="ci:close-big" />
-            </IconButton>}
+            action={
+              <IconButton onClick={handleClose}>
+                <Iconify icon="ci:close-big" />
+              </IconButton>
+            }
           />
           <CardContent>
             <Box
@@ -146,9 +155,7 @@ export const AccountInfo = () => {
               marginBottom={theme.spacing(2)}
             >
               <Box marginRight={theme.spacing(2)}>
-                <Typography>
-                  Connected with {connectedWith}
-                </Typography>
+                <Typography>Connected with {connectedWith}</Typography>
               </Box>
               <Box>
                 <SignOutButton />

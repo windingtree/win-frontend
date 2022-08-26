@@ -44,9 +44,7 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
 
   return (
     <>
-      <Box
-        marginBottom={theme.spacing(5)}
-      >
+      <Box marginBottom={theme.spacing(5)}>
         {account && (
           <Box
             sx={{
