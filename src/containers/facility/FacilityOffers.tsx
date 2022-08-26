@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { RoomCard } from 'src/components/RoomCard';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { styled } from '@mui/material';
+import { styled, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { forwardRef } from 'react';
 
@@ -13,9 +13,9 @@ interface SearchCriteriaAndResult {
   roomsAvailable?: number;
 }
 
-const FacilityOffersContainer = styled(Box)(() => ({
-  marginBottom: '20px',
-  padding: '20px'
+const FacilityOffersContainer = styled(Box)(({theme}) => ({
+  marginBottom: theme.spacing(2.5),
+  padding: theme.spacing(2.5)
 }));
 
 const FacilityOffersTitle = ({
@@ -25,17 +25,13 @@ const FacilityOffersTitle = ({
   startDate,
   nights
 }: SearchCriteriaAndResult) => {
-  const Header = styled(Box)(() => ({
-    fontSize: '2rem',
-    fontWeight: 400,
-    marginBottom: '50px'
-  }));
 
   const SubHeader = styled(Box)(() => ({}));
+  const theme = useTheme();
 
   return (
-    <Box marginBottom={'20px'}>
-      <Header>Available Rooms</Header>
+    <Box marginBottom={theme.spacing(2.5)}>
+      <Typography marginBottom={theme.spacing(6)}>Available Rooms</Typography>
       <SubHeader>
         Results for {rooms || ''} room, {guests} guests, staying from {startDate} for{' '}
         {nights} nights: {roomsAvailable} rooms available.

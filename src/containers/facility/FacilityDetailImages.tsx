@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material';
 import { MediaItem } from '@windingtree/glider-types/types/win';
 import { Box, Image } from 'grommet';
 import { forwardRef } from 'react';
@@ -16,23 +17,24 @@ interface FacilityDetailImagesProps {
 
 export const FacilityDetailImages = forwardRef<HTMLDivElement, FacilityDetailImagesProps>(
   ({ images }, ref) => {
+    const theme = useTheme();
     return (
       <Box
         direction="row"
         style={{
-          gap: '8px',
+          gap: theme.spacing(1),
           flex: '50%'
         }}
         ref={ref}
       >
         <Box direction="column" width="100%" style={{ gap: '8px' }}>
-          <DetailImage src={images[0]?.url} />
-          <DetailImage src={images[1]?.url} />
+          {images[0] && <DetailImage src={images[0]?.url} />}
+          {images[1] && <DetailImage src={images[1]?.url} />}
         </Box>
 
         <Box direction="column" width="100%" style={{ gap: '8px' }}>
-          <DetailImage src={images[2]?.url} />
-          <DetailImage src={images[3]?.url} />
+        {images[2] && <DetailImage src={images[2]?.url} />}
+        {images[3] && <DetailImage src={images[3]?.url} />}
         </Box>
       </Box>
     );

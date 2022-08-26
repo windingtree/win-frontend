@@ -2,18 +2,20 @@ import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
-import { Button, Typography } from '@mui/material';
-import { styled } from '@mui/material';
+import { Typography } from '@mui/material';
+import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
-import { sortByLargestImage } from '../../utils/accommodation';
+import { CustomButton } from '../../components/CustomButton';
+import { useMemo } from 'react';
+import { stringToNumber } from '../../utils/strings';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
   height: '720px',
-  gap: '8px',
-  padding: '20px',
+  gap: theme.spacing(1),
+  padding: theme.spacing(2.5),
 
   [theme.breakpoints.up('lg')]: {
     flexDirection: 'row',
@@ -21,12 +23,12 @@ const Container = styled(Box)(({ theme }) => ({
   }
 }));
 
-const HeaderContainer = styled(Box)(() => ({
+const HeaderContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
-  marginBottom: '5px',
-  padding: '20px'
+  marginBottom: theme.spacing(1),
+  padding: theme.spacing(2.5)
 }));
 
 const HeaderTitleContainer = styled(Box)(() => ({
@@ -47,17 +49,28 @@ const FacilityMainImage = styled('img')(() => ({
   objectFit: 'cover'
 }));
 
-const HeaderButtonFooter = styled(Box)(() => ({
-  fontSize: '8px'
-}));
-
 const HeaderButton = () => {
+  const theme = useTheme();
+  const { offers } = useAccommodationsAndOffers();
+
+  // get lowest offer price
+  const lowestPrice = useMemo(() => {
+    return offers.reduce(
+      (lowestPrice, offer): { price: string; currency: string } => {
+        return stringToNumber(offer.price?.public) > stringToNumber(lowestPrice.price)
+          ? { price: offer.price?.public, currency: offer.price?.currency }
+          : lowestPrice;
+      },
+      { price: '-1', currency: '' }
+    );
+  }, [offers]);
+
   return (
     <HeaderButtonContainer>
       <Box display={'flex'} alignItems={'end'}>
         <Typography>From</Typography>
-        <Typography fontSize={'24px'} marginLeft={'12px'}>
-          $100
+        <Typography variant="body1" marginLeft={theme.spacing(1.5)}>
+          {lowestPrice.currency} {Number(lowestPrice.price).toFixed(2)}
         </Typography>
       </Box>
       <div>
@@ -65,9 +78,9 @@ const HeaderButton = () => {
       </div>
 
       <div>
-        <CtaButton onClick={scrollToDetailImages}>Select Room</CtaButton>
+        <CustomButton onClick={scrollToDetailImages}>Select Room</CustomButton>
       </div>
-      <HeaderButtonFooter>{"You won't be charged yet"}</HeaderButtonFooter>
+      <Typography variant="caption">{"You won't be charged yet"}</Typography>
     </HeaderButtonContainer>
   );
 };
@@ -83,11 +96,11 @@ const HotelAddress = ({ address }: { address?: string }) => {
 };
 
 const HeaderTitle = ({ name, address }: { name?: string; address?: string }) => {
+  const theme = useTheme();
   return (
     <HeaderTitleContainer>
-      <Button sx={{ marginRight: '8px' }}>{'<'}</Button>
       <div>
-        <Typography fontWeight={500} fontSize="2rem" marginBottom={'10px'}>
+        <Typography variant="h1" marginBottom={theme.spacing(1.5)}>
           {name}
         </Typography>
         <HotelAddress address={address} />

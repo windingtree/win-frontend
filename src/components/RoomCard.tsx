@@ -7,9 +7,9 @@ import axios from 'axios';
 import { MessageBox } from './MessageBox';
 import { PricedOfferRequest } from '../api/PricedOffer';
 import type { OfferRecord } from 'src/store/types';
-import { Alert, Box, Grid, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import { ctaButtonStyle } from '../containers/facility/CtaButton';
+import { Alert, Box, Grid, Typography, useTheme } from '@mui/material';
+
+import { CustomLoadingButton } from './CustomLoadingButton';
 
 const logger = Logger('RoomCard');
 
@@ -19,6 +19,7 @@ export const RoomCard: React.FC<{
   facilityId: string;
 }> = ({ offer, facilityId, room }) => {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
 
   const navigate = useNavigate();
   const [notification] = useState<string | undefined>();
@@ -57,15 +58,15 @@ export const RoomCard: React.FC<{
   }, [dispatch]);
 
   return (
-    <Box border={'3px solid #AAAAAA'} padding={'20px'} borderRadius={'5px'}>
+    <Box border={'3px solid #AAAAAA'} padding={theme.spacing(2)} borderRadius={1} marginBottom={theme.spacing(5)}>
       <Grid container spacing={5}>
         <Grid item xs={9}>
           <Box>
-            <Typography fontSize={'2rem'} marginBottom={'12px'}>
+            <Typography variant="h4" marginBottom={theme.spacing(2)}>
               {room?.name}
             </Typography>
             {room?.maximumOccupancy && (
-              <Typography fontSize={'1rem'} marginBottom={'6px'}>
+              <Typography variant="body1" marginBottom={theme.spacing(1)}>
                 {`Book your ${room?.name} for `}
                 {room?.maximumOccupancy?.adults}{' '}
                 {room?.maximumOccupancy?.adults !== undefined &&
@@ -81,7 +82,7 @@ export const RoomCard: React.FC<{
             )}
           </Box>
           <Box flexDirection={'column'} justifyContent={'start'}>
-            <Typography fontSize={'1rem'}>{room?.description}</Typography>
+            <Typography variant="body1">{room?.description}</Typography>
           </Box>
         </Grid>
         <Grid item xs={3} alignSelf={'end'}>
@@ -89,21 +90,20 @@ export const RoomCard: React.FC<{
             display={'flex'}
             flexDirection={'column'}
             alignItems={'end'}
-            rowGap={'10px'}
+            rowGap={theme.spacing(2)}
           >
-            <Typography fontSize={'1.5rem'}>
+            <Typography variant="body1">
               {`${offer.price?.currency} ${Number(offer.price?.public).toFixed(2)} `}
             </Typography>
             <Typography>
               {`Price for ${numberOfDays} nights, ${roomsNumber} room(s)`}
             </Typography>
-            <LoadingButton
+            <CustomLoadingButton
               onClick={() => handleBook()}
               loading={loading}
-              sx={ctaButtonStyle}
             >
               Book Now
-            </LoadingButton>
+            </CustomLoadingButton>
             <MessageBox type="error" show={!!error}>
               {error}
             </MessageBox>
