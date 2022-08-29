@@ -33,10 +33,10 @@ jobs:
           HTTPS: true
           REACT_APP_LOG_LEVEL: info
           NODE_ENV: development
-          REACT_APP_MODE: development
+          REACT_APP_MODE: dev
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-          REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
           REACT_APP_EXPIRATION_GAP: ${{ secrets.REACT_APP_EXPIRATION_GAP }}
+          REACT_APP_HOTJAR_ID: ${{ secrets.REACT_APP_HOTJAR_ID }}
         run: |
           rm -rf ./build
           yarn build

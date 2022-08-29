@@ -3,7 +3,6 @@ import { config } from '@windingtree/win-commons';
 
 export enum AppMode {
   dev = 'dev',
-  stage = 'stage',
   prod = 'prod'
 }
 
@@ -19,7 +18,7 @@ export const checkEnvVariables = (vars: string[]): void =>
     }
   });
 
-checkEnvVariables(['REACT_APP_API_KEY', 'REACT_APP_API_URL', 'REACT_APP_EXPIRATION_GAP']);
+checkEnvVariables(['REACT_APP_API_URL', 'REACT_APP_EXPIRATION_GAP']);
 
 // Configure the time zone
 Settings.defaultZone = config.defaultZone;
@@ -36,9 +35,8 @@ switch (process.env.REACT_APP_MODE) {
   case 'dev':
     mode = AppMode.dev;
     break;
-  case 'stage':
   default:
-    mode = AppMode.stage;
+    mode = AppMode.dev;
 }
 
 export const allowedNetworks = config.getNetworksByMode(mode);
@@ -46,7 +44,6 @@ export const allowedNetworks = config.getNetworksByMode(mode);
 export const getNetworkInfo = config.getNetworkInfo;
 
 export const backend = Object.freeze({
-  key: process.env.REACT_APP_API_KEY,
   url: process.env.REACT_APP_API_URL
 });
 
