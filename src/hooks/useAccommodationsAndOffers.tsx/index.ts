@@ -52,9 +52,9 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     coordinates: data?.coordinates,
     offers,
     refetch,
-    data,
     error,
     isLoading,
-    isFetching
+    isFetching,
+    latestQueryParams: data?.latestQueryParams
   };
 };
