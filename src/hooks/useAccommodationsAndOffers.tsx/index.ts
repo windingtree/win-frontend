@@ -55,6 +55,7 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     data,
     error,
     isLoading,
-    isFetching
+    isFetching,
+    latestQueryParams: data?.latestQueryParams
   };
 };
