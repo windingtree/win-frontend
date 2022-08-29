@@ -25,20 +25,12 @@ export const Facility = () => {
   }, [latestQueryParams, createSearchParams]);
 
   return (
-    <MainLayout
-    //TODO: check with designer whether breadcrumbs are still needed.
-    // breadcrumbs={[
-    //   {
-    //     label: 'Search',
-    //     path: `/`
-    //   }
-    // ]}
-    >
+    <MainLayout>
       <Breadcrumbs
         links={[
           {
             name: 'Home',
-            href: `/`
+            href: '/'
           },
           {
             name: 'Search',
