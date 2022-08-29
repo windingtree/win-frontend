@@ -1,12 +1,6 @@
 import { CardMedia, CardMediaTypeMap } from '@mui/material';
 import { OverrideProps } from '@mui/material/OverridableComponent';
-import {
-  SyntheticEvent,
-  useRef,
-  useState,
-  useCallback,
-  useEffect
-} from 'react';
+import { SyntheticEvent, useRef, useState, useCallback, useEffect } from 'react';
 
 export interface FallbackProps {
   component: string;

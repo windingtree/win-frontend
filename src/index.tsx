@@ -1,9 +1,29 @@
 import { BrowserRouter } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
+import { initHotJar } from './utils/hotjar.js';
 import 'leaflet/dist/leaflet.css';
 import './reset.css';
 import App from './App';
+
+if (
+  process &&
+  process.env &&
+  typeof process.env.REACT_APP_HOTJAR_ID === 'string' &&
+  process.env.REACT_APP_HOTJAR_ID.length
+) {
+  const hjid = Number.parseInt(process.env.REACT_APP_HOTJAR_ID, 10);
+
+  if (!Number.isNaN(hjid)) {
+    console.log(`HotJar ID = '${hjid}'`);
+
+    try {
+      initHotJar(hjid);
+    } catch (err) {
+      console.error('Error while initializing HotJar code.');
+    }
+  }
+}
 
 window.addEventListener('unhandledrejection', (event) => {
   event.preventDefault();

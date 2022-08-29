@@ -1,0 +1,17 @@
+public/**/*.js
+public/**/*.mjs
+public/**/*.ts
+public/**/*.jsx
+public/**/*.tsx
+
+build/**/*.js
+build/**/*.mjs
+build/**/*.ts
+build/**/*.jsx
+build/**/*.tsx
+
+node_modules/**/*.js
+node_modules/**/*.mjs
+node_modules/**/*.ts
+node_modules/**/*.jsx
+node_modules/**/*.tsx
