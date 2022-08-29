@@ -3,7 +3,8 @@ import { config } from '@windingtree/win-commons';
 
 export enum AppMode {
   dev = 'dev',
-  prod = 'prod'
+  stage = 'stage',
+  prod = 'prod',
 }
 
 export interface Api {
@@ -35,8 +36,9 @@ switch (process.env.REACT_APP_MODE) {
   case 'dev':
     mode = AppMode.dev;
     break;
+  case 'stage':
   default:
-    mode = AppMode.dev;
+    mode = AppMode.stage;
 }
 
 export const allowedNetworks = config.getNetworksByMode(mode);
