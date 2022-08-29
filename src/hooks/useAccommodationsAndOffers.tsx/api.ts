@@ -12,6 +12,7 @@ export interface AccommodationsAndOffersResponse {
   accommodations: Record<string, Accommodation>;
   offers: Record<string, Offer>;
   coordinates: Coordinates;
+  latestParams: SearchTypeProps;
 }
 
 export async function fetchAccommodationsAndOffers({
@@ -74,5 +75,7 @@ export async function fetchAccommodationsAndOffers({
   const accommodations = data.accommodations;
   const offers = data.offers;
 
-  return { accommodations, offers, coordinates: normalizedCoordinates };
+  const latestParams = { location, date, roomCount, adultCount, childrenCount };
+
+  return { accommodations, offers, coordinates: normalizedCoordinates, latestParams };
 }
