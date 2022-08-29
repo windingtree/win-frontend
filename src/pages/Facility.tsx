@@ -10,7 +10,6 @@ export const Facility = () => {
   const { latestQueryParams } = useAccommodationsAndOffers();
 
   const query = useMemo(() => {
-    console.log('latestQueryParams', latestQueryParams);
     if (latestQueryParams === undefined) {
       return '';
     }
