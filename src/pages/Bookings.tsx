@@ -19,56 +19,41 @@ export const Bookings = () => {
   const [isLogin, setLogin] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
   const [isAccountContract, setIsContract] = useState<boolean>(false);
-  const isLoggedIn = useMemo(
-    () => !!walletAuth,
-    [walletAuth]
-  );
+  const isLoggedIn = useMemo(() => !!walletAuth, [walletAuth]);
 
-  useEffect(
-    () => {
-      const checkIsContract = async () => {
-        try {
-          if (account && provider) {
-            setIsContract(
-              await isContract(account, provider)
-            );
-          } else {
-            setIsContract(false);
-          }
-        } catch (err) {
-          console.log(err);
+  useEffect(() => {
+    const checkIsContract = async () => {
+      try {
+        if (account && provider) {
+          setIsContract(await isContract(account, provider));
+        } else {
           setIsContract(false);
         }
-      };
-
-      checkIsContract();
-    },
-    [account, provider]
-  );
-
-  const auth = useCallback(
-    async () => {
-      try {
-        setError(undefined);
-        setLogin(true);
-        await login();
-        setLogin(false);
       } catch (err) {
-        setError(err.message || 'Unknown authorization error');
-        setLogin(false);
+        console.log(err);
+        setIsContract(false);
       }
-    },
-    [login]
-  );
+    };
+
+    checkIsContract();
+  }, [account, provider]);
+
+  const auth = useCallback(async () => {
+    try {
+      setError(undefined);
+      setLogin(true);
+      await login();
+      setLogin(false);
+    } catch (err) {
+      setError(err.message || 'Unknown authorization error');
+      setLogin(false);
+    }
+  }, [login]);
 
   return (
     <MainLayout>
       <MessageBox type="warn" show={!account}>
-        <Grid
-          container
-          direction="row"
-          alignItems="center"
-        >
+        <Grid container direction="row" alignItems="center">
           <Grid item marginRight={theme.spacing(5)}>
             Please connect your wallet
           </Grid>
@@ -79,11 +64,7 @@ export const Bookings = () => {
       </MessageBox>
 
       <MessageBox type="warn" show={!!account && !isLoggedIn}>
-        <Grid
-          container
-          direction="row"
-          alignItems="center"
-        >
+        <Grid container direction="row" alignItems="center">
           <Grid item marginRight={theme.spacing(5)}>
             Please authorize your account. You will be prompted for signature.
           </Grid>
@@ -103,55 +84,51 @@ export const Bookings = () => {
       </MessageBox>
 
       <MessageBox type="warn" show={isAccountContract}>
-        It seems that your connected account is a multisig wallet or other smart contract. It is not possible to authorize a smart contract address.
+        It seems that your connected account is a multisig wallet or other smart contract.
+        It is not possible to authorize a smart contract address.
       </MessageBox>
 
       <MessageBox type="error" show={!!error}>
         <Box>{error}</Box>
       </MessageBox>
 
-      {isLoggedIn &&
+      {isLoggedIn && (
         <Box margin={theme.spacing(5)}>
-          <Button
-            variant="contained"
-            onClick={logout}
-          >
+          <Button variant="contained" onClick={logout}>
             LogOut
           </Button>
         </Box>
-      }
+      )}
 
-      {bookings.length > 0 &&
+      {bookings.length > 0 && (
         <>
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             <Box padding={theme.spacing(2)}>N</Box>
             <Box padding={theme.spacing(2)}>offerId</Box>
             <Box padding={theme.spacing(2)}>orderId</Box>
           </Box>
-          {bookings.map(
-            (booking, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Box padding={theme.spacing(2)}>{index}</Box>
-                <Box padding={theme.spacing(2)}>{booking.offerId}</Box>
-                <Box padding={theme.spacing(2)}>{booking.orderId}</Box>
-              </Box>
-            )
-          )}
+          {bookings.map((booking, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <Box padding={theme.spacing(2)}>{index}</Box>
+              <Box padding={theme.spacing(2)}>{booking.offerId}</Box>
+              <Box padding={theme.spacing(2)}>{booking.orderId}</Box>
+            </Box>
+          ))}
         </>
-      }
+      )}
     </MainLayout>
   );
 };

@@ -1,10 +1,10 @@
-import type { Web3ModalProvider } from '../hooks/useWeb3Modal';
-import type {
+import { Web3ModalProvider } from '../hooks/useWeb3Modal';
+import {
   NetworkInfo,
   CryptoAsset,
   AssetCurrency
 } from '@windingtree/win-commons/dist/types';
-import type {
+import {
   BigNumber,
   Wallet,
   Signature,
@@ -15,26 +15,25 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { utils, BigNumber as BN } from 'ethers';
 import {
   Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Text,
+  CardContent,
+  Typography,
   Box,
-  Spinner,
-  Button,
-  Image
-} from 'grommet';
-import { Share as ShareIcon } from 'grommet-icons';
+  CircularProgress,
+  Button
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { createPermitSignature } from '@windingtree/win-pay';
+import { MessageBox } from './MessageBox';
+import { ExternalLink } from './ExternalLink';
+import Iconify from '../components/Iconify';
 import { usePoller } from '../hooks/usePoller';
 import { useAsset } from '../hooks/useAsset';
 import { useWalletRpcApi } from '../hooks/useWalletRpcApi';
 import { useAllowance } from 'src/hooks/useAllowance';
 import { useWinPay } from '../hooks/useWinPay';
+import useResponsive from '../hooks/useResponsive';
 import { centerEllipsis, formatCost } from '../utils/strings';
 import { allowedNetworks, assetsCurrencies } from '../config';
-import { MessageBox } from './MessageBox';
-import { ExternalLink } from './ExternalLink';
 import Logger from '../utils/logger';
 
 const logger = Logger('PaymentCard');
@@ -53,12 +52,14 @@ export interface PaymentSuccess {
   receipt: ContractReceipt;
 }
 
+export type PaymentSuccessCallback = (result: PaymentSuccess) => void;
+
 export interface PaymentCardProps {
   provider?: Web3ModalProvider;
   network?: NetworkInfo;
   asset?: CryptoAsset;
   payment: Payment;
-  onSuccess: (result: PaymentSuccess) => void;
+  onSuccess: PaymentSuccessCallback;
 }
 
 export const PaymentCard = ({
@@ -68,6 +69,8 @@ export const PaymentCard = ({
   payment,
   onSuccess
 }: PaymentCardProps) => {
+  const theme = useTheme();
+  const isDesktop = useResponsive('up', 'md');
   const { watchAsset } = useWalletRpcApi(provider, allowedNetworks);
   const [account, setAccount] = useState<string | undefined>();
   const { winPayContract } = useWinPay(provider, network);
@@ -116,6 +119,8 @@ export const PaymentCard = ({
     setTxHash(undefined);
     setTxStarted(undefined);
   };
+
+  useEffect(() => resetState(), [provider, network, asset, payment]);
 
   useEffect(() => {
     const checkIsAccount = async () => {
@@ -226,8 +231,12 @@ export const PaymentCard = ({
         throw new Error('You cannot create permit signature. The component is not ready');
       }
     } catch (err) {
-      logger.error(err);
-      setPermitError((err as Error).message || 'Unknown permit signature error');
+      logger.error([err]);
+      if (err.reason) {
+        setPermitError(`Error: ${err.reason}`);
+      } else {
+        setPermitError((err as Error).message || 'Unknown permit signature error');
+      }
       setPermitSignature(undefined);
     }
   }, [provider, asset, tokenContract, account]);
@@ -328,9 +337,7 @@ export const PaymentCard = ({
       }
     } catch (err) {
       logger.error(err);
-      setPaymentError(
-        err.message ? err.message.split('[')[0] : 'Unknown payment signature error'
-      );
+      setPaymentError(err.message ? err.message.split('[')[0] : 'Unknown payment error');
       setTxStarted(undefined);
     }
   }, [winPayContract, asset, account, permitSignature]);
@@ -352,94 +359,139 @@ export const PaymentCard = ({
 
   return (
     <>
-      <Card background="light-1" margin={{ bottom: 'small' }} fill>
-        <CardHeader pad="small">
-          <Box width="xsmall" height="xsmall">
-            <Image fit="cover" src={asset.image} />
-          </Box>
-          {!asset.native && (
-            <Box direction="column">
-              <Button
-                primary
-                size="small"
-                label={`Add ${asset.symbol} to wallet`}
-                onClick={addTokenToWallet}
-                margin={{ bottom: 'small' }}
-              />
-              <Button
-                secondary
-                size="small"
-                label={`${asset.symbol} contract`}
-                onClick={() => openExplorer(asset.address)}
-                icon={<ShareIcon />}
-                reverse
-              />
+      <Card
+        sx={{
+          marginBottom: theme.spacing(3)
+        }}
+      >
+        <CardContent
+          sx={{
+            padding: theme.spacing(2)
+          }}
+        >
+          <Box
+            sx={{
+              gap: theme.spacing(2),
+              marginBottom: theme.spacing(2),
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: isDesktop ? 'flex-start' : 'center',
+              justifyContent: isDesktop ? '' : 'space-between'
+            }}
+          >
+            <Box
+              sx={{
+                flexShrink: 0
+              }}
+            >
+              <img width="70" height="70" src={asset.image} alt={asset.name} />
             </Box>
-          )}
-        </CardHeader>
-        <CardBody pad="small">
-          {account && balance && (
-            <Text>
-              Your balance: {Number(utils.formatEther(balance)).toFixed(2)} {asset.symbol}
-            </Text>
-          )}
-        </CardBody>
-        <CardFooter pad="small">
-          <Box>
-            <Text size="large" weight="bold">
-              {formatCost(payment, asset.symbol)}
-            </Text>
+            {!asset.native && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'stretch'
+                }}
+              >
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={addTokenToWallet}
+                  sx={{
+                    marginBottom: theme.spacing(1)
+                  }}
+                >
+                  {`Add ${asset.symbol} to wallet`}
+                </Button>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={() => openExplorer(asset.address)}
+                  endIcon={
+                    <Iconify
+                      color="inherit"
+                      icon="cil:external-link"
+                      marginLeft={theme.spacing(1)}
+                    />
+                  }
+                >
+                  {`${asset.symbol} contract`}
+                </Button>
+              </Box>
+            )}
           </Box>
-          <Box direction="row" gap="small">
+
+          {account && balance && (
+            <Typography marginBottom={theme.spacing(3)}>
+              Your balance: {Number(utils.formatEther(balance)).toFixed(2)} {asset.symbol}
+            </Typography>
+          )}
+
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: theme.spacing(2)
+            }}
+          >
             {!allowanceBlocked && !asset.native && (
               <Button
-                secondary
-                size="small"
-                label="Approve the tokens"
+                variant="contained"
                 onClick={approveTokens}
                 disabled={allowanceBlocked}
-                icon={isTxStarted === 'approve' ? <Spinner /> : undefined}
-                reverse
-              />
+              >
+                Approve the tokens
+                {isTxStarted === 'approve' ? (
+                  <CircularProgress
+                    size="16px"
+                    color="inherit"
+                    sx={{ ml: theme.spacing(1) }}
+                  />
+                ) : undefined}
+              </Button>
             )}
             {!permitBlocked && asset.permit && (
-              <Button
-                secondary
-                size="small"
-                label="Permit the tokens"
-                onClick={createPermit}
-                disabled={permitBlocked}
-              />
+              <Button variant="contained" onClick={createPermit} disabled={permitBlocked}>
+                Permit the tokens
+              </Button>
             )}
-            <Button
-              primary
-              size="small"
-              label="Pay"
-              onClick={makePayment}
-              disabled={paymentBlocked}
-              icon={isTxStarted === 'pay' ? <Spinner /> : undefined}
-              reverse
-            />
+            <Button variant="contained" onClick={makePayment} disabled={paymentBlocked}>
+              Pay {formatCost(payment, asset.symbol)}
+              {isTxStarted === 'pay' ? (
+                <CircularProgress
+                  size="16px"
+                  color="inherit"
+                  sx={{ ml: theme.spacing(1) }}
+                />
+              ) : undefined}
+            </Button>
           </Box>
-        </CardFooter>
+        </CardContent>
       </Card>
+
       <MessageBox type="info" show={!!txHash} loading={isTxStarted !== undefined}>
-        <Text>
+        <Typography>
           Transaction hash:&nbsp;
           <ExternalLink href={`${network?.blockExplorer}/tx/${txHash}`} target="_blank">
             {centerEllipsis(txHash || '')}
           </ExternalLink>
-        </Text>
+        </Typography>
       </MessageBox>
+
       <MessageBox type="warn" show={!!costError}>
         {costError}
       </MessageBox>
+
       <MessageBox type="warn" show={!!permitError}>
         {permitError}
       </MessageBox>
+
       <MessageBox type="warn" show={!!approvalError}>
         {approvalError}
       </MessageBox>
+
       <MessageBox type="warn" show={!!paymentError}>
         {paymentError}
       </MessageBox>

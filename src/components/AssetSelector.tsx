@@ -1,7 +1,9 @@
-import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import type { Payment } from './PaymentCard';
+import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
+import { Payment } from './PaymentCard';
 import { useEffect, useMemo, useState } from 'react';
-import { Select } from 'grommet';
+import { Box, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import Iconify from '../components/Iconify';
 import { getNetworkInfo } from '../config';
 import { MessageBox } from './MessageBox';
 import Logger from '../utils/logger';
@@ -21,6 +23,7 @@ export const AssetSelector = ({
   asset: value,
   onChange
 }: AssetSelectorProps) => {
+  const theme = useTheme();
   const [asset, setAsset] = useState<CryptoAsset | undefined>(
     network ? value : undefined
   );
@@ -65,12 +68,15 @@ export const AssetSelector = ({
     }
   }, [network, value]);
 
-  const omCurrencyChange = async (option: CryptoAsset) => {
+  const omCurrencyChange = (e: SelectChangeEvent) => {
     try {
-      logger.debug(`Token selected #${option.name}`);
-      setAsset(option);
+      const option = String(e.target.value);
+      const selectedAsset = options.filter((o) => o.symbol === option)[0];
+      logger.debug(`Token selected #${selectedAsset.name}`);
+      setAsset(selectedAsset);
     } catch (err) {
       logger.error(err);
+      setAsset(undefined);
     }
   };
 
@@ -83,12 +89,36 @@ export const AssetSelector = ({
   return (
     <>
       <Select
-        placeholder="Select token"
-        labelKey="name"
-        options={options}
-        value={asset}
-        onChange={({ option }) => omCurrencyChange(option)}
-      />
+        value={asset ? asset.symbol : 'none'}
+        sx={{
+          backgroundColor: !asset ? 'rgba(255,0,0,0.7)' : 'transparent'
+        }}
+        onChange={omCurrencyChange}
+      >
+        <MenuItem value="none">
+          <Box
+            color={!asset ? 'white' : 'black'}
+            sx={{
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            {!asset && (
+              <Iconify
+                color="inherit"
+                icon="codicon:warning"
+                marginRight={theme.spacing(1)}
+              />
+            )}
+            <Box>Select token</Box>
+          </Box>
+        </MenuItem>
+        {options.map((option, index) => (
+          <MenuItem key={index} value={option.symbol}>
+            {option.name}
+          </MenuItem>
+        ))}
+      </Select>
       <MessageBox type="warn" show={noOptions}>
         {`The selected network does not support payments in ${payment.currency}`}
       </MessageBox>

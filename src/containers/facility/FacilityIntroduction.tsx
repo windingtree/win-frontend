@@ -2,10 +2,10 @@ import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
-import { MediaItem } from '@windingtree/glider-types/types/win';
 import { Button, Typography } from '@mui/material';
 import { styled } from '@mui/material';
 import { Box } from '@mui/material';
+import { sortByLargestImage } from '../../utils/accommodation';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -50,17 +50,6 @@ const FacilityMainImage = styled('img')(() => ({
 const HeaderButtonFooter = styled(Box)(() => ({
   fontSize: '8px'
 }));
-
-const sortByLargestImage = (images: MediaItem[]) => {
-  if (!images?.length) return [];
-
-  const compareImages = (itemOne: MediaItem, itemTwo: MediaItem) => {
-    return Number(itemTwo.width) - Number(itemOne.width);
-  };
-
-  const sortedImages = images?.sort(compareImages);
-  return sortedImages;
-};
 
 const HeaderButton = () => {
   return (

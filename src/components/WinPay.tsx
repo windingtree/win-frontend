@@ -1,20 +1,22 @@
-import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import type { Payment, PaymentSuccess } from './PaymentCard';
+import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
+import { Payment, PaymentSuccess } from './PaymentCard';
 import { useCallback } from 'react';
-import { Box, Text } from 'grommet';
-import { formatCost } from '../utils/strings';
+import { Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppState } from '../store';
-import { SignInButton, SignOutButton } from './Web3Modal';
 import { NetworkSelector } from './NetworkSelector';
 import { AssetSelector } from './AssetSelector';
 import { PaymentCard } from './PaymentCard';
+import useResponsive from '../hooks/useResponsive';
 
 export interface WinPayProps {
-  payment: Payment;
+  payment?: Payment;
   onSuccess: (result: PaymentSuccess) => void;
 }
 
 export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
+  const theme = useTheme();
+  const isDesktop = useResponsive('up', 'md');
   const dispatch = useAppDispatch();
   const { provider, account, selectedNetwork, selectedAsset } = useAppState();
 
@@ -36,34 +38,39 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
     [dispatch]
   );
 
+  if (!payment) {
+    return null;
+  }
+
   return (
-    <Box direction="column" gap="small" fill>
-      <Box direction="row" align="right" gap="small">
-        <Box direction="row" align="center">
-          <Text size="middle" weight="bold">
-            {formatCost(payment)}
-          </Text>
-        </Box>
-        {account ? <SignOutButton /> : <SignInButton />}
+    <>
+      <Box marginBottom={theme.spacing(5)}>
+        {account && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: isDesktop ? 'row' : 'column',
+              alignItems: isDesktop ? 'center' : 'stretch',
+              gap: theme.spacing(2)
+            }}
+          >
+            <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
+            <AssetSelector
+              network={selectedNetwork}
+              payment={payment}
+              asset={selectedAsset}
+              onChange={setAsset}
+            />
+          </Box>
+        )}
       </Box>
-      {account && (
-        <Box direction="column" gap="small" fill>
-          <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
-          <AssetSelector
-            network={selectedNetwork}
-            payment={payment}
-            asset={selectedAsset}
-            onChange={setAsset}
-          />
-          <PaymentCard
-            provider={provider}
-            network={selectedNetwork}
-            asset={selectedAsset}
-            payment={payment}
-            onSuccess={onSuccess}
-          />
-        </Box>
-      )}
-    </Box>
+      <PaymentCard
+        provider={provider}
+        network={selectedNetwork}
+        asset={selectedAsset}
+        payment={payment}
+        onSuccess={onSuccess}
+      />
+    </>
   );
 };

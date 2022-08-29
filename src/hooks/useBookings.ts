@@ -14,46 +14,40 @@ export const useBookings = (): UseBookingsHook => {
   const { account, walletAuth } = useAppState();
   const [bookings, setBookings] = useState<BookingResponse>([]);
 
-  useEffect(
-    () => {
-      if (!walletAuth) {
+  useEffect(() => {
+    if (!walletAuth) {
+      setBookings([]);
+    }
+  }, [walletAuth]);
+
+  const getBookings = useCallback(async () => {
+    try {
+      if (!account || !walletAuth) {
         setBookings([]);
+        return;
       }
-    },
-    [walletAuth]
-  );
 
-  const getBookings = useCallback(
-    async () => {
-      try {
-        if (!account || !walletAuth) {
-          setBookings([]);
-          return;
-        }
-
-        const res = await axios.get<BookingResponse>(
-          `${backend.url}/api/booking/${account}`,
-          {
-            headers: {
-              "Authorization": `Bearer ${walletAuth.accessToken}`
-            }
+      const res = await axios.get<BookingResponse>(
+        `${backend.url}/api/booking/${account}`,
+        {
+          headers: {
+            Authorization: `Bearer ${walletAuth.accessToken}`
           }
-        );
-
-        const bookingsResponse = res.data;
-
-        if (!bookingsResponse) {
-          throw new Error('Invalid bookings response');
         }
+      );
 
-        setBookings(bookingsResponse);
-      } catch (err) {
-        logger.error(err);
-        setBookings([]);
+      const bookingsResponse = res.data;
+
+      if (!bookingsResponse) {
+        throw new Error('Invalid bookings response');
       }
-    },
-    [account, walletAuth]
-  );
+
+      setBookings(bookingsResponse);
+    } catch (err) {
+      logger.error(err);
+      setBookings([]);
+    }
+  }, [account, walletAuth]);
 
   usePoller(getBookings, !!account && !!walletAuth, 5000, 'Bookings');
 
