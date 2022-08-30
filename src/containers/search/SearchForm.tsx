@@ -118,7 +118,8 @@ export const SearchForm: React.FC = () => {
    * Logic in relation to executing the query
    */
   const { refetch, isFetching, error } = useAccommodationsAndOffers({
-    date: [startDate, endDate],
+    arrival: startDate,
+    departure: endDate,
     adultCount: Number(adultCount),
     location: location,
     roomCount: Number(roomCount)

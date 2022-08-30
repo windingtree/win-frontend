@@ -59,7 +59,7 @@ const LogoBeta = React.forwardRef<any, BoxProps>(({ sx }, ref) => {
   const primaryColor = theme.palette.primary.main;
 
   return (
-    <Box ref={ref} sx={{ width: 120, height: 120, cursor: 'pointer', ...sx }}>
+    <Box ref={ref} sx={{ width: 120, height: '100%', cursor: 'pointer', ...sx }}>
       <svg
         width="100%"
         height="100%"

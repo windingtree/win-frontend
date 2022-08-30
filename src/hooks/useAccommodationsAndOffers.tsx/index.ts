@@ -11,7 +11,8 @@ import {
 
 export interface SearchTypeProps {
   location: string;
-  date: [Date | null, Date | null];
+  arrival: Date | null;
+  departure: Date | null;
   roomCount: number;
   adultCount: number;
   childrenCount?: number;

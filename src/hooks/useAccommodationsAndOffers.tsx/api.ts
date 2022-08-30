@@ -17,7 +17,8 @@ export interface AccommodationsAndOffersResponse {
 
 export async function fetchAccommodationsAndOffers({
   location,
-  date,
+  arrival,
+  departure,
   roomCount,
   adultCount,
   childrenCount
@@ -52,8 +53,8 @@ export async function fetchAccommodationsAndOffers({
         ...normalizedCoordinates,
         radius: 20000
       },
-      arrival: date[0],
-      departure: date[1],
+      arrival,
+      departure,
       roomCount
     },
 
@@ -75,7 +76,14 @@ export async function fetchAccommodationsAndOffers({
   const accommodations = data.accommodations;
   const offers = data.offers;
 
-  const latestQueryParams = { location, date, roomCount, adultCount, childrenCount };
+  const latestQueryParams = {
+    location,
+    departure,
+    arrival,
+    roomCount,
+    adultCount,
+    childrenCount
+  };
 
   return {
     accommodations,

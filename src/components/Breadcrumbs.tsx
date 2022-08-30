@@ -1,50 +1,92 @@
-import type { TextProps } from 'grommet';
-import { Nav, Anchor } from 'grommet';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FormPrevious } from 'grommet-icons';
+import { ReactElement } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+  Box,
+  Link,
+  Typography,
+  BreadcrumbsProps,
+  Breadcrumbs as MUIBreadcrumbs,
+  Container,
+  useTheme
+} from '@mui/material';
+import Iconify from './Iconify';
 
-export interface Breadcrumb {
-  path?: string;
-  label: string;
+type TLink = {
+  href?: string;
+  name: string;
+  icon?: ReactElement;
+};
+
+export interface Props extends BreadcrumbsProps {
+  links: TLink[];
+  activeLast?: boolean;
 }
 
-export interface BreadcrumbsProps {
-  breadcrumbs?: Breadcrumb[];
-  size?: TextProps['size'];
-}
+export const Breadcrumbs = ({ links, activeLast = true, ...other }: Props) => {
+  const theme = useTheme();
+  const currentLink = links[links.length - 1].name;
 
-export const Breadcrumbs = ({ breadcrumbs, size }: BreadcrumbsProps) => {
-  const navigate = useNavigate();
+  const listDefault = links.map((link) => <LinkItem key={link.name} link={link} />);
 
-  const items = useMemo(
-    () =>
-      (breadcrumbs || []).map(({ path, label }, i) => (
-        <Anchor
-          key={i}
-          label={label}
-          onClick={() => (path === undefined ? navigate(-1) : navigate(path))}
-          icon={<FormPrevious />}
-          gap="xsmall"
-          color="black"
-        />
-      )),
-    [navigate, breadcrumbs]
-  );
-
-  if (breadcrumbs === undefined || breadcrumbs.length === 0) {
-    return null;
-  }
+  const listActiveLast = links.map((link) => (
+    <Box key={link.name}>
+      {link.name !== currentLink ? (
+        <LinkItem link={link} />
+      ) : (
+        <Typography
+          variant="body2"
+          sx={{
+            m: 0,
+            maxWidth: 260,
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            color: 'text.disabled',
+            textOverflow: 'ellipsis'
+          }}
+        >
+          {currentLink}
+        </Typography>
+      )}
+    </Box>
+  ));
 
   return (
-    <Nav
-      direction="row"
-      align="center"
-      margin={{
-        bottom: size
+    <Container sx={{ mx: 3 }}>
+      <MUIBreadcrumbs
+        separator={
+          <Iconify color={theme.palette.primary.main} icon="mdi:chevron-right" />
+        }
+        {...other}
+      >
+        {activeLast ? listDefault : listActiveLast}
+      </MUIBreadcrumbs>
+    </Container>
+  );
+};
+
+type LinkItemProps = {
+  link: TLink;
+};
+
+const LinkItem = ({ link }: LinkItemProps) => {
+  const { href, name, icon } = link;
+  const theme = useTheme();
+  return (
+    <Link
+      key={name}
+      variant="subtitle2"
+      component={RouterLink}
+      to={href || '#'}
+      sx={{
+        lineHeight: 2,
+        display: 'flex',
+        alignItems: 'center',
+        color: theme.palette.primary.main,
+        '& > div': { display: 'inherit' }
       }}
     >
-      {items}
-    </Nav>
+      {icon && <Box sx={{ mr: 1, '& svg': { width: 20, height: 20 } }}>{icon}</Box>}
+      {name}
+    </Link>
   );
 };
