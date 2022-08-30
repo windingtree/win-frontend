@@ -19,7 +19,7 @@ const SearchBox = styled(Box)(({ theme }) => ({
 //TODO: remove the footer
 export const Search = () => {
   return (
-    <MainLayout>
+    <MainLayout footer={false}>
       <Box style={{ position: 'relative' }}>
         <Results />
         <MapBox />
