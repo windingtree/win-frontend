@@ -11,7 +11,6 @@ const formatDisplayDate = (date) => {
   return displayedDate;
 };
 
-//TODO: create one helper function for both the start and end date
 export const startDateDisplay = (dateRange) => {
   const startDate = dateRange[0].startDate;
 
@@ -27,3 +26,13 @@ export const endDateDisplay = (dateRange) => {
 
   return formatDisplayDate(startDate);
 };
+
+export const autocompleteData = [
+  'Amsterdam',
+  'Berlin',
+  'Bogota',
+  'Sydney',
+  'Taipei',
+  'Barcelona',
+  'New York'
+];
