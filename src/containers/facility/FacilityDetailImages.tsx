@@ -33,8 +33,8 @@ export const FacilityDetailImages = forwardRef<HTMLDivElement, FacilityDetailIma
         </Box>
 
         <Box direction="column" width="100%" style={{ gap: '8px' }}>
-        {images[2] && <DetailImage src={images[2]?.url} />}
-        {images[3] && <DetailImage src={images[3]?.url} />}
+          {images[2] && <DetailImage src={images[2]?.url} />}
+          {images[3] && <DetailImage src={images[3]?.url} />}
         </Box>
       </Box>
     );

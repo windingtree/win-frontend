@@ -40,4 +40,4 @@ export const stringToNumber = (value: string): number => {
   }
 
   return numberValue;
-} 
+};
