@@ -13,3 +13,10 @@ export const convertToLocalTime = (date: Date): Date => {
 
   return isoDate;
 };
+
+export type NullableDate = Date | null | undefined;
+
+export const daysBetween = (fromDate: NullableDate, toDate?: NullableDate): number => {
+  if (!fromDate || !toDate) return -1;
+  return (toDate.getTime() - fromDate.getTime())/(1000 * 24 * 3600);
+}

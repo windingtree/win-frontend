@@ -2,12 +2,13 @@ import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
-import { Typography } from '@mui/material';
+import { MediaItem } from '@windingtree/glider-types/types/win';
+import { Button, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
-import { CustomButton } from '../../components/CustomButton';
 import { useMemo } from 'react';
 import { stringToNumber } from '../../utils/strings';
+import { sortByLargestImage } from '../../utils/accommodation';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -37,10 +38,11 @@ const HeaderTitleContainer = styled(Box)(() => ({
   alignItems: 'center'
 }));
 
-const HeaderButtonContainer = styled(Box)(() => ({
+const HeaderButtonContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'end'
+  justifyContent: 'end',
+  gap: theme.spacing(0.5)
 }));
 
 const FacilityMainImage = styled('img')(() => ({
@@ -49,13 +51,18 @@ const FacilityMainImage = styled('img')(() => ({
   objectFit: 'cover'
 }));
 
-const HeaderButton = () => {
+const HeaderButton = ({ scrollToDetailImages }) => {
   const theme = useTheme();
-  const { offers } = useAccommodationsAndOffers();
+  const params = useParams();
+  const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
+
+  const id: string = params.id as string;
+  const accommodation = getAccommodationById(accommodations, id);
+  const offers = accommodation?.offers;
 
   // get lowest offer price
   const lowestPrice = useMemo(() => {
-    return offers.reduce(
+    return offers?.reduce(
       (lowestPrice, offer): { price: string; currency: string } => {
         return stringToNumber(offer.price?.public) > stringToNumber(lowestPrice.price)
           ? { price: offer.price?.public, currency: offer.price?.currency }
@@ -70,7 +77,7 @@ const HeaderButton = () => {
       <Box display={'flex'} alignItems={'end'}>
         <Typography>From</Typography>
         <Typography variant="body1" marginLeft={theme.spacing(1.5)}>
-          {lowestPrice.currency} {Number(lowestPrice.price).toFixed(2)}
+          {lowestPrice?.currency} {Number(lowestPrice?.price).toFixed(2)}
         </Typography>
       </Box>
       <div>
@@ -78,7 +85,14 @@ const HeaderButton = () => {
       </div>
 
       <div>
-        <CustomButton onClick={scrollToDetailImages}>Select Room</CustomButton>
+        <Button
+          disableElevation
+          variant="contained"
+          size="large"
+          onClick={scrollToDetailImages}
+        >
+          Select Room
+        </Button>
       </div>
       <Typography variant="caption">{"You won't be charged yet"}</Typography>
     </HeaderButtonContainer>

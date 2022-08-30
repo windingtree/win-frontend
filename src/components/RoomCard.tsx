@@ -8,8 +8,7 @@ import { MessageBox } from './MessageBox';
 import { PricedOfferRequest } from '../api/PricedOffer';
 import type { OfferRecord } from 'src/store/types';
 import { Alert, Box, Grid, Typography, useTheme } from '@mui/material';
-
-import { CustomLoadingButton } from './CustomLoadingButton';
+import { LoadingButton } from '@mui/lab';
 
 const logger = Logger('RoomCard');
 
@@ -58,9 +57,14 @@ export const RoomCard: React.FC<{
   }, [dispatch]);
 
   return (
-    <Box border={'3px solid #AAAAAA'} padding={theme.spacing(2)} borderRadius={1} marginBottom={theme.spacing(5)}>
+    <Box
+      border={'3px solid #AAAAAA'}
+      padding={theme.spacing(2)}
+      borderRadius={1}
+      marginBottom={theme.spacing(5)}
+    >
       <Grid container spacing={5}>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Box>
             <Typography variant="h4" marginBottom={theme.spacing(2)}>
               {room?.name}
@@ -85,25 +89,28 @@ export const RoomCard: React.FC<{
             <Typography variant="body1">{room?.description}</Typography>
           </Box>
         </Grid>
-        <Grid item xs={3} alignSelf={'end'}>
+        <Grid item xs={4} alignSelf={'end'}>
           <Box
             display={'flex'}
             flexDirection={'column'}
             alignItems={'end'}
             rowGap={theme.spacing(2)}
           >
-            <Typography variant="body1">
+            <Typography variant="body1" textAlign={'right'}>
               {`${offer.price?.currency} ${Number(offer.price?.public).toFixed(2)} `}
             </Typography>
-            <Typography>
+            <Typography textAlign={'right'}>
               {`Price for ${numberOfDays} nights, ${roomsNumber} room(s)`}
             </Typography>
-            <CustomLoadingButton
+            <LoadingButton
+              disableElevation
+              variant="contained"
+              size="large"
               onClick={() => handleBook()}
               loading={loading}
             >
               Book Now
-            </CustomLoadingButton>
+            </LoadingButton>
             <MessageBox type="error" show={!!error}>
               {error}
             </MessageBox>
