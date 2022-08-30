@@ -27,7 +27,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const Results: React.FC = () => {
-  const { accommodations, error, isFetching } = useAccommodationsAndOffers();
+  const { accommodations } = useAccommodationsAndOffers();
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
 

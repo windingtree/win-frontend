@@ -167,8 +167,8 @@ export const SearchForm: React.FC = () => {
   const roomText = roomCount === 1 ? 'room' : 'rooms';
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
   const fontStyling = theme.typography.body2;
-  // const buttonSize = useMediaQuery(theme.breakpoints.down('md')) ? 'medium' : 'large';
   const buttonSize = 'large';
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Popover
