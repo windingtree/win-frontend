@@ -43,8 +43,7 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
     width: 'max-content',
     border: `3px solid ${theme.palette.primary.main}`,
     borderRadius: 10
-  },
-  [theme.breakpoints.up('lg')]: {}
+  }
 }));
 
 type FormValuesProps = {

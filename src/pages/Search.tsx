@@ -15,9 +15,7 @@ const SearchBox = styled(Box)(({ theme }) => ({
     justifyContent: 'center',
     top: HEADER.MAIN_DESKTOP_HEIGHT + 16,
     marginLeft: theme.spacing(4)
-  },
-
-  [theme.breakpoints.up('lg')]: {}
+  }
 }));
 
 //TODO: remove the footer
