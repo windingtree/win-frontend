@@ -1,4 +1,4 @@
-import { Box, Paper } from '@mui/material';
+import { Box } from '@mui/material';
 import { createRef, useCallback, useEffect, useMemo } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { SearchResult } from './SearchResult';
@@ -27,7 +27,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const Results: React.FC = () => {
-  const { accommodations } = useAccommodationsAndOffers();
+  const { accommodations, isFetching } = useAccommodationsAndOffers();
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
 
@@ -63,7 +63,7 @@ export const Results: React.FC = () => {
 
   return (
     <StyledContainer>
-      {accommodations.map((facility, idx) => (
+      {!isFetching && accommodations.map((facility, idx) => (
         <SearchResult
           key={facility.id}
           facility={facility}
