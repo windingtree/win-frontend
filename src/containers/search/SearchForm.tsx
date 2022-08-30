@@ -13,7 +13,7 @@ import {
   Alert,
   styled
 } from '@mui/material';
-import { FormProvider, RHFTextField } from 'src/components/hook-form';
+import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
@@ -251,7 +251,7 @@ export const SearchForm: React.FC = () => {
                 size={buttonSize}
                 variant="text"
                 sx={{
-                  minWidth: '210px',
+                  minWidth: '230px',
                   whiteSpace: 'nowrap',
                   ...fontStyling
                 }}
