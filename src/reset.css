@@ -146,9 +146,14 @@ textarea {
   padding: 0;
 }
 
-[type='number']::-webkit-inner-spin-button,
-[type='number']::-webkit-outer-spin-button {
-  height: auto;
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: inner-spin-button !important;
+  opacity: 1;
+  position: absolute;
+  top: 15%;
+  right: 10px;
+  height: 70%;
 }
 
 [type='search'] {

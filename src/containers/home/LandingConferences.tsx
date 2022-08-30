@@ -101,17 +101,27 @@ function ConferenceItem({ item }: ConferenceItemProps) {
             {name}
           </Link>
         </Typography>
-        <Stack direction="row" justifyContent="center" spacing={1}>
+        <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
           <Iconify icon="uiw:date" sx={{ width: 20, height: 20 }} />
-          <Typography textAlign="center">{date}</Typography>
+          <Typography variant="body2" textAlign="center" py={1}>
+            {date}
+          </Typography>
         </Stack>
-        <Stack direction="row" justifyContent="center" spacing={1}>
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={1}
+          mb={1}
+        >
           <Iconify icon="bxs:map-pin" sx={{ width: 20, height: 20 }} />
-          <Typography textAlign="center">{location}</Typography>
+          <Typography variant="body2" textAlign="center">
+            {location}
+          </Typography>
         </Stack>
         <Stack direction="row" justifyContent="center">
           <Button href={url} variant="outlined">
-            Book Accommodation
+            View accommodations
           </Button>
         </Stack>
       </Card>

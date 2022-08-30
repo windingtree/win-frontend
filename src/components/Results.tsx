@@ -1,14 +1,33 @@
 import { Box } from 'grommet';
 import { createRef, useCallback, useEffect, useMemo } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { MessageBox } from './MessageBox';
 import { SearchResult } from './SearchResult';
 import { useAppState, useAppDispatch } from '../store';
+import { styled } from '@mui/system';
+
+const StyledContainer = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  zIndex: '1',
+  width: '100%',
+  height: '40%',
+  bottom: 0,
+  marginBottom: theme.spacing(1),
+  padding: theme.spacing(0, 3),
+  backgroundColor: 'rgba(0, 0, 0, 0)',
+
+  [theme.breakpoints.up('md')]: {
+    width: '20rem',
+    height: '72%'
+  },
+
+  [theme.breakpoints.up('lg')]: {
+    height: '86%'
+  }
+}));
 
 export const Results: React.FC = () => {
   const { accommodations, error, isFetching } = useAccommodationsAndOffers();
-  const { winWidth } = useWindowsDimension();
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
 
@@ -43,21 +62,7 @@ export const Results: React.FC = () => {
   }
 
   return (
-    <Box
-      pad="medium"
-      fill={true}
-      overflow="hidden"
-      style={{
-        position: 'absolute',
-        zIndex: '1',
-        width: winWidth < 900 ? '100%' : '20rem',
-        maxWidth: '100%',
-        height: winWidth < 900 ? '40%' : '86%',
-        left: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0)'
-      }}
-    >
+    <StyledContainer>
       <Box flex={true} overflow="auto">
         <Box>
           <MessageBox
@@ -81,6 +86,6 @@ export const Results: React.FC = () => {
           ))}
         </Box>
       </Box>
-    </Box>
+    </StyledContainer>
   );
 };

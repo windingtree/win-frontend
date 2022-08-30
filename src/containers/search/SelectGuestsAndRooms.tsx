@@ -14,6 +14,7 @@ export const SelectGuestsAndRooms = () => {
           <RHFTextField
             size="small"
             name="adultCount"
+            type="number"
             InputProps={{
               type: 'number',
               inputMode: 'numeric',
