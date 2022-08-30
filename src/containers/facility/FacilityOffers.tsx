@@ -48,14 +48,14 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
   const accommodation = getAccommodationById(accommodations, id);
   const guests =
     (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
-  const nights = daysBetween(latestQueryParams?.date[0], latestQueryParams?.date[1]);
+  const nights = daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure);
 
   return (
     <FacilityOffersContainer ref={ref}>
       <FacilityOffersTitle
         rooms={latestQueryParams?.roomCount}
         guests={guests}
-        startDate={latestQueryParams?.date[0]?.toUTCString()}
+        startDate={latestQueryParams?.arrival?.toUTCString()}
         nights={nights}
         roomsAvailable={accommodation?.offers?.length ?? 0}
       />
