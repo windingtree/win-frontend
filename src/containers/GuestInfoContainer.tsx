@@ -67,52 +67,62 @@ export const GuestInfoContainer = () => {
     formState: { isSubmitting }
   } = methods;
 
-  const values = watch();
+  const onSubmit = useCallback(
+    async (values: PersonalInfo) => {
+      logger.info('submit user data', values);
+      try {
+        setError(undefined);
 
-  const onSubmit = useCallback(async () => {
-    logger.info('submit user data', values);
-    try {
-      setError(undefined);
-
-      if (checkout === undefined) {
-        throw Error('Priced offer undefined');
-      }
-      if (!checkout.offerId) {
-        throw Error('Priced offer offerId not defined');
-      }
-      if (values.birthdate === null) {
-        throw Error('Birth date is not defined');
-      }
-
-      const formattedDate = convertToLocalTime(values.birthdate);
-      values.birthdate = formattedDate;
-      await axios.request(new PersonalInfoRequest(checkout.offerId, values));
-
-      dispatch({
-        type: 'SET_CHECKOUT',
-        payload: {
-          ...checkout,
-          personalInfo: values
+        if (checkout === undefined) {
+          throw Error('Priced offer undefined');
         }
-      });
+        if (!checkout.offerId) {
+          throw Error('Priced offer offerId not defined');
+        }
+        if (values.birthdate === null) {
+          throw Error('Birth date is not defined');
+        }
 
-      logger.info('Guest info sent successfully');
-      navigate('/checkout/' + checkout.offerId);
-    } catch (error) {
-      const message = (error as Error).message || 'Unknown useAuthRequest error';
-      setError(message);
-    }
-  }, [values, checkout, setError]);
+        const formattedDate = convertToLocalTime(values.birthdate);
+        await axios
+          .request(
+            new PersonalInfoRequest(checkout.offerId, {
+              ...values,
+              birthdate: formattedDate
+            })
+          )
+          .catch(() => {
+            throw Error('Something went wrong');
+          });
+
+        dispatch({
+          type: 'SET_CHECKOUT',
+          payload: {
+            ...checkout,
+            personalInfo: { ...values, birthdate: formattedDate }
+          }
+        });
+
+        logger.info('Guest info sent successfully');
+        navigate('/checkout/' + checkout.offerId);
+      } catch (error) {
+        const message = (error as Error).message || 'Unknown error';
+        setError(message);
+      }
+    },
+    [checkout, setError]
+  );
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid justifyContent="center" container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Typography textAlign="center" sx={{ mx: 2 }}>
+          <Typography textAlign="center" sx={{ m: 2 }}>
             This Information will be strictly used by the hotel and win.so to confirm your
             booking! It is mandatory in order for the hotel to reserve your room.
           </Typography>
-          <Card sx={{ my: 3, p: 3 }}>
+          {error && <Alert severity="error">{error}</Alert>}
+          <Card sx={{ my: 2, p: 3 }}>
             <Box
               sx={{
                 display: 'grid',
@@ -154,7 +164,6 @@ export const GuestInfoContainer = () => {
             </Stack>
           </Card>
         </Grid>
-        {error && <Alert severity="error">{error}</Alert>}
       </Grid>
     </FormProvider>
   );
