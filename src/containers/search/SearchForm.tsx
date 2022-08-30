@@ -41,7 +41,6 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   [theme.breakpoints.up('md')]: {
     width: 'max-content',
-    padding: theme.spacing(2),
     border: `3px solid ${theme.palette.primary.main}`,
     borderRadius: 10
   }
@@ -168,7 +167,8 @@ export const SearchForm: React.FC = () => {
    */
   const roomText = roomCount === 1 ? 'room' : 'rooms';
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
-  const fontSize = theme.typography.body1.fontSize;
+  const fontStyling = theme.typography.body2;
+  const buttonSize = 'large';
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -226,7 +226,7 @@ export const SearchForm: React.FC = () => {
               name="location"
               inputProps={{
                 style: {
-                  fontSize,
+                  ...fontStyling,
                   textAlign: useMediaQuery(theme.breakpoints.down('md'))
                     ? 'center'
                     : 'left'
@@ -244,11 +244,12 @@ export const SearchForm: React.FC = () => {
             <Box>
               <Button
                 onClick={() => setDateRangeAnchorEl(formRef.current)}
-                size="large"
+                size={buttonSize}
                 variant="text"
                 sx={{
+                  minWidth: '210px',
                   whiteSpace: 'nowrap',
-                  ...theme.typography.body1
+                  ...fontStyling
                 }}
                 color="inherit"
               >
@@ -259,11 +260,12 @@ export const SearchForm: React.FC = () => {
             <Box>
               <Button
                 sx={{
+                  minWidth: '144px',
                   whiteSpace: 'nowrap',
-                  ...theme.typography.body1
+                  ...fontStyling
                 }}
                 onClick={() => setGuestsAnchorEl(formRef.current)}
-                size="large"
+                size={buttonSize}
                 variant="text"
                 color="inherit"
               >
@@ -276,10 +278,10 @@ export const SearchForm: React.FC = () => {
                 type="submit"
                 loading={isFetching}
                 variant="contained"
-                size="large"
+                size={buttonSize}
                 sx={{
                   whiteSpace: 'nowrap',
-                  ...theme.typography.body1
+                  ...fontStyling
                 }}
               >
                 Search
