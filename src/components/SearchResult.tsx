@@ -52,7 +52,7 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
         onClick={() => navigate(`/facility/${facility.id}`)}
         onMouseOver={handleSelect}
         style={selectedStyle}
-        sx={{ borderRadius: 2, bgcolor: 'background.neutral' }}
+        sx={{ borderRadius: 2, bgcolor: 'background.neutral', mb: 1 }}
       >
         <Stack spacing={1} style={responsiveStyle}>
           <Stack spacing={1} sx={{ p: 2, pb: 1.5 }}>

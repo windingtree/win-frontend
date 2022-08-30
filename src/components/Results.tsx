@@ -1,7 +1,6 @@
 import { Box } from 'grommet';
 import { createRef, useCallback, useEffect, useMemo } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { MessageBox } from './MessageBox';
 import { SearchResult } from './SearchResult';
 import { useAppState, useAppDispatch } from '../store';
 import { styled } from '@mui/system';
@@ -15,6 +14,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(1),
   padding: theme.spacing(0, 3),
   backgroundColor: 'rgba(0, 0, 0, 0)',
+  overflow: 'scroll',
 
   [theme.breakpoints.up('md')]: {
     width: '20rem',
@@ -63,29 +63,15 @@ export const Results: React.FC = () => {
 
   return (
     <StyledContainer>
-      <Box flex={true} overflow="auto">
-        <Box>
-          <MessageBox
-            loading
-            type="info"
-            show={!isFetching && !error && accommodations?.length === 0}
-          >
-            Could not find place
-          </MessageBox>
-        </Box>
-        <Box gap="0.5rem" flex={false}>
-          {/* TODO: Currenlty we are displaying all accomdations, but this may need to be changed to only the accommodations with offers */}
-          {accommodations.map((facility, idx) => (
-            <SearchResult
-              key={facility.id}
-              facility={facility}
-              isSelected={facility.id === selectedFacilityId}
-              onSelect={handleFacilitySelection}
-              ref={searchResultsRefs[idx]}
-            />
-          ))}
-        </Box>
-      </Box>
+      {accommodations.map((facility, idx) => (
+        <SearchResult
+          key={facility.id}
+          facility={facility}
+          isSelected={facility.id === selectedFacilityId}
+          onSelect={handleFacilitySelection}
+          ref={searchResultsRefs[idx]}
+        />
+      ))}
     </StyledContainer>
   );
 };

@@ -34,6 +34,7 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     [data]
   );
 
+  // This includes accommodations with active offers.
   const accommodations = useMemo(
     () => allAccommodations.filter((a) => a.offers.length > 0),
     [allAccommodations]
