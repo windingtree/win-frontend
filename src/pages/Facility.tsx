@@ -5,8 +5,14 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 import { createSearchParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
 import { useMemo } from 'react';
+import { createRef, useCallback } from 'react';
 
 export const Facility = () => {
+  const detailImagesRef = createRef<HTMLDivElement>();
+  const scrollToDetailImages = useCallback(() => {
+    detailImagesRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [detailImagesRef]);
+
   const { latestQueryParams } = useAccommodationsAndOffers();
 
   const query = useMemo(() => {
@@ -38,8 +44,8 @@ export const Facility = () => {
           }
         ]}
       />
-      <FacilityIntroduction />
-      <FacilityOffers />
+      <FacilityIntroduction scrollToDetailImages={scrollToDetailImages}/>
+      <FacilityOffers ref={detailImagesRef}/>
     </MainLayout>
   );
 };

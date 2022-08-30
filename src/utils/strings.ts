@@ -32,3 +32,12 @@ export const copyToClipboard = async (text: string): Promise<void> => {
 
 export const formatCost = (cost: Payment, token?: string): string =>
   `${Number(utils.formatEther(cost.value)).toFixed(2)} ${token || cost.currency}`;
+
+export const stringToNumber = (value: string): number => {
+  const numberValue = parseFloat(value);
+  if (Number.isNaN(numberValue)) {
+    throw new Error(`Error: string to number conversion - invalid string "${value}"`);
+  }
+
+  return numberValue;
+};

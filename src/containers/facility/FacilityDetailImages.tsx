@@ -1,4 +1,7 @@
+import { useTheme } from '@mui/material';
+import { MediaItem } from '@windingtree/glider-types/types/win';
 import { Box, Image } from 'grommet';
+import { forwardRef } from 'react';
 import styled from 'styled-components';
 
 const DetailImage = styled(Image)`
@@ -8,24 +11,32 @@ const DetailImage = styled(Image)`
   object-fit: cover;
 `;
 
-export const FacilityDetailImages = ({ images }) => {
-  return (
-    <Box
-      direction="row"
-      style={{
-        gap: '8px',
-        flex: '50%'
-      }}
-    >
-      <Box direction="column" width="100%" style={{ gap: '8px' }}>
-        <DetailImage src={images[0]?.url} />
-        <DetailImage src={images[1]?.url} />
-      </Box>
+interface FacilityDetailImagesProps {
+  images: MediaItem[];
+}
 
-      <Box direction="column" width="100%" style={{ gap: '8px' }}>
-        <DetailImage src={images[2]?.url} />
-        <DetailImage src={images[3]?.url} />
+export const FacilityDetailImages = forwardRef<HTMLDivElement, FacilityDetailImagesProps>(
+  ({ images }, ref) => {
+    const theme = useTheme();
+    return (
+      <Box
+        direction="row"
+        style={{
+          gap: theme.spacing(1),
+          flex: '50%'
+        }}
+        ref={ref}
+      >
+        <Box direction="column" width="100%" style={{ gap: '8px' }}>
+          {images[0] && <DetailImage src={images[0]?.url} />}
+          {images[1] && <DetailImage src={images[1]?.url} />}
+        </Box>
+
+        <Box direction="column" width="100%" style={{ gap: '8px' }}>
+          {images[2] && <DetailImage src={images[2]?.url} />}
+          {images[3] && <DetailImage src={images[3]?.url} />}
+        </Box>
       </Box>
-    </Box>
-  );
-};
+    );
+  }
+);

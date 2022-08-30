@@ -2,9 +2,12 @@ import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
+import { MediaItem } from '@windingtree/glider-types/types/win';
 import { Button, Typography } from '@mui/material';
-import { styled } from '@mui/material';
+import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
+import { useMemo } from 'react';
+import { stringToNumber } from '../../utils/strings';
 import { sortByLargestImage } from '../../utils/accommodation';
 
 const Container = styled(Box)(({ theme }) => ({
@@ -12,8 +15,8 @@ const Container = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   width: '100%',
   height: '720px',
-  gap: '8px',
-  padding: '20px',
+  gap: theme.spacing(1),
+  padding: theme.spacing(2.5),
 
   [theme.breakpoints.up('lg')]: {
     flexDirection: 'row',
@@ -21,12 +24,12 @@ const Container = styled(Box)(({ theme }) => ({
   }
 }));
 
-const HeaderContainer = styled(Box)(() => ({
+const HeaderContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
-  marginBottom: '5px',
-  padding: '20px'
+  marginBottom: theme.spacing(1),
+  padding: theme.spacing(2.5)
 }));
 
 const HeaderTitleContainer = styled(Box)(() => ({
@@ -35,10 +38,11 @@ const HeaderTitleContainer = styled(Box)(() => ({
   alignItems: 'center'
 }));
 
-const HeaderButtonContainer = styled(Box)(() => ({
+const HeaderButtonContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'end'
+  justifyContent: 'end',
+  gap: theme.spacing(0.5)
 }));
 
 const FacilityMainImage = styled('img')(() => ({
@@ -47,17 +51,33 @@ const FacilityMainImage = styled('img')(() => ({
   objectFit: 'cover'
 }));
 
-const HeaderButtonFooter = styled(Box)(() => ({
-  fontSize: '8px'
-}));
+const HeaderButton = ({ scrollToDetailImages }) => {
+  const theme = useTheme();
+  const params = useParams();
+  const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
 
-const HeaderButton = () => {
+  const id: string = params.id as string;
+  const accommodation = getAccommodationById(accommodations, id);
+  const offers = accommodation?.offers;
+
+  // get lowest offer price
+  const lowestPrice = useMemo(() => {
+    return offers?.reduce(
+      (lowestPrice, offer): { price: string; currency: string } => {
+        return stringToNumber(offer.price?.public) > stringToNumber(lowestPrice.price)
+          ? { price: offer.price?.public, currency: offer.price?.currency }
+          : lowestPrice;
+      },
+      { price: '-1', currency: '' }
+    );
+  }, [offers]);
+
   return (
     <HeaderButtonContainer>
       <Box display={'flex'} alignItems={'end'}>
         <Typography>From</Typography>
-        <Typography fontSize={'24px'} marginLeft={'12px'}>
-          $100
+        <Typography variant="body1" marginLeft={theme.spacing(1.5)}>
+          {lowestPrice?.currency} {Number(lowestPrice?.price).toFixed(2)}
         </Typography>
       </Box>
       <div>
@@ -66,17 +86,15 @@ const HeaderButton = () => {
 
       <div>
         <Button
-          sx={{
-            marginRight: '10px',
-            padding: '15px 30px',
-            backgroundColor: 'purple',
-            color: 'white'
-          }}
+          disableElevation
+          variant="contained"
+          size="large"
+          onClick={scrollToDetailImages}
         >
           Select Room
         </Button>
       </div>
-      <HeaderButtonFooter>{"You won't be charged yet"}</HeaderButtonFooter>
+      <Typography variant="caption">{"You won't be charged yet"}</Typography>
     </HeaderButtonContainer>
   );
 };
@@ -92,11 +110,11 @@ const HotelAddress = ({ address }: { address?: string }) => {
 };
 
 const HeaderTitle = ({ name, address }: { name?: string; address?: string }) => {
+  const theme = useTheme();
   return (
     <HeaderTitleContainer>
-      <Button sx={{ marginRight: '8px' }}>{'<'}</Button>
       <div>
-        <Typography fontWeight={500} fontSize="2rem" marginBottom={'10px'}>
+        <Typography variant="h1" marginBottom={theme.spacing(1.5)}>
           {name}
         </Typography>
         <HotelAddress address={address} />
@@ -105,14 +123,19 @@ const HeaderTitle = ({ name, address }: { name?: string; address?: string }) => 
   );
 };
 
-export const FacilityIntroduction = () => {
+export const FacilityIntroduction = ({
+  scrollToDetailImages
+}: {
+  scrollToDetailImages: () => void;
+}) => {
   const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
   const { id } = useParams();
   const accommodation: AccommodationWithId | null = getAccommodationById(
     accommodations,
     String(id)
   );
-  const sortedImages = sortByLargestImage(accommodation?.media ?? []);
+
+  const sortedImages: MediaItem[] = sortByLargestImage(accommodation?.media ?? []);
   const [mainImage, ...rest] = sortedImages;
   const address = [
     accommodation?.contactInformation?.address?.streetAddress,
@@ -127,7 +150,7 @@ export const FacilityIntroduction = () => {
     <>
       <HeaderContainer>
         <HeaderTitle name={accommodation?.name} address={address} />
-        <HeaderButton />
+        <HeaderButton scrollToDetailImages={scrollToDetailImages} />
       </HeaderContainer>
 
       <Container>
