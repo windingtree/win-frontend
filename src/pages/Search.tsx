@@ -2,26 +2,24 @@ import { MapBox } from '../components/MapBox';
 import { Results } from '../components/Results';
 import MainLayout from 'src/layouts/main';
 import { Box, styled } from '@mui/material';
-import { HEADER } from 'src/config/componentSizes';
 import { SearchForm } from 'src/containers/search/SearchForm';
 
 const SearchBox = styled(Box)(({ theme }) => ({
   position: 'absolute',
-  top: HEADER.MOBILE_HEIGHT,
+  top: 0,
   width: '100%',
   [theme.breakpoints.up('md')]: {
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    top: HEADER.MAIN_DESKTOP_HEIGHT + 16,
-    marginLeft: theme.spacing(4)
+    top: 16
   }
 }));
 
 //TODO: remove the footer
 export const Search = () => {
   return (
-    <MainLayout childrenBelowHeader={false}>
+    <MainLayout>
       <Box style={{ position: 'relative' }}>
         <Results />
         <MapBox />

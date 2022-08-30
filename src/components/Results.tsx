@@ -1,4 +1,4 @@
-import { Box } from 'grommet';
+import { Box, Paper } from '@mui/material';
 import { createRef, useCallback, useEffect, useMemo } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { SearchResult } from './SearchResult';

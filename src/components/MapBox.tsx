@@ -1,5 +1,5 @@
 import { Map, LatLngTuple, Icon } from 'leaflet';
-import { Box } from 'grommet';
+import { Box } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
@@ -119,16 +119,16 @@ export const MapBox: React.FC = () => {
   const displayMap = useMemo(
     () => (
       <MapContainer
-        // zoomControl={false}
+        zoomControl={false}
         center={normalizedCoordinates}
         zoom={defaultZoom}
         style={{
-          height: '100vh',
+          height: '90vh',
           // width: "100vw",
           position: 'relative',
           zIndex: 0
         }}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         ref={setMap}
       >
         <TileLayer
