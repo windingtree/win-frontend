@@ -8,7 +8,11 @@ type Props = {
   footer?: boolean;
   childrenBelowHeader?: boolean;
 };
-export default function MainLayout({ children, footer = true, childrenBelowHeader = true }: Props) {
+export default function MainLayout({
+  children,
+  footer = true,
+  childrenBelowHeader = true
+}: Props) {
   return (
     <Stack sx={{ minHeight: 1 }}>
       <MainHeader childrenBelowHeader={childrenBelowHeader} />

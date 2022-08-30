@@ -1,5 +1,5 @@
 import { Map, LatLngTuple, Icon } from 'leaflet';
-import { Box } from '@mui/material';
+import { Box, CircularProgress, Container } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
@@ -10,14 +10,6 @@ import { FacilityRecord } from 'src/store/types';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
-
-// const pinIcon = new L.Icon({
-//   iconUrl: require('../images/pin.svg'),
-//   iconRetinaUrl: require('../images/pin.svg'),
-//   iconSize: new L.Point(20, 20),
-//   className: 'leaflet-div-icon'
-// });
-
 const pinIcon = new Icon({
   iconUrl: icon,
   iconSize: [25, 40]
@@ -89,7 +81,7 @@ export const MapBox: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // TODO: replace this with activeAccommodations
-  const { accommodations, coordinates } = useAccommodationsAndOffers();
+  const { accommodations, coordinates, isLoading } = useAccommodationsAndOffers();
   const normalizedCoordinates: LatLngTuple = coordinates
     ? [coordinates.lat, coordinates.lon]
     : [51.505, -0.09];
@@ -163,7 +155,20 @@ export const MapBox: React.FC = () => {
   return (
     <Box>
       {map ? <MapSettings center={normalizedCoordinates} map={map} /> : null}
-      {displayMap}
+      {isLoading ? (
+        <Container
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '80vh'
+          }}
+        >
+          <CircularProgress />
+        </Container>
+      ) : (
+        displayMap
+      )}
     </Box>
   );
 };
