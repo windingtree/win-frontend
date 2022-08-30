@@ -62,7 +62,6 @@ export const GuestInfoContainer = () => {
   });
 
   const {
-    watch,
     handleSubmit,
     formState: { isSubmitting }
   } = methods;
