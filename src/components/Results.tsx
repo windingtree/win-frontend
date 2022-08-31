@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { createRef, useCallback, useEffect, useMemo } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { SearchResult } from './SearchResult';
+import { SearchCard } from './SearchCard';
 import { useAppState, useAppDispatch } from '../store';
 import { styled } from '@mui/system';
 
@@ -24,10 +24,10 @@ const StyledContainer = styled(Box)(({ theme }) => ({
     backgroundColor: 'rgba(0, 0, 0, 0)'
   },
 
-  [theme.breakpoints.up('lg')]: {
+  [theme.breakpoints.up('xl')]: {
     top: 0,
     padding: theme.spacing(2),
-    height: '80%'
+    height: '100%'
   }
 }));
 
@@ -46,7 +46,7 @@ export const Results: React.FC = () => {
     [dispatch]
   );
 
-  const searchResultsRefs = useMemo(
+  const SearchCardsRefs = useMemo(
     () =>
       accommodations?.reduce((refs, facility) => {
         const ref = createRef<HTMLDivElement>();
@@ -55,12 +55,12 @@ export const Results: React.FC = () => {
     [accommodations]
   );
 
-  // scroll to searchResult
+  // scroll to SearchCard
   useEffect(() => {
-    searchResultsRefs &&
+    SearchCardsRefs &&
       selectedFacilityId &&
-      searchResultsRefs[selectedFacilityId]?.current?.scrollIntoView();
-  }, [selectedFacilityId, searchResultsRefs]);
+      SearchCardsRefs[selectedFacilityId]?.current?.scrollIntoView();
+  }, [selectedFacilityId, SearchCardsRefs]);
 
   if (!accommodations || accommodations.length === 0) {
     return null;
@@ -70,12 +70,12 @@ export const Results: React.FC = () => {
     <StyledContainer className="noScrollBar">
       {!isFetching &&
         accommodations.map((facility, idx) => (
-          <SearchResult
+          <SearchCard
             key={facility.id}
             facility={facility}
             isSelected={facility.id === selectedFacilityId}
             onSelect={handleFacilitySelection}
-            ref={searchResultsRefs[idx]}
+            ref={SearchCardsRefs[idx]}
           />
         ))}
     </StyledContainer>

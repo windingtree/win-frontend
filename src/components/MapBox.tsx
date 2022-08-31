@@ -7,6 +7,7 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import { useAppDispatch, useAppState } from '../store';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { FacilityRecord } from 'src/store/types';
+import { SearchCard } from './SearchCard';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -139,10 +140,17 @@ export const MapBox: React.FC = () => {
                     icon={pinIcon}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
-                      click: () => selectFacility(f.id)
+                      click: () => selectFacility(f.id),
+                      mouseover: (event) => event.target.openPopup()
                     }}
                   >
-                    <Popup>{f.name}</Popup>
+                    <Popup>
+                      <SearchCard
+                        key={f.id}
+                        facility={f}
+                        isSelected={f.id === selectedFacilityId}
+                      />
+                    </Popup>
                   </Marker>
                 )
             )

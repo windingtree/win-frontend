@@ -2,13 +2,13 @@ import { CSSProperties, forwardRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { emptyFunction } from '../utils/common';
 import { Stack, Paper, Typography } from '@mui/material';
-import Image from '../components/Image';
-import Iconify from '../components/Iconify';
+import Image from './Image';
+import Iconify from './Iconify';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import defaultImage from '../images/cities/berlin.jpeg';
 
-export interface SearchResultProps {
+export interface SearchCardProps {
   facility: AccommodationWithId;
   isSelected?: boolean;
   onSelect?: (...args) => void;
@@ -18,7 +18,7 @@ const priceText = (prices: number[]) =>
     ? `${Math.max(...prices)}`
     : `${Math.min(...prices)} - ${Math.max(...prices)}`;
 
-export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
+export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
   ({ facility, isSelected, onSelect = emptyFunction }, ref) => {
     const navigate = useNavigate();
     const { winWidth } = useWindowsDimension();
