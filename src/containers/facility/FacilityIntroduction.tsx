@@ -192,7 +192,7 @@ export const FacilityIntroduction = ({
           sx={buttonStyle}
           onClick={handleOpenGallery}
         >
-          {largestImages.length > 5 ? "Show all photos" : "View Photos"}
+          {largestImages.length > 5 ? 'Show all photos' : 'View Photos'}
         </Button>
         <FacilityGallery
           open={galleryOpen}

@@ -7,7 +7,7 @@ export const sortByLargestImage = (images: MediaItem[]) =>
 
 export const getLargestImages = (sortedImages: MediaItem[], limit = 50) => {
   let largestSize;
-  const largestImages: MediaItem[] = []
+  const largestImages: MediaItem[] = [];
 
   // if array is empty
   if (!sortedImages.length) return largestImages;
@@ -22,8 +22,8 @@ export const getLargestImages = (sortedImages: MediaItem[], limit = 50) => {
     // if largest size changes (smaller image) exit loop
     if (image.width !== largestSize) break;
 
-    largestImages.push(image);    
+    largestImages.push(image);
   }
 
   return largestImages;
-}
+};

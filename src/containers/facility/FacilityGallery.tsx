@@ -8,7 +8,7 @@ import {
   Stack,
   styled,
   SxProps,
-  Typography,
+  Typography
 } from '@mui/material';
 import { MediaItem } from '@windingtree/glider-types/types/win';
 import { emptyFunction } from '../../utils/common';
@@ -21,7 +21,13 @@ export interface FacilityGalleryProps extends FacilityGalleryModalProps {
   closeHandler: () => void;
 }
 
-export const FacilityGallery = ({ images, selectRoomHandler = emptyFunction, hotelName, closeHandler, ...props }: FacilityGalleryProps) => {
+export const FacilityGallery = ({
+  images,
+  selectRoomHandler = emptyFunction,
+  hotelName,
+  closeHandler,
+  ...props
+}: FacilityGalleryProps) => {
   const GalleryContainer = styled(Box)(({ theme }) => ({
     width: '80%',
     height: 600,
@@ -35,16 +41,16 @@ export const FacilityGallery = ({ images, selectRoomHandler = emptyFunction, hot
   }));
 
   const closeButtonStyle: SxProps = {
-    position: "absolute",
-    right: "1%",
-    top: "1%",
-    color: "black",
-  }
+    position: 'absolute',
+    right: '1%',
+    top: '1%',
+    color: 'black'
+  };
 
   const handleSelectRoom = () => {
     selectRoomHandler();
     closeHandler();
-  }
+  };
 
   return (
     <Modal {...props}>
@@ -61,7 +67,7 @@ export const FacilityGallery = ({ images, selectRoomHandler = emptyFunction, hot
           <Button variant="contained" disableElevation onClick={handleSelectRoom}>
             Select Room
           </Button>
-          <Button variant='text' sx={closeButtonStyle} onClick={closeHandler}>
+          <Button variant="text" sx={closeButtonStyle} onClick={closeHandler}>
             x Close
           </Button>
         </Stack>

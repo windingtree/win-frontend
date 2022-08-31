@@ -28,7 +28,7 @@ const FacilityOffersTitle = ({
 }: SearchCriteriaAndResult) => {
   const SubHeader = styled(Box)(() => ({}));
   const theme = useTheme();
-  const dateStr = startDate && (new Date(startDate)).toDateString();
+  const dateStr = startDate && new Date(startDate).toDateString();
 
   return (
     <Box marginBottom={theme.spacing(2.5)}>
