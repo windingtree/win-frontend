@@ -18,8 +18,9 @@ const Container = styled(Box)(({ theme }) => ({
   width: '100%',
   height: '720px',
   gap: theme.spacing(1),
-  padding: theme.spacing(2.5),
   position: 'relative',
+  marginBottom: theme.spacing(8),
+  marginTop: theme.spacing(2.5),
 
   [theme.breakpoints.up('lg')]: {
     flexDirection: 'row',
@@ -31,8 +32,7 @@ const HeaderContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
-  marginBottom: theme.spacing(1),
-  padding: theme.spacing(2.5)
+  marginBottom: theme.spacing(2.5),
 }));
 
 const HeaderTitleContainer = styled(Box)(() => ({
@@ -94,7 +94,7 @@ const HeaderButton = ({ scrollToDetailImages }) => {
         </Typography>
       </Box>
       <div>
-        <Typography>Average price per night / per room</Typography>
+        <Typography textAlign={"right"}>Average price per night / per room</Typography>
       </div>
 
       <div>
@@ -103,6 +103,9 @@ const HeaderButton = ({ scrollToDetailImages }) => {
           variant="contained"
           size="large"
           onClick={scrollToDetailImages}
+          sx={{
+            whiteSpace: "nowrap"
+          }}
         >
           Select Room
         </Button>
@@ -154,8 +157,8 @@ export const FacilityIntroduction = ({
 
   const buttonStyle: SxProps = {
     position: 'absolute',
-    right: 50,
-    bottom: 50
+    right: "2%",
+    bottom: "5%"
   };
 
   const sortedImages: MediaItem[] = useMemo(

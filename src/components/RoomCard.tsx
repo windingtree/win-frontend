@@ -63,9 +63,8 @@ export const RoomCard: React.FC<{
 
   return (
     <Box
-      border={'3px solid #AAAAAA'}
-      padding={theme.spacing(2)}
-      borderRadius={1}
+      borderTop={'3px solid black'}
+      py={theme.spacing(5)}
       marginBottom={theme.spacing(5)}
     >
       <Grid container spacing={5}>
@@ -113,6 +112,9 @@ export const RoomCard: React.FC<{
               size="large"
               onClick={() => handleBook()}
               loading={loading}
+              sx={{
+                whiteSpace: "nowrap"
+              }}
             >
               Book Now
             </LoadingButton>
