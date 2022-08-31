@@ -13,11 +13,11 @@ import {
   Alert,
   styled
 } from '@mui/material';
-import { FormProvider, RHFTextField } from 'src/components/hook-form';
+import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
-import { endDateDisplay, startDateDisplay } from './helpers';
+import { autocompleteData, endDateDisplay, startDateDisplay } from './helpers';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 import { LoadingButton } from '@mui/lab';
@@ -30,6 +30,7 @@ import {
 import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
+import RHFTAutocomplete from 'src/components/hook-form/RHFAutocomplete';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -109,6 +110,7 @@ export const SearchForm: React.FC = () => {
     formState: { errors }
   } = methods;
   const values = watch();
+
   const hasValidationErrors = Object.keys(errors).length != 0;
   const { roomCount, adultCount, dateRange, location } = values;
   const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
@@ -167,7 +169,7 @@ export const SearchForm: React.FC = () => {
    */
   const roomText = roomCount === 1 ? 'room' : 'rooms';
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
-  const fontStyling = theme.typography.body2;
+  const fontStyling = theme.typography.body1;
   const buttonSize = 'large';
 
   return (
@@ -220,10 +222,12 @@ export const SearchForm: React.FC = () => {
               />
             }
           >
-            <RHFTextField
+            <RHFTAutocomplete
               variant="standard"
               placeholder="Where are you going?"
               name="location"
+              options={autocompleteData}
+              width="230px"
               inputProps={{
                 style: {
                   ...fontStyling,
@@ -247,7 +251,7 @@ export const SearchForm: React.FC = () => {
                 size={buttonSize}
                 variant="text"
                 sx={{
-                  minWidth: '210px',
+                  minWidth: '230px',
                   whiteSpace: 'nowrap',
                   ...fontStyling
                 }}
