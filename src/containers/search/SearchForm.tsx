@@ -106,8 +106,6 @@ export const SearchForm: React.FC = () => {
   } = methods;
   const values = watch();
 
-  console.log(values);
-
   const hasValidationErrors = Object.keys(errors).length != 0;
   const { roomCount, adultCount, dateRange, location } = values;
   const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
