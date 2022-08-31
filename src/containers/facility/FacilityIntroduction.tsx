@@ -9,6 +9,7 @@ import { Box } from '@mui/material';
 import { useMemo } from 'react';
 import { stringToNumber } from '../../utils/strings';
 import { sortByLargestImage } from '../../utils/accommodation';
+import { daysBetween } from '../../utils/date';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -54,34 +55,38 @@ const FacilityMainImage = styled('img')(() => ({
 const HeaderButton = ({ scrollToDetailImages }) => {
   const theme = useTheme();
   const params = useParams();
-  const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
+  const { getAccommodationById, accommodations, latestQueryParams } = useAccommodationsAndOffers();
 
   const id: string = params.id as string;
   const accommodation = getAccommodationById(accommodations, id);
   const offers = accommodation?.offers;
 
   // get lowest offer price
-  const lowestPrice = useMemo(() => {
+  const lowestTotalPrice = useMemo(() => {
     return offers?.reduce(
       (lowestPrice, offer): { price: string; currency: string } => {
-        return stringToNumber(offer.price?.public) > stringToNumber(lowestPrice.price)
+        return !lowestPrice.price || stringToNumber(offer.price?.public) < stringToNumber(lowestPrice.price)
           ? { price: offer.price?.public, currency: offer.price?.currency }
           : lowestPrice;
       },
-      { price: '-1', currency: '' }
+      { price: '', currency: '' }
     );
   }, [offers]);
+
+  const numberOfDays = daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure);
+  const numberOfRooms = latestQueryParams?.roomCount ?? 1;
+  const lowestAveragePrice = lowestTotalPrice && Number(lowestTotalPrice.price)/(numberOfDays * numberOfRooms);
 
   return (
     <HeaderButtonContainer>
       <Box display={'flex'} alignItems={'end'}>
         <Typography>From</Typography>
         <Typography variant="body1" marginLeft={theme.spacing(1.5)}>
-          {lowestPrice?.currency} {Number(lowestPrice?.price).toFixed(2)}
+          {lowestTotalPrice?.currency} {lowestAveragePrice?.toFixed(2)}
         </Typography>
       </Box>
       <div>
-        <Typography>Per Night Per Room</Typography>
+        <Typography>Average Price/Night/Room</Typography>
       </div>
 
       <div>
