@@ -31,9 +31,9 @@ export const Facility = () => {
     return createSearchParams(params);
   }, [latestQueryParams, createSearchParams]);
 
-  const FacilityLayout = styled(Box)(({theme}) => ({
+  const FacilityLayout = styled(Box)(({ theme }) => ({
     paddingLeft: theme.spacing(8),
-    paddingRight: theme.spacing(8),
+    paddingRight: theme.spacing(8)
   }));
 
   return (
@@ -53,7 +53,7 @@ export const Facility = () => {
       <FacilityLayout>
         <FacilityIntroduction scrollToDetailImages={scrollToDetailImages} />
         <FacilityOffers ref={detailImagesRef} />
-      </FacilityLayout>      
+      </FacilityLayout>
     </MainLayout>
   );
 };

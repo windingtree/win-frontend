@@ -113,7 +113,7 @@ export const RoomCard: React.FC<{
               onClick={() => handleBook()}
               loading={loading}
               sx={{
-                whiteSpace: "nowrap"
+                whiteSpace: 'nowrap'
               }}
             >
               Book Now
