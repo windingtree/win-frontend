@@ -52,9 +52,9 @@ export const SearchResult = forwardRef<HTMLDivElement, SearchResultProps>(
         onClick={() => navigate(`/facility/${facility.id}`)}
         onMouseOver={handleSelect}
         style={selectedStyle}
-        sx={{ borderRadius: 2, bgcolor: 'background.neutral', mb: 1 }}
+        sx={{ borderRadius: 2, bgcolor: 'background.neutral' }}
       >
-        <Stack spacing={1} sx={{ ...responsiveStyle, marginBottom: 1 }}>
+        <Stack spacing={1} sx={{ ...responsiveStyle, mb: 1 }}>
           <Stack spacing={1} sx={{ p: 2, pb: 1.5 }}>
             <Stack direction="row" justifyContent="space-between" spacing={1}>
               <Typography variant="subtitle1">{facility.name}</Typography>

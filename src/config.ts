@@ -4,7 +4,7 @@ import { config } from '@windingtree/win-commons';
 export enum AppMode {
   dev = 'dev',
   stage = 'stage',
-  prod = 'prod',
+  prod = 'prod'
 }
 
 export interface Api {

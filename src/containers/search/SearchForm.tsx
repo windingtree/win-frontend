@@ -34,13 +34,14 @@ import RHFTAutocomplete from 'src/components/hook-form/RHFAutocomplete';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
-  padding: theme.spacing(2),
+  paddingBottom: theme.spacing(1),
   display: 'flex',
   justifyContent: 'center',
   border: 'none',
   width: '100%',
   backgroundColor: theme.palette.background.default,
   [theme.breakpoints.up('md')]: {
+    padding: theme.spacing(2),
     width: 'max-content',
     border: `3px solid ${theme.palette.primary.main}`,
     borderRadius: 10
@@ -169,8 +170,8 @@ export const SearchForm: React.FC = () => {
    */
   const roomText = roomCount === 1 ? 'room' : 'rooms';
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
-  const fontStyling = theme.typography.body1;
-  const buttonSize = 'large';
+  const fontStyling = theme.typography.body2;
+  const buttonSize = useMediaQuery(theme.breakpoints.down('md')) ? 'small' : 'large';
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
