@@ -28,12 +28,13 @@ const FacilityOffersTitle = ({
 }: SearchCriteriaAndResult) => {
   const SubHeader = styled(Box)(() => ({}));
   const theme = useTheme();
+  const dateStr = startDate && (new Date(startDate)).toDateString();
 
   return (
     <Box marginBottom={theme.spacing(2.5)}>
       <Typography marginBottom={theme.spacing(6)}>Available Rooms</Typography>
       <SubHeader>
-        Results for {rooms || ''} room, {guests} guests, staying from {startDate} for{' '}
+        Results for {rooms || ''} room, {guests} guests, staying from {dateStr} for{' '}
         {nights} nights: {roomsAvailable} room(s) available.
       </SubHeader>
     </Box>
