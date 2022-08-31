@@ -9,6 +9,8 @@ import { PricedOfferRequest } from '../api/PricedOffer';
 import type { OfferRecord } from 'src/store/types';
 import { Alert, Box, Grid, Typography, useTheme } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { daysBetween } from '../utils/date';
+import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
 
 const logger = Logger('RoomCard');
 
@@ -19,11 +21,14 @@ export const RoomCard: React.FC<{
 }> = ({ offer, facilityId, room }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const { latestQueryParams } = useAccommodationsAndOffers();
+  const arrival = latestQueryParams?.arrival;
+  const departure = latestQueryParams?.departure;
 
   const navigate = useNavigate();
   const [notification] = useState<string | undefined>();
-  const numberOfDays = 1;
-  const roomsNumber = 1;
+  const numberOfDays = daysBetween(arrival, departure);
+  const roomsNumber = latestQueryParams?.roomCount;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
