@@ -28,7 +28,8 @@ export default function RHFTAutocomplete({
           {...field}
           freeSolo={freeSolo}
           isOptionEqualToValue={(option, value) => option === value}
-          onChange={(event, newValue) => field.onChange(newValue)}
+          onChange={(event, newValue) => field.onChange(newValue ?? '')}
+          onInputChange={(event, newValue) => field.onChange(newValue ?? '')}
           options={options}
           sx={{ width }}
           renderInput={({ InputProps, inputProps, ...restParams }) => (
