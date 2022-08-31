@@ -49,7 +49,7 @@ export const FacilityGallery = ({
 
   const handleSelectRoom = () => {
     selectRoomHandler();
-    closeHandler();
+    setTimeout(closeHandler, 300);
   };
 
   return (
