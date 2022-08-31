@@ -1,4 +1,10 @@
-import { Box, Popover as BasePopover, styled } from '@mui/material';
+import {
+  Box,
+  Popover as BasePopover,
+  styled,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 
@@ -17,6 +23,7 @@ export const SearchPopovers = ({
   dateRangeAnchorEl,
   setDateRangeAnchorEl
 }) => {
+  const theme = useTheme();
   return (
     <>
       <Popover
@@ -49,7 +56,7 @@ export const SearchPopovers = ({
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'left'
+          horizontal: useMediaQuery(theme.breakpoints.down('md')) ? 'center' : 'left'
         }}
       >
         <SelectGuestsAndRooms />
