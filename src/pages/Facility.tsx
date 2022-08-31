@@ -44,8 +44,8 @@ export const Facility = () => {
           }
         ]}
       />
-      <FacilityIntroduction scrollToDetailImages={scrollToDetailImages}/>
-      <FacilityOffers ref={detailImagesRef}/>
+      <FacilityIntroduction scrollToDetailImages={scrollToDetailImages} />
+      <FacilityOffers ref={detailImagesRef} />
     </MainLayout>
   );
 };

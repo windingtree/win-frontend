@@ -1,5 +1,5 @@
 import { Map, LatLngTuple, Icon } from 'leaflet';
-import { Box } from 'grommet';
+import { Box, CircularProgress, Container } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
@@ -7,17 +7,10 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import { useAppDispatch, useAppState } from '../store';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { FacilityRecord } from 'src/store/types';
+import { SearchCard } from './SearchCard';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
-
-// const pinIcon = new L.Icon({
-//   iconUrl: require('../images/pin.svg'),
-//   iconRetinaUrl: require('../images/pin.svg'),
-//   iconSize: new L.Point(20, 20),
-//   className: 'leaflet-div-icon'
-// });
-
 const pinIcon = new Icon({
   iconUrl: icon,
   iconSize: [25, 40]
@@ -89,7 +82,7 @@ export const MapBox: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // TODO: replace this with activeAccommodations
-  const { accommodations, coordinates } = useAccommodationsAndOffers();
+  const { accommodations, coordinates, isLoading } = useAccommodationsAndOffers();
   const normalizedCoordinates: LatLngTuple = coordinates
     ? [coordinates.lat, coordinates.lon]
     : [51.505, -0.09];
@@ -119,16 +112,16 @@ export const MapBox: React.FC = () => {
   const displayMap = useMemo(
     () => (
       <MapContainer
-        // zoomControl={false}
+        zoomControl={false}
         center={normalizedCoordinates}
         zoom={defaultZoom}
         style={{
-          height: '100vh',
+          height: '90vh',
           // width: "100vw",
           position: 'relative',
           zIndex: 0
         }}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         ref={setMap}
       >
         <TileLayer
@@ -147,10 +140,17 @@ export const MapBox: React.FC = () => {
                     icon={pinIcon}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
-                      click: () => selectFacility(f.id)
+                      click: () => selectFacility(f.id),
+                      mouseover: (event) => event.target.openPopup()
                     }}
                   >
-                    <Popup>{f.name}</Popup>
+                    <Popup>
+                      <SearchCard
+                        key={f.id}
+                        facility={f}
+                        isSelected={f.id === selectedFacilityId}
+                      />
+                    </Popup>
                   </Marker>
                 )
             )
@@ -163,7 +163,20 @@ export const MapBox: React.FC = () => {
   return (
     <Box>
       {map ? <MapSettings center={normalizedCoordinates} map={map} /> : null}
-      {displayMap}
+      {isLoading ? (
+        <Container
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '80vh'
+          }}
+        >
+          <CircularProgress />
+        </Container>
+      ) : (
+        displayMap
+      )}
     </Box>
   );
 };

@@ -55,7 +55,8 @@ const FacilityMainImage = styled('img')(() => ({
 const HeaderButton = ({ scrollToDetailImages }) => {
   const theme = useTheme();
   const params = useParams();
-  const { getAccommodationById, accommodations, latestQueryParams } = useAccommodationsAndOffers();
+  const { getAccommodationById, accommodations, latestQueryParams } =
+    useAccommodationsAndOffers();
 
   const id: string = params.id as string;
   const accommodation = getAccommodationById(accommodations, id);
@@ -65,7 +66,8 @@ const HeaderButton = ({ scrollToDetailImages }) => {
   const lowestTotalPrice = useMemo(() => {
     return offers?.reduce(
       (lowestPrice, offer): { price: string; currency: string } => {
-        return !lowestPrice.price || stringToNumber(offer.price?.public) < stringToNumber(lowestPrice.price)
+        return !lowestPrice.price ||
+          stringToNumber(offer.price?.public) < stringToNumber(lowestPrice.price)
           ? { price: offer.price?.public, currency: offer.price?.currency }
           : lowestPrice;
       },
@@ -73,9 +75,13 @@ const HeaderButton = ({ scrollToDetailImages }) => {
     );
   }, [offers]);
 
-  const numberOfDays = daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure);
+  const numberOfDays = daysBetween(
+    latestQueryParams?.arrival,
+    latestQueryParams?.departure
+  );
   const numberOfRooms = latestQueryParams?.roomCount ?? 1;
-  const lowestAveragePrice = lowestTotalPrice && Number(lowestTotalPrice.price)/(numberOfDays * numberOfRooms);
+  const lowestAveragePrice =
+    lowestTotalPrice && Number(lowestTotalPrice.price) / (numberOfDays * numberOfRooms);
 
   return (
     <HeaderButtonContainer>
