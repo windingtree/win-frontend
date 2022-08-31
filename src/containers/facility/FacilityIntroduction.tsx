@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { MediaItem } from '@windingtree/glider-types/types/win';
-import { Button, Typography } from '@mui/material';
+import { Button, SxProps, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { stringToNumber } from '../../utils/strings';
-import { sortByLargestImage } from '../../utils/accommodation';
+import { getLargestImages, sortByLargestImage } from '../../utils/accommodation';
+import { FacilityGallery } from './FacilityGallery';
 import { daysBetween } from '../../utils/date';
 
 const Container = styled(Box)(({ theme }) => ({
@@ -18,6 +19,7 @@ const Container = styled(Box)(({ theme }) => ({
   height: '720px',
   gap: theme.spacing(1),
   padding: theme.spacing(2.5),
+  position: 'relative',
 
   [theme.breakpoints.up('lg')]: {
     flexDirection: 'row',
@@ -42,7 +44,7 @@ const HeaderTitleContainer = styled(Box)(() => ({
 const HeaderButtonContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'end',
+  alignItems: 'end',
   gap: theme.spacing(0.5)
 }));
 
@@ -87,12 +89,12 @@ const HeaderButton = ({ scrollToDetailImages }) => {
     <HeaderButtonContainer>
       <Box display={'flex'} alignItems={'end'}>
         <Typography>From</Typography>
-        <Typography variant="body1" marginLeft={theme.spacing(1.5)}>
+        <Typography variant="h5" marginLeft={theme.spacing(1)}>
           {lowestTotalPrice?.currency} {lowestAveragePrice?.toFixed(2)}
         </Typography>
       </Box>
       <div>
-        <Typography>Average Price/Night/Room</Typography>
+        <Typography>Average price per night / per room</Typography>
       </div>
 
       <div>
@@ -146,7 +148,23 @@ export const FacilityIntroduction = ({
     String(id)
   );
 
-  const sortedImages: MediaItem[] = sortByLargestImage(accommodation?.media ?? []);
+  const [galleryOpen, setGalleryOpen] = useState<boolean>(false);
+  const handleOpenGallery = () => setGalleryOpen(true);
+  const handleCloseGallery = () => setGalleryOpen(false);
+
+  const buttonStyle: SxProps = {
+    position: 'absolute',
+    right: 50,
+    bottom: 50
+  };
+
+  const sortedImages: MediaItem[] = useMemo(
+    () => sortByLargestImage(accommodation?.media ?? []),
+    [accommodation?.media]
+  );
+
+  const largestImages = useMemo(() => getLargestImages(sortedImages), [sortedImages]);
+
   const [mainImage, ...rest] = sortedImages;
   const address = [
     accommodation?.contactInformation?.address?.streetAddress,
@@ -167,6 +185,25 @@ export const FacilityIntroduction = ({
       <Container>
         <FacilityMainImage src={mainImage?.url} />
         <FacilityDetailImages images={rest} />
+        <Button
+          variant="contained"
+          color="secondary"
+          size={'large'}
+          sx={buttonStyle}
+          onClick={handleOpenGallery}
+        >
+          {largestImages.length > 5 ? "Show all photos" : "View Photos"}
+        </Button>
+        <FacilityGallery
+          open={galleryOpen}
+          onClose={handleCloseGallery}
+          closeHandler={handleCloseGallery}
+          hotelName={accommodation?.name}
+          selectRoomHandler={scrollToDetailImages}
+          images={largestImages}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        />
       </Container>
     </>
   );
