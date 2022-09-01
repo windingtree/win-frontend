@@ -52,6 +52,12 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
   const nights = daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure);
 
+  const sortedOffers =
+    accommodation &&
+    [...accommodation.offers].sort((prevOffer, nextOffer) => {
+      return Number(prevOffer.price.public) - Number(nextOffer.price.public);
+    });
+
   return (
     <FacilityOffersContainer ref={ref}>
       <FacilityOffersTitle
@@ -61,7 +67,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
         nights={nights}
         roomsAvailable={accommodation?.offers?.length ?? 0}
       />
-      {accommodation?.offers.map((offer, index) => {
+      {sortedOffers?.map((offer, index) => {
         //TODO: revise whether we maybe want to restructure the data in such a way that is more intuitive
         // pricePlanReferences has a key that refers to the accommodationId, which can be confusing.
         const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
