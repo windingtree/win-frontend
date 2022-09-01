@@ -24,8 +24,8 @@ export const Facility = () => {
     const params = {
       roomCount: latestQueryParams.roomCount.toString(),
       adultCount: latestQueryParams.adultCount.toString(),
-      arrival: latestQueryParams.arrival?.toDateString() ?? '',
-      departure: latestQueryParams.departure?.toDateString() ?? '',
+      startDate: latestQueryParams.arrival?.toISOString() ?? '',
+      endDate: latestQueryParams.departure?.toISOString() ?? '',
       location: latestQueryParams.location
     };
     return createSearchParams(params);
