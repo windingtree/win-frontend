@@ -8,6 +8,7 @@ import { useAppDispatch, useAppState } from '../store';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { FacilityRecord } from 'src/store/types';
 import { SearchCard } from './SearchCard';
+import { daysBetween } from '../utils/date';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -82,7 +83,13 @@ export const MapBox: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // TODO: replace this with activeAccommodations
-  const { accommodations, coordinates, isLoading } = useAccommodationsAndOffers();
+  const { accommodations, coordinates, isLoading, latestQueryParams } =
+    useAccommodationsAndOffers();
+  const numberOfDays = useMemo(
+    () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
+    [latestQueryParams]
+  );
+
   const normalizedCoordinates: LatLngTuple = coordinates
     ? [coordinates.lat, coordinates.lon]
     : [51.505, -0.09];
@@ -99,12 +106,7 @@ export const MapBox: React.FC = () => {
     if (selectedFacilityId) {
       const facility = accommodations.find((fac) => fac.id === selectedFacilityId);
       if (facility) {
-        const coordinates = getCoordinates(facility);
-        if (coordinates) {
-          map?.setView({ lat: coordinates[0], lng: coordinates[1] }, map.getZoom(), {
-            animate: true
-          });
-        }
+        // change the priced pin color
       }
     }
   }, [selectedFacilityId]);
@@ -149,6 +151,7 @@ export const MapBox: React.FC = () => {
                         key={f.id}
                         facility={f}
                         isSelected={f.id === selectedFacilityId}
+                        numberOfDays={numberOfDays}
                       />
                     </Popup>
                   </Marker>
