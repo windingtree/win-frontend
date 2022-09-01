@@ -13,6 +13,7 @@ export interface SearchCardProps {
   facility: AccommodationWithId;
   isSelected?: boolean;
   numberOfDays: number;
+  sm?: boolean;
   onSelect?: (...args) => void;
 }
 const totalPrice = (prices: number[], numberOfDays: number) =>
@@ -49,7 +50,7 @@ const currencyIcon = (currency: string) => {
 };
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
-  ({ facility, isSelected, numberOfDays, onSelect = emptyFunction }, ref) => {
+  ({ sm, facility, isSelected, numberOfDays, onSelect = emptyFunction }, ref) => {
     const navigate = useNavigate();
     const { winWidth } = useWindowsDimension();
     const selectedStyle: CSSProperties = isSelected
@@ -58,13 +59,22 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
         }
       : {};
     const responsiveStyle: CSSProperties =
-      winWidth < 900
+      winWidth < 900 || sm
         ? {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between'
           }
         : {};
+
+    const smallCardStyle: CSSProperties = sm
+      ? {
+          minWidth: '380px',
+          marginBottom: '0px'
+        }
+      : {
+          marginBottom: '8px'
+        };
 
     const prices = useMemo(
       () => facility.offers.map((o) => Number(o.price.public)),
@@ -81,19 +91,18 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
         ref={ref}
         onClick={() => navigate(`/facility/${facility.id}`)}
         onMouseOver={handleSelect}
-        style={selectedStyle}
-        sx={{ mb: 1 }}
+        style={{ ...selectedStyle, ...smallCardStyle }}
       >
-        <Stack spacing={1} sx={{ ...responsiveStyle, mb: 1 }}>
+        <Stack spacing={1} sx={{ ...responsiveStyle }}>
           <Stack>
             <CardMediaFallback
               component="img"
-              height="200"
+              height={sm ? '120' : '200'}
               src={facility.media[0] !== undefined ? facility.media[0].url : undefined}
               fallback={FallbackImage}
             />
           </Stack>
-          <Stack spacing={1} sx={{ p: 2, pb: 1.5 }}>
+          <Stack justifyContent="center" spacing={1} sx={{ p: 2, pb: 1.5 }}>
             <Stack direction="row" justifyContent="space-between" spacing={1}>
               <Typography variant="subtitle1">{facility.name}</Typography>
               <Stack sx={{ color: 'text.secondary' }} direction="row" alignItems="center">
