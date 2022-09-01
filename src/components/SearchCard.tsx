@@ -16,8 +16,8 @@ export interface SearchCardProps {
   sm?: boolean;
   onSelect?: (...args) => void;
 }
-const totalPrice = (prices: number[], numberOfDays: number) =>
-  (Math.min(...prices) * numberOfDays).toFixed(2);
+const pricePerNight = (prices: number[], numberOfDays: number) =>
+  (Math.min(...prices) / numberOfDays).toFixed(2);
 
 const currencyIcon = (currency: string) => {
   if (!assetsCurrencies.includes(currency)) {
@@ -118,11 +118,11 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                 </Typography>
                 <Typography variant="caption">
                   {currencyIcon(facility.offers[0]?.price?.currency)}
-                  {Math.min(...prices).toFixed(2)} night.
+                  {pricePerNight(prices, numberOfDays)} night.
                 </Typography>
                 <Typography alignItems="center" variant="caption">
                   {currencyIcon(facility.offers[0]?.price?.currency)}
-                  {totalPrice(prices, numberOfDays)} total
+                  {Math.min(...prices).toFixed(2)} total
                 </Typography>
               </Stack>
             </Stack>
