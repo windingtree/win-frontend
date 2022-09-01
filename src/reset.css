@@ -193,3 +193,17 @@ template {
 .noScrollBar::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+  width: 380px;
+}
+.leaflet-popup-content-wrapper {
+  padding: 0;
+  width: 380px;
+  border-radius: 32px;
+}
+.leaflet-popup-tip {
+  display: none;
+}

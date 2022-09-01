@@ -4,6 +4,7 @@ import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers
 import { SearchCard } from './SearchCard';
 import { useAppState, useAppDispatch } from '../store';
 import { styled } from '@mui/system';
+import { daysBetween } from '../utils/date';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -32,9 +33,13 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const Results: React.FC = () => {
-  const { accommodations, isFetching } = useAccommodationsAndOffers();
+  const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers();
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
+  const numberOfDays = useMemo(
+    () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
+    [latestQueryParams]
+  );
 
   const handleFacilitySelection = useCallback(
     (facilityId: string) => {
@@ -73,6 +78,7 @@ export const Results: React.FC = () => {
           <SearchCard
             key={facility.id}
             facility={facility}
+            numberOfDays={numberOfDays}
             isSelected={facility.id === selectedFacilityId}
             onSelect={handleFacilitySelection}
             ref={SearchCardsRefs[idx]}
