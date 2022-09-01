@@ -6,7 +6,6 @@ import Logger from '../utils/logger';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import { useAppDispatch, useAppState } from '../store';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { FacilityRecord } from 'src/store/types';
 import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
 
@@ -67,14 +66,6 @@ const MapSettings: React.FC<{
   }, [zoom]);
 
   return null;
-};
-
-const getCoordinates = (facility: FacilityRecord): LatLngTuple | undefined => {
-  let coordinates: LatLngTuple | undefined = undefined;
-
-  coordinates = [...(facility.location.coordinates || [])].reverse() as LatLngTuple;
-
-  return coordinates;
 };
 
 export const MapBox: React.FC = () => {
