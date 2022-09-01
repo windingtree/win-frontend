@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   InputAdornment,
-  Popover,
   Stack,
   useTheme,
   Toolbar,
@@ -18,8 +17,6 @@ import { useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
 import { autocompleteData, endDateDisplay, startDateDisplay } from './helpers';
-import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
-import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 import { LoadingButton } from '@mui/lab';
 import {
   createSearchParams,
@@ -31,6 +28,7 @@ import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
 import RHFTAutocomplete from 'src/components/hook-form/RHFAutocomplete';
+import { SearchPopovers } from './SearchPopovers';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -40,6 +38,7 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   border: 'none',
   width: '100%',
   backgroundColor: theme.palette.background.default,
+
   [theme.breakpoints.up('md')]: {
     padding: theme.spacing(2),
     width: 'max-content',
@@ -61,10 +60,6 @@ type FormValuesProps = {
 
 const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={12} />;
 
-/**
- * @param searchAfterInitialRender defines whether a search has to be executed when the component is rendered for the first time.
- * @param navigateAfterSearch navigates to the search page after a user clicks on the search button.
- */
 export const SearchForm: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -173,41 +168,18 @@ export const SearchForm: React.FC = () => {
   const fontStyling = theme.typography.body2;
   const buttonSize = useMediaQuery(theme.breakpoints.down('md')) ? 'small' : 'large';
 
+  const popOversState = {
+    isGuestsPopoverOpen,
+    guestsAnchorEl,
+    setGuestsAnchorEl,
+    isDatePopoverOpen,
+    dateRangeAnchorEl,
+    setDateRangeAnchorEl
+  };
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Popover
-        id="popover-date-range"
-        open={isDatePopoverOpen}
-        anchorEl={dateRangeAnchorEl}
-        onClose={() => setDateRangeAnchorEl(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-      >
-        <RHFDateRangePicker name="dateRange" minDate={new Date()} />
-      </Popover>
-
-      <Popover
-        id="popover-guest-and-rooms"
-        open={isGuestsPopoverOpen}
-        anchorEl={guestsAnchorEl}
-        onClose={() => setGuestsAnchorEl(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
-      >
-        <SelectGuestsAndRooms />
-      </Popover>
+      <SearchPopovers {...popOversState} />
       <Stack direction="column" alignItems="center">
         <ToolbarStyle ref={formRef}>
           <Stack
