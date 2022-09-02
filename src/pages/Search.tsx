@@ -7,7 +7,7 @@ import { HEADER } from 'src/config/componentSizes';
 
 const SearchBox = styled(Box)(({ theme }) => ({
   position: 'absolute',
-  top: 0,
+  top: HEADER.MOBILE_HEIGHT,
   width: '100%',
   [theme.breakpoints.up('md')]: {
     width: '100%',

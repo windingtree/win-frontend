@@ -1,5 +1,5 @@
 import { Map, LatLngTuple, Icon } from 'leaflet';
-import { Box, CircularProgress, Container } from '@mui/material';
+import { Backdrop, Box, CircularProgress } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
@@ -157,21 +157,16 @@ export const MapBox: React.FC = () => {
 
   return (
     <Box>
-      {map ? <MapSettings center={normalizedCoordinates} map={map} /> : null}
-      {isLoading || isFetching ? (
-        <Container
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh'
-          }}
-        >
-          <CircularProgress />
-        </Container>
-      ) : (
-        displayMap
-      )}
+      {map && !isFetching && !isLoading ? (
+        <MapSettings center={normalizedCoordinates} map={map} />
+      ) : null}
+      <Backdrop
+        sx={{ background: 'transparent', backdropFilter: 'blur(8px)', zIndex: 1 }}
+        open={isLoading || isFetching}
+      >
+        <CircularProgress />
+      </Backdrop>
+      {displayMap}
     </Box>
   );
 };

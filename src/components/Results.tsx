@@ -12,7 +12,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   zIndex: '1',
   width: '100%',
   height: '45%',
-  top: '60%',
+  top: '55%',
   left: 0,
   padding: theme.spacing(2),
   backgroundColor: '#fff',
