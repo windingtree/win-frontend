@@ -55,26 +55,26 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const { winWidth } = useWindowsDimension();
     const selectedStyle: CSSProperties = isSelected
       ? {
-          position: 'relative'
-        }
+        position: 'relative'
+      }
       : {};
     const responsiveStyle: CSSProperties =
       winWidth < 900 || sm
         ? {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-          }
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start'
+        }
         : {};
 
     const smallCardStyle: CSSProperties = sm
       ? {
-          minWidth: '380px',
-          marginBottom: '0px'
-        }
+        minWidth: '380px',
+        marginBottom: '0px'
+      }
       : {
-          marginBottom: '8px'
-        };
+        marginBottom: '8px'
+      };
 
     const prices = useMemo(
       () => facility.offers.map((o) => Number(o.price.public)),
@@ -98,11 +98,12 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             <CardMediaFallback
               component="img"
               height={sm ? '120' : '200'}
+              width={sm ? '120' : '200'}
               src={facility.media[0] !== undefined ? facility.media[0].url : undefined}
               fallback={FallbackImage}
             />
           </Stack>
-          <Stack justifyContent="center" spacing={1} sx={{ p: 2, pb: 1.5 }}>
+          <Stack justifyContent="center" sx={sm ? { p: 1, pb: 0.5 } : { p: 2, pb: 1.5 }}>
             <Stack direction="row" justifyContent="space-between" spacing={1}>
               <Typography variant="subtitle1">{facility.name}</Typography>
               <Stack sx={{ color: 'text.secondary' }} direction="row" alignItems="center">
