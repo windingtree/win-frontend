@@ -1,5 +1,5 @@
 import { Map, LatLngTuple, Icon } from 'leaflet';
-import { Box, CircularProgress, Container } from '@mui/material';
+import { Backdrop, Box, CircularProgress } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
@@ -74,7 +74,7 @@ export const MapBox: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // TODO: replace this with activeAccommodations
-  const { accommodations, coordinates, isLoading, latestQueryParams } =
+  const { accommodations, coordinates, isLoading, latestQueryParams, isFetching } =
     useAccommodationsAndOffers();
   const numberOfDays = useMemo(
     () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
@@ -109,7 +109,7 @@ export const MapBox: React.FC = () => {
         center={normalizedCoordinates}
         zoom={defaultZoom}
         style={{
-          height: '90vh',
+          height: '100vh',
           // width: "100vw",
           position: 'relative',
           zIndex: 0
@@ -157,21 +157,16 @@ export const MapBox: React.FC = () => {
 
   return (
     <Box>
-      {map ? <MapSettings center={normalizedCoordinates} map={map} /> : null}
-      {isLoading ? (
-        <Container
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '80vh'
-          }}
-        >
-          <CircularProgress />
-        </Container>
-      ) : (
-        displayMap
-      )}
+      {map && !isFetching && !isLoading ? (
+        <MapSettings center={normalizedCoordinates} map={map} />
+      ) : null}
+      <Backdrop
+        sx={{ background: 'transparent', backdropFilter: 'blur(8px)', zIndex: 1 }}
+        open={isLoading || isFetching}
+      >
+        <CircularProgress />
+      </Backdrop>
+      {displayMap}
     </Box>
   );
 };
