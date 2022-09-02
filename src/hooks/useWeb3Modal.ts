@@ -37,7 +37,7 @@ export const useWeb3Modal = (web3ModalConfig: Web3ModalConfig): Web3ModalHook =>
   }, [web3Modal]);
 
   const signIn = useCallback(async () => {
-    const unhandledRejectionHandler = (event: { preventDefault: () => void; }) => {
+    const unhandledRejectionHandler = (event: { preventDefault: () => void }) => {
       event.preventDefault();
       setIsConnecting(false);
       window.removeEventListener('unhandledrejection', unhandledRejectionHandler);

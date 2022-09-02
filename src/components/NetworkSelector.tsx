@@ -77,9 +77,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
       value={network && isRightNetwork ? network.chainId.toString() : 'none'}
       onChange={omNetworkChange}
     >
-      <MenuItem value="none">
-        Select network
-      </MenuItem>
+      <MenuItem value="none">Select network</MenuItem>
       {allowedNetworks.map((n, index) => (
         <MenuItem key={index} value={n.chainId.toString()}>
           {n.name}

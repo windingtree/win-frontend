@@ -1,13 +1,12 @@
 import { PaymentSuccessCallback } from '../components/PaymentCard';
 import { utils } from 'ethers';
-import { Container, Grid, Box, CircularProgress, Typography, Card } from '@mui/material';
+import { Container, Box, CircularProgress, Typography, Card } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import MainLayout from '../layouts/main';
 import { WinPay } from '../components/WinPay';
-import { MessageBox } from '../components/MessageBox';
 import { SignInButton } from '../components/Web3Modal';
 import { CardMediaFallback } from '../components/CardMediaFallback';
 import { formatCost } from '../utils/strings';
@@ -75,11 +74,11 @@ export const Checkout = () => {
           marginBottom: theme.spacing(5)
         }}
       >
-        {!account &&
+        {!account && (
           <Typography variant="h3" mb={3}>
             Please connect your wallet to proceed with the Payment
           </Typography>
-        }
+        )}
         <Box
           sx={{
             marginBottom: isDesktop ? 5 : 3,
@@ -122,9 +121,7 @@ export const Checkout = () => {
           </Box>
         </Box>
 
-        {!account &&
-          <SignInButton size='large' sx={{ padding: 5 }} />
-        }
+        {!account && <SignInButton size="large" sx={{ padding: 5 }} />}
 
         <WinPay payment={payment} onSuccess={onPaymentSuccess} />
       </Container>

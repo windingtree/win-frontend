@@ -12,7 +12,12 @@ export const SignInButton = (props: ButtonProps) => {
   }
 
   return (
-    <Button variant="contained" onClick={() => signIn()} disabled={isConnecting} {...props}>
+    <Button
+      variant="contained"
+      onClick={() => signIn()}
+      disabled={isConnecting}
+      {...props}
+    >
       <Box
         sx={{
           display: 'flex',
@@ -25,7 +30,9 @@ export const SignInButton = (props: ButtonProps) => {
           </Typography>
         )}
         {!isDesktop && <Iconify icon="ri:login-box-line" />}
-        {isConnecting && <CircularProgress size={18} sx={{ marginLeft: 1 }} color="inherit" />}
+        {isConnecting && (
+          <CircularProgress size={18} sx={{ marginLeft: 1 }} color="inherit" />
+        )}
       </Box>
     </Button>
   );
@@ -40,7 +47,12 @@ export const SignOutButton = (props: ButtonProps) => {
   }
 
   return (
-    <Button variant="contained" onClick={() => signOut()} disabled={isConnecting} {...props}>
+    <Button
+      variant="contained"
+      onClick={() => signOut()}
+      disabled={isConnecting}
+      {...props}
+    >
       <Box
         sx={{
           display: 'flex',
@@ -53,7 +65,10 @@ export const SignOutButton = (props: ButtonProps) => {
           </Typography>
         )}
         {!isDesktop && <Iconify icon="ri:logout-box-line" />}
-        &nbsp;{isConnecting && <CircularProgress size={18} sx={{ marginLeft: 1 }} color="inherit" />}
+        &nbsp;
+        {isConnecting && (
+          <CircularProgress size={18} sx={{ marginLeft: 1 }} color="inherit" />
+        )}
       </Box>
     </Button>
   );

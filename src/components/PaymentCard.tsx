@@ -397,14 +397,11 @@ export const PaymentCard = ({
 
   usePoller(getBalance, provider && asset && !!account, 2000, 'Account balance');
 
-  const checkExpiration = useCallback(
-    () => {
-      if (DateTime.fromSeconds(payment.expiration) < DateTime.now()) {
-        setPaymentExpired(true);
-      }
-    },
-    [payment]
-  );
+  const checkExpiration = useCallback(() => {
+    if (DateTime.fromSeconds(payment.expiration) < DateTime.now()) {
+      setPaymentExpired(true);
+    }
+  }, [payment]);
 
   usePoller(checkExpiration, payment && !paymentExpired, 1000, 'Expiration check');
 
@@ -463,13 +460,7 @@ export const PaymentCard = ({
                   size="small"
                   variant="outlined"
                   onClick={() => openExplorer(asset.address)}
-                  endIcon={
-                    <Iconify
-                      color="inherit"
-                      icon="cil:external-link"
-                      ml={1}
-                    />
-                  }
+                  endIcon={<Iconify color="inherit" icon="cil:external-link" ml={1} />}
                 >
                   {`${asset.symbol} contract`}
                 </Button>
@@ -499,11 +490,7 @@ export const PaymentCard = ({
               >
                 Approve the tokens
                 {isTxStarted === 'approve' ? (
-                  <CircularProgress
-                    size="16px"
-                    color="inherit"
-                    sx={{ ml: 1 }}
-                  />
+                  <CircularProgress size="16px" color="inherit" sx={{ ml: 1 }} />
                 ) : undefined}
               </Button>
             )}
@@ -515,11 +502,7 @@ export const PaymentCard = ({
             <Button variant="contained" onClick={makePayment} disabled={paymentBlocked}>
               Pay {formatCost(payment, asset.symbol)}
               {isTxStarted === 'pay' ? (
-                <CircularProgress
-                  size="16px"
-                  color="inherit"
-                  sx={{ ml: 1 }}
-                />
+                <CircularProgress size="16px" color="inherit" sx={{ ml: 1 }} />
               ) : undefined}
             </Button>
           </Box>
@@ -536,59 +519,61 @@ export const PaymentCard = ({
       </MessageBox>
 
       <MessageBox type="warn" show={!!costError}>
-        <Typography variant="body1">
-          {costError}
-        </Typography>
+        <Typography variant="body1">{costError}</Typography>
       </MessageBox>
 
       <MessageBox type="warn" show={!!permitError}>
         <Typography variant="body1">
-          {permitError}<br/>
+          {permitError}
+          <br />
           Please try to create permit signature again.
         </Typography>
       </MessageBox>
 
       <MessageBox type="warn" show={!!approvalError}>
         <Typography variant="body1">
-          {approvalError}<br/>
+          {approvalError}
+          <br />
           Please try to send approval transaction again.
         </Typography>
       </MessageBox>
 
       <MessageBox type="error" show={paymentExpired}>
         <Typography variant="body1">
-          Your booking offer is expired. <Link to="/">Please try to search for accommodation again</Link>
+          Your booking offer is expired.{' '}
+          <Link to="/">Please try to search for accommodation again</Link>
         </Typography>
       </MessageBox>
 
       <MessageBox type="warn" show={!!paymentError}>
         <Typography variant="body1">
-          {paymentError}<br/>
+          {paymentError}
+          <br />
           Please check your account transactions history on the block explorer:&nbsp;
-          <ExternalLink href={`${network?.blockExplorer}/address/${account}`} target="_blank">
+          <ExternalLink
+            href={`${network?.blockExplorer}/address/${account}`}
+            target="_blank"
+          >
             {centerEllipsis(account || '')}
-          </ExternalLink><br/>
+          </ExternalLink>
+          <br />
           <List>
             <ListItem>
               <ListItemIcon>
-                <Iconify
-                  color="inherit"
-                  icon="bi:dot"
-                />
+                <Iconify color="inherit" icon="bi:dot" />
               </ListItemIcon>
               <ListItemText>
-                If the payment transaction not been sent please try to send it again.<br/>
+                If the payment transaction not been sent please try to send it again.
+                <br />
               </ListItemText>
             </ListItem>
             <ListItem>
               <ListItemIcon>
-                <Iconify
-                  color="inherit"
-                  icon="bi:dot"
-                />
+                <Iconify color="inherit" icon="bi:dot" />
               </ListItemIcon>
               <ListItemText>
-                If the payment transaction is sent despite of error please wait for the booking confirmation in your mailbox.
+                If the payment transaction is sent despite of error please wait for the
+                booking confirmation in your mailbox.
               </ListItemText>
             </ListItem>
           </List>

@@ -85,13 +85,8 @@ export const AssetSelector = ({
 
   return (
     <>
-      <Select
-        value={asset ? asset.symbol : 'none'}
-        onChange={omCurrencyChange}
-      >
-        <MenuItem value="none">
-          Select token
-        </MenuItem>
+      <Select value={asset ? asset.symbol : 'none'} onChange={omCurrencyChange}>
+        <MenuItem value="none">Select token</MenuItem>
         {options.map((option, index) => (
           <MenuItem key={index} value={option.symbol}>
             <Box
@@ -103,14 +98,11 @@ export const AssetSelector = ({
                 gap: 1
               }}
             >
-              <Box>
-                {option.name}
-              </Box>
+              <Box>{option.name}</Box>
               <Box>
                 <img width={18} height={18} src={option.image} />
               </Box>
             </Box>
-
           </MenuItem>
         ))}
       </Select>
