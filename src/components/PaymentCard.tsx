@@ -19,10 +19,15 @@ import {
   Typography,
   Box,
   CircularProgress,
-  Button
+  Button,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
 import { createPermitSignature } from '@windingtree/win-pay';
+import { DateTime } from 'luxon';
 import { MessageBox } from './MessageBox';
 import { ExternalLink } from './ExternalLink';
 import Iconify from '../components/Iconify';
@@ -69,7 +74,6 @@ export const PaymentCard = ({
   payment,
   onSuccess
 }: PaymentCardProps) => {
-  const theme = useTheme();
   const isDesktop = useResponsive('up', 'md');
   const { watchAsset } = useWalletRpcApi(provider, allowedNetworks);
   const [account, setAccount] = useState<string | undefined>();
@@ -85,8 +89,10 @@ export const PaymentCard = ({
   const [approvalError, setApprovalError] = useState<string | undefined>();
   const [paymentError, setPaymentError] = useState<string | undefined>();
   const [txHash, setTxHash] = useState<string | undefined>();
+  const [paymentExpired, setPaymentExpired] = useState<boolean>(false);
   const paymentBlocked = useMemo(
     () =>
+      paymentExpired ||
       !!costError ||
       isTxStarted !== undefined ||
       (asset &&
@@ -97,6 +103,7 @@ export const PaymentCard = ({
   );
   const permitBlocked = useMemo(
     () =>
+      paymentExpired ||
       permitSignature !== undefined ||
       tokenAllowance.gte(payment.value) ||
       isAccountContract,
@@ -104,6 +111,7 @@ export const PaymentCard = ({
   );
   const allowanceBlocked = useMemo(
     () =>
+      paymentExpired ||
       !permitBlocked ||
       (asset && !asset.native && tokenAllowance.gte(payment.value)) ||
       permitSignature !== undefined,
@@ -228,7 +236,9 @@ export const PaymentCard = ({
         logger.debug('Permit signature', signature);
         setPermitSignature(signature);
       } else {
-        throw new Error('You cannot create permit signature. The component is not ready');
+        throw new Error(
+          'You cannot create permit signature. The component is not ready. Please be sure what you wallet is connected'
+        );
       }
     } catch (err) {
       logger.error([err]);
@@ -276,6 +286,21 @@ export const PaymentCard = ({
 
         if (permitSignature !== undefined) {
           // Make payment with permitted tokens
+          logger.debug(
+            'Deal params:',
+            payment.providerId,
+            payment.serviceId,
+            payment.expiration,
+            asset.address,
+            payment.value,
+            {
+              owner: account,
+              deadline: payment.expiration,
+              v: permitSignature.v,
+              r: permitSignature.r,
+              s: permitSignature.s
+            }
+          );
           tx = await winPayContract[
             'deal(bytes32,bytes32,uint256,address,uint256,(address,uint256,uint8,bytes32,bytes32))'
           ](
@@ -298,6 +323,17 @@ export const PaymentCard = ({
           logger.debug('Payment (permitted) deal receipt', receipt);
         } else if (asset.native) {
           // Make payment with native tokens
+          logger.debug(
+            'Deal params:',
+            payment.providerId,
+            payment.serviceId,
+            payment.expiration,
+            asset.address,
+            payment.value,
+            {
+              value: payment.value
+            }
+          );
           tx = await winPayContract['deal(bytes32,bytes32,uint256,address,uint256)'](
             payment.providerId,
             payment.serviceId,
@@ -314,6 +350,14 @@ export const PaymentCard = ({
           logger.debug('Payment (native) deal receipt', receipt);
         } else {
           // Make payment with approved tokens
+          logger.debug(
+            'Deal params:',
+            payment.providerId,
+            payment.serviceId,
+            payment.expiration,
+            asset.address,
+            payment.value
+          );
           tx = await winPayContract['deal(bytes32,bytes32,uint256,address,uint256)'](
             payment.providerId,
             payment.serviceId,
@@ -353,6 +397,17 @@ export const PaymentCard = ({
 
   usePoller(getBalance, provider && asset && !!account, 2000, 'Account balance');
 
+  const checkExpiration = useCallback(
+    () => {
+      if (DateTime.fromSeconds(payment.expiration) < DateTime.now()) {
+        setPaymentExpired(true);
+      }
+    },
+    [payment]
+  );
+
+  usePoller(checkExpiration, payment && !paymentExpired, 1000, 'Expiration check');
+
   if (!provider || !asset) {
     return null;
   }
@@ -361,18 +416,18 @@ export const PaymentCard = ({
     <>
       <Card
         sx={{
-          marginBottom: theme.spacing(3)
+          mb: 3
         }}
       >
         <CardContent
           sx={{
-            padding: theme.spacing(2)
+            padding: 2
           }}
         >
           <Box
             sx={{
-              gap: theme.spacing(2),
-              marginBottom: theme.spacing(2),
+              gap: 2,
+              mb: 2,
               display: 'flex',
               flexDirection: 'row',
               alignItems: isDesktop ? 'flex-start' : 'center',
@@ -399,7 +454,7 @@ export const PaymentCard = ({
                   variant="outlined"
                   onClick={addTokenToWallet}
                   sx={{
-                    marginBottom: theme.spacing(1)
+                    mb: 1
                   }}
                 >
                   {`Add ${asset.symbol} to wallet`}
@@ -412,7 +467,7 @@ export const PaymentCard = ({
                     <Iconify
                       color="inherit"
                       icon="cil:external-link"
-                      marginLeft={theme.spacing(1)}
+                      ml={1}
                     />
                   }
                 >
@@ -423,7 +478,7 @@ export const PaymentCard = ({
           </Box>
 
           {account && balance && (
-            <Typography marginBottom={theme.spacing(3)}>
+            <Typography mb={3}>
               Your balance: {Number(utils.formatEther(balance)).toFixed(2)} {asset.symbol}
             </Typography>
           )}
@@ -433,7 +488,7 @@ export const PaymentCard = ({
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              gap: theme.spacing(2)
+              gap: 2
             }}
           >
             {!allowanceBlocked && !asset.native && (
@@ -447,7 +502,7 @@ export const PaymentCard = ({
                   <CircularProgress
                     size="16px"
                     color="inherit"
-                    sx={{ ml: theme.spacing(1) }}
+                    sx={{ ml: 1 }}
                   />
                 ) : undefined}
               </Button>
@@ -463,7 +518,7 @@ export const PaymentCard = ({
                 <CircularProgress
                   size="16px"
                   color="inherit"
-                  sx={{ ml: theme.spacing(1) }}
+                  sx={{ ml: 1 }}
                 />
               ) : undefined}
             </Button>
@@ -472,7 +527,7 @@ export const PaymentCard = ({
       </Card>
 
       <MessageBox type="info" show={!!txHash} loading={isTxStarted !== undefined}>
-        <Typography>
+        <Typography variant="body1">
           Transaction hash:&nbsp;
           <ExternalLink href={`${network?.blockExplorer}/tx/${txHash}`} target="_blank">
             {centerEllipsis(txHash || '')}
@@ -481,19 +536,63 @@ export const PaymentCard = ({
       </MessageBox>
 
       <MessageBox type="warn" show={!!costError}>
-        {costError}
+        <Typography variant="body1">
+          {costError}
+        </Typography>
       </MessageBox>
 
       <MessageBox type="warn" show={!!permitError}>
-        {permitError}
+        <Typography variant="body1">
+          {permitError}<br/>
+          Please try to create permit signature again.
+        </Typography>
       </MessageBox>
 
       <MessageBox type="warn" show={!!approvalError}>
-        {approvalError}
+        <Typography variant="body1">
+          {approvalError}<br/>
+          Please try to send approval transaction again.
+        </Typography>
+      </MessageBox>
+
+      <MessageBox type="error" show={paymentExpired}>
+        <Typography variant="body1">
+          Your booking offer is expired. <Link to="/">Please try to search for accommodation again</Link>
+        </Typography>
       </MessageBox>
 
       <MessageBox type="warn" show={!!paymentError}>
-        {paymentError}
+        <Typography variant="body1">
+          {paymentError}<br/>
+          Please check your account transactions history on the block explorer:&nbsp;
+          <ExternalLink href={`${network?.blockExplorer}/address/${account}`} target="_blank">
+            {centerEllipsis(account || '')}
+          </ExternalLink><br/>
+          <List>
+            <ListItem>
+              <ListItemIcon>
+                <Iconify
+                  color="inherit"
+                  icon="bi:dot"
+                />
+              </ListItemIcon>
+              <ListItemText>
+                If the payment transaction not been sent please try to send it again.<br/>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <Iconify
+                  color="inherit"
+                  icon="bi:dot"
+                />
+              </ListItemIcon>
+              <ListItemText>
+                If the payment transaction is sent despite of error please wait for the booking confirmation in your mailbox.
+              </ListItemText>
+            </ListItem>
+          </List>
+        </Typography>
       </MessageBox>
     </>
   );

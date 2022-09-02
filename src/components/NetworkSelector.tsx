@@ -1,8 +1,6 @@
 import { NetworkInfo } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect, useCallback } from 'react';
-import { Box, Select, MenuItem, SelectChangeEvent } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import Iconify from '../components/Iconify';
+import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { allowedNetworks, getNetworkInfo } from '../config';
 import { useAppState } from '../store';
 import { useNetworkId } from '../hooks/useNetworkId';
@@ -17,7 +15,6 @@ export interface NetworkSelectorProps {
 }
 
 export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
-  const theme = useTheme();
   const { provider } = useAppState();
   const { switchChain } = useWalletRpcApi(provider, allowedNetworks);
   const [networkId, , isRightNetwork] = useNetworkId(provider, allowedNetworks);
@@ -79,27 +76,9 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
       variant="outlined"
       value={network && isRightNetwork ? network.chainId.toString() : 'none'}
       onChange={omNetworkChange}
-      sx={{
-        backgroundColor: !isRightNetwork ? 'rgba(255,0,0,0.7)' : 'transparent'
-      }}
     >
       <MenuItem value="none">
-        <Box
-          color={!isRightNetwork ? 'white' : 'black'}
-          sx={{
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
-          {!isRightNetwork && (
-            <Iconify
-              color="inherit"
-              icon="codicon:warning"
-              marginRight={theme.spacing(1)}
-            />
-          )}
-          <Box>Select network</Box>
-        </Box>
+        Select network
       </MenuItem>
       {allowedNetworks.map((n, index) => (
         <MenuItem key={index} value={n.chainId.toString()}>

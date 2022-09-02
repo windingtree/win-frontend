@@ -2,8 +2,6 @@ import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { Payment } from './PaymentCard';
 import { useEffect, useMemo, useState } from 'react';
 import { Box, Select, MenuItem, SelectChangeEvent } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import Iconify from '../components/Iconify';
 import { getNetworkInfo } from '../config';
 import { MessageBox } from './MessageBox';
 import Logger from '../utils/logger';
@@ -23,7 +21,6 @@ export const AssetSelector = ({
   asset: value,
   onChange
 }: AssetSelectorProps) => {
-  const theme = useTheme();
   const [asset, setAsset] = useState<CryptoAsset | undefined>(
     network ? value : undefined
   );
@@ -90,32 +87,30 @@ export const AssetSelector = ({
     <>
       <Select
         value={asset ? asset.symbol : 'none'}
-        sx={{
-          backgroundColor: !asset ? 'rgba(255,0,0,0.7)' : 'transparent'
-        }}
         onChange={omCurrencyChange}
       >
         <MenuItem value="none">
-          <Box
-            color={!asset ? 'white' : 'black'}
-            sx={{
-              display: 'flex',
-              alignItems: 'center'
-            }}
-          >
-            {!asset && (
-              <Iconify
-                color="inherit"
-                icon="codicon:warning"
-                marginRight={theme.spacing(1)}
-              />
-            )}
-            <Box>Select token</Box>
-          </Box>
+          Select token
         </MenuItem>
         {options.map((option, index) => (
           <MenuItem key={index} value={option.symbol}>
-            {option.name}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 1
+              }}
+            >
+              <Box>
+                {option.name}
+              </Box>
+              <Box>
+                <img width={18} height={18} src={option.image} />
+              </Box>
+            </Box>
+
           </MenuItem>
         ))}
       </Select>
