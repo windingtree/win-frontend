@@ -125,30 +125,30 @@ export const MapBox: React.FC = () => {
         <ZoomControl position="topright" />
         {accommodations && accommodations.length > 0
           ? accommodations.map(
-            (f) =>
-              f.location &&
-              f.location.coordinates && (
-                <Marker
-                  key={f.id}
-                  icon={pinIcon}
-                  position={[f.location.coordinates[1], f.location.coordinates[0]]}
-                  eventHandlers={{
-                    click: () => selectFacility(f.id),
-                    mouseover: (event) => event.target.openPopup()
-                  }}
-                >
-                  <Popup>
-                    <SearchCard
-                      key={f.id}
-                      sm={true}
-                      facility={f}
-                      isSelected={f.id === selectedFacilityId}
-                      numberOfDays={numberOfDays}
-                    />
-                  </Popup>
-                </Marker>
-              )
-          )
+              (f) =>
+                f.location &&
+                f.location.coordinates && (
+                  <Marker
+                    key={f.id}
+                    icon={pinIcon}
+                    position={[f.location.coordinates[1], f.location.coordinates[0]]}
+                    eventHandlers={{
+                      click: () => selectFacility(f.id),
+                      mouseover: (event) => event.target.openPopup()
+                    }}
+                  >
+                    <Popup>
+                      <SearchCard
+                        key={f.id}
+                        sm={true}
+                        facility={f}
+                        isSelected={f.id === selectedFacilityId}
+                        numberOfDays={numberOfDays}
+                      />
+                    </Popup>
+                  </Marker>
+                )
+            )
           : null}
       </MapContainer>
     ),
@@ -158,7 +158,7 @@ export const MapBox: React.FC = () => {
   return (
     <Box>
       {map ? <MapSettings center={normalizedCoordinates} map={map} /> : null}
-      {(isLoading || isFetching) ? (
+      {isLoading || isFetching ? (
         <Container
           sx={{
             display: 'flex',

@@ -55,26 +55,26 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const { winWidth } = useWindowsDimension();
     const selectedStyle: CSSProperties = isSelected
       ? {
-        position: 'relative'
-      }
+          position: 'relative'
+        }
       : {};
     const responsiveStyle: CSSProperties =
       winWidth < 900 || sm
         ? {
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start'
-        }
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-start'
+          }
         : {};
 
     const smallCardStyle: CSSProperties = sm
       ? {
-        minWidth: '380px',
-        marginBottom: '0px'
-      }
+          minWidth: '380px',
+          marginBottom: '0px'
+        }
       : {
-        marginBottom: '8px'
-      };
+          marginBottom: '8px'
+        };
 
     const prices = useMemo(
       () => facility.offers.map((o) => Number(o.price.public)),
