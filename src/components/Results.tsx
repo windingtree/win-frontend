@@ -22,7 +22,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
     top: 110 + HEADER.MAIN_DESKTOP_HEIGHT,
     width: '20rem',
     padding: theme.spacing(0, 2),
-    height: '100%',
+    height: '70%',
     backgroundColor: 'rgba(0, 0, 0, 0)'
   },
 
