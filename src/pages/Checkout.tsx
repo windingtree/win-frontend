@@ -75,9 +75,14 @@ export const Checkout = () => {
           marginBottom: theme.spacing(5)
         }}
       >
+        {!account &&
+          <Typography variant="h3" mb={3}>
+            Please connect your wallet to proceed with the Payment
+          </Typography>
+        }
         <Box
           sx={{
-            marginBottom: isDesktop ? theme.spacing(5) : theme.spacing(3),
+            marginBottom: isDesktop ? 5 : 3,
             textAlign: isDesktop ? 'left' : 'center'
           }}
         >
@@ -117,16 +122,9 @@ export const Checkout = () => {
           </Box>
         </Box>
 
-        <MessageBox type="warn" show={!account}>
-          <Grid container direction="row" alignItems="center">
-            <Grid item marginRight={theme.spacing(5)}>
-              Please connect your wallet
-            </Grid>
-            <Grid item>
-              <SignInButton />
-            </Grid>
-          </Grid>
-        </MessageBox>
+        {!account &&
+          <SignInButton size='large' sx={{ padding: 5 }} />
+        }
 
         <WinPay payment={payment} onSuccess={onPaymentSuccess} />
       </Container>
