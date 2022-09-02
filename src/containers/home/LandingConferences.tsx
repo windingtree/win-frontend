@@ -67,7 +67,7 @@ const conferences: ItemProps[] = [
 
 export default function LandingConferences() {
   return (
-    <Grid sx={{ pb: 5 }} container xs={12}>
+    <Grid sx={{ pb: 5, xs: 12 }} container>
       <Box sx={{ p: 1, position: 'relative' }}>
         <Typography textAlign="center" variant="h3">
           Upcoming blockchain conferences
