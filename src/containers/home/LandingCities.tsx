@@ -56,7 +56,7 @@ const cities = [
 
 export default function LandingCities() {
   return (
-    <Grid sx={{ pb: 5 }} container xs={12}>
+    <Grid sx={{ pb: 5, xs: 12 }} container>
       <Box sx={{ p: 1, position: 'relative' }}>
         <Typography textAlign="center" variant="h3">
           Cities in the spotlight
