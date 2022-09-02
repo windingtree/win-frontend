@@ -74,7 +74,7 @@ export const MapBox: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // TODO: replace this with activeAccommodations
-  const { accommodations, coordinates, isLoading, latestQueryParams } =
+  const { accommodations, coordinates, isLoading, latestQueryParams, isFetching } =
     useAccommodationsAndOffers();
   const numberOfDays = useMemo(
     () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
@@ -109,7 +109,7 @@ export const MapBox: React.FC = () => {
         center={normalizedCoordinates}
         zoom={defaultZoom}
         style={{
-          height: '90vh',
+          height: '100vh',
           // width: "100vw",
           position: 'relative',
           zIndex: 0
@@ -125,30 +125,30 @@ export const MapBox: React.FC = () => {
         <ZoomControl position="topright" />
         {accommodations && accommodations.length > 0
           ? accommodations.map(
-              (f) =>
-                f.location &&
-                f.location.coordinates && (
-                  <Marker
-                    key={f.id}
-                    icon={pinIcon}
-                    position={[f.location.coordinates[1], f.location.coordinates[0]]}
-                    eventHandlers={{
-                      click: () => selectFacility(f.id),
-                      mouseover: (event) => event.target.openPopup()
-                    }}
-                  >
-                    <Popup>
-                      <SearchCard
-                        key={f.id}
-                        sm={true}
-                        facility={f}
-                        isSelected={f.id === selectedFacilityId}
-                        numberOfDays={numberOfDays}
-                      />
-                    </Popup>
-                  </Marker>
-                )
-            )
+            (f) =>
+              f.location &&
+              f.location.coordinates && (
+                <Marker
+                  key={f.id}
+                  icon={pinIcon}
+                  position={[f.location.coordinates[1], f.location.coordinates[0]]}
+                  eventHandlers={{
+                    click: () => selectFacility(f.id),
+                    mouseover: (event) => event.target.openPopup()
+                  }}
+                >
+                  <Popup>
+                    <SearchCard
+                      key={f.id}
+                      sm={true}
+                      facility={f}
+                      isSelected={f.id === selectedFacilityId}
+                      numberOfDays={numberOfDays}
+                    />
+                  </Popup>
+                </Marker>
+              )
+          )
           : null}
       </MapContainer>
     ),
@@ -158,13 +158,13 @@ export const MapBox: React.FC = () => {
   return (
     <Box>
       {map ? <MapSettings center={normalizedCoordinates} map={map} /> : null}
-      {isLoading ? (
+      {(isLoading || isFetching) ? (
         <Container
           sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '80vh'
+            height: '100vh'
           }}
         >
           <CircularProgress />

@@ -5,6 +5,7 @@ import { SearchCard } from './SearchCard';
 import { useAppState, useAppDispatch } from '../store';
 import { styled } from '@mui/system';
 import { daysBetween } from '../utils/date';
+import { HEADER } from 'src/config/componentSizes';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -18,16 +19,17 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   overflow: 'scroll',
 
   [theme.breakpoints.up('md')]: {
-    top: 110,
+    top: 110 + HEADER.MAIN_DESKTOP_HEIGHT,
     width: '20rem',
     padding: theme.spacing(0, 2),
-    height: '80%',
+    height: '100%',
     backgroundColor: 'rgba(0, 0, 0, 0)'
   },
 
   [theme.breakpoints.up('xl')]: {
     top: 0,
-    padding: theme.spacing(2),
+    padding: theme.spacing(1, 2),
+    paddingTop: 16 + HEADER.MAIN_DESKTOP_HEIGHT,
     height: '100%'
   }
 }));

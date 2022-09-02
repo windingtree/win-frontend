@@ -103,7 +103,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               fallback={FallbackImage}
             />
           </Stack>
-          <Stack justifyContent="center" sx={sm ? { p: 1, pb: 0.5 } : { p: 2, pb: 1.5 }}>
+          <Stack justifyContent="center" spacing={1} sx={{ py: 2, px: 1.5, mt: 0 }}>
             <Stack direction="row" justifyContent="space-between" spacing={1}>
               <Typography variant="subtitle1">{facility.name}</Typography>
               <Stack sx={{ color: 'text.secondary' }} direction="row" alignItems="center">
