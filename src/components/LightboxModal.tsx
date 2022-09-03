@@ -6,7 +6,7 @@ import { Typography, GlobalStyles } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-function LightboxModalStyles() {
+const LightboxModalStyles = () => {
   const theme = useTheme();
 
   const isRTL = theme.direction === 'rtl';
@@ -103,20 +103,20 @@ function LightboxModalStyles() {
 
 // ----------------------------------------------------------------------
 
-interface Props extends ILightBoxProps {
+export interface LightboxModalProps extends ILightBoxProps {
   images: string[];
   photoIndex: number;
   setPhotoIndex: (index: number) => void;
   isOpen: boolean;
 }
 
-export default function LightboxModal({
+export const LightboxModal = ({
   images,
   photoIndex,
   setPhotoIndex,
   isOpen,
   ...other
-}: Props) {
+}: LightboxModalProps) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
