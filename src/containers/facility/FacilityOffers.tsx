@@ -20,7 +20,6 @@ const FacilityOffersContainer = styled(Box)(({ theme }) => ({
 
 const FacilityOffersTitle = ({
   rooms,
-  roomsAvailable,
   guests,
   startDate,
   nights
@@ -36,7 +35,7 @@ const FacilityOffersTitle = ({
       </Typography>
       <SubHeader>
         Results for {rooms || ''} room, {guests} guests, staying from {dateStr} for{' '}
-        {nights} nights: {roomsAvailable} room(s) available.
+        {nights} nights.
       </SubHeader>
     </Box>
   );
