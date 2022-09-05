@@ -2,7 +2,6 @@ import { Box, Stack } from '@mui/material';
 import MainFooter from './MainFooter';
 import MainHeader from './MainHeader';
 import { ReactNode, useRef, useEffect } from 'react';
-import { HEADER } from 'src/config/componentSizes';
 
 type Props = {
   children: ReactNode;
