@@ -1,6 +1,6 @@
 import { NetworkInfo } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect, useCallback } from 'react';
-import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { Select, MenuItem, FormHelperText, SelectChangeEvent } from '@mui/material';
 import { allowedNetworks, getNetworkInfo } from '../config';
 import { useAppState } from '../store';
 import { useNetworkId } from '../hooks/useNetworkId';
@@ -76,6 +76,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
       variant="outlined"
       value={network && isRightNetwork ? network.chainId.toString() : 'none'}
       onChange={omNetworkChange}
+      error={network === undefined}
     >
       <MenuItem value="none">Select network</MenuItem>
       {allowedNetworks.map((n, index) => (
@@ -83,6 +84,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
           {n.name}
         </MenuItem>
       ))}
+      <FormHelperText>{network === undefined ? 'Please select network' : undefined}</FormHelperText>
     </Select>
   );
 };
