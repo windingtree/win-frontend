@@ -11,7 +11,8 @@ import {
 
 export interface SearchTypeProps {
   location: string;
-  date: [Date | null, Date | null];
+  arrival: Date | null;
+  departure: Date | null;
   roomCount: number;
   adultCount: number;
   childrenCount?: number;
@@ -34,6 +35,7 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     [data]
   );
 
+  // This includes accommodations with active offers.
   const accommodations = useMemo(
     () => allAccommodations.filter((a) => a.offers.length > 0),
     [allAccommodations]

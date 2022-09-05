@@ -5,20 +5,22 @@ import { ReactNode } from 'react';
 
 type Props = {
   children: ReactNode;
+  footer?: boolean;
   childrenBelowHeader?: boolean;
   maxWidth?: ContainerProps['maxWidth'];
 };
 export default function MainLayout({
   children,
   childrenBelowHeader = true,
-  maxWidth = false
+  maxWidth = false,
+  footer = true
 }: Props) {
   return (
     <Stack sx={{ minHeight: 1 }}>
       <MainHeader childrenBelowHeader={childrenBelowHeader} />
       <Container maxWidth={maxWidth}>{children}</Container>
       <Box sx={{ flexGrow: 1 }} />
-      <MainFooter />
+      {footer && <MainFooter />}
     </Stack>
   );
 }

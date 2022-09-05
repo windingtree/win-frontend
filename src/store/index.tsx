@@ -42,7 +42,7 @@ const web3ModalConfig: Web3ModalConfig = {
     walletconnect: {
       package: WalletConnectProvider,
       options: {
-        rpc: allowedNetworks.map((n) => ({ [n.chainId]: n.rpc }))
+        rpc: allowedNetworks.reduce((a, v) => ({ ...a, [v.chainId]: v.rpc }), {})
       }
     }
   }

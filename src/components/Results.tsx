@@ -1,16 +1,45 @@
-import { Box } from 'grommet';
+import { Box } from '@mui/material';
 import { createRef, useCallback, useEffect, useMemo } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { useWindowsDimension } from '../hooks/useWindowsDimension';
-import { MessageBox } from './MessageBox';
-import { SearchResult } from './SearchResult';
+import { SearchCard } from './SearchCard';
 import { useAppState, useAppDispatch } from '../store';
+import { styled } from '@mui/system';
+import { daysBetween } from '../utils/date';
+
+const StyledContainer = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  zIndex: '1',
+  width: '100%',
+  height: '45%',
+  top: '60%',
+  left: 0,
+  padding: theme.spacing(2),
+  backgroundColor: '#fff',
+  overflow: 'scroll',
+
+  [theme.breakpoints.up('md')]: {
+    top: 110,
+    width: '20rem',
+    padding: theme.spacing(0, 2),
+    height: '80%',
+    backgroundColor: 'rgba(0, 0, 0, 0)'
+  },
+
+  [theme.breakpoints.up('xl')]: {
+    top: 0,
+    padding: theme.spacing(2),
+    height: '100%'
+  }
+}));
 
 export const Results: React.FC = () => {
-  const { accommodations, error, isFetching } = useAccommodationsAndOffers();
-  const { winWidth } = useWindowsDimension();
+  const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers();
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
+  const numberOfDays = useMemo(
+    () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
+    [latestQueryParams]
+  );
 
   const handleFacilitySelection = useCallback(
     (facilityId: string) => {
@@ -22,7 +51,7 @@ export const Results: React.FC = () => {
     [dispatch]
   );
 
-  const searchResultsRefs = useMemo(
+  const SearchCardsRefs = useMemo(
     () =>
       accommodations?.reduce((refs, facility) => {
         const ref = createRef<HTMLDivElement>();
@@ -31,56 +60,30 @@ export const Results: React.FC = () => {
     [accommodations]
   );
 
-  // scroll to searchResult
+  // scroll to SearchCard
   useEffect(() => {
-    searchResultsRefs &&
+    SearchCardsRefs &&
       selectedFacilityId &&
-      searchResultsRefs[selectedFacilityId]?.current?.scrollIntoView();
-  }, [selectedFacilityId, searchResultsRefs]);
+      SearchCardsRefs[selectedFacilityId]?.current?.scrollIntoView();
+  }, [selectedFacilityId, SearchCardsRefs]);
 
   if (!accommodations || accommodations.length === 0) {
     return null;
   }
 
   return (
-    <Box
-      pad="medium"
-      fill={true}
-      overflow="hidden"
-      style={{
-        position: 'absolute',
-        zIndex: '1',
-        width: winWidth < 900 ? '100%' : '20rem',
-        maxWidth: '100%',
-        height: winWidth < 900 ? '40%' : '86%',
-        left: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0)'
-      }}
-    >
-      <Box flex={true} overflow="auto">
-        <Box>
-          <MessageBox
-            loading
-            type="info"
-            show={!isFetching && !error && accommodations?.length === 0}
-          >
-            Could not find place
-          </MessageBox>
-        </Box>
-        <Box gap="0.5rem" flex={false}>
-          {/* TODO: Currenlty we are displaying all accomdations, but this may need to be changed to only the accommodations with offers */}
-          {accommodations.map((facility, idx) => (
-            <SearchResult
-              key={facility.id}
-              facility={facility}
-              isSelected={facility.id === selectedFacilityId}
-              onSelect={handleFacilitySelection}
-              ref={searchResultsRefs[idx]}
-            />
-          ))}
-        </Box>
-      </Box>
-    </Box>
+    <StyledContainer className="noScrollBar">
+      {!isFetching &&
+        accommodations.map((facility, idx) => (
+          <SearchCard
+            key={facility.id}
+            facility={facility}
+            numberOfDays={numberOfDays}
+            isSelected={facility.id === selectedFacilityId}
+            onSelect={handleFacilitySelection}
+            ref={SearchCardsRefs[idx]}
+          />
+        ))}
+    </StyledContainer>
   );
 };

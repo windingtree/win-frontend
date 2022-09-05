@@ -14,10 +14,14 @@ export interface AccommodationsAndOffersResponse {
   coordinates: Coordinates;
   latestQueryParams: SearchTypeProps;
 }
-
+/**
+ * This hook fetches accommodations and its related offers.
+ * Take into consideration that errors thrown are displayed to the user.
+ */
 export async function fetchAccommodationsAndOffers({
   location,
-  date,
+  arrival,
+  departure,
   roomCount,
   adultCount,
   childrenCount
@@ -30,13 +34,17 @@ export async function fetchAccommodationsAndOffers({
     //TODO: include endpoint in .env or config
     .get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
     .catch((_) => {
-      throw new Error(`Unable to get coordinates for location: ${location}`);
+      throw new Error(
+        `Something went wrong when retrieving the coordinates of ${location}. Please try again.`
+      );
     });
 
   const coordinates = coordinatesData[0];
 
   if (!coordinates) {
-    throw new Error('Coordinates not found in the OSM response');
+    throw new Error(
+      `We could not find ${location} as a city, region or country. Try a different location.`
+    );
   }
 
   const normalizedCoordinates: Coordinates = {
@@ -52,8 +60,8 @@ export async function fetchAccommodationsAndOffers({
         ...normalizedCoordinates,
         radius: 20000
       },
-      arrival: date[0],
-      departure: date[1],
+      arrival,
+      departure,
       roomCount
     },
 
@@ -63,19 +71,26 @@ export async function fetchAccommodationsAndOffers({
   const uri = `${process.env.REACT_APP_API_URL}/api/hotels/offers/search`;
   const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch((e) => {
     if (e.response.status === 404) {
-      throw new Error(`No accommodations found for ${location}`);
+      throw new Error(`No accommodations found for ${location}.`);
     }
-    throw new Error('Unexpected response when retrieving accommodations and offers');
+    throw new Error('Something went wrong. Please try again.');
   });
 
   if (!data) {
-    throw new Error('Invalid API response');
+    throw new Error('Something went wrong. Please try again.');
   }
 
   const accommodations = data.accommodations;
   const offers = data.offers;
 
-  const latestQueryParams = { location, date, roomCount, adultCount, childrenCount };
+  const latestQueryParams = {
+    location,
+    departure,
+    arrival,
+    roomCount,
+    adultCount,
+    childrenCount
+  };
 
   return {
     accommodations,
