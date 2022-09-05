@@ -114,7 +114,7 @@ export const SearchForm: React.FC = () => {
   /**
    * Logic in relation to executing the query
    */
-  const { refetch, isFetching, error } = useAccommodationsAndOffers({
+  const { refetch, isFetching, error, isFetched, accommodations } = useAccommodationsAndOffers({
     arrival: startDate,
     departure: endDate,
     adultCount: Number(adultCount),
@@ -278,12 +278,20 @@ export const SearchForm: React.FC = () => {
 
           {error && (
             <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center', mt: 1 }}
               severity="error"
             >
               {(error as Error) && (error as Error).message
                 ? (error as Error).message
                 : 'Something went wrong '}
+            </Alert>
+          )}
+          {(!error && isFetched && accommodations.length === 0) && (
+            <Alert
+              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center', mt: 1 }}
+              severity="error"
+            >
+              No accommodations found for {location}.
             </Alert>
           )}
         </>
