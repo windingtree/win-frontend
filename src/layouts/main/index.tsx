@@ -21,7 +21,6 @@ export default function MainLayout({
 
   return (
     <Stack ref={ref} sx={{ minHeight: 1 }}>
-      <Box ref={ref} />
       <MainHeader childrenBelowHeader={childrenBelowHeader} />
       {children}
       <Box sx={{ flexGrow: 1 }} />
