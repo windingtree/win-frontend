@@ -80,7 +80,12 @@ export const FacilityGallery = ({
             {images?.map((image, index) => {
               return image ? (
                 <ImageListItem key={`${image.url}-${index}`}>
-                  <Image src={image.url} loading={'lazy'} onClick={() => imageClickHandler(index)} sx={{cursor: "pointer"}}/>
+                  <Image
+                    src={image.url}
+                    loading={'lazy'}
+                    onClick={() => imageClickHandler(index)}
+                    sx={{ cursor: 'pointer' }}
+                  />
                 </ImageListItem>
               ) : null;
             })}

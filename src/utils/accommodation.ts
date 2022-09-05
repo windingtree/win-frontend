@@ -29,7 +29,7 @@ export const getLargestImages = (sortedImages: MediaItem[], limit = 50) => {
   return largestImages;
 };
 
-export const buildAccommodationAddress = (accommodation: AccommodationWithId | null) => {  
+export const buildAccommodationAddress = (accommodation: AccommodationWithId | null) => {
   if (!accommodation) return;
   return [
     accommodation.contactInformation?.address?.streetAddress,
@@ -39,4 +39,4 @@ export const buildAccommodationAddress = (accommodation: AccommodationWithId | n
   ]
     .filter(Boolean)
     .join(', ');
-}
+};

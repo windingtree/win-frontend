@@ -122,7 +122,15 @@ const HeaderButton = ({ scrollToDetailImages }) => {
   );
 };
 
-const HotelAddress = ({ address, accommodationId, name }: { address?: string, accommodationId: string, name?: string }) => {
+const HotelAddress = ({
+  address,
+  accommodationId,
+  name
+}: {
+  address?: string;
+  accommodationId: string;
+  name?: string;
+}) => {
   const { latestQueryParams } = useAccommodationsAndOffers();
   const mapQuery = useMemo(() => {
     if (latestQueryParams === undefined) {
@@ -135,7 +143,7 @@ const HotelAddress = ({ address, accommodationId, name }: { address?: string, ac
       startDate: latestQueryParams.arrival?.toISOString() ?? '',
       endDate: latestQueryParams.departure?.toISOString() ?? '',
       location: latestQueryParams.location,
-      ...( (accommodationId && name) ? {focusedFacilityId: accommodationId + name} : {})
+      ...(accommodationId && name ? { focusedFacilityId: accommodationId + name } : {})
     };
 
     return createSearchParams(params);
@@ -145,7 +153,7 @@ const HotelAddress = ({ address, accommodationId, name }: { address?: string, ac
     <>
       <Box>
         {address}.{' '}
-        <Link component={RouterLink} to={mapQuery ? `/search?${mapQuery}` : "#"} >
+        <Link component={RouterLink} to={mapQuery ? `/search?${mapQuery}` : '#'}>
           See Map
         </Link>
       </Box>
@@ -153,7 +161,15 @@ const HotelAddress = ({ address, accommodationId, name }: { address?: string, ac
   );
 };
 
-const HeaderTitle = ({ name, address, accommodationId }: { name?: string; address?: string, accommodationId: string }) => {
+const HeaderTitle = ({
+  name,
+  address,
+  accommodationId
+}: {
+  name?: string;
+  address?: string;
+  accommodationId: string;
+}) => {
   const theme = useTheme();
   return (
     <HeaderTitleContainer>
@@ -161,7 +177,7 @@ const HeaderTitle = ({ name, address, accommodationId }: { name?: string; addres
         <Typography variant="h1" marginBottom={theme.spacing(1.5)}>
           {name}
         </Typography>
-        <HotelAddress address={address} accommodationId={accommodationId} name={name}/>
+        <HotelAddress address={address} accommodationId={accommodationId} name={name} />
       </div>
     </HeaderTitleContainer>
   );
@@ -231,7 +247,11 @@ export const FacilityIntroduction = ({
   return (
     <>
       <HeaderContainer>
-        <HeaderTitle name={accommodation?.name} address={address} accommodationId={accommodation?.hotelId ?? ''}/>
+        <HeaderTitle
+          name={accommodation?.name}
+          address={address}
+          accommodationId={accommodation?.hotelId ?? ''}
+        />
         <HeaderButton scrollToDetailImages={scrollToDetailImages} />
       </HeaderContainer>
 

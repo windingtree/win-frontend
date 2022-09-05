@@ -13,7 +13,8 @@ import { useSearchParams } from 'react-router-dom';
 const logger = Logger('MapBox');
 const defaultZoom = 13;
 
-const focusedIconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png';
+const focusedIconUrl =
+  'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png';
 
 const defaultIcon = new Icon({
   iconUrl: icon,
@@ -84,7 +85,10 @@ export const MapBox: React.FC = () => {
 
   // to highlight a given marker use url params "focusedFacilityId"
   const [searchParams] = useSearchParams();
-  const focusedFacilityId = useMemo(() => searchParams.get("focusedFacilityId"), [searchParams]);
+  const focusedFacilityId = useMemo(
+    () => searchParams.get('focusedFacilityId'),
+    [searchParams]
+  );
 
   // TODO: replace this with activeAccommodations
   const { accommodations, coordinates, isLoading, latestQueryParams, isFetching } =
@@ -100,15 +104,15 @@ export const MapBox: React.FC = () => {
     if (focusedFacilityId) {
       const facility = accommodations.find((fac) => fac.id === focusedFacilityId);
       if (facility) {
-        result = [facility.location.coordinates[1], facility.location.coordinates[0]]
+        result = [facility.location.coordinates[1], facility.location.coordinates[0]];
       }
-    }  
-    return result
-  }, [accommodations])
-  
-  const normalizedCoordinates: LatLngTuple = focusedCoordinates ?? (coordinates
-    ? [coordinates.lat, coordinates.lon]
-    : [51.505, -0.09]);
+    }
+    return result;
+  }, [accommodations]);
+
+  const normalizedCoordinates: LatLngTuple =
+    focusedCoordinates ??
+    (coordinates ? [coordinates.lat, coordinates.lon] : [51.505, -0.09]);
 
   const selectFacility = (facilityId: string) => {
     dispatch({
@@ -155,7 +159,9 @@ export const MapBox: React.FC = () => {
                 f.location.coordinates && (
                   <Marker
                     key={f.id}
-                    icon={(f.hotelId + f.name) === focusedFacilityId ? focusedIcon : defaultIcon}
+                    icon={
+                      f.hotelId + f.name === focusedFacilityId ? focusedIcon : defaultIcon
+                    }
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
                       click: () => selectFacility(f.id),
