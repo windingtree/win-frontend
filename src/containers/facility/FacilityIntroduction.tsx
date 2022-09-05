@@ -18,6 +18,7 @@ import { daysBetween } from '../../utils/date';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from '../../components/LightboxModal';
 import { Link as RouterLink } from 'react-router-dom';
+import FallbackImage from '../../images/hotel-fallback.webp';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -279,7 +280,7 @@ export const FacilityIntroduction = ({
 
         <LightboxModal
           images={largestImagesUrls}
-          mainSrc={largestImagesUrls[slideIndex]}
+          mainSrc={largestImagesUrls[slideIndex] ?? FallbackImage}
           isOpen={slideOpen}
           photoIndex={slideIndex}
           setPhotoIndex={setSlideIndex}
