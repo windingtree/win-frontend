@@ -9,10 +9,20 @@ import { useAppState } from '../store';
 export const GuestInfo = () => {
   const { checkout } = useAppState();
   const { latestQueryParams } = useAccommodationsAndOffers();
-  const query = useMemo(
-    () => createSearchParams(JSON.stringify(latestQueryParams)),
-    [latestQueryParams, createSearchParams]
-  );
+
+  const query = useMemo(() => {
+    if (latestQueryParams === undefined) {
+      return '';
+    }
+    const params = {
+      roomCount: latestQueryParams.roomCount.toString(),
+      adultCount: latestQueryParams.adultCount.toString(),
+      startDate: latestQueryParams.arrival?.toISOString() ?? '',
+      endDate: latestQueryParams.departure?.toISOString() ?? '',
+      location: latestQueryParams.location
+    };
+    return createSearchParams(params);
+  }, [latestQueryParams, createSearchParams]);
 
   return (
     <MainLayout>
