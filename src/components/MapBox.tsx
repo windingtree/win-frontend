@@ -135,6 +135,8 @@ export const MapBox: React.FC = () => {
     () => (
       <MapContainer
         zoomControl={false}
+        maxZoom={16}
+        minZoom={10}
         center={normalizedCoordinates}
         zoom={defaultZoom}
         style={{
