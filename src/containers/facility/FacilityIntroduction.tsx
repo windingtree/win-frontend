@@ -242,8 +242,6 @@ export const FacilityIntroduction = ({
   const [mainImage, ...rest] = sortedImages;
   const address = buildAccommodationAddress(accommodation);
 
-  console.log(largestImagesUrls);
-
   return (
     <>
       <HeaderContainer>
