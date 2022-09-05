@@ -1,18 +1,23 @@
 import { FacilityDetailImages } from './FacilityDetailImages';
-import { useParams } from 'react-router-dom';
+import { createSearchParams, useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { MediaItem } from '@windingtree/glider-types/types/win';
-import { Button, SxProps, Typography } from '@mui/material';
+import { Button, Link, SxProps, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { stringToNumber } from '../../utils/strings';
-import { buildAccommodationAddress, getLargestImages, sortByLargestImage } from '../../utils/accommodation';
+import {
+  buildAccommodationAddress,
+  getLargestImages,
+  sortByLargestImage
+} from '../../utils/accommodation';
 import { FacilityGallery } from './FacilityGallery';
 import { daysBetween } from '../../utils/date';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from '../../components/LightboxModal';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -117,17 +122,38 @@ const HeaderButton = ({ scrollToDetailImages }) => {
   );
 };
 
-const HotelAddress = ({ address }: { address?: string }) => {
+const HotelAddress = ({ address, accommodationId, name }: { address?: string, accommodationId: string, name?: string }) => {
+  const { latestQueryParams } = useAccommodationsAndOffers();
+  const mapQuery = useMemo(() => {
+    if (latestQueryParams === undefined) {
+      return '';
+    }
+
+    const params = {
+      roomCount: latestQueryParams.roomCount.toString(),
+      adultCount: latestQueryParams.adultCount.toString(),
+      startDate: latestQueryParams.arrival?.toISOString() ?? '',
+      endDate: latestQueryParams.departure?.toISOString() ?? '',
+      location: latestQueryParams.location,
+      ...( (accommodationId && name) ? {focusedFacilityId: accommodationId + name} : {})
+    };
+
+    return createSearchParams(params);
+  }, [latestQueryParams, createSearchParams]);
+
   return (
     <>
-      <div>
-        {address}. See Map {'>'}
-      </div>
+      <Box>
+        {address}.{' '}
+        <Link component={RouterLink} to={mapQuery ? `/search?${mapQuery}` : "#"} >
+          See Map
+        </Link>
+      </Box>
     </>
   );
 };
 
-const HeaderTitle = ({ name, address }: { name?: string; address?: string }) => {
+const HeaderTitle = ({ name, address, accommodationId }: { name?: string; address?: string, accommodationId: string }) => {
   const theme = useTheme();
   return (
     <HeaderTitleContainer>
@@ -135,7 +161,7 @@ const HeaderTitle = ({ name, address }: { name?: string; address?: string }) => 
         <Typography variant="h1" marginBottom={theme.spacing(1.5)}>
           {name}
         </Typography>
-        <HotelAddress address={address} />
+        <HotelAddress address={address} accommodationId={accommodationId} name={name}/>
       </div>
     </HeaderTitleContainer>
   );
@@ -165,8 +191,11 @@ export const FacilityIntroduction = ({
 
   // get largest images and their urls
   const largestImages = useMemo(() => getLargestImages(sortedImages), [sortedImages]);
-  const largestImagesUrls = useMemo(() => largestImages.map(({url}) => url as string), [largestImages]);
-  
+  const largestImagesUrls = useMemo(
+    () => largestImages.map(({ url }) => url as string),
+    [largestImages]
+  );
+
   // slide handlers
   const handleOpenSlide = (targetSlideIndex = 0) => {
     setSlideIndex(targetSlideIndex);
@@ -179,21 +208,20 @@ export const FacilityIntroduction = ({
   const handleOpenGallery = () => {
     if (largestImages.length > 5) {
       setGalleryOpen(true);
-    }
-    else {
+    } else {
       handleCloseGallery();
       handleOpenSlide();
-    }    
+    }
   };
 
-  const handleCloseGallery = () => setGalleryOpen(false);  
+  const handleCloseGallery = () => setGalleryOpen(false);
 
   // show all photos buttons
   const buttonStyle: SxProps = {
     position: 'absolute',
     right: '2%',
     bottom: '5%'
-  };  
+  };
 
   const [mainImage, ...rest] = sortedImages;
   const address = buildAccommodationAddress(accommodation);
@@ -203,7 +231,7 @@ export const FacilityIntroduction = ({
   return (
     <>
       <HeaderContainer>
-        <HeaderTitle name={accommodation?.name} address={address} />
+        <HeaderTitle name={accommodation?.name} address={address} accommodationId={accommodation?.hotelId ?? ''}/>
         <HeaderButton scrollToDetailImages={scrollToDetailImages} />
       </HeaderContainer>
 
@@ -231,13 +259,13 @@ export const FacilityIntroduction = ({
           aria-describedby="modal-modal-description"
         />
 
-        <LightboxModal 
+        <LightboxModal
           images={largestImagesUrls}
           mainSrc={largestImagesUrls[slideIndex]}
           isOpen={slideOpen}
           photoIndex={slideIndex}
           setPhotoIndex={setSlideIndex}
-          onCloseRequest={handleCloseSlide}          
+          onCloseRequest={handleCloseSlide}
         />
       </Container>
     </>

@@ -8,12 +8,21 @@ import { useAppDispatch, useAppState } from '../store';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
+import { useSearchParams } from 'react-router-dom';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
-const pinIcon = new Icon({
+
+const focusedIconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png';
+
+const defaultIcon = new Icon({
   iconUrl: icon,
-  iconSize: [25, 40]
+  iconSize: [25, 41]
+});
+
+const focusedIcon = new Icon({
+  iconUrl: focusedIconUrl,
+  iconSize: [25, 41]
 });
 
 const MapSettings: React.FC<{
@@ -73,6 +82,10 @@ export const MapBox: React.FC = () => {
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
 
+  // to highlight a given marker use url params "focusedFacilityId"
+  const [searchParams] = useSearchParams();
+  const focusedFacilityId = useMemo(() => searchParams.get("focusedFacilityId"), [searchParams]);
+
   // TODO: replace this with activeAccommodations
   const { accommodations, coordinates, isLoading, latestQueryParams, isFetching } =
     useAccommodationsAndOffers();
@@ -81,9 +94,21 @@ export const MapBox: React.FC = () => {
     [latestQueryParams]
   );
 
-  const normalizedCoordinates: LatLngTuple = coordinates
+  // if search url contains a focusedFacilityId we should center map to it
+  const focusedCoordinates: LatLngTuple | undefined = useMemo(() => {
+    let result;
+    if (focusedFacilityId) {
+      const facility = accommodations.find((fac) => fac.id === focusedFacilityId);
+      if (facility) {
+        result = [facility.location.coordinates[1], facility.location.coordinates[0]]
+      }
+    }  
+    return result
+  }, [accommodations])
+  
+  const normalizedCoordinates: LatLngTuple = focusedCoordinates ?? (coordinates
     ? [coordinates.lat, coordinates.lon]
-    : [51.505, -0.09];
+    : [51.505, -0.09]);
 
   const selectFacility = (facilityId: string) => {
     dispatch({
@@ -130,7 +155,7 @@ export const MapBox: React.FC = () => {
                 f.location.coordinates && (
                   <Marker
                     key={f.id}
-                    icon={pinIcon}
+                    icon={(f.hotelId + f.name) === focusedFacilityId ? focusedIcon : defaultIcon}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
                       click: () => selectFacility(f.id),
