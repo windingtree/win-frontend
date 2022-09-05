@@ -58,7 +58,7 @@ export const GuestInfoContainer = () => {
 
   const methods = useForm<PersonalInfo>({
     resolver: yupResolver(NewUserSchema),
-    defaultValues
+    defaultValues: checkout?.personalInfo ?? defaultValues
   });
 
   const {
@@ -114,7 +114,7 @@ export const GuestInfoContainer = () => {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid justifyContent="center" container spacing={3}>
+      <Grid justifyContent="center" container>
         <Grid item xs={12} md={6}>
           <Typography textAlign="center" sx={{ m: 2 }}>
             This Information will be strictly used by the hotel and win.so to confirm your

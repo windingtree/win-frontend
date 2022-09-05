@@ -16,6 +16,8 @@ import { sortByLargestImage } from '../utils/accommodation';
 import useResponsive from '../hooks/useResponsive';
 import FallbackImage from '../images/hotel-fallback.webp';
 import Logger from '../utils/logger';
+import { Breadcrumbs } from '../components/Breadcrumbs';
+import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
 
 const logger = Logger('Checkout');
 
@@ -27,6 +29,12 @@ export const Checkout = () => {
   const theme = useTheme();
   const isDesktop = useResponsive('up', 'md');
   const { checkout, account } = useAppState();
+  const { latestQueryParams } = useAccommodationsAndOffers();
+  const query = useMemo(
+    () => createSearchParams(JSON.stringify(latestQueryParams)),
+    [latestQueryParams, createSearchParams]
+  );
+
   const payment = useMemo(
     () =>
       checkout && {
@@ -56,6 +64,26 @@ export const Checkout = () => {
   if (!checkout || !payment) {
     return (
       <MainLayout>
+        <Breadcrumbs
+          links={[
+            {
+              name: 'Home',
+              href: '/'
+            },
+            {
+              name: 'Search',
+              href: `/search?${query}`
+            },
+            {
+              name: 'Facility',
+              href: checkout ? `/facility/${checkout.facilityId}` : `/search?${query}`
+            },
+            {
+              name: 'Guest Info',
+              href: '/guest-info'
+            }
+          ]}
+        />
         <Container
           sx={{
             mb: theme.spacing(5)
@@ -69,6 +97,26 @@ export const Checkout = () => {
 
   return (
     <MainLayout>
+      <Breadcrumbs
+        links={[
+          {
+            name: 'Home',
+            href: '/'
+          },
+          {
+            name: 'Search',
+            href: `/search?${query}`
+          },
+          {
+            name: 'Facility',
+            href: checkout ? `/facility/${checkout.facilityId}` : `/search?${query}`
+          },
+          {
+            name: 'Guest Info',
+            href: '/guest-info'
+          }
+        ]}
+      />
       <Container
         sx={{
           marginBottom: theme.spacing(5)

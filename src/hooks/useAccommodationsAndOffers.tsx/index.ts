@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { fetchAccommodationsAndOffers } from './api';
 import {
   getAccommodationById,
@@ -46,6 +46,11 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     [data]
   );
 
+  const getAccommodationByHotelId = useCallback(
+    (hotelId: string) => accommodations.find((a) => a.hotelId === hotelId),
+    [accommodations]
+  );
+
   return {
     getOffersById,
     getAccommodationById,
@@ -58,6 +63,7 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     isLoading,
     isFetching,
     latestQueryParams: data?.latestQueryParams,
-    isFetched
+    isFetched,
+    getAccommodationByHotelId
   };
 };
