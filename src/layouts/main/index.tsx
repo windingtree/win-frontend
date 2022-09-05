@@ -1,7 +1,8 @@
 import { Box, Stack } from '@mui/material';
 import MainFooter from './MainFooter';
 import MainHeader from './MainHeader';
-import { ReactNode } from 'react';
+import { ReactNode, useRef, useEffect } from 'react';
+import { HEADER } from 'src/config/componentSizes';
 
 type Props = {
   children: ReactNode;
@@ -13,8 +14,15 @@ export default function MainLayout({
   footer = true,
   childrenBelowHeader = true
 }: Props) {
+  const ref = useRef<null | HTMLElement>(null);
+
+  useEffect(() => {
+    ref.current !== null && ref.current.scrollIntoView();
+  }, [ref]);
+
   return (
-    <Stack sx={{ minHeight: 1 }}>
+    <Stack ref={ref} sx={{ minHeight: 1 }}>
+      <Box ref={ref} />
       <MainHeader childrenBelowHeader={childrenBelowHeader} />
       {children}
       <Box sx={{ flexGrow: 1 }} />
