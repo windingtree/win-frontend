@@ -44,6 +44,7 @@ export const Account = ({ account, provider }: AccountProps) => {
               `(${Number(utils.formatEther(balance)).toFixed(2)} ${chain.currency})`
             )
           )
+          // eslint-disable-next-line no-console
           .catch(console.error);
       } else {
         setBalance('');

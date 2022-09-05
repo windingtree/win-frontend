@@ -1,4 +1,5 @@
 import { MediaItem } from '@windingtree/glider-types/types/win';
+import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 
 export const sortByLargestImage = (images: MediaItem[]) =>
   images.sort((itemOne: MediaItem, itemTwo: MediaItem) => {
@@ -26,4 +27,16 @@ export const getLargestImages = (sortedImages: MediaItem[], limit = 50) => {
   }
 
   return largestImages;
+};
+
+export const buildAccommodationAddress = (accommodation: AccommodationWithId | null) => {
+  if (!accommodation) return;
+  return [
+    accommodation.contactInformation?.address?.streetAddress,
+    accommodation.contactInformation?.address?.locality,
+    accommodation.contactInformation?.address?.premise,
+    accommodation.contactInformation?.address?.country
+  ]
+    .filter(Boolean)
+    .join(', ');
 };
