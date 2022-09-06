@@ -51,7 +51,7 @@ export const Breadcrumbs = ({ links, activeLast = true, ...other }: Props) => {
   ));
 
   return (
-    <Container sx={{ mx: 3 }}>
+    <Container sx={{ mx: 3, mb: 2 }}>
       <MUIBreadcrumbs
         separator={
           <Iconify color={theme.palette.primary.main} icon="mdi:chevron-right" />
