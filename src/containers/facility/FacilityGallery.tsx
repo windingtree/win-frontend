@@ -11,14 +11,17 @@ import {
   Typography
 } from '@mui/material';
 import { MediaItem } from '@windingtree/glider-types/types/win';
+import Image from '../../components/Image';
 import { emptyFunction } from '../../utils/common';
 
 export type FacilityGalleryModalProps = Omit<ModalProps, 'children'>;
+export type GalleryImageClickHandler = (index: number) => void;
 export interface FacilityGalleryProps extends FacilityGalleryModalProps {
   images?: MediaItem[];
   hotelName?: string;
   selectRoomHandler: () => void;
   closeHandler: () => void;
+  imageClickHandler: GalleryImageClickHandler;
 }
 
 export const FacilityGallery = ({
@@ -26,6 +29,7 @@ export const FacilityGallery = ({
   selectRoomHandler = emptyFunction,
   hotelName,
   closeHandler,
+  imageClickHandler,
   ...props
 }: FacilityGalleryProps) => {
   const GalleryContainer = styled(Box)(({ theme }) => ({
@@ -76,7 +80,12 @@ export const FacilityGallery = ({
             {images?.map((image, index) => {
               return image ? (
                 <ImageListItem key={`${image.url}-${index}`}>
-                  <img src={image.url} loading={'lazy'} />
+                  <Image
+                    src={image.url}
+                    loading={'lazy'}
+                    onClick={() => imageClickHandler(index)}
+                    sx={{ cursor: 'pointer' }}
+                  />
                 </ImageListItem>
               ) : null;
             })}

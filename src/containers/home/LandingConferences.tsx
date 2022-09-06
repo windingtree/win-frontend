@@ -67,7 +67,7 @@ const conferences: ItemProps[] = [
 
 export default function LandingConferences() {
   return (
-    <Grid sx={{ pb: 5 }} container xs={12}>
+    <Grid sx={{ pb: 5 }} container>
       <Box sx={{ p: 1, position: 'relative' }}>
         <Typography textAlign="center" variant="h3">
           Upcoming blockchain conferences
@@ -91,7 +91,7 @@ function ConferenceItem({ item }: ConferenceItemProps) {
   const { name, date, url, conferenceUrl, image, location } = item;
 
   return (
-    <Grid item xs={6} md={3} lg={3}>
+    <Grid item xs={12} sm={6} md={3} lg={3}>
       <Card sx={{ pb: 1, mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
         <Box sx={{ px: 2, pt: 2, pb: 1, position: 'relative' }}>
           <Image src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { fetchAccommodationsAndOffers } from './api';
 import {
   getAccommodationById,
@@ -19,7 +19,7 @@ export interface SearchTypeProps {
 }
 
 export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
-  const { data, refetch, error, isLoading, isFetching } = useQuery(
+  const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery(
     ['search-accommodations'],
     async () => {
       if (!props) {
@@ -27,7 +27,7 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
       }
       return await fetchAccommodationsAndOffers(props);
     },
-    { enabled: false }
+    { enabled: false, keepPreviousData: false }
   );
 
   const allAccommodations = useMemo(
@@ -46,6 +46,11 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     [data]
   );
 
+  const getAccommodationByHotelId = useCallback(
+    (hotelId: string) => accommodations.find((a) => a.hotelId === hotelId),
+    [accommodations]
+  );
+
   return {
     getOffersById,
     getAccommodationById,
@@ -57,6 +62,8 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     error,
     isLoading,
     isFetching,
-    latestQueryParams: data?.latestQueryParams
+    latestQueryParams: data?.latestQueryParams,
+    isFetched,
+    getAccommodationByHotelId
   };
 };

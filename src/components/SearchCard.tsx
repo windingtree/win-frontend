@@ -63,7 +63,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
         ? {
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'flex-start'
           }
         : {};
 
@@ -98,11 +98,12 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             <CardMediaFallback
               component="img"
               height={sm ? '120' : '200'}
+              width={sm ? '120' : '200'}
               src={facility.media[0] !== undefined ? facility.media[0].url : undefined}
               fallback={FallbackImage}
             />
           </Stack>
-          <Stack justifyContent="center" spacing={1} sx={{ p: 2, pb: 1.5 }}>
+          <Stack justifyContent="center" spacing={1} sx={{ py: 2, px: 1.5, mt: 0 }}>
             <Stack direction="row" justifyContent="space-between" spacing={1}>
               <Typography variant="subtitle1">{facility.name}</Typography>
               <Stack sx={{ color: 'text.secondary' }} direction="row" alignItems="center">

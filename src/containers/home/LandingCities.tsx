@@ -28,7 +28,7 @@ const cities = [
     id: '1',
     city: 'Berlin',
     image: berlin,
-    url: '/search?roomCount=1&adultCount=2&startDate=2022-09-12T00%3A00%3A00%2B02%3A00&endDate=2022-09-14T00%3A00%3A00%2B02%3A00&location=berlin',
+    url: '/search?roomCount=1&adultCount=2&startDate=2022-09-12T00%3A00%3A00%2B02%3A00&endDate=2022-09-14T00%3A00%3A00%2B02%3A00&location=Berlin',
     latlon: [52.5170365, 13.3888599]
   },
   {
@@ -49,14 +49,14 @@ const cities = [
     id: '4',
     city: 'Taipei',
     image: taipei,
-    url: '/search?roomCount=1&adultCount=2&startDate=2022-12-02T00%3A00%3A00%2B01%3A00&endDate=2022-12-04T00%3A00%3A00%2B01%3A00&location=taipei',
+    url: '/search?roomCount=1&adultCount=2&startDate=2022-12-02T00%3A00%3A00%2B01%3A00&endDate=2022-12-04T00%3A00%3A00%2B01%3A00&location=Taipei',
     latlon: [25.0375198, 121.5636796]
   }
 ];
 
 export default function LandingCities() {
   return (
-    <Grid sx={{ pb: 5 }} container xs={12}>
+    <Grid sx={{ pb: 5 }} container>
       <Box sx={{ p: 1, position: 'relative' }}>
         <Typography textAlign="center" variant="h3">
           Cities in the spotlight
@@ -82,7 +82,7 @@ function CityItem({ item }: CityItemProps) {
   const theme = useTheme();
 
   return (
-    <Grid item xs={6} md={3} lg={3}>
+    <Grid item xs={12} sm={6} md={3} lg={3}>
       <Card onClick={() => navigate(url)} sx={{ cursor: 'pointer' }}>
         <Box sx={{ position: 'relative' }}>
           <Image src={image} ratio="3/4" sx={{ borderRadius: 1.5 }} />

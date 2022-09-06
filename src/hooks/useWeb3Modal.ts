@@ -37,9 +37,18 @@ export const useWeb3Modal = (web3ModalConfig: Web3ModalConfig): Web3ModalHook =>
   }, [web3Modal]);
 
   const signIn = useCallback(async () => {
+    const unhandledRejectionHandler = (event: { preventDefault: () => void }) => {
+      event.preventDefault();
+      setIsConnecting(false);
+      window.removeEventListener('unhandledrejection', unhandledRejectionHandler);
+    };
+
     try {
       setError(undefined);
       setIsConnecting(true);
+
+      // Because of bug in the web3Modal
+      window.addEventListener('unhandledrejection', unhandledRejectionHandler);
 
       const updateProvider = async () => {
         const web3ModalProvider = await web3Modal.connect();
@@ -68,6 +77,8 @@ export const useWeb3Modal = (web3ModalConfig: Web3ModalConfig): Web3ModalHook =>
         });
 
         setProvider(new ethers.providers.Web3Provider(web3ModalProvider));
+        setIsConnecting(false);
+        window.removeEventListener('unhandledrejection', unhandledRejectionHandler);
       };
 
       updateProvider();
@@ -75,6 +86,7 @@ export const useWeb3Modal = (web3ModalConfig: Web3ModalConfig): Web3ModalHook =>
       logger.info(`Wallet connected`);
     } catch (error) {
       setIsConnecting(false);
+      window.removeEventListener('unhandledrejection', unhandledRejectionHandler);
 
       if (error) {
         logger.error(error);

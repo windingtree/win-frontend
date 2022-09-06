@@ -43,13 +43,14 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^17.0.3",
+    "@commitlint/config-conventional": "^17.1.0",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@hookform/resolvers": "^2.9.7",
     "@iconify/react": "^3.2.2",
     "@mui/lab": "^5.0.0-alpha.95",
     "@mui/material": "^5.10.0",
+    "@mui/x-date-pickers": "^5.0.0-beta.7",
     "@storybook/addon-actions": "^6.5.9",
     "@storybook/addon-essentials": "^6.5.9",
     "@storybook/addon-interactions": "^6.5.9",
@@ -87,6 +88,7 @@
     "cra-webpack-rewired": "1.0.1",
     "crypto-browserify": "^3.12.0",
     "date-fns": "^2.29.1",
+    "dayjs": "^1.11.5",
     "ethers": "^5.6.9",
     "framer-motion": "^7.2.0",
     "git-cz": "^4.9.0",
@@ -95,6 +97,7 @@
     "https-browserify": "^1.0.0",
     "husky": "^8.0.1",
     "leaflet": "^1.8.0",
+    "lint-staged": "^13.0.3",
     "luxon": "^3.0.1",
     "os-browserify": "^0.3.0",
     "prettier": "^2.6.2",
@@ -106,6 +109,7 @@
     "react-grid-system": "^8.1.6",
     "react-hook-form": "^7.34.2",
     "react-image-gallery": "1.2.8",
+    "react-image-lightbox": "^5.1.4",
     "react-lazy-load-image-component": "^1.5.5",
     "react-leaflet": "^4.0.0",
     "react-router-dom": "^6.3.0",
@@ -117,10 +121,8 @@
     "url": "^0.11.0",
     "uuid": "8.3.2",
     "web-vitals": "^3.0.0-rc.0",
-    "web3modal": "^1.9.8",
-    "yup": "^0.32.11",
-    "@mui/x-date-pickers": "^5.0.0-beta.7",
-    "dayjs": "^1.11.5"
+    "web3modal": "^1.9.9",
+    "yup": "^0.32.11"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"

@@ -1,9 +1,9 @@
-import { Box, Button, Typography, CircularProgress } from '@mui/material';
+import { Box, Button, Typography, CircularProgress, ButtonProps } from '@mui/material';
 import Iconify from '../components/Iconify';
 import useResponsive from '../hooks/useResponsive';
 import { useAppState } from '../store';
 
-export const SignInButton = () => {
+export const SignInButton = (props: ButtonProps) => {
   const isDesktop = useResponsive('up', 'md');
   const { isConnecting, signIn, provider } = useAppState();
 
@@ -12,7 +12,12 @@ export const SignInButton = () => {
   }
 
   return (
-    <Button variant="contained" onClick={() => signIn()} disabled={isConnecting}>
+    <Button
+      variant="contained"
+      onClick={() => signIn()}
+      disabled={isConnecting}
+      {...props}
+    >
       <Box
         sx={{
           display: 'flex',
@@ -21,17 +26,19 @@ export const SignInButton = () => {
       >
         {isDesktop && (
           <Typography variant="body2">
-            {isConnecting ? 'Connecting' : 'Connect'}
+            {isConnecting ? 'Connecting' : 'Connect Wallet'}
           </Typography>
         )}
         {!isDesktop && <Iconify icon="ri:login-box-line" />}
-        {isConnecting && <CircularProgress size={18} color="inherit" />}
+        {isConnecting && (
+          <CircularProgress size={18} sx={{ marginLeft: 1 }} color="inherit" />
+        )}
       </Box>
     </Button>
   );
 };
 
-export const SignOutButton = () => {
+export const SignOutButton = (props: ButtonProps) => {
   const isDesktop = useResponsive('up', 'md');
   const { isConnecting, signOut, provider } = useAppState();
 
@@ -40,7 +47,12 @@ export const SignOutButton = () => {
   }
 
   return (
-    <Button variant="contained" onClick={() => signOut()} disabled={isConnecting}>
+    <Button
+      variant="contained"
+      onClick={() => signOut()}
+      disabled={isConnecting}
+      {...props}
+    >
       <Box
         sx={{
           display: 'flex',
@@ -53,7 +65,10 @@ export const SignOutButton = () => {
           </Typography>
         )}
         {!isDesktop && <Iconify icon="ri:logout-box-line" />}
-        &nbsp;{isConnecting && <CircularProgress size={18} color="inherit" />}
+        &nbsp;
+        {isConnecting && (
+          <CircularProgress size={18} sx={{ marginLeft: 1 }} color="inherit" />
+        )}
       </Box>
     </Button>
   );

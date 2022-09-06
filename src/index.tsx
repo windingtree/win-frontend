@@ -15,11 +15,13 @@ if (
   const hjid = Number.parseInt(process.env.REACT_APP_HOTJAR_ID, 10);
 
   if (!Number.isNaN(hjid)) {
+    // eslint-disable-next-line no-console
     console.log(`HotJar ID = '${hjid}'`);
 
     try {
       initHotJar(hjid);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Error while initializing HotJar code.');
     }
   }
@@ -28,6 +30,7 @@ if (
 window.addEventListener('unhandledrejection', (event) => {
   event.preventDefault();
   event.stopPropagation();
+  // eslint-disable-next-line no-console
   console.log('Unhandled error event', event);
 });
 

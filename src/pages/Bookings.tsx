@@ -30,6 +30,7 @@ export const Bookings = () => {
           setIsContract(false);
         }
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err);
         setIsContract(false);
       }

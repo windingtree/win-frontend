@@ -1,11 +1,9 @@
 import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { Payment } from './PaymentCard';
 import { useEffect, useMemo, useState } from 'react';
-import { Box, Select, MenuItem, SelectChangeEvent } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import Iconify from '../components/Iconify';
+import { Box, Select, MenuItem, FormHelperText, SelectChangeEvent } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
 import { getNetworkInfo } from '../config';
-import { MessageBox } from './MessageBox';
 import Logger from '../utils/logger';
 
 const logger = Logger('AssetSelector');
@@ -23,7 +21,6 @@ export const AssetSelector = ({
   asset: value,
   onChange
 }: AssetSelectorProps) => {
-  const theme = useTheme();
   const [asset, setAsset] = useState<CryptoAsset | undefined>(
     network ? value : undefined
   );
@@ -34,7 +31,8 @@ export const AssetSelector = ({
     const chain = getNetworkInfo(network.chainId);
     return [...chain.contracts.assets.filter((a) => a.currency === payment.currency)];
   }, [network, payment]);
-  const noOptions = useMemo(() => !!asset && options.length === 0, [options, asset]);
+  const notSelected = useMemo(() => options.length > 0 && asset === undefined, [options, asset]);
+  const noOptions = useMemo(() => options.length === 0, [options]);
 
   useEffect(() => {
     try {
@@ -87,41 +85,39 @@ export const AssetSelector = ({
   }
 
   return (
-    <>
+    <FormControl error={notSelected || noOptions}>
       <Select
         value={asset ? asset.symbol : 'none'}
-        sx={{
-          backgroundColor: !asset ? 'rgba(255,0,0,0.7)' : 'transparent'
-        }}
         onChange={omCurrencyChange}
       >
-        <MenuItem value="none">
-          <Box
-            color={!asset ? 'white' : 'black'}
-            sx={{
-              display: 'flex',
-              alignItems: 'center'
-            }}
-          >
-            {!asset && (
-              <Iconify
-                color="inherit"
-                icon="codicon:warning"
-                marginRight={theme.spacing(1)}
-              />
-            )}
-            <Box>Select token</Box>
-          </Box>
-        </MenuItem>
+        <MenuItem value="none">{!noOptions ? 'Select token' : ''}</MenuItem>
         {options.map((option, index) => (
           <MenuItem key={index} value={option.symbol}>
-            {option.name}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 1
+              }}
+            >
+              <Box>{option.name}</Box>
+              <Box>
+                <img width={18} height={18} src={option.image} />
+              </Box>
+            </Box>
           </MenuItem>
         ))}
       </Select>
-      <MessageBox type="warn" show={noOptions}>
-        {`The selected network does not support payments in ${payment.currency}`}
-      </MessageBox>
-    </>
+      <FormHelperText>
+        {noOptions
+          ? `The selected network does not support payments in ${payment.currency}`
+          : notSelected
+            ? 'Please select a supported token'
+            : ''
+        }
+      </FormHelperText>
+    </FormControl>
   );
 };

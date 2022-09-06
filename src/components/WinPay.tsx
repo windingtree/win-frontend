@@ -50,7 +50,7 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
             sx={{
               display: 'flex',
               flexDirection: isDesktop ? 'row' : 'column',
-              alignItems: isDesktop ? 'center' : 'stretch',
+              alignItems: isDesktop ? 'top' : 'stretch',
               gap: theme.spacing(2)
             }}
           >
