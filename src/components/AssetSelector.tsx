@@ -90,7 +90,7 @@ export const AssetSelector = ({
         value={asset ? asset.symbol : 'none'}
         onChange={omCurrencyChange}
       >
-        <MenuItem value="none">Select token</MenuItem>
+        <MenuItem value="none">{!noOptions ? 'Select token' : ''}</MenuItem>
         {options.map((option, index) => (
           <MenuItem key={index} value={option.symbol}>
             <Box
