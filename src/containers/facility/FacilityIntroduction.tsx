@@ -183,12 +183,12 @@ const CovidDialog = ({
   const paperStyles: DialogProps['PaperProps'] = {
     sx: {
       '&.MuiPaper-rounded': {
-        borderRadius: 0
+        // borderRadius: 0,
+        border: "1px solid red"
       },
-      backgroundColor: 'pink',
       position: 'absolute',
-      left: 330,
-      top: 100
+      left: 250,
+      top: 95
     }
   };
 
@@ -197,7 +197,6 @@ const CovidDialog = ({
       open={open}
       onClose={handleClose}
       PaperProps={paperStyles}
-      sx={{ border: '1px solid red' }}
     >
       <DialogTitle mb={1}>
         <Stack direction={'row'} alignItems={'center'}>
@@ -255,7 +254,7 @@ const HeaderTitle = ({
     <HeaderTitleContainer>
       <Box>
         <Box mb={3}>
-          <Link href="#" onClick={handleOpenDialog} variant={'h3'}>
+          <Link href="#" onClick={handleOpenDialog} variant={'h6'}>
             COVID-19 Support
           </Link>
         </Box>
