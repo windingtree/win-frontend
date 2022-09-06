@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { backend } from 'src/config';
 
@@ -7,10 +7,14 @@ type Rewards = {
   quantity: string;
 }[];
 
+type MutationProps = {
+  id: string;
+  rewardType: string;
+};
+
 async function getRewards(id: string) {
   const { data } = await axios
     .get(`${backend.url}/api/booking/${id}/rewardOptions`)
-
     .catch((e) => {
       throw new Error('Could not retrieve rewards');
     });
@@ -26,9 +30,18 @@ export const useRewards = (id: string) => {
     }
   );
 
+  // include typescript
+  const claimReward = useMutation(({ id, rewardType }: MutationProps) => {
+    // return error when error
+    return axios.post(`${backend.url}/api/booking/${id}/reward`, {
+      rewardType
+    });
+  });
+
   return {
     error,
     isLoading,
-    data
+    data,
+    claimReward
   };
 };
