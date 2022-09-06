@@ -187,17 +187,13 @@ const CovidDialog = ({
         border: `1px solid ${theme.palette.error.main}`
       },
       position: 'absolute',
-      left: 250,
+      left: 200,
       top: 95
     }
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      PaperProps={paperStyles}
-    >
+    <Dialog open={open} onClose={handleClose} PaperProps={paperStyles}>
       <DialogTitle mb={1}>
         <Stack direction={'row'} alignItems={'center'}>
           <Iconify
