@@ -75,17 +75,20 @@ export const RoomCard: React.FC<{
             </Typography>
             {room?.maximumOccupancy && (
               <Typography variant="body1" marginBottom={theme.spacing(1)}>
-                {`Book your ${room?.name} for `}
-                {room?.maximumOccupancy?.adults}{' '}
-                {room?.maximumOccupancy?.adults !== undefined &&
-                room?.maximumOccupancy?.adults > 1
-                  ? 'adults'
-                  : 'adult'}
-                , {room?.maximumOccupancy?.children}{' '}
-                {room?.maximumOccupancy?.children !== undefined &&
-                room?.maximumOccupancy?.children > 1
-                  ? 'children'
-                  : 'child'}
+                {`Book your ${room?.name} `}
+                {!room?.maximumOccupancy?.adults
+                  ? ''
+                  : (room?.maximumOccupancy?.adults > 1
+                    ? `for ${room?.maximumOccupancy?.adults} adults`
+                    : `for ${room?.maximumOccupancy?.adults} adult`
+                  )}
+                {!room?.maximumOccupancy?.children
+                  ? ''
+                  : (room?.maximumOccupancy?.children > 1
+                    ? ` and ${room?.maximumOccupancy?.children} children`
+                    : ` and ${room?.maximumOccupancy?.children} child`
+                  )}
+
               </Typography>
             )}
           </Box>
