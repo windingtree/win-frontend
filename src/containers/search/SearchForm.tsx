@@ -114,13 +114,14 @@ export const SearchForm: React.FC = () => {
   /**
    * Logic in relation to executing the query
    */
-  const { refetch, isFetching, error, isFetched, accommodations } = useAccommodationsAndOffers({
-    arrival: startDate,
-    departure: endDate,
-    adultCount: Number(adultCount),
-    location: location,
-    roomCount: Number(roomCount)
-  });
+  const { refetch, isFetching, error, isFetched, accommodations } =
+    useAccommodationsAndOffers({
+      arrival: startDate,
+      departure: endDate,
+      adultCount: Number(adultCount),
+      location: location,
+      roomCount: Number(roomCount)
+    });
 
   const onSubmit = useCallback(() => {
     //TODO: update search params when submitting the form
@@ -278,7 +279,12 @@ export const SearchForm: React.FC = () => {
 
           {error && (
             <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center', mt: 1 }}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                textAlign: 'center',
+                mt: 1
+              }}
               severity="error"
             >
               {(error as Error) && (error as Error).message
@@ -286,9 +292,14 @@ export const SearchForm: React.FC = () => {
                 : 'Something went wrong '}
             </Alert>
           )}
-          {(!error && isFetched && accommodations.length === 0) && (
+          {!error && isFetched && accommodations.length === 0 && (
             <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center', mt: 1 }}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                textAlign: 'center',
+                mt: 1
+              }}
               severity="error"
             >
               No accommodations found for {location}.
