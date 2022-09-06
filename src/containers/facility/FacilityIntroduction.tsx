@@ -180,11 +180,11 @@ const CovidDialog = ({
   open: boolean;
   handleClose: () => void;
 }) => {
+  const theme = useTheme();
   const paperStyles: DialogProps['PaperProps'] = {
     sx: {
       '&.MuiPaper-rounded': {
-        // borderRadius: 0,
-        border: "1px solid red"
+        border: `1px solid ${theme.palette.error.main}`
       },
       position: 'absolute',
       left: 250,
@@ -203,9 +203,9 @@ const CovidDialog = ({
           <Iconify
             icon={'typcn:info-large'}
             sx={{
-              border: '1px solid maroon',
+              border: `1px solid ${theme.palette.error.darker}`,
               borderRadius: '50%',
-              color: 'maroon',
+              color: theme.palette.error.darker,
               mr: 1
             }}
             fontSize="large"
