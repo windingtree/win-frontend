@@ -32,7 +32,7 @@ export const AssetSelector = ({
     return [...chain.contracts.assets.filter((a) => a.currency === payment.currency)];
   }, [network, payment]);
   const notSelected = useMemo(() => options.length > 0 && asset === undefined, [options, asset]);
-  const noOptions = useMemo(() => options.length === 0, [options, asset]);
+  const noOptions = useMemo(() => options.length === 0, [options]);
 
   useEffect(() => {
     try {
