@@ -86,7 +86,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
           </MenuItem>
         ))}
       </Select>
-      <FormHelperText>{network === undefined ? 'Please select network' : null}</FormHelperText>
+      <FormHelperText>{network === undefined ? 'Please select a supported network' : null}</FormHelperText>
     </FormControl>
   );
 };

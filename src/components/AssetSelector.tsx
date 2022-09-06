@@ -114,7 +114,7 @@ export const AssetSelector = ({
         {noOptions
           ? `The selected network does not support payments in ${payment.currency}`
           : notSelected
-            ? 'Please select token'
+            ? 'Please select a supported token'
             : ''
         }
       </FormHelperText>
