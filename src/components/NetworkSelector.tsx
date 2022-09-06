@@ -1,6 +1,7 @@
 import { NetworkInfo } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect, useCallback } from 'react';
-import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { Select, MenuItem, FormHelperText, SelectChangeEvent } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
 import { allowedNetworks, getNetworkInfo } from '../config';
 import { useAppState } from '../store';
 import { useNetworkId } from '../hooks/useNetworkId';
@@ -72,17 +73,20 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
   );
 
   return (
-    <Select
-      variant="outlined"
-      value={network && isRightNetwork ? network.chainId.toString() : 'none'}
-      onChange={omNetworkChange}
-    >
-      <MenuItem value="none">Select network</MenuItem>
-      {allowedNetworks.map((n, index) => (
-        <MenuItem key={index} value={n.chainId.toString()}>
-          {n.name}
-        </MenuItem>
-      ))}
-    </Select>
+    <FormControl error={network === undefined}>
+      <Select
+        variant="outlined"
+        value={network && isRightNetwork ? network.chainId.toString() : 'none'}
+        onChange={omNetworkChange}
+      >
+        <MenuItem value="none">Select network</MenuItem>
+        {allowedNetworks.map((n, index) => (
+          <MenuItem key={index} value={n.chainId.toString()}>
+            {n.name}
+          </MenuItem>
+        ))}
+      </Select>
+      <FormHelperText>{network === undefined ? 'Please select a supported network' : null}</FormHelperText>
+    </FormControl>
   );
 };

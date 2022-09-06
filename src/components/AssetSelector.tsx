@@ -1,9 +1,9 @@
 import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { Payment } from './PaymentCard';
 import { useEffect, useMemo, useState } from 'react';
-import { Box, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { Box, Select, MenuItem, FormHelperText, SelectChangeEvent } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
 import { getNetworkInfo } from '../config';
-import { MessageBox } from './MessageBox';
 import Logger from '../utils/logger';
 
 const logger = Logger('AssetSelector');
@@ -31,7 +31,8 @@ export const AssetSelector = ({
     const chain = getNetworkInfo(network.chainId);
     return [...chain.contracts.assets.filter((a) => a.currency === payment.currency)];
   }, [network, payment]);
-  const noOptions = useMemo(() => !!asset && options.length === 0, [options, asset]);
+  const notSelected = useMemo(() => options.length > 0 && asset === undefined, [options, asset]);
+  const noOptions = useMemo(() => options.length === 0, [options]);
 
   useEffect(() => {
     try {
@@ -84,9 +85,12 @@ export const AssetSelector = ({
   }
 
   return (
-    <>
-      <Select value={asset ? asset.symbol : 'none'} onChange={omCurrencyChange}>
-        <MenuItem value="none">Select token</MenuItem>
+    <FormControl error={notSelected || noOptions}>
+      <Select
+        value={asset ? asset.symbol : 'none'}
+        onChange={omCurrencyChange}
+      >
+        <MenuItem value="none">{!noOptions ? 'Select token' : ''}</MenuItem>
         {options.map((option, index) => (
           <MenuItem key={index} value={option.symbol}>
             <Box
@@ -106,9 +110,14 @@ export const AssetSelector = ({
           </MenuItem>
         ))}
       </Select>
-      <MessageBox type="warn" show={noOptions}>
-        {`The selected network does not support payments in ${payment.currency}`}
-      </MessageBox>
-    </>
+      <FormHelperText>
+        {noOptions
+          ? `The selected network does not support payments in ${payment.currency}`
+          : notSelected
+            ? 'Please select a supported token'
+            : ''
+        }
+      </FormHelperText>
+    </FormControl>
   );
 };
