@@ -17,7 +17,6 @@ import { useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
 import { autocompleteData, endDateDisplay, startDateDisplay } from './helpers';
-import { LoadingButton } from '@mui/lab';
 import {
   createSearchParams,
   useNavigate,
@@ -251,10 +250,10 @@ export const SearchForm: React.FC = () => {
               </Button>
             </Box>
             <Box>
-              <LoadingButton
+              <Button
                 disableElevation
                 type="submit"
-                loading={isFetching}
+                disabled={isFetching}
                 variant="contained"
                 size={buttonSize}
                 sx={{
@@ -263,7 +262,7 @@ export const SearchForm: React.FC = () => {
                 }}
               >
                 Search
-              </LoadingButton>
+              </Button>
             </Box>
           </Stack>
         </ToolbarStyle>
