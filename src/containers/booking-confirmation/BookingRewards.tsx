@@ -52,6 +52,8 @@ export const BookingRewards = () => {
     );
   }
 
+  console.log(mutationError);
+
   return (
     <RewardIntroduction>
       <>
@@ -88,7 +90,7 @@ export const BookingRewards = () => {
         </Grid>
         {mutationError && (
           <Alert severity="error" sx={{ mt: 2 }}>
-            Something went wrong. Try again{' '}
+            {mutationError.message}
           </Alert>
         )}
       </>
