@@ -166,8 +166,7 @@ export const MapBox: React.FC = () => {
                     }
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
-                      click: () => selectFacility(f.id),
-                      mouseover: (event) => event.target.openPopup()
+                      click: () => selectFacility(f.id)
                     }}
                   >
                     <Popup>
