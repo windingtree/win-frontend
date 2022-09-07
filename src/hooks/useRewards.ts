@@ -1,20 +1,20 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { RewardOption } from '@windingtree/glider-types/types/win';
 import axios from 'axios';
 import { backend } from 'src/config';
 
-type Rewards = {
-  tokenName: string;
-  quantity: string;
-}[];
-
 type MutationProps = {
-  id: string;
-  rewardType: string;
+  id?: string | null;
+  rewardType?: string;
 };
+
+interface ClaimRewardResponse {
+  success: boolean;
+}
 
 const getRewards = async (id: string) => {
   const { data } = await axios
-    .get(`${backend.url}/api/booking/${id}/rewardOptions`)
+    .get<RewardOption[]>(`${backend.url}/api/booking/${id}/rewardOptions`)
     .catch((_) => {
       throw new Error('Could not retrieve rewards');
     });
@@ -22,20 +22,24 @@ const getRewards = async (id: string) => {
   return data;
 };
 
-const postClaimReward = async (id, rewardType) => {
-  const result = await axios
-    .post(`${backend.url}/api/booking/${id}/reward`, {
+const postClaimReward = async ({ id, rewardType }: MutationProps) => {
+  const { data } = await axios
+    .post<ClaimRewardResponse>(`${backend.url}/api/booking/${id}/reward`, {
       rewardType
     })
     .catch((_) => {
       throw new Error('Something went wrong with claiming your reward.');
     });
 
-  return result;
+  if (!data.success) {
+    throw new Error('Something went wrong with claiming your reward.');
+  }
+
+  return data;
 };
 
-export const useRewards = (id: string) => {
-  const { error, data, isLoading } = useQuery<Rewards, Error>(
+export const useRewards = (id: string | null) => {
+  const { error, data, isLoading } = useQuery<RewardOption[] | undefined>(
     ['rewards', { id }],
     async () => {
       if (!id) return;
@@ -43,8 +47,8 @@ export const useRewards = (id: string) => {
     }
   );
 
-  const claimReward = useMutation(({ id, rewardType }: MutationProps) =>
-    postClaimReward(id, rewardType)
+  const claimReward = useMutation<ClaimRewardResponse, Error, MutationProps>(
+    ({ id, rewardType }) => postClaimReward({ id, rewardType })
   );
 
   return {

@@ -1,11 +1,9 @@
 import { useSearchParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-
 import { ExternalLink } from 'src/components/ExternalLink';
 import { useAppState } from 'src/store';
 
 export const BookingDetails = () => {
-  //TODO: retrieve offer ID and transaction id
   const { selectedNetwork } = useAppState();
   const [params] = useSearchParams();
 

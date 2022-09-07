@@ -4,7 +4,7 @@ import MainLayout from 'src/layouts/main';
 
 export const BookingConfirmation = () => {
   return (
-    <MainLayout maxWidth="sm">
+    <MainLayout maxWidth="md">
       <BookingDetails />
       <BookingRewards />
     </MainLayout>

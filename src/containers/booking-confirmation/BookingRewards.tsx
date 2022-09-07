@@ -3,15 +3,18 @@ import { useEffect, useState } from 'react';
 import { useRewards } from 'src/hooks/useRewards';
 import { RewardCard } from './RewardCard';
 import { RewardModal } from './RewardModal';
+import { useSearchParams } from 'react-router-dom';
 
-const convertTonsToKilos = (tons: string) => {
+const convertTonsToKilos = (tons: string | undefined): number => {
+  if (!tons) return 0;
+
   const kilos = Number(tons) * 1000;
   return kilos;
 };
 
 const RewardIntroduction = ({ children }) => {
   return (
-    <Box mt={6}>
+    <Box mt={6} mb={6}>
       <Typography variant="h4" component="h3">
         Claim your reward
       </Typography>
@@ -25,8 +28,8 @@ const RewardIntroduction = ({ children }) => {
 };
 
 export const BookingRewards = () => {
-  //TODO: get offerId and transaction id from the url
-  const offerId = 'c6541a8b-9e88-41d1-a773-17f94cb853e4';
+  const [params] = useSearchParams();
+  const offerId = params.get('offerId');
   const { data, isLoading, claimReward, error } = useRewards(offerId);
   const {
     mutate,
@@ -52,8 +55,6 @@ export const BookingRewards = () => {
     );
   }
 
-  console.log(mutationError);
-
   return (
     <RewardIntroduction>
       <>
@@ -64,14 +65,35 @@ export const BookingRewards = () => {
               isLoading={isLoading}
               isMutationLoading={isMutationLoading}
               isMutationSuccess={isMutationSuccess}
-              iconUrl="/images/lif-token.webp"
-              title="Reward the climate"
-              subtitle={`Safe ${convertTonsToKilos(nct?.quantity)} kilos CO2.`}
-              disclaimer="Prices can fluctuate."
+              iconUrl="/images/nct-token-logo.svg"
+              title={`${convertTonsToKilos(nct?.quantity)} kg of CO₂ reduced`}
+              disclaimer="The amount displayed above is based on todays market price, of NCT and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
               onClick={() => {
-                mutate({ id: offerId, rewardType: lif.rewardType });
+                mutate({ id: offerId, rewardType: lif?.rewardType });
               }}
-            />
+            >
+              <Box sx={{ textAlign: 'left' }}>
+                <Typography variant="body1" mb={2} component="ul">
+                  <li>
+                    {' '}
+                    We purchase and retire on you behalf Nature Carbon Credit (NCT) from
+                    Toucan Protocol.
+                  </li>
+                  <li>Send you a proof as an NFT certificate.</li>
+                </Typography>
+
+                <Typography variant="caption">
+                  Read more about Toucan Protocol and NCT{' '}
+                  <a
+                    href="https://docs.toucan.earth/toucan/pool/pool-parties/nct-pool-party-report"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    here
+                  </a>
+                </Typography>
+              </Box>
+            </RewardCard>
           </Grid>
           <Grid item xs={12} md={6}>
             <RewardCard
@@ -79,13 +101,57 @@ export const BookingRewards = () => {
               isMutationLoading={isMutationLoading}
               isMutationSuccess={isMutationSuccess}
               iconUrl="/images/lif-token.webp"
-              title="Claim lif tokens"
-              subtitle={`Claim ${lif?.quantity} lif tokens`}
-              disclaimer="Prices can fluctuate."
+              title={`${lif?.quantity} LIF`}
+              disclaimer="The amount displayed above is based on todays market price, of LIF and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
               onClick={() => {
-                mutate({ id: offerId, rewardType: lif.rewardType });
+                mutate({ id: offerId, rewardType: lif?.rewardType });
               }}
-            />
+            >
+              <Box sx={{ textAlign: 'left' }}>
+                <Typography variant="body1" mb={2} component="ul">
+                  <li>
+                    <a
+                      href="https://snapshot.org/#/windingtree.eth"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Vote
+                    </a>{' '}
+                    on the evolution of the project.
+                  </li>
+                  <li>Receive incentivised POAPs/NFTs.</li>
+                  <li>
+                    Hold a token that as we grow, will have extended utility within the
+                    platform and DAO.
+                  </li>
+                </Typography>
+
+                <Typography variant="caption">
+                  Learn more about about winding tree here{' '}
+                  <a href="https://windingtree.com/" target="_blank" rel="noreferrer">
+                    here
+                  </a>
+                  <br />
+                  Join the community on discord{' '}
+                  <a
+                    href="https://discord.gg/rmpCCNDVRq"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    here
+                  </a>{' '}
+                  <br />
+                  Link on{' '}
+                  <a
+                    href="https://snapshot.org/#/windingtree.eth"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    vote
+                  </a>
+                </Typography>
+              </Box>
+            </RewardCard>
           </Grid>
         </Grid>
         {mutationError && (

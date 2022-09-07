@@ -1,4 +1,7 @@
-import { Button, Container, Modal, styled, Typography } from '@mui/material';
+import { Button, Container, Modal, Stack, styled, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { IconButtonAnimate } from 'src/components/animate';
+import Iconify from 'src/components/Iconify';
 
 const ContainerStyle = styled(Container)(({ theme }) => ({
   position: 'absolute',
@@ -12,18 +15,51 @@ const ContainerStyle = styled(Container)(({ theme }) => ({
 }));
 
 export const RewardModal = ({ isOpen, handleClose }) => {
+  const navigate = useNavigate();
+
   return (
     <Modal open={isOpen} onClose={handleClose}>
-      <ContainerStyle maxWidth="xs">
+      <ContainerStyle maxWidth="xs" sx={{ textAlign: 'center' }}>
+        <IconButtonAnimate
+          color="primary"
+          size="small"
+          sx={{ position: 'absolute', right: 3, top: 3 }}
+          onClick={handleClose}
+        >
+          <Iconify icon="eva:close-circle-outline" width={24} height={24} />
+        </IconButtonAnimate>
         <Typography variant="h6" component="h3">
-          Reward claimed
+          Fren, you made it 🫂
         </Typography>
         <Typography sx={{ mt: 1 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          <br />
+          The booking is paid ✅ <br />
+          The reward is confirmed ✅ <br />
+          <br />
+          You know how early we are in Web 3.0. Help us improve the UX sharing your
+          feedback and insights in the form below
         </Typography>
-        <Button sx={{ mt: 2 }} fullWidth variant="contained" onClick={handleClose}>
-          Close modal
-        </Button>
+
+        <Stack direction="row" mt={1}>
+          <Button
+            sx={{ mt: 2 }}
+            size="large"
+            fullWidth
+            variant="contained"
+            href="https://winwindao.typeform.com/win-feedback"
+          >
+            Leave feedback
+          </Button>
+          <Button
+            sx={{ mt: 2, ml: 1 }}
+            fullWidth
+            size="large"
+            variant="outlined"
+            onClick={() => navigate('/')}
+          >
+            Book next stay
+          </Button>
+        </Stack>
       </ContainerStyle>
     </Modal>
   );
