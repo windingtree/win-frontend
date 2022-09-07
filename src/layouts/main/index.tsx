@@ -1,7 +1,7 @@
 import { Box, Container, ContainerProps, Stack } from '@mui/material';
 import MainFooter from './MainFooter';
 import MainHeader from './MainHeader';
-import { ReactNode, useRef, useEffect } from 'react';
+import { ReactNode } from 'react';
 
 type Props = {
   children: ReactNode;
@@ -9,22 +9,19 @@ type Props = {
   childrenBelowHeader?: boolean;
   maxWidth?: ContainerProps['maxWidth'];
 };
+
 export default function MainLayout({
   children,
   childrenBelowHeader = true,
   maxWidth = false,
   footer = true
 }: Props) {
-  const ref = useRef<null | HTMLElement>(null);
-
-  useEffect(() => {
-    ref.current !== null && ref.current.scrollIntoView();
-  }, [ref]);
-
   return (
-    <Stack ref={ref} sx={{ minHeight: 1 }}>
+    <Stack sx={{ minHeight: 1 }}>
       <MainHeader childrenBelowHeader={childrenBelowHeader} />
-      <Container maxWidth={maxWidth}>{children}</Container>
+      <Container disableGutters={maxWidth ? false : true} maxWidth={maxWidth}>
+        {children}
+      </Container>
       <Box sx={{ flexGrow: 1 }} />
       {footer && <MainFooter />}
     </Stack>
