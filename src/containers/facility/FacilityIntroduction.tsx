@@ -3,7 +3,17 @@ import { createSearchParams, useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { MediaItem } from '@windingtree/glider-types/types/win';
-import { Button, Link, SxProps, Typography } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogProps,
+  DialogTitle,
+  Link,
+  Stack,
+  SxProps,
+  Typography
+} from '@mui/material';
 import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { useMemo, useState } from 'react';
@@ -19,6 +29,7 @@ import 'react-image-lightbox/style.css';
 import { LightboxModal } from '../../components/LightboxModal';
 import { Link as RouterLink } from 'react-router-dom';
 import FallbackImage from '../../images/hotel-fallback.webp';
+import Iconify from '../../components/Iconify';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -162,6 +173,66 @@ const HotelAddress = ({
   );
 };
 
+const CovidDialog = ({
+  open = false,
+  handleClose
+}: {
+  open: boolean;
+  handleClose: () => void;
+}) => {
+  const theme = useTheme();
+  const paperStyles: DialogProps['PaperProps'] = {
+    sx: {
+      '&.MuiPaper-rounded': {
+        border: `1px solid ${theme.palette.error.main}`
+      },
+      position: 'absolute',
+      left: 200,
+      top: 95
+    }
+  };
+
+  return (
+    <Dialog open={open} onClose={handleClose} PaperProps={paperStyles}>
+      <DialogTitle mb={1}>
+        <Stack direction={'row'} alignItems={'center'}>
+          <Iconify
+            icon={'typcn:info-large'}
+            sx={{
+              border: `1px solid ${theme.palette.error.darker}`,
+              borderRadius: '50%',
+              color: theme.palette.error.darker,
+              mr: 1
+            }}
+            fontSize="large"
+          />
+          <Typography variant="h6">Coronavirus (COVID-19) Support</Typography>
+        </Stack>
+      </DialogTitle>
+      <DialogContent>
+        <Typography variant="body2">
+          Please check for travel restrictions. In response to Coronavirus (COVID-19),
+          travel may be permitted only for certain purposes and in particular, touristic
+          travel may not be allowed, and certain services and amenities may be
+          unavailable.
+        </Typography>
+        <br />
+        <Typography variant="body2">
+          Please verify the information published by the government authorities. An
+          overview of country specific rules for COVID can be found{' '}
+          <Link
+            href="https://apply.joinsherpa.com/travel-restrictions"
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            here
+          </Link>
+        </Typography>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const HeaderTitle = ({
   name,
   address,
@@ -172,14 +243,23 @@ const HeaderTitle = ({
   accommodationId: string;
 }) => {
   const theme = useTheme();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const handleOpenDialog = () => setDialogOpen(true);
+  const handleCloseDialog = () => setDialogOpen(false);
   return (
     <HeaderTitleContainer>
-      <div>
-        <Typography variant="h1" marginBottom={theme.spacing(1.5)}>
+      <Box>
+        <Box mb={3}>
+          <Link href="#" onClick={handleOpenDialog} variant={'h6'}>
+            COVID-19 Support
+          </Link>
+        </Box>
+        <Typography variant="h2" marginBottom={theme.spacing(1.5)}>
           {name}
         </Typography>
         <HotelAddress address={address} accommodationId={accommodationId} name={name} />
-      </div>
+        <CovidDialog open={dialogOpen} handleClose={handleCloseDialog} />
+      </Box>
     </HeaderTitleContainer>
   );
 };

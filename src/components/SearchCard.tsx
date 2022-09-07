@@ -1,13 +1,13 @@
 import { CSSProperties, forwardRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { emptyFunction } from '../utils/common';
-import { Stack, Typography, Card } from '@mui/material';
+import { Stack, Typography, Card, useTheme } from '@mui/material';
 import Iconify from './Iconify';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
-import { CardMediaFallback } from './CardMediaFallback';
-import FallbackImage from '../images/hotel-fallback.webp';
 import { assetsCurrencies } from '@windingtree/win-commons/dist/types';
+import { ImageCarousel } from './ImageCarousel';
+import { buildAccommodationAddress } from '../utils/accommodation';
 
 export interface SearchCardProps {
   facility: AccommodationWithId;
@@ -52,6 +52,7 @@ const currencyIcon = (currency: string) => {
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
   ({ sm, facility, isSelected, numberOfDays, onSelect = emptyFunction }, ref) => {
     const navigate = useNavigate();
+    const theme = useTheme();
     const { winWidth } = useWindowsDimension();
     const selectedStyle: CSSProperties = isSelected
       ? {
@@ -89,21 +90,19 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     return (
       <Card
         ref={ref}
-        onClick={() => navigate(`/facility/${facility.id}`)}
         onMouseOver={handleSelect}
         style={{ ...selectedStyle, ...smallCardStyle }}
       >
-        <Stack spacing={1} sx={{ ...responsiveStyle }}>
-          <Stack>
-            <CardMediaFallback
-              component="img"
-              height={sm ? '120' : '200'}
-              width={sm ? '120' : '200'}
-              src={facility.media[0] !== undefined ? facility.media[0].url : undefined}
-              fallback={FallbackImage}
-            />
+        <Stack sx={{ ...responsiveStyle }}>
+          <Stack width={theme.spacing(sm ? 16 : 36)} height={theme.spacing(sm ? 16 : 24)}>
+            <ImageCarousel size={sm ? 'small' : 'large'} media={facility.media} />
           </Stack>
-          <Stack justifyContent="center" spacing={1} sx={{ py: 2, px: 1.5, mt: 0 }}>
+          <Stack
+            onClick={() => navigate(`/facility/${facility.id}`)}
+            justifyContent="center"
+            spacing={1}
+            sx={{ py: 2, px: 1.5, mt: 0, cursor: 'pointer' }}
+          >
             <Stack direction="row" justifyContent="space-between" spacing={1}>
               <Typography variant="subtitle1">{facility.name}</Typography>
               <Stack sx={{ color: 'text.secondary' }} direction="row" alignItems="center">
@@ -113,15 +112,28 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             </Stack>
 
             <Stack direction="row" alignItems="center" sx={{ color: 'text.secondary' }}>
+              <Typography variant="caption">
+                {buildAccommodationAddress(facility)}
+              </Typography>
+            </Stack>
+            <Stack direction="row" alignItems="center">
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography textAlign="center" variant="caption">
+                <Typography
+                  textAlign="center"
+                  variant="caption"
+                  sx={{ color: 'text.secondary' }}
+                >
                   Starting at
                 </Typography>
-                <Typography variant="caption">
+                <Typography variant="subtitle2">
                   {currencyIcon(facility.offers[0]?.price?.currency)}
                   {pricePerNight(prices, numberOfDays)} night.
                 </Typography>
-                <Typography alignItems="center" variant="caption">
+                <Typography
+                  alignItems="center"
+                  variant="caption"
+                  sx={{ color: 'text.secondary' }}
+                >
                   {currencyIcon(facility.offers[0]?.price?.currency)}
                   {Math.min(...prices).toFixed(2)} total
                 </Typography>

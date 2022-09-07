@@ -17,7 +17,6 @@ import { useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
 import { autocompleteData, endDateDisplay, startDateDisplay } from './helpers';
-import { LoadingButton } from '@mui/lab';
 import {
   createSearchParams,
   useNavigate,
@@ -103,7 +102,8 @@ export const SearchForm: React.FC = () => {
   const {
     watch,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setValue
   } = methods;
   const values = watch();
 
@@ -114,13 +114,14 @@ export const SearchForm: React.FC = () => {
   /**
    * Logic in relation to executing the query
    */
-  const { refetch, isFetching, error, isFetched, accommodations } = useAccommodationsAndOffers({
-    arrival: startDate,
-    departure: endDate,
-    adultCount: Number(adultCount),
-    location: location,
-    roomCount: Number(roomCount)
-  });
+  const { refetch, isFetching, error, isFetched, accommodations, latestQueryParams } =
+    useAccommodationsAndOffers({
+        arrival: startDate,
+        departure: endDate,
+        adultCount: Number(adultCount),
+        location: location,
+        roomCount: Number(roomCount)
+      });
 
   const onSubmit = useCallback(() => {
     //TODO: update search params when submitting the form
@@ -160,6 +161,30 @@ export const SearchForm: React.FC = () => {
     }
   }, [search]);
 
+  useEffect(() => {
+    if (pathname !== '/search' && pathname !== '/') return;
+
+    const includesAllSearchParams =
+      !!searchParams.get('location') &&
+      !!searchParams.get('endDate') &&
+      !!searchParams.get('startDate') &&
+      !!searchParams.get('roomCount') &&
+      !!searchParams.get('roomCount') &&
+      !!searchParams.get('adultCount');
+
+    if (!includesAllSearchParams && latestQueryParams) {
+      setValue('location', latestQueryParams.location);
+      setValue('adultCount', latestQueryParams.adultCount);
+      setValue('roomCount', latestQueryParams.roomCount);
+      setValue('dateRange', [
+        {
+          startDate: latestQueryParams.arrival ?? null,
+          endDate: latestQueryParams.departure ?? null,
+          key: 'selection'
+        }
+      ]);
+    }
+  }, [latestQueryParams, pathname]);
   /**
    * Logic in relation to styling and textual UI
    */
@@ -250,10 +275,10 @@ export const SearchForm: React.FC = () => {
               </Button>
             </Box>
             <Box>
-              <LoadingButton
+              <Button
                 disableElevation
                 type="submit"
-                loading={isFetching}
+                disabled={isFetching}
                 variant="contained"
                 size={buttonSize}
                 sx={{
@@ -262,7 +287,7 @@ export const SearchForm: React.FC = () => {
                 }}
               >
                 Search
-              </LoadingButton>
+              </Button>
             </Box>
           </Stack>
         </ToolbarStyle>
@@ -278,7 +303,12 @@ export const SearchForm: React.FC = () => {
 
           {error && (
             <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center', mt: 1 }}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                textAlign: 'center',
+                mt: 1
+              }}
               severity="error"
             >
               {(error as Error) && (error as Error).message
@@ -286,9 +316,14 @@ export const SearchForm: React.FC = () => {
                 : 'Something went wrong '}
             </Alert>
           )}
-          {(!error && isFetched && accommodations.length === 0) && (
+          {!error && isFetched && accommodations.length === 0 && (
             <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center', mt: 1 }}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                textAlign: 'center',
+                mt: 1
+              }}
               severity="error"
             >
               No accommodations found for {location}.

@@ -58,7 +58,7 @@ export default function Image({
           component={LazyLoadImage}
           wrapperClassName="wrapper"
           effect={disabledEffect ? undefined : effect}
-          placeholderSrc="/assets/placeholder.svg"
+          placeholderSrc="hotel-fallback.webp"
           sx={{ width: 1, height: 1, objectFit: 'cover' }}
           {...other}
         />

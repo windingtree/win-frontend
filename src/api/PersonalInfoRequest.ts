@@ -9,8 +9,8 @@ export interface PersonalInfoBody {
   contactInformation: string[];
   birthdate: Date | null;
   type: PassengerType;
-  civility: string;
-  gender: string;
+  civility?: string;
+  gender?: string;
 }
 
 export class PersonalInfoRequest implements Request {
@@ -26,8 +26,6 @@ export class PersonalInfoRequest implements Request {
         lastnames: [personalInfo.lastname],
         contactInformation: [personalInfo.email, personalInfo.phone],
         birthdate: personalInfo.birthdate,
-        civility: 'MR',
-        gender: 'Male',
         type: PassengerType.adult
       }
     ];
