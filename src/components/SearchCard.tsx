@@ -56,26 +56,26 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const { winWidth } = useWindowsDimension();
     const selectedStyle: CSSProperties = isSelected
       ? {
-        position: 'relative'
-      }
+          position: 'relative'
+        }
       : {};
     const responsiveStyle: CSSProperties =
       winWidth < 900 || sm
         ? {
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start'
-        }
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-start'
+          }
         : {};
 
     const smallCardStyle: CSSProperties = sm
       ? {
-        minWidth: '380px',
-        marginBottom: '0px'
-      }
+          minWidth: '380px',
+          marginBottom: '0px'
+        }
       : {
-        marginBottom: '8px'
-      };
+          marginBottom: '8px'
+        };
 
     const prices = useMemo(
       () => facility.offers.map((o) => Number(o.price.public)),
@@ -97,7 +97,12 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
           <Stack width={theme.spacing(sm ? 16 : 36)} height={theme.spacing(sm ? 16 : 24)}>
             <ImageCarousel size={sm ? 'small' : 'large'} media={facility.media} />
           </Stack>
-          <Stack onClick={() => navigate(`/facility/${facility.id}`)} justifyContent="center" spacing={1} sx={{ py: 2, px: 1.5, mt: 0, cursor: 'pointer' }}>
+          <Stack
+            onClick={() => navigate(`/facility/${facility.id}`)}
+            justifyContent="center"
+            spacing={1}
+            sx={{ py: 2, px: 1.5, mt: 0, cursor: 'pointer' }}
+          >
             <Stack direction="row" justifyContent="space-between" spacing={1}>
               <Typography variant="subtitle1">{facility.name}</Typography>
               <Stack sx={{ color: 'text.secondary' }} direction="row" alignItems="center">
@@ -111,16 +116,24 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                 {buildAccommodationAddress(facility)}
               </Typography>
             </Stack>
-            <Stack direction="row" alignItems="center" >
+            <Stack direction="row" alignItems="center">
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography textAlign="center" variant="caption" sx={{ color: 'text.secondary' }}>
+                <Typography
+                  textAlign="center"
+                  variant="caption"
+                  sx={{ color: 'text.secondary' }}
+                >
                   Starting at
                 </Typography>
                 <Typography variant="subtitle2">
                   {currencyIcon(facility.offers[0]?.price?.currency)}
                   {pricePerNight(prices, numberOfDays)} night.
                 </Typography>
-                <Typography alignItems="center" variant="caption" sx={{ color: 'text.secondary' }}>
+                <Typography
+                  alignItems="center"
+                  variant="caption"
+                  sx={{ color: 'text.secondary' }}
+                >
                   {currencyIcon(facility.offers[0]?.price?.currency)}
                   {Math.min(...prices).toFixed(2)} total
                 </Typography>
