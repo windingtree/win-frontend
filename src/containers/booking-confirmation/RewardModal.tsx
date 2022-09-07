@@ -36,8 +36,9 @@ export const RewardModal = ({ isOpen, handleClose }) => {
           The booking is paid ✅ <br />
           The reward is confirmed ✅ <br />
           <br />
-          You know how early we are in Web 3.0. Help us improve the UX sharing your
-          feedback and insights in the form below
+          You know how early we are in Web 3.0. <br />
+          Help us improve the experience by sharing your feedback and insights in the form
+          below.
         </Typography>
 
         <Stack direction="row" mt={1}>

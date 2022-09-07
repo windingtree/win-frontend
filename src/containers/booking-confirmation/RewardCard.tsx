@@ -39,7 +39,6 @@ export const RewardCard = ({
   const tooltipPlacement = useMediaQuery(theme.breakpoints.down('md'))
     ? 'top'
     : 'right-end';
-  const buttonText = isMutationSuccess ? 'Reward claimed' : 'Claim reward';
   const paddingContainer = theme.spacing(3);
   return (
     <Card
@@ -92,7 +91,7 @@ export const RewardCard = ({
                 width: `calc(100% - (2 * ${paddingContainer}));`
               }}
             >
-              {buttonText}
+              Choose Reward
             </LoadingButton>
           </Box>
         </Stack>

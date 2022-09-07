@@ -16,11 +16,10 @@ const RewardIntroduction = ({ children }) => {
   return (
     <Box mt={6} mb={6}>
       <Typography variant="h4" component="h3">
-        Claim your reward
+        Choose your reward option
       </Typography>
       <Typography variant="body1" mb={3}>
-        Because you have booked with win.so you are rewarded. Pick one of the two rewards
-        below.
+        Numbers are estimated based on your booking value.
       </Typography>
       {children}
     </Box>
@@ -76,7 +75,7 @@ export const BookingRewards = () => {
                 <Typography variant="body1" mb={2} component="ul">
                   <li>
                     {' '}
-                    We purchase and retire on you behalf Nature Carbon Credit (NCT) from
+                    We purchase and retire on your behalf Nature Carbon Credit (NCT) from
                     Toucan Protocol.
                   </li>
                   <li>Send you a proof as an NFT certificate.</li>
@@ -127,7 +126,7 @@ export const BookingRewards = () => {
                 </Typography>
 
                 <Typography variant="caption">
-                  Learn more about about winding tree here{' '}
+                  Learn more about Winding Tree{' '}
                   <a href="https://windingtree.com/" target="_blank" rel="noreferrer">
                     here
                   </a>
@@ -140,15 +139,6 @@ export const BookingRewards = () => {
                   >
                     here
                   </a>{' '}
-                  <br />
-                  Link on{' '}
-                  <a
-                    href="https://snapshot.org/#/windingtree.eth"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    vote
-                  </a>
                 </Typography>
               </Box>
             </RewardCard>
