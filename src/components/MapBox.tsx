@@ -1,30 +1,32 @@
-import { Map, LatLngTuple, Icon } from 'leaflet';
-import { Backdrop, Box, CircularProgress } from '@mui/material';
+import { Map, LatLngTuple, DivIcon } from 'leaflet';
+import { Backdrop, Box, CircularProgress, GlobalStyles } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
-import icon from 'leaflet/dist/images/marker-icon.png';
 import { useAppDispatch, useAppState } from '../store';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
+import { currencySymbolMap } from '../utils/currencies';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
 
-const focusedIconUrl =
-  'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png';
+interface LowestPriceFormat {
+  price: number;
+  currency: string;
+  decimals?: number;
+}
 
-const defaultIcon = new Icon({
-  iconUrl: icon,
-  iconSize: [25, 41]
-});
+const getMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = false) => {
+  const currencySymbol = currencySymbolMap[currency];
 
-const focusedIcon = new Icon({
-  iconUrl: focusedIconUrl,
-  iconSize: [25, 41]
-});
+  return new DivIcon({
+    html: `<div>${currencySymbol} ${Math.ceil(price)}</div>`,
+    className: `map-marker-icon ${focused ? 'marker-focused' : ''}`
+  });
+};
 
 const MapSettings: React.FC<{
   center: LatLngTuple;
@@ -98,6 +100,20 @@ export const MapBox: React.FC = () => {
     [latestQueryParams]
   );
 
+  const accommodationsWithLowestPrice = useMemo(
+    () =>
+      accommodations?.length && accommodations.map((accomodation) => {
+        const lowestPrice = accomodation.offers.map((offer) => ({
+          price: Number(offer.price.public) / numberOfDays,
+          currency: offer.price.currency
+        }))
+        .reduce((prevLowest, currentVal) =>
+          prevLowest.price < currentVal.price ? prevLowest : currentVal
+        );
+        return {...accomodation, lowestPrice}
+    }
+  ), [accommodations]);
+
   // if search url contains a focusedFacilityId we should center map to it
   const focusedCoordinates: LatLngTuple | undefined = useMemo(() => {
     let result;
@@ -131,6 +147,34 @@ export const MapBox: React.FC = () => {
     }
   }, [selectedFacilityId]);
 
+  const mapMarkerStyles = useMemo(
+    () => (
+      <GlobalStyles
+        styles={(theme) => ({
+          '.map-marker-icon': {
+            backgroundColor: theme.palette.common.white,
+            fontSize: theme.typography.body2.fontSize,
+            fontWeight: theme.typography.fontWeightBold,
+            borderRadius: theme.spacing(2),
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 'auto !important',
+            height: 'auto !important',
+            padding: `${theme.spacing(0.1)} ${theme.spacing(1)}`,
+            whiteSpace: 'nowrap',
+            boxShadow: `0 0 10px 0 ${theme.palette.grey[500]}`
+          },
+          '.marker-focused': {
+            backgroundColor: theme.palette.error.main,
+            color: theme.palette.common.white
+          }
+        })}
+      />
+    ),
+    []
+  );
+
   const displayMap = useMemo(
     () => (
       <MapContainer
@@ -154,16 +198,17 @@ export const MapBox: React.FC = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ZoomControl position="topright" />
-        {accommodations && accommodations.length > 0
-          ? accommodations.map(
-              (f) =>
-                f.location &&
-                f.location.coordinates && (
+        {mapMarkerStyles}
+        {accommodationsWithLowestPrice && accommodationsWithLowestPrice.length > 0
+          ? accommodationsWithLowestPrice.map((f) => {
+              if (f.location && f.location.coordinates) {
+                return (
                   <Marker
                     key={f.id}
-                    icon={
-                      f.hotelId + f.name === focusedFacilityId ? focusedIcon : defaultIcon
-                    }
+                    icon={getMarkerIcon(
+                      f.lowestPrice,
+                      f.hotelId + f.name === focusedFacilityId
+                    )}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
                       click: () => selectFacility(f.id)
@@ -179,8 +224,11 @@ export const MapBox: React.FC = () => {
                       />
                     </Popup>
                   </Marker>
-                )
-            )
+                );
+              } else {
+                return null;
+              }
+            })
           : null}
       </MapContainer>
     ),

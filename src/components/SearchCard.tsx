@@ -29,17 +29,31 @@ const currencyIcon = (currency: string) => {
     case 'USD':
       return <Iconify mb={-0.5} icon={'mdi-light:currency-usd'} width={16} height={16} />;
     case 'JPY':
-      return 'JPY';
+      return <Iconify mb={-0.5} icon={'mdi-light:currency-jpy'} width={16} height={16} />;
     case 'PLN':
       return 'PLN';
     case 'CHF':
       return 'CHF';
     case 'GBP':
-      return 'GBP';
+      return <Iconify mb={-0.5} icon={'mdi-light:currency-gbp'} width={16} height={16} />;
     case 'AUD':
-      return 'AUD';
+      return (
+        <Iconify
+          mb={-0.5}
+          icon={'tabler:currency-dollar-australian'}
+          width={16}
+          height={16}
+        />
+      );
     case 'CAD':
-      return 'CAD';
+      return (
+        <Iconify
+          mb={-0.5}
+          icon={'tabler:currency-dollar-canadian'}
+          width={16}
+          height={16}
+        />
+      );
     case 'SEK':
       return 'SEK';
     case 'SDG':
