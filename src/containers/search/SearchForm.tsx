@@ -107,7 +107,11 @@ export const SearchForm: React.FC = () => {
   } = methods;
   const values = watch();
 
-  const hasValidationErrors = Object.keys(errors).length != 0;
+  const hasLocationValidationError = (errors && errors.location) ? true : false;
+  const hasDateRangeValidationError = (errors && errors.dateRange) ? true : false;
+  const hasAdultCountValidationError = (errors && errors.adultCount) ? true : false;
+  const hasRoomCountValidationError = (errors && errors.roomCount) ? true : false;
+
   const { roomCount, adultCount, dateRange, location } = values;
   const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
   const endDate = dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate);
@@ -292,12 +296,36 @@ export const SearchForm: React.FC = () => {
           </Stack>
         </ToolbarStyle>
         <>
-          {hasValidationErrors && (
+          {hasLocationValidationError && (
             <Alert
               sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
               severity="error"
             >
-              Fill in your destination, dates and the amount of rooms/guests.
+              Fill in a proper destination.
+            </Alert>
+          )}
+          {hasDateRangeValidationError && (
+            <Alert
+              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+              severity="error"
+            >
+              Fill in proper dates.
+            </Alert>
+          )}
+          {hasAdultCountValidationError && (
+            <Alert
+              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+              severity="error"
+            >
+              Fill in proper number of guests.
+            </Alert>
+          )}
+          {hasRoomCountValidationError && (
+            <Alert
+              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+              severity="error"
+            >
+              Fill in proper number of rooms.
             </Alert>
           )}
 

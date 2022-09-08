@@ -4,12 +4,13 @@ export const SearchSchema = Yup.object().shape({
   location: Yup.string().required('Location is required'),
   adultCount: Yup.number()
     .transform((value) => (isNaN(value) ? undefined : value))
-    .required('Should be more than 0')
-    .moreThan(0, 'Should be more than 0'),
+    .required('Minimum is 1')
+    .moreThan(0, 'Minimum is 1'),
   roomCount: Yup.number()
     .transform((value) => (isNaN(value) ? undefined : value))
-    .required('Should be more than 0')
-    .moreThan(0, 'Should be more than 0'),
+    .required('Minimum is 1')
+    .moreThan(0, 'Minimum is 1')
+    .lessThan(10, 'Maximum is 9'),
   dateRange: Yup.array()
     .of(
       Yup.object().shape({
