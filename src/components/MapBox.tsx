@@ -20,7 +20,8 @@ interface LowestPriceFormat {
 }
 
 const getMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = false) => {
-  const currencySymbol = getSymbolFromCurrency(currency);
+  let currencySymbol = getSymbolFromCurrency(currency);
+  currencySymbol = currencySymbol === '$' ? `${currency.slice(0, 2)}$` : currencySymbol;
   return new DivIcon({
     html: `<div>${currencySymbol} ${Math.ceil(price)}</div>`,
     className: `map-marker-icon ${focused ? 'marker-focused' : ''}`
