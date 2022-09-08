@@ -29,7 +29,7 @@ export const SelectGuestsAndRooms = () => {
       <Stack direction="row" justifyContent="space-between">
         <Box>
           <Typography fontWeight="bold">Rooms</Typography>
-          <Typography variant="caption">Select number of rooms.</Typography>
+          <Typography variant="caption">Select number of rooms. Maximum is 9.</Typography>
         </Box>
 
         <Box width={FIELD_WIDTH}>
@@ -40,7 +40,9 @@ export const SelectGuestsAndRooms = () => {
             InputProps={{
               inputMode: 'numeric',
               inputProps: {
-                min: 1
+                min: 1,
+                max: 9,
+                step: 1
               }
             }}
           />
