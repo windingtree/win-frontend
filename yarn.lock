@@ -5333,9 +5333,9 @@
     "@xtuc/long" "4.2.2"
 
 "@windingtree/glider-types@^1.13.0":
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-1.13.0.tgz#0e9c48674695cf8057cfd91f41789e40b57f87b9"
-  integrity sha512-lXtmgDNH2pm1wcbl2OSFi9JAWQ/+qV/obw8fL7NjeHpvZpg9xg+YAbveAxLhp1wjEdQVvcU2znhrscmdcDA/8Q==
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-1.16.0.tgz#7672c6f165b04e7e62f76de778c383a305d58444"
+  integrity sha512-VtcI+ENCfftQTQLokX9/OVdui58xKXThw+pwDkNcTI9ENh4QRaIWxnJc4r7kBgZtmCXyeF/BBY/PTRrPuM774g==
 
 "@windingtree/org.id-utils@^1.0.0-beta.47":
   version "1.0.0-beta.47"

@@ -62,10 +62,12 @@ export const Checkout = () => {
   );
 
   const onPaymentSuccess = useCallback<PaymentSuccessCallback>((result) => {
+    if (!checkout) return;
     logger.debug(`Payment result:`, result);
     navigate({
       pathname: '/bookings/confirmation',
       search: `?${createSearchParams({
+        offerId: checkout.offerId,
         tx: result.tx.hash
       })}`
     });
