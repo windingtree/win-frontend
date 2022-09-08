@@ -8,7 +8,7 @@ import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers
 import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
-import getSymbolFromCurrency from 'currency-symbol-map';
+import { currencySymbolMap } from '../utils/currencies';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -20,8 +20,8 @@ interface LowestPriceFormat {
 }
 
 const getMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = false) => {
-  let currencySymbol = getSymbolFromCurrency(currency);
-  currencySymbol = currencySymbol === '$' ? `${currency.slice(0, 2)}$` : currencySymbol;
+  const currencySymbol = currencySymbolMap[currency];
+
   return new DivIcon({
     html: `<div>${currencySymbol} ${Math.ceil(price)}</div>`,
     className: `map-marker-icon ${focused ? 'marker-focused' : ''}`
@@ -99,6 +99,20 @@ export const MapBox: React.FC = () => {
     () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
     [latestQueryParams]
   );
+
+  const accommodationsWithLowestPrice = useMemo(
+    () =>
+      accommodations?.length && accommodations.map((accomodation) => {
+        const lowestPrice = accomodation.offers.map((offer) => ({
+          price: Number(offer.price.public) / numberOfDays,
+          currency: offer.price.currency
+        }))
+        .reduce((prevLowest, currentVal) =>
+          prevLowest.price < currentVal.price ? prevLowest : currentVal
+        );
+        return {...accomodation, lowestPrice}
+    }
+  ), [accommodations]);
 
   // if search url contains a focusedFacilityId we should center map to it
   const focusedCoordinates: LatLngTuple | undefined = useMemo(() => {
@@ -185,26 +199,14 @@ export const MapBox: React.FC = () => {
         />
         <ZoomControl position="topright" />
         {mapMarkerStyles}
-        {accommodations && accommodations.length > 0
-          ? accommodations.map((f) => {
+        {accommodationsWithLowestPrice && accommodationsWithLowestPrice.length > 0
+          ? accommodationsWithLowestPrice.map((f) => {
               if (f.location && f.location.coordinates) {
-                const lowestPrice = useMemo(
-                  () =>
-                    f.offers
-                      .map((offer) => ({
-                        price: Number(offer.price.public) / numberOfDays,
-                        currency: offer.price.currency
-                      }))
-                      .reduce((prevLowest, currentVal) =>
-                        prevLowest.price < currentVal.price ? prevLowest : currentVal
-                      ),
-                  [f.offers]
-                );
                 return (
                   <Marker
                     key={f.id}
                     icon={getMarkerIcon(
-                      lowestPrice,
+                      f.lowestPrice,
                       f.hotelId + f.name === focusedFacilityId
                     )}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
