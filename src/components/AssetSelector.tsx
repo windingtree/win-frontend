@@ -31,7 +31,10 @@ export const AssetSelector = ({
     const chain = getNetworkInfo(network.chainId);
     return [...chain.contracts.assets.filter((a) => a.currency === payment.currency)];
   }, [network, payment]);
-  const notSelected = useMemo(() => options.length > 0 && asset === undefined, [options, asset]);
+  const notSelected = useMemo(
+    () => options.length > 0 && asset === undefined,
+    [options, asset]
+  );
   const noOptions = useMemo(() => options.length === 0, [options]);
 
   useEffect(() => {
@@ -86,10 +89,7 @@ export const AssetSelector = ({
 
   return (
     <FormControl error={notSelected || noOptions}>
-      <Select
-        value={asset ? asset.symbol : 'none'}
-        onChange={omCurrencyChange}
-      >
+      <Select value={asset ? asset.symbol : 'none'} onChange={omCurrencyChange}>
         <MenuItem value="none">{!noOptions ? 'Select token' : ''}</MenuItem>
         {options.map((option, index) => (
           <MenuItem key={index} value={option.symbol}>
@@ -114,9 +114,8 @@ export const AssetSelector = ({
         {noOptions
           ? `The selected network does not support payments in ${payment.currency}`
           : notSelected
-            ? 'Please select a supported token'
-            : ''
-        }
+          ? 'Please select a supported token'
+          : ''}
       </FormHelperText>
     </FormControl>
   );
