@@ -1,5 +1,5 @@
 import { FacilityDetailImages } from './FacilityDetailImages';
-import { createSearchParams, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { MediaItem } from '@windingtree/glider-types/types/win';
@@ -27,7 +27,6 @@ import { FacilityGallery } from './FacilityGallery';
 import { daysBetween } from '../../utils/date';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from '../../components/LightboxModal';
-import { Link as RouterLink } from 'react-router-dom';
 import FallbackImage from '../../images/hotel-fallback.webp';
 import Iconify from '../../components/Iconify';
 
@@ -136,36 +135,20 @@ const HeaderButton = ({ scrollToDetailImages }) => {
 
 const HotelAddress = ({
   address,
-  accommodationId,
-  name
+  coordinates
 }: {
   address?: string;
-  accommodationId: string;
-  name?: string;
+  coordinates: number[] | undefined;
 }) => {
-  const { latestQueryParams } = useAccommodationsAndOffers();
-  const mapQuery = useMemo(() => {
-    if (latestQueryParams === undefined) {
-      return '';
-    }
-
-    const params = {
-      roomCount: latestQueryParams.roomCount.toString(),
-      adultCount: latestQueryParams.adultCount.toString(),
-      startDate: latestQueryParams.arrival?.toISOString() ?? '',
-      endDate: latestQueryParams.departure?.toISOString() ?? '',
-      location: latestQueryParams.location,
-      ...(accommodationId && name ? { focusedFacilityId: accommodationId + name } : {})
-    };
-
-    return createSearchParams(params);
-  }, [latestQueryParams, createSearchParams]);
+  const googleBaseUrl = new URL('https://www.google.com/maps/@?api=1&map_action=map');
+  coordinates &&
+    googleBaseUrl.searchParams.set('center', `${coordinates[1]},${coordinates[0]}`);
 
   return (
     <>
       <Box>
         {address}.{' '}
-        <Link component={RouterLink} to={mapQuery ? `/search?${mapQuery}` : '#'}>
+        <Link href={googleBaseUrl.toString()} target="_blank" rel="_noreferrer">
           See Map
         </Link>
       </Box>
@@ -236,11 +219,11 @@ const CovidDialog = ({
 const HeaderTitle = ({
   name,
   address,
-  accommodationId
+  accommodation
 }: {
   name?: string;
   address?: string;
-  accommodationId: string;
+  accommodation: AccommodationWithId | null;
 }) => {
   const theme = useTheme();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -257,7 +240,10 @@ const HeaderTitle = ({
         <Typography variant="h2" marginBottom={theme.spacing(1.5)}>
           {name}
         </Typography>
-        <HotelAddress address={address} accommodationId={accommodationId} name={name} />
+        <HotelAddress
+          address={address}
+          coordinates={accommodation?.location?.coordinates}
+        />
         <CovidDialog open={dialogOpen} handleClose={handleCloseDialog} />
       </Box>
     </HeaderTitleContainer>
@@ -329,7 +315,7 @@ export const FacilityIntroduction = ({
         <HeaderTitle
           name={accommodation?.name}
           address={address}
-          accommodationId={accommodation?.hotelId ?? ''}
+          accommodation={accommodation}
         />
         <HeaderButton scrollToDetailImages={scrollToDetailImages} />
       </HeaderContainer>
