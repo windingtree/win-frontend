@@ -107,10 +107,10 @@ export const SearchForm: React.FC = () => {
   } = methods;
   const values = watch();
 
-  const hasLocationValidationError = (errors && errors.location) ? true : false;
-  const hasDateRangeValidationError = (errors && errors.dateRange) ? true : false;
-  const hasAdultCountValidationError = (errors && errors.adultCount) ? true : false;
-  const hasRoomCountValidationError = (errors && errors.roomCount) ? true : false;
+  const hasLocationValidationError = errors && errors.location ? true : false;
+  const hasDateRangeValidationError = errors && errors.dateRange ? true : false;
+  const hasAdultCountValidationError = errors && errors.adultCount ? true : false;
+  const hasRoomCountValidationError = errors && errors.roomCount ? true : false;
 
   const { roomCount, adultCount, dateRange, location } = values;
   const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
@@ -120,12 +120,12 @@ export const SearchForm: React.FC = () => {
    */
   const { refetch, isFetching, error, isFetched, accommodations, latestQueryParams } =
     useAccommodationsAndOffers({
-        arrival: startDate,
-        departure: endDate,
-        adultCount: Number(adultCount),
-        location: location,
-        roomCount: Number(roomCount)
-      });
+      arrival: startDate,
+      departure: endDate,
+      adultCount: Number(adultCount),
+      location: location,
+      roomCount: Number(roomCount)
+    });
 
   const onSubmit = useCallback(() => {
     //TODO: update search params when submitting the form
