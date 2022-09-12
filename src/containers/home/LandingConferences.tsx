@@ -94,7 +94,9 @@ function ConferenceItem({ item }: ConferenceItemProps) {
     <Grid item xs={12} sm={6} md={3} lg={3}>
       <Card sx={{ pb: 1, mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
         <Box sx={{ px: 2, pt: 2, pb: 1, position: 'relative' }}>
-          <Image src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />
+          <Link href={url}>
+            <Image src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />
+          </Link>
         </Box>
         <Typography textAlign="center" variant="subtitle2">
           <Link href={conferenceUrl} target="_blank" rel="nopener">
