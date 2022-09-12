@@ -197,7 +197,7 @@ template {
 .leaflet-popup-content {
   margin: 0;
   padding: 0;
-  width: 380px;
+  min-width: 380px;
 }
 .leaflet-popup-content-wrapper {
   padding: 0;

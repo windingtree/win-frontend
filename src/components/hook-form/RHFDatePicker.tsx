@@ -24,6 +24,7 @@ export const RHFDatePicker = ({ name, ...other }: Props) => {
             openTo="year"
             views={['year', 'month', 'day']}
             label={other.label}
+            InputAdornmentProps={{ position: 'start' }}
             value={value}
             renderInput={(params) => (
               <TextField
