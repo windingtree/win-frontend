@@ -22,7 +22,7 @@ const SearchBox = styled(Box)(({ theme }) => ({
 const NoMapBox = styled(Box)(({ theme }) => ({
   width: '100%',
   height: '100%',
-  backgroundColor: theme.palette.common.white
+  backgroundColor: theme.palette.background.default
 }));
 
 //TODO: remove the footer
