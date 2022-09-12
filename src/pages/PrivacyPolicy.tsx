@@ -1,11 +1,11 @@
 import MainLayout from 'src/layouts/main';
-import { Box, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import { ExternallUnsafeLink, ContactEmailLink } from '../components/ExternalUnsafeLink';
 
 export const PrivacyPolicy = () => {
   return (
     <MainLayout>
-      <Box sx={{ width: '100%', maxWidth: 600 }} alignSelf="center">
+      <Container sx={{ maxWidth: 600, marginY: 4 }}>
         <Typography variant="h3" gutterBottom>
           Privacy and Cookie Policy
         </Typography>
@@ -534,7 +534,7 @@ export const PrivacyPolicy = () => {
           believe that some of the data processed by Winding Tree is incorrect, please
           contact at <ContactEmailLink />.
         </Typography>
-      </Box>
+      </Container>
     </MainLayout>
   );
 };
