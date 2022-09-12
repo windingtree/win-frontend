@@ -1,12 +1,12 @@
 import MainLayout from 'src/layouts/main';
-import { Box, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { ContactEmailLink } from '../components/ExternalUnsafeLink';
 
 export const TermsAndConditions = () => {
   return (
     <MainLayout>
-      <Box sx={{ width: '100%', maxWidth: 600 }} alignSelf="center">
+      <Container sx={{ maxWidth: 600, marginY: 4 }}>
         <Typography variant="h3" gutterBottom>
           Terms and Conditions
         </Typography>
@@ -596,7 +596,7 @@ export const TermsAndConditions = () => {
           Terms and Conditions, are governed by the laws of Gibraltar. You submit to the
           non-exclusive jurisdiction of the courts exercising jurisdiction of Gibraltar.
         </Typography>
-      </Box>
+      </Container>
     </MainLayout>
   );
 };

@@ -12,7 +12,6 @@ import { About } from './pages/About';
 import { Contacts } from './pages/Contacts';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsAndConditions } from './pages/TermsAndConditions';
-import { Security } from './pages/Security';
 import { Developers } from './pages/Developers';
 import { Checkout } from './pages/Checkout';
 import { GuestInfo } from './pages/GuestInfo';
@@ -79,12 +78,6 @@ export const pagesRoutesConfig: Routes = [
     element: <About />,
     title: 'About',
     label: 'About'
-  },
-  {
-    path: '/security',
-    element: <Security />,
-    title: 'Security info',
-    label: 'Security info'
   },
   {
     path: '/privacy',
