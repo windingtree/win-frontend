@@ -1,6 +1,6 @@
 import { SearchResults, Offer, Accommodation } from '@windingtree/glider-types/types/win';
 import axios from 'axios';
-import { getPassengersBody } from './helpers';
+import { getPassengersBody, InvalidLocationError } from './helpers';
 import { SearchTypeProps } from '.';
 
 export interface Coordinates {
@@ -42,7 +42,7 @@ export async function fetchAccommodationsAndOffers({
   const coordinates = coordinatesData[0];
 
   if (!coordinates) {
-    throw new Error(
+    throw new InvalidLocationError(
       `We could not find ${location} as a city, region or country. Try a different location.`
     );
   }
