@@ -14,6 +14,7 @@ import type { PersonalInfo } from '../store/types';
 import { RHFDatePicker } from '../components/hook-form/RHFDatePicker';
 import { regexp } from '@windingtree/org.id-utils';
 import { convertToLocalTime } from '../utils/date';
+import { DateTime } from 'luxon';
 
 const logger = Logger('GuestInfoContainer');
 
@@ -50,6 +51,15 @@ export const GuestInfoContainer = () => {
       .required('Phone number is required'),
     birthdate: Yup.date()
       // .matches(regexp.isoDate, 'Incorrect date')
+      .test('birthdate', 'Should be more than 18', (value) => {
+        if (value === undefined) {
+          return false;
+        }
+        const birthdate = DateTime.fromJSDate(value);
+        const today = DateTime.now();
+        const diff = today.diff(birthdate, ['years']);
+        return diff.years >= 18;
+      })
       .required('Birthdate is required')
   });
 
@@ -140,13 +150,18 @@ export const GuestInfoContainer = () => {
               <Checkbox checked={privacy} onChange={() => setPrivacy(!privacy)} />
               <Box>
                 <Typography variant="subtitle1">
-                  <Link href="/privacy" underline="hover" target="_blank" rel="noopener">
-                    win.so policies
-                  </Link>
+                  I agree with terms and conditions
                 </Typography>
                 <Typography>
-                  Please agree to win.so general terms for travellers. Curious about how
-                  we handle your personal data? Read win.so privacy and cookie statement.
+                  I have read and approved win.so&nbsp;
+                  <Link href="/terms" underline="hover" target="_blank" rel="noopener">
+                    General Terms & Conditions
+                  </Link>
+                  &nbsp;for travellers and&nbsp;
+                  <Link href="/privacy" underline="hover" target="_blank" rel="noopener">
+                    Privacy and Cookie Statement
+                  </Link>
+                  .
                 </Typography>
               </Box>
             </Stack>

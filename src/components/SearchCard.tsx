@@ -80,12 +80,17 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             flexDirection: 'row',
             justifyContent: 'flex-start'
           }
-        : {};
+        : {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start'
+          };
 
     const smallCardStyle: CSSProperties = sm
       ? {
           minWidth: '380px',
-          marginBottom: '0px'
+          marginBottom: '0px',
+          height: '128px'
         }
       : {
           marginBottom: '8px'
@@ -108,50 +113,78 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
         style={{ ...selectedStyle, ...smallCardStyle }}
       >
         <Stack sx={{ ...responsiveStyle }}>
-          <Stack width={theme.spacing(sm ? 16 : 36)} height={theme.spacing(sm ? 16 : 24)}>
-            <ImageCarousel size={sm ? 'small' : 'large'} media={facility.media} />
+          <Stack
+            width={theme.spacing(sm || winWidth < 900 ? 16 : 36)}
+            height={theme.spacing(sm || winWidth < 900 ? 16 : 24)}
+          >
+            <ImageCarousel
+              size={sm || winWidth < 900 ? 'small' : 'large'}
+              media={facility.media}
+            />
           </Stack>
           <Stack
             onClick={() => navigate(`/facility/${facility.id}`)}
-            justifyContent="center"
+            justifyContent="space-between"
+            width={sm ? '252px' : '100%'}
             spacing={1}
             sx={{ py: 2, px: 1.5, mt: 0, cursor: 'pointer' }}
           >
             <Stack direction="row" justifyContent="space-between" spacing={1}>
-              <Typography variant="subtitle1">{facility.name}</Typography>
+              <Typography noWrap overflow={'hidden'} variant="subtitle1">
+                {facility.name}
+              </Typography>
               <Stack sx={{ color: 'text.secondary' }} direction="row" alignItems="center">
                 <Iconify mr={0.5} icon={'clarity:star-solid'} width={12} height={12} />
                 <Typography variant="caption">{facility.rating}</Typography>
               </Stack>
             </Stack>
 
-            <Stack direction="row" alignItems="center" sx={{ color: 'text.secondary' }}>
-              <Typography variant="caption">
-                {buildAccommodationAddress(facility)}
-              </Typography>
-            </Stack>
-            <Stack direction="row" alignItems="center">
-              <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography
-                  textAlign="center"
-                  variant="caption"
-                  sx={{ color: 'text.secondary' }}
-                >
-                  Starting at
-                </Typography>
-                <Typography variant="subtitle2">
-                  {currencyIcon(facility.offers[0]?.price?.currency)}
-                  {pricePerNight(prices, numberOfDays)} night.
-                </Typography>
-                <Typography
-                  alignItems="center"
-                  variant="caption"
-                  sx={{ color: 'text.secondary' }}
-                >
-                  {currencyIcon(facility.offers[0]?.price?.currency)}
-                  {Math.min(...prices).toFixed(2)} total
+            {!sm && (
+              <Stack direction="row" alignItems="center" sx={{ color: 'text.secondary' }}>
+                <Typography variant="caption">
+                  {buildAccommodationAddress(facility)}
                 </Typography>
               </Stack>
+            )}
+
+            <Stack
+              direction={winWidth < 900 || sm ? 'row-reverse' : 'row'}
+              alignItems="end"
+              justifyContent="space-between"
+            >
+              <Stack
+                direction={winWidth < 900 || sm ? 'column' : 'row'}
+                alignItems={winWidth < 900 || sm ? 'end' : 'center'}
+                justifyContent="space-between"
+                spacing={sm ? 0 : 1}
+              >
+                <Stack direction="row" alignItems="center" spacing={0.5}>
+                  <Typography
+                    textAlign="center"
+                    variant="caption"
+                    sx={{ color: 'text.secondary' }}
+                  >
+                    From
+                  </Typography>
+                  <Typography variant="subtitle2">
+                    {currencyIcon(facility.offers[0]?.price?.currency)}
+                    {pricePerNight(prices, numberOfDays)}/night
+                  </Typography>
+                </Stack>
+
+                {!(winWidth < 900 || sm) && <Typography>|</Typography>}
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Typography
+                    alignItems="center"
+                    variant="caption"
+                    sx={{ color: 'text.secondary' }}
+                  >
+                    {currencyIcon(facility.offers[0]?.price?.currency)}
+                    {Math.min(...prices).toFixed(2)} total
+                  </Typography>
+                </Stack>
+              </Stack>
+              <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />
             </Stack>
           </Stack>
         </Stack>
