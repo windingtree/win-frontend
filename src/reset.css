@@ -199,6 +199,9 @@ template {
   padding: 0;
   min-width: 380px;
 }
+.leaflet-popup-close-button {
+  display: none;
+}
 .leaflet-popup-content-wrapper {
   padding: 0;
   width: 380px;
