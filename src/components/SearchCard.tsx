@@ -184,7 +184,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                   </Typography>
                 </Stack>
               </Stack>
-              <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />
+              {!sm && <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />}
             </Stack>
           </Stack>
         </Stack>
