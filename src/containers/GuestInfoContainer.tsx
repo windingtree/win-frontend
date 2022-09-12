@@ -10,6 +10,7 @@ import { LoadingButton } from '@mui/lab';
 import { Alert, Box, Card, Checkbox, Grid, Link, Stack, Typography } from '@mui/material';
 import { useAppDispatch, useAppState } from '../store';
 import { FormProvider, RHFTextField } from '../components/hook-form';
+import { RHFPhoneField } from '../components/hook-form/RHFPhoneField';
 import type { PersonalInfo } from '../store/types';
 import { RHFDatePicker } from '../components/hook-form/RHFDatePicker';
 import { regexp } from '@windingtree/org.id-utils';
@@ -73,6 +74,7 @@ export const GuestInfoContainer = () => {
 
   const {
     handleSubmit,
+    reset,
     formState: { isSubmitting }
   } = methods;
 
@@ -112,6 +114,8 @@ export const GuestInfoContainer = () => {
           }
         });
 
+        reset();
+
         logger.info('Guest info sent successfully');
         navigate('/checkout/' + checkout.offerId);
       } catch (error) {
@@ -119,7 +123,7 @@ export const GuestInfoContainer = () => {
         setError(message);
       }
     },
-    [checkout, setError]
+    [checkout, reset]
   );
 
   return (
@@ -144,7 +148,7 @@ export const GuestInfoContainer = () => {
               <RHFTextField name="lastname" label="Last Name" />
               <RHFDatePicker name="birthdate" label="Birth date" />
               <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phone" label="Phone Number" />
+              <RHFPhoneField name="phone" label="Phone Number" />
             </Box>
             <Stack direction="row" alignItems="flex-start" sx={{ mt: 3 }}>
               <Checkbox checked={privacy} onChange={() => setPrivacy(!privacy)} />
