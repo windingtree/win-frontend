@@ -123,7 +123,7 @@ export const SearchForm: React.FC = () => {
       arrival: startDate,
       departure: endDate,
       adultCount: Number(adultCount),
-      location: location,
+      location,
       roomCount: Number(roomCount)
     });
 
@@ -354,7 +354,8 @@ export const SearchForm: React.FC = () => {
               }}
               severity="error"
             >
-              No accommodations found for {location}.
+              {/* use query params value instead of form value, to show only actually searched value */}
+              No accommodations found for {latestQueryParams?.location}.
             </Alert>
           )}
         </>
