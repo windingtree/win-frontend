@@ -1,5 +1,5 @@
 import { Map, LatLngTuple, DivIcon } from 'leaflet';
-import { Backdrop, Box, CircularProgress, GlobalStyles } from '@mui/material';
+import { Backdrop, Box, CircularProgress, GlobalStyles, styled } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
@@ -9,6 +9,7 @@ import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
 import { currencySymbolMap } from '../utils/currencies';
+import { InvalidLocationError } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -80,6 +81,12 @@ const MapSettings: React.FC<{
   return null;
 };
 
+const NoMapBox = styled(Box)(({ theme }) => ({
+  width: '100%',
+  height: '100%',
+  backgroundColor: theme.palette.background.default
+}));
+
 export const MapBox: React.FC = () => {
   const [map, setMap] = useState<Map | null>(null);
   const { selectedFacilityId } = useAppState();
@@ -93,7 +100,7 @@ export const MapBox: React.FC = () => {
   );
 
   // TODO: replace this with activeAccommodations
-  const { accommodations, coordinates, isLoading, latestQueryParams, isFetching } =
+  const { accommodations, coordinates, isLoading, latestQueryParams, isFetching, error } =
     useAccommodationsAndOffers();
   const numberOfDays = useMemo(
     () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
@@ -238,9 +245,11 @@ export const MapBox: React.FC = () => {
     [normalizedCoordinates, accommodations, selectedFacilityId]
   );
 
+  const invalidLocation = error instanceof InvalidLocationError;
+
   return (
     <Box>
-      {map && !isFetching && !isLoading ? (
+      {map && !isFetching && !isLoading && !invalidLocation ? (
         <MapSettings center={normalizedCoordinates} map={map} />
       ) : null}
       <Backdrop
@@ -249,7 +258,7 @@ export const MapBox: React.FC = () => {
       >
         <CircularProgress />
       </Backdrop>
-      {displayMap}
+      {invalidLocation ? <NoMapBox /> : <>{displayMap}</>}
     </Box>
   );
 };
