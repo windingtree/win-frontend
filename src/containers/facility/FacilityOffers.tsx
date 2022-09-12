@@ -5,6 +5,7 @@ import { styled, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { forwardRef } from 'react';
 import { daysBetween } from '../../utils/date';
+import { DateTime } from 'luxon';
 
 interface SearchCriteriaAndResult {
   rooms?: number;
@@ -26,7 +27,8 @@ const FacilityOffersTitle = ({
 }: SearchCriteriaAndResult) => {
   const SubHeader = styled(Box)(() => ({}));
   const theme = useTheme();
-  const dateStr = startDate && new Date(startDate).toDateString();
+  const dateStr =
+    startDate && DateTime.fromJSDate(new Date(startDate)).toFormat('ccc, LLL d, yyyy');
 
   return (
     <Box marginBottom={theme.spacing(5)}>

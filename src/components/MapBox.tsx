@@ -102,17 +102,20 @@ export const MapBox: React.FC = () => {
 
   const accommodationsWithLowestPrice = useMemo(
     () =>
-      accommodations?.length && accommodations.map((accomodation) => {
-        const lowestPrice = accomodation.offers.map((offer) => ({
-          price: Number(offer.price.public) / numberOfDays,
-          currency: offer.price.currency
-        }))
-        .reduce((prevLowest, currentVal) =>
-          prevLowest.price < currentVal.price ? prevLowest : currentVal
-        );
-        return {...accomodation, lowestPrice}
-    }
-  ), [accommodations]);
+      accommodations?.length &&
+      accommodations.map((accomodation) => {
+        const lowestPrice = accomodation.offers
+          .map((offer) => ({
+            price: Number(offer.price.public) / numberOfDays,
+            currency: offer.price.currency
+          }))
+          .reduce((prevLowest, currentVal) =>
+            prevLowest.price < currentVal.price ? prevLowest : currentVal
+          );
+        return { ...accomodation, lowestPrice };
+      }),
+    [accommodations]
+  );
 
   // if search url contains a focusedFacilityId we should center map to it
   const focusedCoordinates: LatLngTuple | undefined = useMemo(() => {
