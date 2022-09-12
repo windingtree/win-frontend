@@ -11,6 +11,8 @@ export interface AccommodationWithId extends Accommodation {
   offers: OfferRecord[];
 }
 
+export class InvalidLocationError extends Error {}
+
 export const getActiveAccommodations = (
   accommodations: Accommodation[],
   offers: Offer[]

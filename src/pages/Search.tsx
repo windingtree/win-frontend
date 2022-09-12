@@ -4,6 +4,8 @@ import MainLayout from 'src/layouts/main';
 import { Box, styled } from '@mui/material';
 import { SearchForm } from 'src/containers/search/SearchForm';
 import { HEADER } from 'src/config/componentSizes';
+import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
+import { InvalidLocationError } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 
 const SearchBox = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -17,13 +19,28 @@ const SearchBox = styled(Box)(({ theme }) => ({
   }
 }));
 
+const NoMapBox = styled(Box)(({ theme }) => ({
+  width: '100%',
+  height: '100%',
+  backgroundColor: theme.palette.common.white
+}));
+
 //TODO: remove the footer
 export const Search = () => {
+  const { error } = useAccommodationsAndOffers();
+  const invalidLocation = error instanceof InvalidLocationError;
   return (
     <MainLayout childrenBelowHeader={false} footer={false}>
       <Box style={{ position: 'relative' }}>
-        <Results />
-        <MapBox />
+        {invalidLocation ? (
+          <NoMapBox />
+        ) : (
+          <>
+            <Results />
+            <MapBox />
+          </>
+        )}
+
         <SearchBox>
           <SearchForm />
         </SearchBox>
