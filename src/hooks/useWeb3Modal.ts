@@ -1,6 +1,6 @@
 import type { IProviderControllerOptions } from 'web3modal';
 import type { providers } from 'ethers';
-import { useMemo, useEffect, useState, useCallback } from 'react';
+import { useMemo, useEffect, useState, useCallback, useRef } from 'react';
 import { ethers } from 'ethers';
 import Web3modal from 'web3modal';
 import Logger from '../utils/logger';
@@ -24,6 +24,7 @@ export type Web3ModalHook = [
 ];
 
 export const useWeb3Modal = (web3ModalConfig: Web3ModalConfig): Web3ModalHook => {
+  const failuresRef = useRef(0);
   const [provider, setProvider] = useState<undefined | providers.Web3Provider>();
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
@@ -73,12 +74,18 @@ export const useWeb3Modal = (web3ModalConfig: Web3ModalConfig): Web3ModalHook =>
         // Subscribe to provider disconnection
         web3ModalProvider.on('disconnect', (code: number, reason: string) => {
           logger.info(`Disconnected with code: ${code} and reason: ${reason}`);
-          signOut();
+          if (failuresRef.current > 5) {
+            signOut();
+          } else {
+            updateProvider();
+            failuresRef.current++;
+          }
         });
 
         setProvider(new ethers.providers.Web3Provider(web3ModalProvider));
         setIsConnecting(false);
         window.removeEventListener('unhandledrejection', unhandledRejectionHandler);
+        failuresRef.current = 0;
       };
 
       updateProvider();
