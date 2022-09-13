@@ -1,4 +1,4 @@
-import { Map, LatLngTuple, DivIcon } from 'leaflet';
+import { Map, LatLngTuple, DivIcon, Icon } from 'leaflet';
 import {
   Alert,
   Backdrop,
@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
+import defaultIconUrl from 'leaflet/dist/images/marker-icon.png';
 import Logger from '../utils/logger';
 import { useAppDispatch, useAppState } from '../store';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
@@ -17,6 +18,7 @@ import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
 import { currencySymbolMap } from '../utils/currencies';
 import { InvalidLocationError } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
+import { getCurrentEvents, getEventsWithinRadius } from '../utils/events';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -27,12 +29,28 @@ interface LowestPriceFormat {
   decimals?: number;
 }
 
-const getMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = false) => {
+const getPriceMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = false) => {
   const currencySymbol = currencySymbolMap[currency];
 
   return new DivIcon({
     html: `<div>${currencySymbol} ${Math.ceil(price)}</div>`,
     className: `map-marker-icon ${focused ? 'marker-focused' : ''}`
+  });
+};
+
+const getImageIcon = ({
+  imageUrl,
+  rounded = false,
+  size = 40
+}: {
+  imageUrl?: string;
+  rounded?: boolean;
+  size?: number;
+}) => {
+  return new Icon({
+    iconUrl: imageUrl ?? defaultIconUrl,
+    iconSize: imageUrl ? [size, size] : [40, 64],
+    className: `${rounded ? 'marker-rounded' : ''}`
   });
 };
 
@@ -164,6 +182,40 @@ export const MapBox: React.FC = () => {
     }
   }, [selectedFacilityId]);
 
+  const eventMarkers = useMemo(() => {
+    const currentEvents =
+      latestQueryParams?.arrival &&
+      latestQueryParams?.departure &&
+      getCurrentEvents({
+        fromDate: latestQueryParams?.arrival,
+        toDate: latestQueryParams?.departure
+      });
+
+    const maxRadius = 20; // TO-DO: convert to miles if needed
+    const currentEventsWithinRadius =
+      currentEvents &&
+      getEventsWithinRadius(currentEvents, normalizedCoordinates, maxRadius);
+
+    return currentEventsWithinRadius?.length ? (
+      <>
+        {currentEventsWithinRadius.map(
+          (evt) =>
+            evt.latlon && (
+              <Marker
+                key={evt.name}
+                icon={getImageIcon({
+                  imageUrl: evt.mapIcon?.url,
+                  rounded: evt.mapIcon?.rounded,
+                  size: 100
+                })}
+                position={[evt.latlon[0], evt.latlon[1]]}
+              />
+            )
+        )}
+      </>
+    ) : null;
+  }, [latestQueryParams]);
+
   const mapMarkerStyles = useMemo(
     () => (
       <GlobalStyles
@@ -185,6 +237,10 @@ export const MapBox: React.FC = () => {
           '.marker-focused': {
             backgroundColor: theme.palette.error.main,
             color: theme.palette.common.white
+          },
+          '.marker-rounded': {
+            borderRadius: '50%',
+            boxShadow: `0 0 15px 0 ${theme.palette.grey[500]}`
           }
         })}
       />
@@ -216,13 +272,14 @@ export const MapBox: React.FC = () => {
         />
         <ZoomControl position="topright" />
         {mapMarkerStyles}
+        {eventMarkers}
         {accommodationsWithLowestPrice && accommodationsWithLowestPrice.length > 0
           ? accommodationsWithLowestPrice.map((f) => {
               if (f.location && f.location.coordinates) {
                 return (
                   <Marker
                     key={f.id}
-                    icon={getMarkerIcon(
+                    icon={getPriceMarkerIcon(
                       f.lowestPrice,
                       f.hotelId + f.name === focusedFacilityId
                     )}
