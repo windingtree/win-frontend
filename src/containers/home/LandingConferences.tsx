@@ -1,7 +1,7 @@
 import { Box, Card, Typography, Grid, Button, Stack, Link } from '@mui/material';
 import Iconify from '../../components/Iconify';
 import Image from '../../components/Image';
-import { EventItemProps, events } from '../../utils/events';
+import { EventItemProps, upcomingEvents } from '../../utils/events';
 //import sydney from '../../images/sydney.jpeg';
 //import taipei from '../../images/taipei.jpeg';
 
@@ -15,7 +15,7 @@ export default function LandingConferences() {
       </Box>
 
       <Grid container spacing={4}>
-        {events.map((item, index) => (
+        {upcomingEvents.map((item, index) => (
           <ConferenceItem key={index} item={item} />
         ))}
       </Grid>
