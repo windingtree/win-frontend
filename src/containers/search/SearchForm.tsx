@@ -123,7 +123,7 @@ export const SearchForm: React.FC = () => {
       arrival: startDate,
       departure: endDate,
       adultCount: Number(adultCount),
-      location: location,
+      location,
       roomCount: Number(roomCount)
     });
 
@@ -301,7 +301,7 @@ export const SearchForm: React.FC = () => {
               sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
               severity="error"
             >
-              Please, fill in a proper destination.
+              Fill in a proper destination.
             </Alert>
           )}
           {hasDateRangeValidationError && (
@@ -309,7 +309,7 @@ export const SearchForm: React.FC = () => {
               sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
               severity="error"
             >
-              Please, fill in proper dates.
+              Fill in proper dates.
             </Alert>
           )}
           {hasAdultCountValidationError && (
@@ -317,7 +317,7 @@ export const SearchForm: React.FC = () => {
               sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
               severity="error"
             >
-              Please, fill in proper number of guests.
+              Fill in proper number of guests.
             </Alert>
           )}
           {hasRoomCountValidationError && (
@@ -325,7 +325,7 @@ export const SearchForm: React.FC = () => {
               sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
               severity="error"
             >
-              Please, fill in proper number of rooms.
+              Fill in proper number of rooms.
             </Alert>
           )}
 
@@ -354,7 +354,8 @@ export const SearchForm: React.FC = () => {
               }}
               severity="error"
             >
-              No accommodations found for {location}.
+              {/* use query params value instead of form value, to show only actually searched value */}
+              No accommodations found for {latestQueryParams?.location}.
             </Alert>
           )}
         </>
