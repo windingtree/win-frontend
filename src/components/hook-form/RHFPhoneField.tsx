@@ -445,12 +445,22 @@ export const countries: readonly CountryType[] = [
 export const normalizePhone = (phone: string) => phone.replace(/[^\d]+/gi, '');
 
 export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
-  const { control, getValues } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
   const [country, setCountry] = useState<CountryType | null>(null);
 
-  const onCountryChange = (e: InputChangeEvent, value: CountryType) => {
-    setCountry(value);
-  };
+  const onCountryChange = useCallback(
+    (e: InputChangeEvent, value: CountryType) => {
+      const phone = getValues()[name];
+      if (country && phone) {
+        setValue(
+          name,
+          phone.replace(new RegExp(`^[+]*(${normalizePhone(country.phone)})`), '')
+        );
+      }
+      setCountry(value);
+    },
+    [name, getValues, setValue, country]
+  );
 
   const doSetCountry = (phone: string): void => {
     const phoneCountry = countries.filter(
