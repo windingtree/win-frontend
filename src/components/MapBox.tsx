@@ -117,8 +117,8 @@ export const MapBox: React.FC = () => {
   const accommodationsWithLowestPrice = useMemo(
     () =>
       accommodations?.length &&
-      accommodations.map((accomodation) => {
-        const lowestPrice = accomodation.offers
+      accommodations.map((accommodation) => {
+        const lowestPrice = accommodation.offers
           .map((offer) => ({
             price: Number(offer.price.public) / numberOfDays,
             currency: offer.price.currency
@@ -126,7 +126,7 @@ export const MapBox: React.FC = () => {
           .reduce((prevLowest, currentVal) =>
             prevLowest.price < currentVal.price ? prevLowest : currentVal
           );
-        return { ...accomodation, lowestPrice };
+        return { ...accommodation, lowestPrice };
       }),
     [accommodations]
   );
