@@ -1,12 +1,14 @@
 import { useFormContext, Controller } from 'react-hook-form';
 import { Box, TextField, TextFieldProps, Autocomplete, InputAdornment } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
 export type PhoneFieldProps = {
   name: string
 } & TextFieldProps;
 
 export type InputChangeEvent = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+
+export type OnChangeCallback = (e: InputChangeEvent) => void;
 
 export interface CountryType {
   code: string;
@@ -443,36 +445,54 @@ export const countries: readonly CountryType[] = [
 export const normalizePhone = (phone: string) => phone.replace(/[^\d]+/gi, '');
 
 export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
-  const { control } = useFormContext();
+  const { control, getValues } = useFormContext();
   const [country, setCountry] = useState<CountryType | null>(null);
 
   const onCountryChange = (e: InputChangeEvent, value: CountryType) => {
     setCountry(value);
   };
 
-  const onFieldChange = (
-    e: InputChangeEvent,
-    onChange: (e: InputChangeEvent) => void
-  ) => {
+  const doSetCountry = (phone: string): void => {
     const phoneCountry = countries.filter(
-      c => normalizePhone(e.target.value).startsWith(normalizePhone(c.phone))
+      c => normalizePhone(phone).startsWith(normalizePhone(c.phone))
     )[0];
     if (phoneCountry) {
       setCountry(phoneCountry);
     }
+  };
+
+  const onFieldChange = (e: InputChangeEvent, onChange: OnChangeCallback): void => {
+    doSetCountry(e.target.value);
     return onChange(e);
   };
 
-  const applyCode = (phone: string) => {
-    phone = phone ? normalizePhone(phone) : '';
-    const code = country && normalizePhone(country.phone);
-    if (!code && !phone) {
-      return phone;
-    }
-    return !code || phone.startsWith(code)
-      ? `+${phone}`
-      : `+${code}${phone}`;
-  };
+  useEffect(
+    () => {
+      if (country === null) {
+        const phone = getValues()[name];
+        if (phone) {
+          doSetCountry(phone);
+        }
+      }
+    },
+    [name, getValues, country]
+  );
+
+  const applyCode = useCallback(
+    (phone: string) => {
+      phone = phone ? normalizePhone(phone) : '';
+      const code = country && normalizePhone(country.phone);
+      if (!code && !phone) {
+        return '';
+      } else if (code && phone && phone.length <= code.length) {
+        return `+${code}`;
+      }
+      return !code || phone.startsWith(code)
+        ? `+${phone}`
+        : `+${code}${phone}`;
+    },
+    [country]
+  );
 
   return (
     <Controller
@@ -487,8 +507,10 @@ export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
         >
           <Autocomplete
             sx={{ width: 300, mr: 1 }}
-            options={countries}
             autoHighlight
+            // disableClearable
+            clearIcon={null}
+            options={countries}
             value={country}
             onChange={onCountryChange}
             getOptionLabel={(option) => option.label}
