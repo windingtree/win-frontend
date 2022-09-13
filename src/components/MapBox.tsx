@@ -1,5 +1,5 @@
 import { Map, LatLngTuple, DivIcon } from 'leaflet';
-import { Backdrop, Box, CircularProgress, GlobalStyles, styled } from '@mui/material';
+import { Alert, Backdrop, Box, CircularProgress, GlobalStyles } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import Logger from '../utils/logger';
@@ -256,7 +256,15 @@ export const MapBox: React.FC = () => {
         sx={{ background: 'transparent', backdropFilter: 'blur(8px)', zIndex: 1 }}
         open={isLoading || isFetching}
       >
-        <CircularProgress />
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <CircularProgress />
+          <Alert
+            sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center', mt: 2 }}
+            severity="info"
+          >
+            Great accommodations take a little longer to find! Please be patient.
+          </Alert>
+        </Box>
       </Backdrop>
       {invalidLocation ? <NoMapBox /> : <>{displayMap}</>}
     </Box>
