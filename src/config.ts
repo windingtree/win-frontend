@@ -1,10 +1,10 @@
 import { Settings } from 'luxon';
 import { config } from '@windingtree/win-commons';
-import dappcon22 from '../images/conferences/dappcon22.jpg';
-import blockchaineurope2022 from '../images/conferences/blockchaineurope2022.png';
-import devcon6 from '../images/conferences/devcon6.jpeg';
-import ethdownunder from '../images/conferences/ethdownunder.png';
-import devcon6Icon from '../images/event-icons/devcon6.jpg';
+import dappcon22 from './images/conferences/dappcon22.jpg';
+import blockchaineurope2022 from './images/conferences/blockchaineurope2022.png';
+import devcon6 from './images/conferences/devcon6.jpeg';
+import ethdownunder from './images/conferences/ethdownunder.png';
+import devcon6Icon from './images/event-icons/devcon6.jpg';
 
 export enum AppMode {
   dev = 'dev',
