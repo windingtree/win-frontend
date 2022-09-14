@@ -28,7 +28,11 @@ type ConferenceItemProps = {
 };
 
 function ConferenceItem({ item }: ConferenceItemProps) {
-  const { name, date, url, conferenceUrl, image, location } = item;
+  const { name, date, url: initialUrl, conferenceUrl, image, location } = item;
+  const urlObj = initialUrl ? new URL(initialUrl, window.location.origin) : undefined;
+  urlObj?.searchParams.set('focusedEvent', name);
+
+  const url = urlObj?.toString();
 
   return (
     <Grid item xs={12} sm={6} md={3} lg={3}>
