@@ -186,12 +186,13 @@ export const MapBox: React.FC = () => {
     const currentEvents =
       latestQueryParams?.arrival &&
       latestQueryParams?.departure &&
+      // add 3 day swing
       getCurrentEvents({
-        fromDate: latestQueryParams?.arrival,
-        toDate: latestQueryParams?.departure
+        fromDate: new Date(latestQueryParams.arrival.setDate(latestQueryParams.arrival.getDate() - 3)),
+        toDate: new Date(latestQueryParams.departure.setDate(latestQueryParams.departure.getDate() + 3))
       });
 
-    const maxRadius = 20; // TO-DO: convert to miles if needed
+    const maxRadius = 3; // TO-DO: convert to miles if needed
     const currentEventsWithinRadius =
       currentEvents &&
       getEventsWithinRadius(currentEvents, normalizedCoordinates, maxRadius);
