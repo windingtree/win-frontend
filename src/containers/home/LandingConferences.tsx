@@ -1,7 +1,7 @@
 import { Box, Card, Typography, Grid, Button, Stack, Link } from '@mui/material';
 import Iconify from '../../components/Iconify';
 import Image from '../../components/Image';
-import { EventItemProps, upcomingEvents } from '../../utils/events';
+import { EventItemProps, upcomingEvents } from '../../config';
 //import sydney from '../../images/sydney.jpeg';
 //import taipei from '../../images/taipei.jpeg';
 
