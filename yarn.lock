@@ -5332,7 +5332,7 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@windingtree/glider-types@^1.13.0":
+"@windingtree/glider-types@^1.16.0":
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-1.16.0.tgz#7672c6f165b04e7e62f76de778c383a305d58444"
   integrity sha512-VtcI+ENCfftQTQLokX9/OVdui58xKXThw+pwDkNcTI9ENh4QRaIWxnJc4r7kBgZtmCXyeF/BBY/PTRrPuM774g==
@@ -5347,17 +5347,17 @@
     axios "0.24.0"
     ethers "5.5.3"
 
-"@windingtree/win-commons@^1.6.2":
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.6.2.tgz#c0a5468ed403c6f75c976fdedc16ae646e91a991"
-  integrity sha512-IjYkNZTbsqr19X1S4ZkhxodE963FeU+eypnjVvagWsxlNWV4KMB5D+Nvg4eOf0/7cM/k03Hq3gpn5lMLn6se9w==
+"@windingtree/win-commons@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.7.0.tgz#e11473f367cf1f6e22bb162f300d70ce72c1a953"
+  integrity sha512-+eEhPavVdElEhZVws79fkOzdo0S5Cy4h+m+GYVKTQWRugIhkzUOId5uS+MXpec/N0ugKoggVnCE0AMYgViLhiA==
   dependencies:
     ethers "^5.6.9"
 
-"@windingtree/win-pay@^1.1.0":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.1.1.tgz#26c9228c7d5414e8d0bd04468136a61cac22aabc"
-  integrity sha512-vFJjGEy4ajjZv+dXCTgHeRHfhzfFT+kaOZ8bMg9sTBo6iP+zKIzz9nHSJ/dWJw+Q3cfyDneTJXuiBBDRNglMtg==
+"@windingtree/win-pay@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.6.0.tgz#1e22772d915946b28b47aac05e72f0afc2586310"
+  integrity sha512-dAdUnj1NH9M3DBdiCjHfPzHSAEqXOKkQFx8m5POpXSZDZSQO5jMIqMhYjratfo3eg+ScdstOP7wpqI66K+85VA==
   dependencies:
     "@openzeppelin/contracts" "^4.7.1"
     "@openzeppelin/contracts-upgradeable" "^4.7.1"
