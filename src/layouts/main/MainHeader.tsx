@@ -79,6 +79,8 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
   const isOffset = useOffSetTop(HEADER.MAIN_DESKTOP_HEIGHT);
   const isDesktop = useResponsive('up', 'md');
 
+  const sil = 'hello';
+
   return (
     <>
       <AppBar sx={{ boxShadow: 0, bgcolor: 'transparent' }}>
@@ -95,7 +97,7 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
             <Box sx={{ flexGrow: 1 }} />
             <AccountInfo />
 
-            {/* {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />} */}
+            {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />}
 
             {/* Currenlty the navConfig is empty, therefore it is commented out */}
             {/* {!isDesktop && <MenuMobile isOffset={isOffset} navConfig={navConfig} />} */}
