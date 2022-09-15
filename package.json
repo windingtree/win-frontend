@@ -124,8 +124,7 @@
     "web3modal": "^1.9.9",
     "yup": "^0.32.11",
     "react-slick": "^0.23.0",
-    "@types/react-slick": "^0.23.10",
-    "eslint-plugin-spellcheck": "^0.0.19"
+    "@types/react-slick": "^0.23.10"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"
