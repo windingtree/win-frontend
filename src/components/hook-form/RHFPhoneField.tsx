@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { useFormContext, Controller } from 'react-hook-form';
 import {
   Box,
