@@ -2,15 +2,14 @@ import { Box, Card, Typography, Grid, Button, Stack, Link } from '@mui/material'
 import Iconify from '../../components/Iconify';
 import Image from '../../components/Image';
 import { EventItemProps, upcomingEvents } from '../../config';
-//import sydney from '../../images/sydney.jpeg';
-//import taipei from '../../images/taipei.jpeg';
 
 export default function LandingConferences() {
   return (
     <Grid sx={{ pb: 5 }} container>
-      <Box sx={{ p: 1, position: 'relative' }}>
-        <Typography textAlign="center" variant="h3">
-          Upcoming blockchain conferences
+      <Box sx={{ position: 'relative' }}>
+        <Typography variant="h3">Upcoming Blockchain Events</Typography>
+        <Typography color="text.secondary" mb={2}>
+          Need a place to stay for an event. Checkout our favourite stays below!
         </Typography>
       </Box>
 
@@ -35,7 +34,7 @@ function ConferenceItem({ item }: ConferenceItemProps) {
   const url = urlObj?.toString();
 
   return (
-    <Grid item xs={12} sm={6} md={3} lg={3}>
+    <Grid item xs={12} sm={6} md={4} lg={4}>
       <Card sx={{ pb: 1, mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
         <Box sx={{ px: 2, pt: 2, pb: 1, position: 'relative' }}>
           <Link href={url}>
