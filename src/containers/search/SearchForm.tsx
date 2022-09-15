@@ -209,7 +209,7 @@ export const SearchForm: React.FC = () => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <SearchPopovers {...popOversState} />
-      <Stack direction="column" alignItems="center">
+      <Stack direction="column">
         <ToolbarStyle ref={formRef}>
           <Stack
             direction={{ xs: 'column', md: 'row' }}

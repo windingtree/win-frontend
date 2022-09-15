@@ -1,13 +1,16 @@
 import { alpha, styled } from '@mui/material/styles';
 import { Box, AppBar, Toolbar, Container } from '@mui/material';
-import MenuDesktop from './MenuDesktop';
-import MenuMobile from './MenuMobile';
-import navConfig from './MenuConfig';
 import { LogoBeta } from 'src/components/Logo';
 import useOffSetTop from 'src/hooks/useOffsetTop';
 import useResponsive from 'src/hooks/useResponsive';
 import { HEADER } from 'src/config/componentSizes';
 import { AccountInfo } from 'src/components/AccountInfo';
+import { SocialsButton } from 'src/components/SocialButton';
+import MenuDesktop from './MenuDesktop';
+import navConfig from './MenuConfig';
+
+// this is commented out because the navconfig is currently commented out
+// import MenuMobile from './MenuMobile';
 
 const BLUR = 8;
 
@@ -51,6 +54,27 @@ type MainHeaderProps = {
   childrenBelowHeader?: boolean;
 };
 
+const SOCIALS = [
+  {
+    name: 'Blog',
+    icon: 'fluent:news-16-filled',
+    socialColor: '#00AAEC',
+    path: 'https://blog.windingtree.com/'
+  },
+  {
+    name: 'Discord',
+    icon: 'ic:outline-discord',
+    socialColor: '#7289da',
+    path: 'https://discord.gg/RWqqzT3Gf8'
+  },
+  {
+    name: 'Twitter',
+    icon: 'eva:twitter-fill',
+    socialColor: '#00AAEC',
+    path: 'https://twitter.com/windingtree'
+  }
+];
+
 export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
   const isOffset = useOffSetTop(HEADER.MAIN_DESKTOP_HEIGHT);
   const isDesktop = useResponsive('up', 'md');
@@ -73,7 +97,10 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
 
             {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />}
 
-            {!isDesktop && <MenuMobile isOffset={isOffset} navConfig={navConfig} />}
+            {/* Currenlty the navConfig is empty, therefore it is commented out */}
+            {/* {!isDesktop && <MenuMobile isOffset={isOffset} navConfig={navConfig} />} */}
+
+            <SocialsButton socials={SOCIALS} sx={{ mx: 0.5 }} />
           </Container>
         </ToolbarStyle>
 

@@ -58,8 +58,9 @@ export default function LandingCities() {
   return (
     <Grid sx={{ pb: 5 }} container>
       <Box sx={{ p: 1, position: 'relative' }}>
-        <Typography textAlign="center" variant="h3">
-          Cities in the spotlight
+        <Typography variant="h3">Scenic Cities</Typography>
+        <Typography color="text.secondary" mb={2}>
+          Our current favourite cities to visit and travel to
         </Typography>
       </Box>
 

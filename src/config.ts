@@ -76,19 +76,6 @@ export const expirationGap = Number(process.env.REACT_APP_EXPIRATION_GAP);
 
 export const upcomingEvents: EventItemProps[] = [
   {
-    name: 'DappCon22',
-    location: 'Berlin',
-    image: dappcon22,
-    url: '/search?roomCount=1&adultCount=2&startDate=2022-09-12T00%3A00%3A00%2B02%3A00&endDate=2022-09-14T00%3A00%3A00%2B02%3A00&location=Berlin',
-    conferenceUrl: 'https://www.dappcon.io/',
-    date: '12-14  September',
-    latlon: [52.5103084, 13.4265072],
-    dateRange: {
-      fromDate: '12-09-2022',
-      toDate: '14-09-2022'
-    }
-  },
-  {
     name: 'Blockchain Expo Europe 2022',
     location: 'Amsterdam',
     image: blockchaineurope2022,
@@ -139,4 +126,49 @@ export const upcomingEvents: EventItemProps[] = [
     date: '2-4  December'
     // latlon: [25.0375198, 121.5636796],
   }*/
+];
+
+export const SOCIALS = [
+  {
+    name: 'Winding Tree website',
+    icon: 'iconoir:www',
+    socialColor: '#7289da',
+    path: 'https://windingtree.com/'
+  },
+  {
+    name: 'Blog',
+    icon: 'fluent:news-16-filled',
+    socialColor: '#00AAEC',
+    path: 'https://blog.windingtree.com/'
+  },
+  {
+    name: 'Discord',
+    icon: 'ic:outline-discord',
+    socialColor: '#7289da',
+    path: 'https://discord.gg/RWqqzT3Gf8'
+  },
+  {
+    name: 'Twitter',
+    icon: 'eva:twitter-fill',
+    socialColor: '#00AAEC',
+    path: 'https://twitter.com/windingtree'
+  },
+  {
+    name: 'LinkedIn',
+    icon: 'akar-icons:linkedin-box-fill',
+    socialColor: '#00AAEC',
+    path: 'https://www.linkedin.com/company/winding-tree/'
+  },
+  {
+    name: 'Youtube',
+    icon: 'mdi:youtube',
+    socialColor: '#c4302b',
+    path: 'https://youtube.com/windingtree'
+  },
+  {
+    name: 'Github',
+    icon: 'akar-icons:github-fill',
+    socialColor: '#c4302b',
+    path: 'https://github.com/windingtree/'
+  }
 ];

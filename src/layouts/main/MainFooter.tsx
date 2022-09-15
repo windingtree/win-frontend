@@ -2,7 +2,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Grid, Link, Divider, Container, Typography, Stack } from '@mui/material';
 import { Logo } from 'src/components/Logo';
-import SocialsButton from 'src/components/SocialButton';
+import { SocialsButton } from 'src/components/SocialButton';
+import { SOCIALS } from 'src/config';
 
 const LINKS = [
   {
@@ -73,7 +74,8 @@ export default function MainFooter() {
 
           <Grid item xs={12} md={6}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              WIN.so is a decentralized travel booking website powered by&nbsp;
+              Win.so an accommodation marketplace for the crypto community and digital
+              nomads with no commissions. Website powered by&nbsp;
               <Link
                 href="https://windingtree.com"
                 underline="hover"
@@ -89,7 +91,7 @@ export default function MainFooter() {
               justifyContent={{ xs: 'center', md: 'flex-start' }}
               sx={{ mt: 5, mb: { xs: 5, md: 0 } }}
             >
-              <SocialsButton sx={{ mx: 0.5 }} />
+              <SocialsButton socials={SOCIALS} sx={{ mx: 0.5 }} />
             </Stack>
           </Grid>
 
