@@ -6,8 +6,6 @@ import useResponsive from 'src/hooks/useResponsive';
 import { HEADER } from 'src/config/componentSizes';
 import { AccountInfo } from 'src/components/AccountInfo';
 import { SocialsButton } from 'src/components/SocialButton';
-import MenuDesktop from './MenuDesktop';
-import navConfig from './MenuConfig';
 
 // this is commented out because the navconfig is currently commented out
 // import MenuMobile from './MenuMobile';
@@ -95,7 +93,7 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
             <Box sx={{ flexGrow: 1 }} />
             <AccountInfo />
 
-            {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />}
+            {/* {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />} */}
 
             {/* Currenlty the navConfig is empty, therefore it is commented out */}
             {/* {!isDesktop && <MenuMobile isOffset={isOffset} navConfig={navConfig} />} */}
