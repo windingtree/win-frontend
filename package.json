@@ -9,7 +9,7 @@
     "test": "cra-webpack-rewired test",
     "storybook": "start-storybook -p 6006 -s public",
     "commit": "git-cz -S",
-    "lint": "npx eslint . --ext .ts,.tsx && npx prettier -c .",
+    "lint": "npx eslint --fix . --ext .ts,.tsx && npx prettier -c .",
     "prettier": "npx prettier -w ./docs ./src ./README.md ./.eslintrc"
   },
   "eslintConfig": {
