@@ -85,7 +85,7 @@ const MapSettings: React.FC<{
 
   useEffect(() => {
     logger.debug('onMove', center);
-    map.setView(center, defaultZoom);
+    map.setView(center);
   }, [map, center]);
 
   useEffect(() => {

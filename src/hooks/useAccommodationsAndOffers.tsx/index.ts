@@ -27,7 +27,13 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
       }
       return await fetchAccommodationsAndOffers(props);
     },
-    { enabled: false, keepPreviousData: false }
+    {
+      enabled: false,
+      keepPreviousData: false,
+      cacheTime: 25 * 60 * 1000, //25 min expiration
+      refetchInterval: 25 * 60 * 1000, //25 min expiration
+      staleTime: 25 * 60 * 1000 //25 min expiration
+    }
   );
 
   const allAccommodations = useMemo(
