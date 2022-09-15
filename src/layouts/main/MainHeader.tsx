@@ -93,7 +93,7 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
             <LogoBeta />
 
             <Box sx={{ flexGrow: 1 }} />
-            <AccountInfo />
+            {/* <AccountInfo /> */}
 
             {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />}
 
