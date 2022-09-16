@@ -13,9 +13,8 @@ export const datesOverlap = (
 ) => {
   const { fromDate: targetFromDate, toDate: targetToDate } = targetDateRange;
   return (
-    (dateRange.fromDate <= targetFromDate && dateRange.toDate >= targetToDate) ||
-    (dateRange.fromDate >= targetFromDate && dateRange.toDate >= targetToDate) ||
-    (dateRange.fromDate <= targetFromDate && dateRange.toDate <= targetToDate)
+    (dateRange.fromDate <= targetFromDate && dateRange.toDate >= targetFromDate) ||
+    (dateRange.fromDate <= targetToDate && dateRange.toDate >= targetToDate)
   );
 };
 

@@ -75,7 +75,7 @@ export default function MainFooter() {
           <Grid item xs={12} md={6}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
               Win.so an accommodation marketplace for the crypto community and digital
-              nomads with no commissions. Website powered by&nbsp;
+              nomads. Website powered by&nbsp;
               <Link
                 href="https://windingtree.com"
                 underline="hover"
