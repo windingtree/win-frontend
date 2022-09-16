@@ -1,5 +1,6 @@
 import { Accommodation, Offer } from '@windingtree/glider-types/types/win';
 import { OfferRecord } from 'src/store/types';
+import { EventInfo, LowestPriceFormat } from '.';
 
 enum PassengerType {
   child = 'CHD',
@@ -9,6 +10,8 @@ enum PassengerType {
 export interface AccommodationWithId extends Accommodation {
   id: string;
   offers: OfferRecord[];
+  lowestPrice?: LowestPriceFormat;
+  eventInfo?: EventInfo;
 }
 
 export class InvalidLocationError extends Error {}
