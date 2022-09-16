@@ -5,10 +5,12 @@ import {
   Box,
   CircularProgress,
   GlobalStyles,
-  styled
+  styled,
+  Typography,
+  Stack
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, Tooltip, ZoomControl } from 'react-leaflet';
 import defaultIconUrl from 'leaflet/dist/images/marker-icon.png';
 import Logger from '../utils/logger';
 import { useAppDispatch, useAppState } from '../store';
@@ -147,7 +149,14 @@ export const MapBox: React.FC = () => {
                   size: [50, 73]
                 })}
                 position={[evt.latlon[0], evt.latlon[1]]}
-              />
+              >
+                <Tooltip direction='top' offset={[0, -37]}>
+                  <Stack>
+                    <Typography variant="subtitle2">{evt.name}</Typography>
+                    <Typography variant="subtitle2">{evt.date}</Typography>
+                  </Stack>                  
+                </Tooltip>
+              </Marker>
             )
         )}
       </>
