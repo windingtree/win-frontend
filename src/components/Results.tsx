@@ -6,6 +6,7 @@ import { useAppState, useAppDispatch } from '../store';
 import { styled } from '@mui/system';
 import { daysBetween } from '../utils/date';
 import { HEADER } from 'src/config/componentSizes';
+import { useSearchParams } from 'react-router-dom';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -35,7 +36,11 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const Results: React.FC = () => {
-  const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers();
+  // to highlight a given event marker use url params "focusedEvent"
+  const [searchParams] = useSearchParams();
+  const focusedEvent = useMemo(() => searchParams.get('focusedEvent'), [searchParams]);
+
+  const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers(undefined, focusedEvent);
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
   const numberOfDays = useMemo(
@@ -84,6 +89,7 @@ export const Results: React.FC = () => {
             isSelected={facility.id === selectedFacilityId}
             onSelect={handleFacilitySelection}
             ref={SearchCardsRefs[idx]}
+            focusedEvent={facility.eventInfo}
           />
         ))}
     </StyledContainer>
