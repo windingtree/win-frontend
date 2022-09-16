@@ -155,7 +155,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             {focusedEvent && (
               <Stack direction="row" alignItems="center" sx={{ color: 'text.secondary', marginTop: '-8px' }}>
                 <Typography variant="caption">
-                  {`approx. ${focusedEvent.distance.toFixed(2)}km walking distance, ${Math.ceil(focusedEvent.durationInMinutes)}min from ${focusedEvent.eventName} `}
+                  {`Approx.  ${Math.ceil(focusedEvent.durationInMinutes)}min walking distance, ${focusedEvent.distance.toFixed(1)}km from ${focusedEvent.eventName} `}
                 </Typography>
               </Stack>
             )}
@@ -186,7 +186,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                 </Stack>
 
                 {!(winWidth < 900 || sm) && <Typography>|</Typography>}
-                <Stack direction="row" alignItems="center" spacing={1}>
+                {!sm && <Stack direction="row" alignItems="center" spacing={1}>
                   <Typography
                     alignItems="center"
                     variant="caption"
@@ -195,7 +195,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                     {facility.lowestPrice && currencyIcon(facility.lowestPrice.currency)}
                     {Math.min(...prices).toFixed(2)} total
                   </Typography>
-                </Stack>
+                </Stack>}
               </Stack>
               {!sm && <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />}
             </Stack>
