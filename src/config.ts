@@ -3,7 +3,7 @@ import { config } from '@windingtree/win-commons';
 import blockchaineurope2022 from './images/conferences/blockchaineurope2022.png';
 import devcon6 from './images/conferences/devcon6.jpeg';
 import ethdownunder from './images/conferences/ethdownunder.png';
-import devcon6Icon from './images/event-icons/devcon6.jpg';
+import devcon6Icon from './images/event-icons/devcon_pin_50x73px.svg';
 
 export enum AppMode {
   dev = 'dev',
@@ -94,7 +94,7 @@ export const upcomingEvents: EventItemProps[] = [
     conferenceUrl: 'https://devcon.org',
     url: '/search?roomCount=1&adultCount=2&startDate=2022-10-07T00%3A00%3A00%2B02%3A00&endDate=2022-10-16T00%3A00%3A00%2B02%3A00&location=Bogota',
     date: '7-16  October',
-    latlon: [4.6288342, -74.0935167],
+    latlon: [4.6296313, -74.0934695],
     mapIcon: {
       url: devcon6Icon,
       rounded: true
