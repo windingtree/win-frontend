@@ -94,7 +94,7 @@ export const upcomingEvents: EventItemProps[] = [
     conferenceUrl: 'https://devcon.org',
     url: '/search?roomCount=1&adultCount=2&startDate=2022-10-07T00%3A00%3A00%2B02%3A00&endDate=2022-10-16T00%3A00%3A00%2B02%3A00&location=Bogota',
     date: '7-16  October',
-    latlon: [4.6493578, -74.0915278],
+    latlon: [4.6288342, -74.0935167],
     mapIcon: {
       url: devcon6Icon,
       rounded: true
