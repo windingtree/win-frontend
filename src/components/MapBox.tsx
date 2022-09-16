@@ -160,10 +160,10 @@ export const MapBox: React.FC = () => {
       // add 3 day swing
       getCurrentEvents({
         fromDate: new Date(
-          latestQueryParams.arrival.setDate(latestQueryParams.arrival.getDate() - 1)
+          new Date(latestQueryParams.arrival).setDate(latestQueryParams.arrival.getDate() - 1)
         ),
         toDate: new Date(
-          latestQueryParams.departure.setDate(latestQueryParams.departure.getDate() + 1)
+          new Date(latestQueryParams.departure).setDate(latestQueryParams.departure.getDate() + 1)
         )
       });
 
