@@ -30,7 +30,8 @@ const faq = [
   },
   {
     question: 'What is Lif token?',
-    answer: 'Lif token was minted during the ICO fund-raising that was happening in 2018. It grants rights to vote on the evolution of the platform.'
+    answer:
+      'Lif token was minted during the ICO fund-raising that was happening in 2018. It grants rights to vote on the evolution of the platform.'
   },
   {
     question: 'How decentralized is the platform?',

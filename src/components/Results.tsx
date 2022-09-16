@@ -40,7 +40,10 @@ export const Results: React.FC = () => {
   const [searchParams] = useSearchParams();
   const focusedEvent = useMemo(() => searchParams.get('focusedEvent'), [searchParams]);
 
-  const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers(undefined, focusedEvent);
+  const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers(
+    undefined,
+    focusedEvent
+  );
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
   const numberOfDays = useMemo(

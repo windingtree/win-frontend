@@ -10,11 +10,21 @@ import {
   Stack
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, Tooltip, ZoomControl } from 'react-leaflet';
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  Tooltip,
+  ZoomControl
+} from 'react-leaflet';
 import defaultIconUrl from 'leaflet/dist/images/marker-icon.png';
 import Logger from '../utils/logger';
 import { useAppDispatch, useAppState } from '../store';
-import { LowestPriceFormat, useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import {
+  LowestPriceFormat,
+  useAccommodationsAndOffers
+} from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
@@ -118,8 +128,15 @@ export const MapBox: React.FC = () => {
   const focusedEvent = useMemo(() => searchParams.get('focusedEvent'), [searchParams]);
 
   // TODO: replace this with activeAccommodations
-  const { accommodations, coordinates, isLoading, latestQueryParams, isFetching, error, focusedEventCoordinates } =
-    useAccommodationsAndOffers(undefined, focusedEvent);
+  const {
+    accommodations,
+    coordinates,
+    isLoading,
+    latestQueryParams,
+    isFetching,
+    error,
+    focusedEventCoordinates
+  } = useAccommodationsAndOffers(undefined, focusedEvent);
   const numberOfDays = useMemo(
     () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
     [latestQueryParams]
@@ -132,7 +149,11 @@ export const MapBox: React.FC = () => {
     });
   };
 
-  const currentEventsWithinRadius = useCurrentEvents({fromDate: latestQueryParams?.arrival, toDate: latestQueryParams?.departure, center: coordinates});
+  const currentEventsWithinRadius = useCurrentEvents({
+    fromDate: latestQueryParams?.arrival,
+    toDate: latestQueryParams?.departure,
+    center: coordinates
+  });
 
   // show markers of events within given radius
   const eventMarkers = useMemo(() => {
@@ -150,11 +171,11 @@ export const MapBox: React.FC = () => {
                 })}
                 position={[evt.latlon[0], evt.latlon[1]]}
               >
-                <Tooltip direction='top' offset={[0, -37]}>
+                <Tooltip direction="top" offset={[0, -37]}>
                   <Stack>
                     <Typography variant="subtitle2">{evt.name}</Typography>
                     <Typography variant="subtitle2">{evt.date}</Typography>
-                  </Stack>                  
+                  </Stack>
                 </Tooltip>
               </Marker>
             )
@@ -210,7 +231,6 @@ export const MapBox: React.FC = () => {
   const normalizedCoordinates: LatLngTuple =
     focusedCoordinates ??
     (coordinates ? [coordinates.lat, coordinates.lon] : [51.505, -0.09]);
-
 
   const displayMap = useMemo(
     () => (

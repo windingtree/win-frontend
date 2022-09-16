@@ -66,10 +66,7 @@ const currencyIcon = (currency: string) => {
 };
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
-  (
-    { sm, facility, isSelected, onSelect = emptyFunction, focusedEvent },
-    ref
-  ) => {
+  ({ sm, facility, isSelected, onSelect = emptyFunction, focusedEvent }, ref) => {
     const navigate = useNavigate();
     const theme = useTheme();
     const { winWidth } = useWindowsDimension();
@@ -153,9 +150,17 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             )}
 
             {focusedEvent && (
-              <Stack direction="row" alignItems="center" sx={{ color: 'text.secondary', marginTop: '-8px' }}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ color: 'text.secondary', marginTop: '-8px' }}
+              >
                 <Typography variant="caption">
-                  {`Approx.  ${Math.ceil(focusedEvent.durationInMinutes)}min walking distance, ${focusedEvent.distance.toFixed(1)}km from ${focusedEvent.eventName} `}
+                  {`Approx.  ${Math.ceil(
+                    focusedEvent.durationInMinutes
+                  )}min walking distance, ${focusedEvent.distance.toFixed(1)}km from ${
+                    focusedEvent.eventName
+                  } `}
                 </Typography>
               </Stack>
             )}
@@ -186,16 +191,19 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                 </Stack>
 
                 {!(winWidth < 900 || sm) && <Typography>|</Typography>}
-                {!sm && <Stack direction="row" alignItems="center" spacing={1}>
-                  <Typography
-                    alignItems="center"
-                    variant="caption"
-                    sx={{ color: 'text.secondary' }}
-                  >
-                    {facility.lowestPrice && currencyIcon(facility.lowestPrice.currency)}
-                    {Math.min(...prices).toFixed(2)} total
-                  </Typography>
-                </Stack>}
+                {!sm && (
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography
+                      alignItems="center"
+                      variant="caption"
+                      sx={{ color: 'text.secondary' }}
+                    >
+                      {facility.lowestPrice &&
+                        currencyIcon(facility.lowestPrice.currency)}
+                      {Math.min(...prices).toFixed(2)} total
+                    </Typography>
+                  </Stack>
+                )}
               </Stack>
               {!sm && <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />}
             </Stack>
