@@ -11,8 +11,8 @@ export interface CurrentEventsProps {
 }
 
 export const useCurrentEvents = ({
-  fromDate,
-  toDate,
+  fromDate = null,
+  toDate = null,
   center,
   radius = 3
 }: CurrentEventsProps) => {
@@ -22,8 +22,8 @@ export const useCurrentEvents = ({
       toDate &&
       // add 1 day swing
       getCurrentEvents({
-        fromDate: new Date(fromDate.setDate(fromDate.getDate() - 1)),
-        toDate: new Date(toDate.setDate(toDate.getDate() + 1))
+        fromDate: new Date(new Date(fromDate).setDate(fromDate.getDate() - 1)),
+        toDate: new Date(new Date(toDate).setDate(toDate.getDate() + 1))
       });
 
     const initialCenter: [number, number] = center
