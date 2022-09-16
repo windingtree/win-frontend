@@ -35,15 +35,15 @@ const getPriceMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = fa
 const getImageIcon = ({
   imageUrl,
   rounded = false,
-  size = 40
+  size = [40, 40]
 }: {
   imageUrl?: string;
   rounded?: boolean;
-  size?: number;
+  size?: [number, number];
 }) => {
   return new Icon({
     iconUrl: imageUrl ?? defaultIconUrl,
-    iconSize: imageUrl ? [size, size] : [40, 64],
+    iconSize: imageUrl ? size : [40, 64],
     className: `${rounded ? 'marker-rounded' : ''}`
   });
 };
@@ -144,7 +144,7 @@ export const MapBox: React.FC = () => {
                 icon={getImageIcon({
                   imageUrl: evt.mapIcon?.url,
                   rounded: evt.mapIcon?.rounded,
-                  size: 100
+                  size: [50, 73]
                 })}
                 position={[evt.latlon[0], evt.latlon[1]]}
               />
@@ -179,8 +179,7 @@ export const MapBox: React.FC = () => {
             color: theme.palette.common.white
           },
           '.marker-rounded': {
-            borderRadius: '50%',
-            boxShadow: `0 0 15px 0 ${theme.palette.grey[500]}`
+            //
           }
         })}
       />
@@ -197,7 +196,7 @@ export const MapBox: React.FC = () => {
       result = focusedEventCoordinates;
     }
     return result;
-  }, [accommodations, eventMarkers, focusedEvent]);
+  }, [focusedEvent]);
 
   const normalizedCoordinates: LatLngTuple =
     focusedCoordinates ??
