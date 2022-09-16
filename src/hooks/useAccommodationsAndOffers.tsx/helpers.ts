@@ -1,4 +1,4 @@
-import { Accommodation, Offer } from '@windingtree/glider-types/types/win';
+import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
 import { OfferRecord } from 'src/store/types';
 import {
   AccommodationTransformFn,
@@ -14,7 +14,7 @@ enum PassengerType {
   adult = 'ADT'
 }
 
-export interface AccommodationWithId extends Accommodation {
+export interface AccommodationWithId extends WinAccommodation {
   id: string;
   offers: OfferRecord[];
   lowestPrice?: LowestPriceFormat;
@@ -24,7 +24,7 @@ export interface AccommodationWithId extends Accommodation {
 export class InvalidLocationError extends Error {}
 
 export const getActiveAccommodations = (
-  accommodations: Accommodation[],
+  accommodations: WinAccommodation[],
   offers: Offer[]
 ) => {
   if (!accommodations || !offers) return [];
@@ -44,7 +44,7 @@ export const getActiveAccommodations = (
 };
 
 export const normalizeAccommodations = (
-  accommodations: Record<string, Accommodation> | undefined,
+  accommodations: Record<string, WinAccommodation> | undefined,
   offers: Record<string, Offer> | undefined
 ): AccommodationWithId[] => {
   if (!accommodations) return [];
@@ -52,7 +52,7 @@ export const normalizeAccommodations = (
   const normalizedAccommodations = Object.entries(
     accommodations
   ).map<AccommodationWithId>(([keyA, valueA]) => {
-    const filteredOffers: OfferRecord[] = normalizedOffers.filter((offer) =>
+    const filteredOffers = normalizedOffers.filter((offer) =>
       Object.entries(offer.pricePlansReferences)
         .map(([, valueP]) => valueP.accommodation === keyA)
         .includes(true)

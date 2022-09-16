@@ -10,7 +10,7 @@ import {
   SxProps,
   Typography
 } from '@mui/material';
-import { MediaItem } from '@windingtree/glider-types/types/win';
+import { MediaItem } from '@windingtree/glider-types/dist/win';
 import Image from '../../components/Image';
 import { emptyFunction } from '../../utils/common';
 

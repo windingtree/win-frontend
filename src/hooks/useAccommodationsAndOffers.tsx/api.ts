@@ -1,4 +1,8 @@
-import { SearchResults, Offer, Accommodation } from '@windingtree/glider-types/types/win';
+import {
+  SearchResults,
+  Offer,
+  WinAccommodation
+} from '@windingtree/glider-types/dist/win';
 import axios from 'axios';
 import { getPassengersBody, InvalidLocationError } from './helpers';
 import { SearchTypeProps } from '.';
@@ -9,7 +13,7 @@ export interface Coordinates {
 }
 
 export interface AccommodationsAndOffersResponse {
-  accommodations: Record<string, Accommodation>;
+  accommodations: Record<string, WinAccommodation>;
   offers: Record<string, Offer>;
   coordinates: Coordinates;
   latestQueryParams: SearchTypeProps;

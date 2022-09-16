@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { RewardOption } from '@windingtree/glider-types/types/win';
+import { RewardOption } from '@windingtree/glider-types/dist/win';
 import axios from 'axios';
 import { backend } from 'src/config';
 

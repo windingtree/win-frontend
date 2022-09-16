@@ -1,4 +1,4 @@
-import type { RoomTypes, PricedOffer } from '@windingtree/glider-types/types/win';
+import type { RoomTypes, WinPricedOffer } from '@windingtree/glider-types/dist/win';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store';
 import { useCallback, useState } from 'react';
@@ -38,7 +38,7 @@ export const RoomCard: React.FC<{
       setError(undefined);
       setLoading(true);
 
-      const res = await axios.request<PricedOffer>(new PricedOfferRequest(offer.id));
+      const res = await axios.request<WinPricedOffer>(new PricedOfferRequest(offer.id));
 
       if (res.data) {
         dispatch({
@@ -52,7 +52,7 @@ export const RoomCard: React.FC<{
         logger.info('Get priced offer successfully');
         navigate('/guest-info');
       } else {
-        throw new Error('Somethin went wrong!');
+        throw new Error('Something went wrong!');
       }
     } catch (error) {
       const message = (error as Error).message || 'Unknown useAuthRequest error';
