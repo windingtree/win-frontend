@@ -1,15 +1,15 @@
 import { PaymentSuccessCallback } from '../components/PaymentCard';
-import { utils } from 'ethers';
-import { Container, Box, CircularProgress, Typography, Card } from '@mui/material';
+import { BigNumber, utils } from 'ethers';
+import { Container, Box, CircularProgress, Typography, Card, Select, MenuItem } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import MainLayout from '../layouts/main';
 import { WinPay } from '../components/WinPay';
 import { SignInButton } from '../components/Web3Modal';
 import { CardMediaFallback } from '../components/CardMediaFallback';
-import { formatCost } from '../utils/strings';
+import { formatCost, formatPrice } from '../utils/strings';
 import { useAppState } from '../store';
 import { expirationGap } from '../config';
 import { sortByLargestImage } from '../utils/accommodation';
@@ -18,11 +18,87 @@ import FallbackImage from '../images/hotel-fallback.webp';
 import Logger from '../utils/logger';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
+import { CheckOut } from '../store/types';
 
 const logger = Logger('Checkout');
 
+export interface CheckoutPrice {
+  value: string;
+  currency: string;
+}
+
+export interface PriceSelectProps {
+  onChange(price: CheckoutPrice): void;
+}
+
 export const normalizeExpiration = (expirationDate: string): number =>
   Math.ceil(DateTime.fromISO(expirationDate).toSeconds()) - expirationGap;
+
+export const CurrencySelector = ({ offer, quote, onChange }: CheckOut & PriceSelectProps) => {
+  const [price, setPrice] = useState<CheckoutPrice | null>(null);
+
+  const options = useMemo<CheckoutPrice[]>(
+    () => (
+      offer
+        ? [
+          {
+            value: offer.price.public,
+            currency: offer.price.currency
+          },
+          ...(
+            quote
+              ? [
+                {
+                  value: quote.targetAmount || '',
+                  currency:  quote.targetCurrency || ''
+                }
+              ]
+              : []
+          )
+        ]
+        : []
+    ),
+    [offer, quote]
+  );
+
+  const onPriceSelect = (_, nextPrice) => {
+    setPrice(nextPrice);
+    onChange(nextPrice);
+  };
+
+  if (!offer) {
+    return null;
+  }
+
+  if (!offer.quote) {
+    return (
+      <Typography component='span'>
+        {formatPrice(
+          utils.parseEther(offer.price.public.toString()),
+          offer.price.currency
+        )}
+      </Typography>
+    );
+  }
+
+  return (
+    <Select
+      value={price}
+      onChange={onPriceSelect}
+    >
+      {options.map(
+        (p, index) => (
+          <MenuItem key={index}>
+            {formatPrice(
+              utils.parseEther(p.value),
+              p.currency
+            )}
+          </MenuItem>
+        )
+      )}
+    </Select>
+  );
+};
 
 export const Checkout = () => {
   const navigate = useNavigate();
