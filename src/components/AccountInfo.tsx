@@ -5,6 +5,7 @@ import {
   Card,
   CardHeader,
   CardContent,
+  Paper,
   Popover,
   Typography,
   Button,
@@ -31,7 +32,15 @@ export const Account = ({ account, open }: AccountProps) => {
   const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
 
   return (
-    <>
+    <Paper
+      variant="outlined"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: theme.spacing(5),
+        padding: '3px 4px 2px 4px'
+      }}
+    >
       <Box marginRight="5px">
         <AccountIcon seed={account} size={7} scale={4} />
       </Box>
@@ -47,7 +56,7 @@ export const Account = ({ account, open }: AccountProps) => {
           marginLeft={theme.spacing(1)}
         />
       )}
-    </>
+    </Paper>
   );
 };
 
