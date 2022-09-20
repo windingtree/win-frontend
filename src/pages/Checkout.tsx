@@ -1,6 +1,15 @@
 import { PaymentSuccessCallback } from '../components/PaymentCard';
-import { BigNumber, utils } from 'ethers';
-import { Container, Box, CircularProgress, Typography, Card, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { utils } from 'ethers';
+import {
+  Container,
+  Box,
+  CircularProgress,
+  Typography,
+  Card,
+  Select,
+  MenuItem,
+  SelectChangeEvent
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
@@ -9,7 +18,7 @@ import MainLayout from '../layouts/main';
 import { WinPay } from '../components/WinPay';
 import { SignInButton } from '../components/Web3Modal';
 import { CardMediaFallback } from '../components/CardMediaFallback';
-import { formatCost, formatPrice } from '../utils/strings';
+import { formatPrice } from '../utils/strings';
 import { useAppState } from '../store';
 import { expirationGap } from '../config';
 import { sortByLargestImage } from '../utils/accommodation';
@@ -34,44 +43,44 @@ export interface PriceSelectProps {
 export const normalizeExpiration = (expirationDate: string): number =>
   Math.ceil(DateTime.fromISO(expirationDate).toSeconds()) - expirationGap;
 
-export const PaymentCurrencySelector = ({ offer, quote, onChange }: CheckOut & PriceSelectProps) => {
+export const PaymentCurrencySelector = ({
+  offer,
+  quote,
+  onChange
+}: CheckOut & PriceSelectProps) => {
   const [price, setPrice] = useState<CheckoutPrice | null>(
     offer
       ? {
-        value: offer.price.public,
-        currency: offer.price.currency
-      }
+          value: offer.price.public,
+          currency: offer.price.currency
+        }
       : null
   );
 
   const options = useMemo<CheckoutPrice[]>(
-    () => (
+    () =>
       offer
         ? [
-          {
-            value: offer.price.public,
-            currency: offer.price.currency
-          },
-          ...(
-            quote
+            {
+              value: offer.price.public,
+              currency: offer.price.currency
+            },
+            ...(quote
               ? [
-                {
-                  value: quote.targetAmount || '',
-                  currency:  quote.targetCurrency || ''
-                }
-              ]
-              : []
-          )
-        ]
-        : []
-    ),
+                  {
+                    value: quote.targetAmount || '',
+                    currency: quote.targetCurrency || ''
+                  }
+                ]
+              : [])
+          ]
+        : [],
     [offer, quote]
   );
 
   const onPriceSelect = useCallback(
     (e: SelectChangeEvent) => {
-      const nextPrice = options.find(o => o.currency === e.target.value) ?? null;
-      console.log('@@@', nextPrice)
+      const nextPrice = options.find((o) => o.currency === e.target.value) ?? null;
       setPrice(nextPrice);
       onChange(nextPrice);
     },
@@ -84,7 +93,7 @@ export const PaymentCurrencySelector = ({ offer, quote, onChange }: CheckOut & P
 
   if (!offer.quote) {
     return (
-      <Typography variant="h3" component='span'>
+      <Typography variant="h3" component="span">
         {formatPrice(
           utils.parseEther(offer.price.public.toString()),
           offer.price.currency
@@ -94,25 +103,14 @@ export const PaymentCurrencySelector = ({ offer, quote, onChange }: CheckOut & P
   }
 
   return (
-    <Select
-      value={price?.currency}
-      onChange={onPriceSelect}
-    >
-      {options.map(
-        (p, index) => (
-          <MenuItem
-            key={index}
-            value={p.currency}
-          >
-            <Typography variant="h3" component="span">
-              {formatPrice(
-                utils.parseEther(p.value),
-                p.currency
-              )}
-            </Typography>
-          </MenuItem>
-        )
-      )}
+    <Select value={price?.currency} onChange={onPriceSelect}>
+      {options.map((p, index) => (
+        <MenuItem key={index} value={p.currency}>
+          <Typography variant="h3" component="span">
+            {formatPrice(utils.parseEther(p.value), p.currency)}
+          </Typography>
+        </MenuItem>
+      ))}
     </Select>
   );
 };
@@ -243,7 +241,8 @@ export const Checkout = () => {
           }}
         >
           <Typography variant="h3">
-            Your payment value is <PaymentCurrencySelector onChange={setPriceOverride} {...checkout} />
+            Your payment value is{' '}
+            <PaymentCurrencySelector onChange={setPriceOverride} {...checkout} />
           </Typography>
         </Box>
 
