@@ -1,6 +1,6 @@
 import { PaymentSuccessCallback } from '../components/PaymentCard';
 import { BigNumber, utils } from 'ethers';
-import { Container, Box, CircularProgress, Typography, Card, Select, MenuItem } from '@mui/material';
+import { Container, Box, CircularProgress, Typography, Card, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
@@ -28,14 +28,21 @@ export interface CheckoutPrice {
 }
 
 export interface PriceSelectProps {
-  onChange(price: CheckoutPrice): void;
+  onChange(price: CheckoutPrice | null): void;
 }
 
 export const normalizeExpiration = (expirationDate: string): number =>
   Math.ceil(DateTime.fromISO(expirationDate).toSeconds()) - expirationGap;
 
-export const CurrencySelector = ({ offer, quote, onChange }: CheckOut & PriceSelectProps) => {
-  const [price, setPrice] = useState<CheckoutPrice | null>(null);
+export const PaymentCurrencySelector = ({ offer, quote, onChange }: CheckOut & PriceSelectProps) => {
+  const [price, setPrice] = useState<CheckoutPrice | null>(
+    offer
+      ? {
+        value: offer.price.public,
+        currency: offer.price.currency
+      }
+      : null
+  );
 
   const options = useMemo<CheckoutPrice[]>(
     () => (
@@ -61,10 +68,15 @@ export const CurrencySelector = ({ offer, quote, onChange }: CheckOut & PriceSel
     [offer, quote]
   );
 
-  const onPriceSelect = (_, nextPrice) => {
-    setPrice(nextPrice);
-    onChange(nextPrice);
-  };
+  const onPriceSelect = useCallback(
+    (e: SelectChangeEvent) => {
+      const nextPrice = options.find(o => o.currency === e.target.value) ?? null;
+      console.log('@@@', nextPrice)
+      setPrice(nextPrice);
+      onChange(nextPrice);
+    },
+    [options]
+  );
 
   if (!offer) {
     return null;
@@ -72,7 +84,7 @@ export const CurrencySelector = ({ offer, quote, onChange }: CheckOut & PriceSel
 
   if (!offer.quote) {
     return (
-      <Typography component='span'>
+      <Typography variant="h3" component='span'>
         {formatPrice(
           utils.parseEther(offer.price.public.toString()),
           offer.price.currency
@@ -83,16 +95,21 @@ export const CurrencySelector = ({ offer, quote, onChange }: CheckOut & PriceSel
 
   return (
     <Select
-      value={price}
+      value={price?.currency}
       onChange={onPriceSelect}
     >
       {options.map(
         (p, index) => (
-          <MenuItem key={index}>
-            {formatPrice(
-              utils.parseEther(p.value),
-              p.currency
-            )}
+          <MenuItem
+            key={index}
+            value={p.currency}
+          >
+            <Typography variant="h3" component="span">
+              {formatPrice(
+                utils.parseEther(p.value),
+                p.currency
+              )}
+            </Typography>
           </MenuItem>
         )
       )}
@@ -106,6 +123,7 @@ export const Checkout = () => {
   const isDesktop = useResponsive('up', 'md');
   const { checkout, account } = useAppState();
   const { latestQueryParams } = useAccommodationsAndOffers();
+  const [priceOverride, setPriceOverride] = useState<CheckoutPrice | null>(null);
 
   const query = useMemo(() => {
     if (latestQueryParams === undefined) {
@@ -124,14 +142,17 @@ export const Checkout = () => {
   const payment = useMemo(
     () =>
       checkout && {
-        currency: checkout.offer.price.currency,
-        value: utils.parseEther(checkout.offer.price.public.toString()),
+        currency: priceOverride ? priceOverride.currency : checkout.offer.price.currency,
+        value: utils.parseEther(
+          priceOverride ? priceOverride.value : checkout.offer.price.public.toString()
+        ),
         expiration: normalizeExpiration(checkout.offer.expiration),
         providerId: String(checkout.provider),
         serviceId: String(checkout.serviceId)
       },
     [checkout]
   );
+
   const hotelImage = useMemo(
     () => checkout && sortByLargestImage(checkout.accommodation.media)[0],
     [checkout]
@@ -222,7 +243,7 @@ export const Checkout = () => {
           }}
         >
           <Typography variant="h3">
-            Your payment value is {formatCost(payment)}
+            Your payment value is <PaymentCurrencySelector onChange={setPriceOverride} {...checkout} />
           </Typography>
         </Box>
 
