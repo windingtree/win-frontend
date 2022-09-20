@@ -78,7 +78,9 @@ export const useAccommodationsAndOffers = (
     return filteredAccommodations?.map((accommodation) => {
       const lowestPrice: LowestPriceFormat = accommodation.offers
         .map((offer) => ({
-          price: Number(offer.price.public) / numberOfDays,
+          price:
+            Number(offer.price.public) /
+            (numberOfDays * (latestQueryParams?.roomCount ?? 1)),
           currency: offer.price.currency
         }))
         .reduce((prevLowest, currentVal) =>
