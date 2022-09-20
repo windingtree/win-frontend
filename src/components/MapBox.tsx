@@ -22,6 +22,7 @@ import defaultIconUrl from 'leaflet/dist/images/marker-icon.png';
 import Logger from '../utils/logger';
 import { useAppDispatch, useAppState } from '../store';
 import {
+  EventInfo,
   LowestPriceFormat,
   useAccommodationsAndOffers
 } from 'src/hooks/useAccommodationsAndOffers.tsx';
@@ -29,8 +30,12 @@ import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
 import { currencySymbolMap } from '../utils/currencies';
-import { useCurrentEvents } from '../hooks/useCurrentEvents';
-import { InvalidLocationError } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
+import {
+  accommodationEventTransform,
+  AccommodationWithId,
+  InvalidLocationError
+} from '../hooks/useAccommodationsAndOffers.tsx/helpers';
+import { getCurrentEventsWithinRadius } from '../utils/events';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -59,6 +64,10 @@ const getImageIcon = ({
     className: `${rounded ? 'marker-rounded' : ''}`
   });
 };
+
+export interface AccommodationWithEventinfo extends AccommodationWithId {
+  eventInfo: EventInfo;
+}
 
 const MapSettings: React.FC<{
   center: LatLngTuple;
@@ -125,18 +134,18 @@ export const MapBox: React.FC = () => {
 
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();
-  const focusedEvent = useMemo(() => searchParams.get('focusedEvent'), [searchParams]);
+  const focusedEvent = useMemo(
+    () => searchParams.get('focusedEvent') ?? '',
+    [searchParams]
+  );
 
   // TODO: replace this with activeAccommodations
-  const {
-    accommodations,
-    coordinates,
-    isLoading,
-    latestQueryParams,
-    isFetching,
-    error,
-    focusedEventCoordinates
-  } = useAccommodationsAndOffers(undefined, focusedEvent);
+  // apply a callback function to transform returned accomodation objects
+  const { accommodations, coordinates, isLoading, latestQueryParams, isFetching, error } =
+    useAccommodationsAndOffers(
+      undefined,
+      useCallback(accommodationEventTransform(focusedEvent), [focusedEvent])
+    );
   const numberOfDays = useMemo(
     () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
     [latestQueryParams]
@@ -149,11 +158,19 @@ export const MapBox: React.FC = () => {
     });
   };
 
-  const currentEventsWithinRadius = useCurrentEvents({
-    fromDate: latestQueryParams?.arrival,
-    toDate: latestQueryParams?.departure,
-    center: coordinates
-  });
+  const currentEvents = useMemo(
+    () =>
+      getCurrentEventsWithinRadius({
+        fromDate: latestQueryParams?.arrival,
+        toDate: latestQueryParams?.departure,
+        center: coordinates,
+        focusedEvent
+      }),
+    [coordinates, latestQueryParams]
+  );
+
+  const { currentEventsWithinRadius = null, focusedEventItem = null } =
+    currentEvents ?? {};
 
   // show markers of events within given radius
   const eventMarkers = useMemo(() => {
@@ -222,11 +239,11 @@ export const MapBox: React.FC = () => {
     let result;
 
     // if search url contains a focusedEvent we should center map to it
-    if (focusedEvent && focusedEventCoordinates) {
-      result = focusedEventCoordinates;
+    if (focusedEventItem) {
+      result = focusedEventItem.latlon;
     }
     return result;
-  }, [focusedEvent]);
+  }, [focusedEventItem]);
 
   const normalizedCoordinates: LatLngTuple =
     focusedCoordinates ??

@@ -7,6 +7,7 @@ import { styled } from '@mui/system';
 import { daysBetween } from '../utils/date';
 import { HEADER } from 'src/config/componentSizes';
 import { useSearchParams } from 'react-router-dom';
+import { accommodationEventTransform } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -38,11 +39,15 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 export const Results: React.FC = () => {
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();
-  const focusedEvent = useMemo(() => searchParams.get('focusedEvent'), [searchParams]);
+  const focusedEvent = useMemo(
+    () => searchParams.get('focusedEvent') ?? '',
+    [searchParams]
+  );
 
+  // apply a callback function to transform returned accommodation objects
   const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers(
     undefined,
-    focusedEvent
+    useCallback(accommodationEventTransform(focusedEvent), [focusedEvent])
   );
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
