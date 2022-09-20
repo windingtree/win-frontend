@@ -5,10 +5,10 @@ import { Stack, Typography, Card, useTheme } from '@mui/material';
 import Iconify from './Iconify';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
-import { assetsCurrencies } from '@windingtree/win-commons/dist/types';
 import { ImageCarousel } from './ImageCarousel';
 import { buildAccommodationAddress } from '../utils/accommodation';
 import { EventInfo } from '../hooks/useAccommodationsAndOffers.tsx';
+import { currencySymbolMap } from '../utils/currencies';
 
 export interface SearchCardProps {
   facility: AccommodationWithId;
@@ -18,50 +18,6 @@ export interface SearchCardProps {
   focusedEvent?: EventInfo;
   onSelect?: (...args) => void;
 }
-
-const currencyIcon = (currency: string) => {
-  if (!assetsCurrencies.includes(currency)) {
-    return '';
-  }
-  switch (currency) {
-    case 'EUR':
-      return <Iconify mb={-0.5} icon={'mdi-light:currency-eur'} width={16} height={16} />;
-    case 'USD':
-      return <Iconify mb={-0.5} icon={'mdi-light:currency-usd'} width={16} height={16} />;
-    case 'JPY':
-      return <Iconify mb={-0.5} icon={'mdi-light:currency-jpy'} width={16} height={16} />;
-    case 'PLN':
-      return 'PLN';
-    case 'CHF':
-      return 'CHF';
-    case 'GBP':
-      return <Iconify mb={-0.5} icon={'mdi-light:currency-gbp'} width={16} height={16} />;
-    case 'AUD':
-      return (
-        <Iconify
-          mb={-0.5}
-          icon={'tabler:currency-dollar-australian'}
-          width={16}
-          height={16}
-        />
-      );
-    case 'CAD':
-      return (
-        <Iconify
-          mb={-0.5}
-          icon={'tabler:currency-dollar-canadian'}
-          width={16}
-          height={16}
-        />
-      );
-    case 'SEK':
-      return 'SEK';
-    case 'SDG':
-      return 'SDG';
-    default:
-      return '';
-  }
-};
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
   ({ sm, facility, isSelected, onSelect = emptyFunction, focusedEvent }, ref) => {
@@ -183,7 +139,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                     From
                   </Typography>
                   <Typography variant="subtitle2">
-                    {facility.lowestPrice && currencyIcon(facility.lowestPrice.currency)}
+                    {facility.lowestPrice && currencySymbolMap[facility.lowestPrice.currency]}
                     {facility.lowestPrice && facility.lowestPrice.price.toFixed(2)}/night
                   </Typography>
                 </Stack>
@@ -197,7 +153,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                       sx={{ color: 'text.secondary' }}
                     >
                       {facility.lowestPrice &&
-                        currencyIcon(facility.lowestPrice.currency)}
+                         currencySymbolMap[facility.lowestPrice.currency]}
                       {Math.min(...prices).toFixed(2)} total
                     </Typography>
                   </Stack>
