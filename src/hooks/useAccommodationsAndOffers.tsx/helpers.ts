@@ -163,3 +163,5 @@ export const accommodationEventTransform =
 
     return { ...accommodation, eventInfo };
   };
+
+export const getGroupMode = (roomCount: number) => roomCount > 9;
