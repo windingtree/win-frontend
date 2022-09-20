@@ -5,29 +5,40 @@ import {
   Box,
   CircularProgress,
   GlobalStyles,
-  styled
+  styled,
+  Typography,
+  Stack
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  Tooltip,
+  ZoomControl
+} from 'react-leaflet';
 import defaultIconUrl from 'leaflet/dist/images/marker-icon.png';
 import Logger from '../utils/logger';
 import { useAppDispatch, useAppState } from '../store';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import {
+  EventInfo,
+  LowestPriceFormat,
+  useAccommodationsAndOffers
+} from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
 import { currencySymbolMap } from '../utils/currencies';
-import { InvalidLocationError } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
-import { getCurrentEvents, getEventsWithinRadius } from '../utils/events';
+import {
+  accommodationEventTransform,
+  AccommodationWithId,
+  InvalidLocationError
+} from '../hooks/useAccommodationsAndOffers.tsx/helpers';
+import { getActiveEventsWithinRadius } from '../utils/events';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
-
-interface LowestPriceFormat {
-  price: number;
-  currency: string;
-  decimals?: number;
-}
 
 const getPriceMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = false) => {
   const currencySymbol = currencySymbolMap[currency];
@@ -41,18 +52,22 @@ const getPriceMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = fa
 const getImageIcon = ({
   imageUrl,
   rounded = false,
-  size = 40
+  size = [40, 40]
 }: {
   imageUrl?: string;
   rounded?: boolean;
-  size?: number;
+  size?: [number, number];
 }) => {
   return new Icon({
     iconUrl: imageUrl ?? defaultIconUrl,
-    iconSize: imageUrl ? [size, size] : [40, 64],
+    iconSize: imageUrl ? size : [40, 64],
     className: `${rounded ? 'marker-rounded' : ''}`
   });
 };
+
+export interface AccommodationWithEventinfo extends AccommodationWithId {
+  eventInfo: EventInfo;
+}
 
 const MapSettings: React.FC<{
   center: LatLngTuple;
@@ -119,31 +134,22 @@ export const MapBox: React.FC = () => {
 
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();
-  const focusedEvent = useMemo(() => searchParams.get('focusedEvent'), [searchParams]);
+  const focusedEvent = useMemo(
+    () => searchParams.get('focusedEvent') ?? '',
+    [searchParams]
+  );
 
-  // TODO: replace this with activeAccommodations
+  // apply a callback function to transform returned accomodation objects
+  const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
+    focusedEvent
+  ]);
   const { accommodations, coordinates, isLoading, latestQueryParams, isFetching, error } =
-    useAccommodationsAndOffers();
+    useAccommodationsAndOffers({
+      accommodationTransformFn: transformFn
+    });
   const numberOfDays = useMemo(
     () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
     [latestQueryParams]
-  );
-
-  const accommodationsWithLowestPrice = useMemo(
-    () =>
-      accommodations?.length &&
-      accommodations.map((accommodation) => {
-        const lowestPrice = accommodation.offers
-          .map((offer) => ({
-            price: Number(offer.price.public) / numberOfDays,
-            currency: offer.price.currency
-          }))
-          .reduce((prevLowest, currentVal) =>
-            prevLowest.price < currentVal.price ? prevLowest : currentVal
-          );
-        return { ...accommodation, lowestPrice };
-      }),
-    [accommodations]
   );
 
   const selectFacility = (facilityId: string) => {
@@ -153,27 +159,22 @@ export const MapBox: React.FC = () => {
     });
   };
 
+  const currentEvents = useMemo(
+    () =>
+      getActiveEventsWithinRadius({
+        fromDate: latestQueryParams?.arrival,
+        toDate: latestQueryParams?.departure,
+        center: coordinates,
+        focusedEvent
+      }),
+    [coordinates, latestQueryParams]
+  );
+
+  const { currentEventsWithinRadius = null, focusedEventItem = null } =
+    currentEvents ?? {};
+
+  // show markers of events within given radius
   const eventMarkers = useMemo(() => {
-    const currentEvents =
-      latestQueryParams?.arrival &&
-      latestQueryParams?.departure &&
-      // add 3 day swing
-      getCurrentEvents({
-        fromDate: new Date(
-          new Date(latestQueryParams.arrival).setDate(latestQueryParams.arrival.getDate() - 1)
-        ),
-        toDate: new Date(
-          new Date(latestQueryParams.departure).setDate(latestQueryParams.departure.getDate() + 1)
-        )
-      });
-
-    const maxRadius = 3; // TO-DO: convert to miles if needed
-    const initialCenter: [number, number] = coordinates
-      ? [coordinates.lat, coordinates.lon]
-      : [51.505, -0.09];
-    const currentEventsWithinRadius =
-      currentEvents && getEventsWithinRadius(currentEvents, initialCenter, maxRadius);
-
     const markers = currentEventsWithinRadius?.length ? (
       <>
         {currentEventsWithinRadius.map(
@@ -184,16 +185,23 @@ export const MapBox: React.FC = () => {
                 icon={getImageIcon({
                   imageUrl: evt.mapIcon?.url,
                   rounded: evt.mapIcon?.rounded,
-                  size: 100
+                  size: [50, 73]
                 })}
                 position={[evt.latlon[0], evt.latlon[1]]}
-              />
+              >
+                <Tooltip direction="top" offset={[0, -37]}>
+                  <Stack>
+                    <Typography variant="subtitle2">{evt.name}</Typography>
+                    <Typography variant="subtitle2">{evt.date}</Typography>
+                  </Stack>
+                </Tooltip>
+              </Marker>
             )
         )}
       </>
     ) : null;
 
-    return { markers, events: currentEventsWithinRadius };
+    return markers;
   }, [latestQueryParams]);
 
   const mapMarkerStyles = useMemo(
@@ -219,8 +227,7 @@ export const MapBox: React.FC = () => {
             color: theme.palette.common.white
           },
           '.marker-rounded': {
-            borderRadius: '50%',
-            boxShadow: `0 0 15px 0 ${theme.palette.grey[500]}`
+            //
           }
         })}
       />
@@ -231,15 +238,13 @@ export const MapBox: React.FC = () => {
   // determine from search url if there is a relevant area to focus
   const focusedCoordinates: LatLngTuple | undefined = useMemo(() => {
     let result;
+
     // if search url contains a focusedEvent we should center map to it
-    if (focusedEvent) {
-      const targetEvent = eventMarkers?.events?.find((evt) => evt.name === focusedEvent);
-      if (targetEvent?.latlon) {
-        result = [targetEvent.latlon[0], targetEvent.latlon[1]];
-      }
+    if (focusedEventItem) {
+      result = focusedEventItem.latlon;
     }
     return result;
-  }, [accommodations, eventMarkers]);
+  }, [focusedEventItem]);
 
   const normalizedCoordinates: LatLngTuple =
     focusedCoordinates ??
@@ -269,9 +274,9 @@ export const MapBox: React.FC = () => {
         />
         <ZoomControl position="topright" />
         {mapMarkerStyles}
-        {eventMarkers.markers}
-        {accommodationsWithLowestPrice && accommodationsWithLowestPrice.length > 0
-          ? accommodationsWithLowestPrice.map((f) => {
+        {eventMarkers}
+        {accommodations && accommodations.length > 0
+          ? accommodations.map((f) => {
               if (f.location && f.location.coordinates) {
                 return (
                   <Marker
@@ -289,6 +294,7 @@ export const MapBox: React.FC = () => {
                         facility={f}
                         isSelected={f.id === selectedFacilityId}
                         numberOfDays={numberOfDays}
+                        focusedEvent={f.eventInfo}
                       />
                     </Popup>
                   </Marker>

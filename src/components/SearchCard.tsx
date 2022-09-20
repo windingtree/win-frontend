@@ -8,16 +8,16 @@ import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { assetsCurrencies } from '@windingtree/win-commons/dist/types';
 import { ImageCarousel } from './ImageCarousel';
 import { buildAccommodationAddress } from '../utils/accommodation';
+import { EventInfo } from '../hooks/useAccommodationsAndOffers.tsx';
 
 export interface SearchCardProps {
   facility: AccommodationWithId;
   isSelected?: boolean;
   numberOfDays: number;
   sm?: boolean;
+  focusedEvent?: EventInfo;
   onSelect?: (...args) => void;
 }
-const pricePerNight = (prices: number[], numberOfDays: number) =>
-  (Math.min(...prices) / numberOfDays).toFixed(2);
 
 const currencyIcon = (currency: string) => {
   if (!assetsCurrencies.includes(currency)) {
@@ -64,7 +64,7 @@ const currencyIcon = (currency: string) => {
 };
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
-  ({ sm, facility, isSelected, numberOfDays, onSelect = emptyFunction }, ref) => {
+  ({ sm, facility, isSelected, onSelect = emptyFunction, focusedEvent }, ref) => {
     const navigate = useNavigate();
     const theme = useTheme();
     const { winWidth } = useWindowsDimension();
@@ -90,7 +90,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
       ? {
           minWidth: '380px',
           marginBottom: '0px',
-          height: '128px'
+          minHeight: '128px'
         }
       : {
           marginBottom: '8px'
@@ -147,6 +147,22 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               </Stack>
             )}
 
+            {focusedEvent && (
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ color: 'text.secondary', marginTop: '-8px' }}
+              >
+                <Typography variant="caption">
+                  {`Approx.  ${Math.ceil(
+                    focusedEvent.durationInMinutes
+                  )}min walking distance, ${focusedEvent.distance.toFixed(1)}km from ${
+                    focusedEvent.eventName
+                  } `}
+                </Typography>
+              </Stack>
+            )}
+
             <Stack
               direction={winWidth < 900 || sm ? 'row-reverse' : 'row'}
               alignItems="end"
@@ -167,22 +183,25 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                     From
                   </Typography>
                   <Typography variant="subtitle2">
-                    {currencyIcon(facility.offers[0]?.price?.currency)}
-                    {pricePerNight(prices, numberOfDays)}/night
+                    {facility.lowestPrice && currencyIcon(facility.lowestPrice.currency)}
+                    {facility.lowestPrice && facility.lowestPrice.price.toFixed(2)}/night
                   </Typography>
                 </Stack>
 
                 {!(winWidth < 900 || sm) && <Typography>|</Typography>}
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <Typography
-                    alignItems="center"
-                    variant="caption"
-                    sx={{ color: 'text.secondary' }}
-                  >
-                    {currencyIcon(facility.offers[0]?.price?.currency)}
-                    {Math.min(...prices).toFixed(2)} total
-                  </Typography>
-                </Stack>
+                {!sm && (
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography
+                      alignItems="center"
+                      variant="caption"
+                      sx={{ color: 'text.secondary' }}
+                    >
+                      {facility.lowestPrice &&
+                        currencyIcon(facility.lowestPrice.currency)}
+                      {Math.min(...prices).toFixed(2)} total
+                    </Typography>
+                  </Stack>
+                )}
               </Stack>
               {!sm && <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />}
             </Stack>

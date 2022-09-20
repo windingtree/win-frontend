@@ -1,5 +1,13 @@
 import { Accommodation, Offer } from '@windingtree/glider-types/types/win';
 import { OfferRecord } from 'src/store/types';
+import {
+  AccommodationTransformFn,
+  EventInfo,
+  LowestPriceFormat,
+  SearchTypeProps
+} from '.';
+import { getActiveEventsWithinRadius } from '../../utils/events';
+import { crowDistance } from '../../utils/geo';
 
 enum PassengerType {
   child = 'CHD',
@@ -9,6 +17,8 @@ enum PassengerType {
 export interface AccommodationWithId extends Accommodation {
   id: string;
   offers: OfferRecord[];
+  lowestPrice?: LowestPriceFormat;
+  eventInfo?: EventInfo;
 }
 
 export class InvalidLocationError extends Error {}
@@ -115,3 +125,41 @@ export const getAccommodationById = (
 
   return selectedAccommodation;
 };
+
+// function to tranform accommodation object to include distance/time from chosen event
+export const accommodationEventTransform =
+  (focusedEvent: string): AccommodationTransformFn =>
+  (accommodation: AccommodationWithId, searchProps: SearchTypeProps) => {
+    if (!focusedEvent) return accommodation;
+    if (!searchProps) return accommodation;
+
+    const { arrival, departure } = searchProps;
+
+    const currentEvents = getActiveEventsWithinRadius({
+      fromDate: arrival,
+      toDate: departure,
+      focusedEvent
+    });
+
+    const { focusedEventItem = null } = currentEvents ?? {};
+
+    const focusedEventCoordinates = focusedEventItem?.latlon && [
+      focusedEventItem.latlon[0],
+      focusedEventItem.latlon[1]
+    ];
+
+    let eventInfo: EventInfo | undefined;
+    if (focusedEventCoordinates) {
+      const distance = crowDistance(
+        accommodation.location.coordinates[1],
+        accommodation.location.coordinates[0],
+        focusedEventCoordinates[0],
+        focusedEventCoordinates[1]
+      );
+
+      const durationInMinutes = (distance / 5) * 60; // we are assuming 5km/hr walking distance in minutes
+      eventInfo = { distance, eventName: focusedEvent, durationInMinutes };
+    }
+
+    return { ...accommodation, eventInfo };
+  };

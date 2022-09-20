@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon';
 import { EventItemProps, upcomingEvents } from '../config';
+import { Coordinates } from '../hooks/useAccommodationsAndOffers.tsx/api';
+import { NullableDate } from './date';
 import { crowDistance } from './geo';
 
 export interface EventSearchParams {
@@ -18,7 +20,7 @@ export const datesOverlap = (
   );
 };
 
-export const getCurrentEvents = (dateRange: EventSearchParams) => {
+export const getActiveEvents = (dateRange: EventSearchParams) => {
   return upcomingEvents.filter((evt) => {
     try {
       const eventFromDate = DateTime.fromFormat(
@@ -57,4 +59,42 @@ export const getEventsWithinRadius = (
       ) <= maxRadius
     );
   });
+};
+
+export interface CurrentEventsProps {
+  fromDate?: NullableDate;
+  toDate?: NullableDate;
+  center?: Coordinates | null;
+  radius?: number;
+  focusedEvent?: string | null;
+}
+
+// get active events within a radius with optional focused event
+export const getActiveEventsWithinRadius = ({
+  fromDate = null,
+  toDate = null,
+  center = null,
+  radius = 3,
+  focusedEvent
+}: CurrentEventsProps) => {
+  const currentEvents =
+    fromDate &&
+    toDate &&
+    // add 1 day swing
+    getActiveEvents({
+      fromDate: new Date(new Date(fromDate).setDate(fromDate.getDate() - 1)),
+      toDate: new Date(new Date(toDate).setDate(toDate.getDate() + 1))
+    });
+
+  if (!currentEvents) return null;
+
+  const focusedEventItem = currentEvents?.find((evt) => evt.name === focusedEvent);
+
+  const initialCenter: [number, number] =
+    focusedEventItem?.latlon ?? (center ? [center.lat, center.lon] : [51.505, -0.09]);
+
+  const currentEventsWithinRadius =
+    currentEvents && getEventsWithinRadius(currentEvents, initialCenter, radius);
+
+  return { currentEventsWithinRadius, focusedEventItem };
 };
