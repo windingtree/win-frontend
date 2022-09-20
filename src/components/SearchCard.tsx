@@ -18,8 +18,6 @@ export interface SearchCardProps {
   focusedEvent?: EventInfo;
   onSelect?: (...args) => void;
 }
-/* const pricePerNight = (prices: number[], numberOfDays: number) =>
-  (Math.min(...prices) / numberOfDays).toFixed(2); */
 
 const currencyIcon = (currency: string) => {
   if (!assetsCurrencies.includes(currency)) {
