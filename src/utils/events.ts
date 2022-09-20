@@ -20,7 +20,7 @@ export const datesOverlap = (
   );
 };
 
-export const getCurrentEvents = (dateRange: EventSearchParams) => {
+export const getActiveEvents = (dateRange: EventSearchParams) => {
   return upcomingEvents.filter((evt) => {
     try {
       const eventFromDate = DateTime.fromFormat(
@@ -70,7 +70,7 @@ export interface CurrentEventsProps {
 }
 
 // get active events within a radius with optional focused event
-export const getCurrentEventsWithinRadius = ({
+export const getActiveEventsWithinRadius = ({
   fromDate = null,
   toDate = null,
   center = null,
@@ -81,7 +81,7 @@ export const getCurrentEventsWithinRadius = ({
     fromDate &&
     toDate &&
     // add 1 day swing
-    getCurrentEvents({
+    getActiveEvents({
       fromDate: new Date(new Date(fromDate).setDate(fromDate.getDate() - 1)),
       toDate: new Date(new Date(toDate).setDate(toDate.getDate() + 1))
     });

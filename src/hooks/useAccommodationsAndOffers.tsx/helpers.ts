@@ -6,7 +6,7 @@ import {
   LowestPriceFormat,
   SearchTypeProps
 } from '.';
-import { getCurrentEventsWithinRadius } from '../../utils/events';
+import { getActiveEventsWithinRadius } from '../../utils/events';
 import { crowDistance } from '../../utils/geo';
 
 enum PassengerType {
@@ -135,7 +135,7 @@ export const accommodationEventTransform =
 
     const { arrival, departure } = searchProps;
 
-    const currentEvents = getCurrentEventsWithinRadius({
+    const currentEvents = getActiveEventsWithinRadius({
       fromDate: arrival,
       toDate: departure,
       focusedEvent

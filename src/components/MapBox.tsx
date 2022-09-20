@@ -35,7 +35,7 @@ import {
   AccommodationWithId,
   InvalidLocationError
 } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
-import { getCurrentEventsWithinRadius } from '../utils/events';
+import { getActiveEventsWithinRadius } from '../utils/events';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -161,7 +161,7 @@ export const MapBox: React.FC = () => {
 
   const currentEvents = useMemo(
     () =>
-      getCurrentEventsWithinRadius({
+      getActiveEventsWithinRadius({
         fromDate: latestQueryParams?.arrival,
         toDate: latestQueryParams?.departure,
         center: coordinates,

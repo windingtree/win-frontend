@@ -68,8 +68,11 @@ export const useAccommodationsAndOffers = ({
     [data]
   );
 
-  // This includes accommodations with active offers.
+  // Get accomodations with active offer along with the offer with lowest price/room/night
+  // and an optional "accommodation" object transformation via
+  // a transformation callback function
   const accommodations = useMemo(() => {
+    // This includes accommodations with active offers.
     const filteredAccommodations = allAccommodations.filter((a) => a.offers.length > 0);
 
     const numberOfDays = daysBetween(
