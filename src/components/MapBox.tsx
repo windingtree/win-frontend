@@ -139,13 +139,14 @@ export const MapBox: React.FC = () => {
     [searchParams]
   );
 
-  // TODO: replace this with activeAccommodations
   // apply a callback function to transform returned accomodation objects
+  const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
+    focusedEvent
+  ]);
   const { accommodations, coordinates, isLoading, latestQueryParams, isFetching, error } =
-    useAccommodationsAndOffers(
-      undefined,
-      useCallback(accommodationEventTransform(focusedEvent), [focusedEvent])
-    );
+    useAccommodationsAndOffers({
+      accommodationTransformFn: transformFn
+    });
   const numberOfDays = useMemo(
     () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
     [latestQueryParams]

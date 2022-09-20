@@ -37,17 +37,20 @@ export type AccommodationTransformFn = (
   searchProps?: SearchTypeProps | void
 ) => AccommodationWithId;
 
-export const useAccommodationsAndOffers = (
-  props: SearchTypeProps | void,
-  accommodationTransformFn?: AccommodationTransformFn
-) => {
+export const useAccommodationsAndOffers = ({
+  searchProps,
+  accommodationTransformFn
+}: {
+  searchProps?: SearchTypeProps | void;
+  accommodationTransformFn?: AccommodationTransformFn;
+} = {}) => {
   const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery(
     ['search-accommodations'],
     async () => {
-      if (!props) {
+      if (!searchProps) {
         return;
       }
-      return await fetchAccommodationsAndOffers(props);
+      return await fetchAccommodationsAndOffers(searchProps);
     },
     {
       enabled: false,

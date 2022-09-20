@@ -45,10 +45,13 @@ export const Results: React.FC = () => {
   );
 
   // apply a callback function to transform returned accommodation objects
-  const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers(
-    undefined,
-    useCallback(accommodationEventTransform(focusedEvent), [focusedEvent])
-  );
+  const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
+    focusedEvent
+  ]);
+  const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers({
+    accommodationTransformFn: transformFn
+  });
+  
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
   const numberOfDays = useMemo(

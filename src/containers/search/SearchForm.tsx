@@ -115,17 +115,21 @@ export const SearchForm: React.FC = () => {
   const { roomCount, adultCount, dateRange, location } = values;
   const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
   const endDate = dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate);
+
+  const searchProps = {
+    arrival: startDate,
+    departure: endDate,
+    adultCount: Number(adultCount),
+    location,
+    roomCount: Number(roomCount)
+  }
+
   /**
    * Logic in relation to executing the query
    */
+
   const { refetch, isFetching, error, isFetched, accommodations, latestQueryParams } =
-    useAccommodationsAndOffers({
-      arrival: startDate,
-      departure: endDate,
-      adultCount: Number(adultCount),
-      location,
-      roomCount: Number(roomCount)
-    });
+    useAccommodationsAndOffers({searchProps});
 
   const onSubmit = useCallback(() => {
     //TODO: update search params when submitting the form
