@@ -108,8 +108,9 @@ export const Checkout = () => {
   }
 
   return (
-    <MainLayout>
+    <MainLayout maxWidth="lg">
       <Breadcrumbs
+        sx={{ mb: 5 }}
         links={[
           {
             name: 'Home',
@@ -129,62 +130,55 @@ export const Checkout = () => {
           }
         ]}
       />
-      <Container
+
+      {!account && (
+        <Typography variant="h3" mb={3}>
+          Please connect your wallet to proceed with the Payment
+        </Typography>
+      )}
+      <Box
         sx={{
+          marginBottom: isDesktop ? 5 : 3,
+          textAlign: isDesktop ? 'left' : 'center'
+        }}
+      >
+        <Typography variant="h3">Your payment value is {formatCost(payment)}</Typography>
+      </Box>
+
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: isDesktop ? 'row' : 'column',
+          alignItems: 'center',
           marginBottom: theme.spacing(5)
         }}
       >
-        {!account && (
-          <Typography variant="h3" mb={3}>
-            Please connect your wallet to proceed with the Payment
-          </Typography>
-        )}
         <Box
           sx={{
-            marginBottom: isDesktop ? 5 : 3,
-            textAlign: isDesktop ? 'left' : 'center'
+            marginRight: isDesktop ? theme.spacing(5) : 0,
+            marginBottom: isDesktop ? 0 : theme.spacing(3)
           }}
         >
-          <Typography variant="h3">
-            Your payment value is {formatCost(payment)}
+          <Card>
+            <CardMediaFallback
+              component="img"
+              height="200"
+              src={hotelImage?.url}
+              fallback={FallbackImage}
+              alt={checkout.accommodation.name}
+            />
+          </Card>
+        </Box>
+        <Box>
+          <Typography>
+            You are paying for stay in {checkout.accommodation.name}
           </Typography>
         </Box>
+      </Box>
 
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: isDesktop ? 'row' : 'column',
-            alignItems: 'center',
-            marginBottom: theme.spacing(5)
-          }}
-        >
-          <Box
-            sx={{
-              marginRight: isDesktop ? theme.spacing(5) : 0,
-              marginBottom: isDesktop ? 0 : theme.spacing(3)
-            }}
-          >
-            <Card>
-              <CardMediaFallback
-                component="img"
-                height="200"
-                src={hotelImage?.url}
-                fallback={FallbackImage}
-                alt={checkout.accommodation.name}
-              />
-            </Card>
-          </Box>
-          <Box>
-            <Typography>
-              You are paying for stay in {checkout.accommodation.name}
-            </Typography>
-          </Box>
-        </Box>
+      {!account && <SignInButton size="large" sx={{ padding: 5 }} />}
 
-        {!account && <SignInButton size="large" sx={{ padding: 5 }} />}
-
-        <WinPay payment={payment} onSuccess={onPaymentSuccess} />
-      </Container>
+      <WinPay payment={payment} onSuccess={onPaymentSuccess} />
     </MainLayout>
   );
 };

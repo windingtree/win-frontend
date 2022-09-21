@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { RoomCard } from 'src/components/RoomCard';
+import { RoomCard } from 'src/containers/facility/RoomCard/RoomCard';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { styled, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { forwardRef } from 'react';
 import { daysBetween } from '../../utils/date';
 import { DateTime } from 'luxon';
+import { FacilityGroupOffers } from './FacilityGroupOffers';
 
 interface SearchCriteriaAndResult {
   rooms?: number;
@@ -31,8 +32,8 @@ const FacilityOffersTitle = ({
     startDate && DateTime.fromJSDate(new Date(startDate)).toFormat('ccc, LLL d, yyyy');
 
   return (
-    <Box marginBottom={theme.spacing(5)}>
-      <Typography marginBottom={theme.spacing(1.5)} variant={'h3'}>
+    <Box mb={theme.spacing(5)}>
+      <Typography mb={theme.spacing(1.5)} variant={'h3'}>
         Available Rooms
       </Typography>
       <SubHeader>
@@ -52,7 +53,12 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
   const guests =
     (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
   const nights = daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure);
+  const roomCount = latestQueryParams?.roomCount;
+  //TODO: determine whether it is a group booking
+  // const showGroupBooking = roomCount && roomCount > 9;
+  const showGroupBooking = true;
 
+  //TODO: put this in useAccommodationsAndOffers hook
   const sortedOffers =
     accommodation &&
     [...accommodation.offers].sort((prevOffer, nextOffer) => {
@@ -62,29 +68,38 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <FacilityOffersContainer ref={ref}>
       <FacilityOffersTitle
-        rooms={latestQueryParams?.roomCount}
+        rooms={roomCount}
         guests={guests}
         startDate={latestQueryParams?.arrival?.toUTCString()}
         nights={nights}
         roomsAvailable={accommodation?.offers?.length ?? 0}
       />
-      {sortedOffers?.map((offer, index) => {
-        //TODO: revise whether we maybe want to restructure the data in such a way that is more intuitive
-        // pricePlanReferences has a key that refers to the accommodationId, which can be confusing.
-        const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
-        const roomId: string = accommodationOfOffer?.roomType || '';
-        const rooms = accommodation?.roomTypes || {};
-        const matchedRoomWithOffer = rooms[roomId];
 
-        return (
-          <RoomCard
-            key={index}
-            facilityId={id}
-            offer={offer}
-            room={matchedRoomWithOffer}
-          />
-        );
-      })}
+      {showGroupBooking && (
+        <FacilityGroupOffers
+          offers={sortedOffers}
+          accommodation={accommodation}
+          facilityId={id}
+        />
+      )}
+      {!showGroupBooking &&
+        sortedOffers?.map((offer, index) => {
+          //TODO: revise whether we maybe want to restructure the data in such a way that is more intuitive
+          // pricePlanReferences has a key that refers to the accommodationId, which can be confusing.
+          const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
+          const roomId: string = accommodationOfOffer?.roomType || '';
+          const rooms = accommodation?.roomTypes || {};
+          const matchedRoomWithOffer = rooms[roomId];
+
+          return (
+            <RoomCard
+              key={index}
+              facilityId={id}
+              offer={offer}
+              room={matchedRoomWithOffer}
+            />
+          );
+        })}
     </FacilityOffersContainer>
   );
 });

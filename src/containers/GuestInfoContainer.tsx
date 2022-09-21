@@ -128,61 +128,55 @@ export const GuestInfoContainer = () => {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid justifyContent="center" container>
-        <Grid item xs={12} md={6}>
-          <Typography textAlign="center" sx={{ m: 2 }}>
-            This Information will be strictly used by the hotel and win.so to confirm your
-            booking! It is mandatory in order for the hotel to reserve your room.
-          </Typography>
-          {error && <Alert severity="error">{error}</Alert>}
-          <Card sx={{ my: 2, p: 3 }}>
-            <Box
-              sx={{
-                display: 'grid',
-                columnGap: 2,
-                rowGap: 3,
-                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' }
-              }}
-            >
-              <RHFTextField name="firstname" label="First Name" />
-              <RHFTextField name="lastname" label="Last Name" />
-              <RHFDatePicker name="birthdate" label="Birth date" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFPhoneField name="phone" label="Phone Number" />
-            </Box>
-            <Stack direction="row" alignItems="flex-start" sx={{ mt: 3 }}>
-              <Checkbox checked={privacy} onChange={() => setPrivacy(!privacy)} />
-              <Box>
-                <Typography variant="subtitle1">
-                  I agree with terms and conditions
-                </Typography>
-                <Typography>
-                  I have read and approved win.so&nbsp;
-                  <Link href="/terms" underline="hover" target="_blank" rel="noopener">
-                    General Terms & Conditions
-                  </Link>
-                  &nbsp;for travellers and&nbsp;
-                  <Link href="/privacy" underline="hover" target="_blank" rel="noopener">
-                    Privacy and Cookie Statement
-                  </Link>
-                  .
-                </Typography>
-              </Box>
-            </Stack>
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton
-                disableElevation
-                disabled={!privacy}
-                type="submit"
-                variant="contained"
-                loading={isSubmitting}
-              >
-                Proceed to Payment
-              </LoadingButton>
-            </Stack>
-          </Card>
-        </Grid>
-      </Grid>
+      {error && <Alert severity="error">{error}</Alert>}
+      <Card sx={{ my: 3, p: 3 }}>
+        <Typography sx={{ mb: 2 }}>
+          This Information will be strictly used by the hotel and win.so to confirm your
+          booking! It is mandatory in order for the hotel to reserve your room.
+        </Typography>
+        <Box
+          sx={{
+            display: 'grid',
+            columnGap: 2,
+            rowGap: 3,
+            gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' }
+          }}
+        >
+          <RHFTextField name="firstname" label="First Name" />
+          <RHFTextField name="lastname" label="Last Name" />
+          <RHFDatePicker name="birthdate" label="Birth date" />
+          <RHFTextField name="email" label="Email Address" />
+          <RHFPhoneField name="phone" label="Phone Number" />
+        </Box>
+        <Stack direction="row" alignItems="flex-start" sx={{ mt: 3 }}>
+          <Checkbox checked={privacy} onChange={() => setPrivacy(!privacy)} />
+          <Box>
+            <Typography variant="subtitle1">I agree with terms and conditions</Typography>
+            <Typography>
+              I have read and approved win.so&nbsp;
+              <Link href="/terms" underline="hover" target="_blank" rel="noopener">
+                General Terms & Conditions
+              </Link>
+              &nbsp;for travellers and&nbsp;
+              <Link href="/privacy" underline="hover" target="_blank" rel="noopener">
+                Privacy and Cookie Statement
+              </Link>
+              .
+            </Typography>
+          </Box>
+        </Stack>
+        <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+          <LoadingButton
+            disableElevation
+            disabled={!privacy}
+            type="submit"
+            variant="contained"
+            loading={isSubmitting}
+          >
+            Proceed to Payment
+          </LoadingButton>
+        </Stack>
+      </Card>
     </FormProvider>
   );
 };

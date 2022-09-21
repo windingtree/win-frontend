@@ -39,6 +39,7 @@ export const normalizeAccommodations = (
 ): AccommodationWithId[] => {
   if (!accommodations) return [];
   const normalizedOffers = offers ? normalizeOffers(offers) : [];
+
   const normalizedAccommodations = Object.entries(
     accommodations
   ).map<AccommodationWithId>(([keyA, valueA]) => {

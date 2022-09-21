@@ -25,7 +25,7 @@ export const GuestInfo = () => {
   }, [latestQueryParams, createSearchParams]);
 
   return (
-    <MainLayout>
+    <MainLayout maxWidth="sm">
       <Breadcrumbs
         links={[
           {

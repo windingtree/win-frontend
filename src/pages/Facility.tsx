@@ -30,8 +30,9 @@ export const Facility = () => {
   }, [latestQueryParams, createSearchParams]);
 
   return (
-    <MainLayout>
+    <MainLayout maxWidth="lg">
       <Breadcrumbs
+        sx={{ mb: 2 }}
         links={[
           {
             name: 'Home',
@@ -43,10 +44,9 @@ export const Facility = () => {
           }
         ]}
       />
-      <Box sx={{ px: 8 }}>
-        <FacilityIntroduction scrollToDetailImages={scrollToDetailImages} />
-        <FacilityOffers ref={detailImagesRef} />
-      </Box>
+
+      <FacilityIntroduction scrollToDetailImages={scrollToDetailImages} />
+      <FacilityOffers ref={detailImagesRef} />
     </MainLayout>
   );
 };

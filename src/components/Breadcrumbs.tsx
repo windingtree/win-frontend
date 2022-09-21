@@ -6,7 +6,6 @@ import {
   Typography,
   BreadcrumbsProps,
   Breadcrumbs as MUIBreadcrumbs,
-  Container,
   useTheme
 } from '@mui/material';
 import Iconify from './Iconify';
@@ -22,7 +21,7 @@ export interface Props extends BreadcrumbsProps {
   activeLast?: boolean;
 }
 
-export const Breadcrumbs = ({ links, activeLast = true, ...other }: Props) => {
+export const Breadcrumbs = ({ links, activeLast = true, sx, ...other }: Props) => {
   const theme = useTheme();
   const currentLink = links[links.length - 1].name;
 
@@ -51,16 +50,13 @@ export const Breadcrumbs = ({ links, activeLast = true, ...other }: Props) => {
   ));
 
   return (
-    <Container sx={{ mx: 3, mb: 2 }}>
-      <MUIBreadcrumbs
-        separator={
-          <Iconify color={theme.palette.primary.main} icon="mdi:chevron-right" />
-        }
-        {...other}
-      >
-        {activeLast ? listDefault : listActiveLast}
-      </MUIBreadcrumbs>
-    </Container>
+    <MUIBreadcrumbs
+      sx={sx}
+      separator={<Iconify color={theme.palette.primary.main} icon="mdi:chevron-right" />}
+      {...other}
+    >
+      {activeLast ? listDefault : listActiveLast}
+    </MUIBreadcrumbs>
   );
 };
 
