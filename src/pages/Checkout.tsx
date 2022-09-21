@@ -8,7 +8,8 @@ import {
   Card,
   Select,
   MenuItem,
-  SelectChangeEvent
+  SelectChangeEvent,
+  FormHelperText
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useCallback, useMemo, useState } from 'react';
@@ -91,7 +92,7 @@ export const PaymentCurrencySelector = ({
     return null;
   }
 
-  if (!offer.quote) {
+  if (!quote) {
     return (
       <Typography variant="h3" component="span">
         {formatPrice(
@@ -103,15 +104,20 @@ export const PaymentCurrencySelector = ({
   }
 
   return (
-    <Select value={price?.currency} onChange={onPriceSelect}>
-      {options.map((p, index) => (
-        <MenuItem key={index} value={p.currency}>
-          <Typography variant="h3" component="span">
-            {formatPrice(utils.parseEther(p.value), p.currency)}
-          </Typography>
-        </MenuItem>
-      ))}
-    </Select>
+    <Box>
+      <Select value={price?.currency} onChange={onPriceSelect}>
+        {options.map((p, index) => (
+          <MenuItem key={index} value={p.currency}>
+            <Typography variant="h3" component="span">
+              {formatPrice(utils.parseEther(p.value), p.currency)}
+            </Typography>
+          </MenuItem>
+        ))}
+      </Select>
+      <FormHelperText>
+        Select the payment currency
+      </FormHelperText>
+    </Box>
   );
 };
 
@@ -148,7 +154,7 @@ export const Checkout = () => {
         providerId: String(checkout.provider),
         serviceId: String(checkout.serviceId)
       },
-    [checkout]
+    [checkout, priceOverride]
   );
 
   const hotelImage = useMemo(
@@ -240,10 +246,19 @@ export const Checkout = () => {
             textAlign: isDesktop ? 'left' : 'center'
           }}
         >
-          <Typography variant="h3">
-            Your payment value is{' '}
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 1
+          }}>
+            <Box>
+              <Typography variant="h3" sx={{ marginTop: '-28px' }}>
+                Your payment value is
+              </Typography>
+            </Box>
             <PaymentCurrencySelector onChange={setPriceOverride} {...checkout} />
-          </Typography>
+          </Box>
         </Box>
 
         <Box
