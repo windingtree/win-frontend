@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import { daysBetween } from '../../utils/date';
-import { fetchAccommodationsAndOffers } from './api';
+import { Coordinates, fetchAccommodationsAndOffers } from './api';
 import {
   getAccommodationById,
   getActiveAccommodations,
@@ -32,9 +32,14 @@ export interface EventInfo {
   durationInMinutes: number;
 }
 
+export type AccommodationTransformFnParams = {
+  accommodation: AccommodationWithId;
+  searchProps?: SearchTypeProps | void;
+  searchResultsCenter?: Coordinates;
+};
+
 export type AccommodationTransformFn = (
-  accommodation: AccommodationWithId,
-  searchProps?: SearchTypeProps | void
+  params: AccommodationTransformFnParams
 ) => AccommodationWithId;
 
 export const useAccommodationsAndOffers = ({
@@ -97,10 +102,11 @@ export const useAccommodationsAndOffers = ({
       // that can be used to modify or add properties to accomodation object
       let transformedAccommodation = accommodation;
       if (accommodationTransformFn && typeof accommodationTransformFn === 'function') {
-        transformedAccommodation = accommodationTransformFn(
+        transformedAccommodation = accommodationTransformFn({
           accommodation,
-          latestQueryParams
-        );
+          searchProps: latestQueryParams,
+          searchResultsCenter: data?.coordinates
+        });
       }
 
       return { ...transformedAccommodation, lowestPrice };

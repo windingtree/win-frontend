@@ -86,7 +86,7 @@ export const getActiveEventsWithinRadius = ({
       toDate: new Date(new Date(toDate).setDate(toDate.getDate() + 1))
     });
 
-  if (!currentEvents) return null;
+  if (!currentEvents) return { currentEventsWithinRadius: [] };
 
   const focusedEventItem = currentEvents?.find((evt) => evt.name === focusedEvent);
 

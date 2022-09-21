@@ -1,11 +1,6 @@
 import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
 import { OfferRecord } from 'src/store/types';
-import {
-  AccommodationTransformFn,
-  EventInfo,
-  LowestPriceFormat,
-  SearchTypeProps
-} from '.';
+import { AccommodationTransformFn, EventInfo, LowestPriceFormat } from '.';
 import { getActiveEventsWithinRadius } from '../../utils/events';
 import { crowDistance } from '../../utils/geo';
 
@@ -18,7 +13,7 @@ export interface AccommodationWithId extends WinAccommodation {
   id: string;
   offers: OfferRecord[];
   lowestPrice?: LowestPriceFormat;
-  eventInfo?: EventInfo;
+  eventInfo?: EventInfo[];
 }
 
 export class InvalidLocationError extends Error {}
@@ -126,11 +121,11 @@ export const getAccommodationById = (
   return selectedAccommodation;
 };
 
-// function to tranform accommodation object to include distance/time from chosen event
+// function to transform accommodation object to include distance/time from chosen event
 export const accommodationEventTransform =
   (focusedEvent: string): AccommodationTransformFn =>
-  (accommodation: AccommodationWithId, searchProps: SearchTypeProps) => {
-    if (!focusedEvent) return accommodation;
+  ({ accommodation, searchProps, searchResultsCenter }) => {
+    // return if no search props
     if (!searchProps) return accommodation;
 
     const { arrival, departure } = searchProps;
@@ -138,17 +133,18 @@ export const accommodationEventTransform =
     const currentEvents = getActiveEventsWithinRadius({
       fromDate: arrival,
       toDate: departure,
-      focusedEvent
+      focusedEvent,
+      center: searchResultsCenter
     });
 
-    const { focusedEventItem = null } = currentEvents ?? {};
+    const { focusedEventItem = null, currentEventsWithinRadius } = currentEvents ?? {};
 
     const focusedEventCoordinates = focusedEventItem?.latlon && [
       focusedEventItem.latlon[0],
       focusedEventItem.latlon[1]
     ];
 
-    let eventInfo: EventInfo | undefined;
+    const eventInfo: EventInfo[] | undefined = [];
     if (focusedEventCoordinates) {
       const distance = crowDistance(
         accommodation.location.coordinates[1],
@@ -157,8 +153,39 @@ export const accommodationEventTransform =
         focusedEventCoordinates[1]
       );
 
+      // return eventInfo as an array of distances with focusedEventInfo at the top if it exists
       const durationInMinutes = (distance / 5) * 60; // we are assuming 5km/hr walking distance in minutes
-      eventInfo = { distance, eventName: focusedEvent, durationInMinutes };
+      eventInfo.push({ distance, eventName: focusedEvent, durationInMinutes });
+    }
+
+    if (currentEventsWithinRadius && currentEventsWithinRadius.length) {
+      const infos: EventInfo[] = [];
+
+      for (let idx = 0; idx < currentEventsWithinRadius.length; idx++) {
+        const event = currentEventsWithinRadius[idx];
+
+        const eventCoordinates = event?.latlon && [event.latlon[0], event.latlon[1]];
+
+        if (eventCoordinates) {
+          const distance = crowDistance(
+            accommodation.location.coordinates[1],
+            accommodation.location.coordinates[0],
+            eventCoordinates[0],
+            eventCoordinates[1]
+          );
+
+          // return eventInfo as an array of distances with focusedEventInfo at the top if it exists
+
+          const durationInMinutes = (distance / 5) * 60; // we are assuming 5km/hr walking distance in minutes
+          infos.push({ distance, eventName: event.name, durationInMinutes });
+        }
+      }
+
+      // sort by distance with nearest events first
+      infos.sort((a, b) => a.distance - b.distance);
+
+      // update eventInfo array with focusedEvent at top and other events in ascending distance
+      eventInfo.push(...infos);
     }
 
     return { ...accommodation, eventInfo };
