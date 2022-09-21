@@ -178,3 +178,6 @@ export const SOCIALS = [
     path: 'https://github.com/windingtree/'
   }
 ];
+
+// default distance used for accommodation API search
+export const defaultSearchRadiusInMeters = 20000;

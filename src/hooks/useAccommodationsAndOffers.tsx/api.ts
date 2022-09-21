@@ -6,6 +6,7 @@ import {
 import axios from 'axios';
 import { getPassengersBody, InvalidLocationError } from './helpers';
 import { SearchTypeProps } from '.';
+import { defaultSearchRadiusInMeters } from '../../config';
 
 export interface Coordinates {
   lat: number;
@@ -62,7 +63,7 @@ export async function fetchAccommodationsAndOffers({
     accommodation: {
       location: {
         ...normalizedCoordinates,
-        radius: 20000
+        radius: defaultSearchRadiusInMeters
       },
       arrival,
       departure,

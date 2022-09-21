@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { EventItemProps, upcomingEvents } from '../config';
+import { defaultSearchRadiusInMeters, EventItemProps, upcomingEvents } from '../config';
 import { Coordinates } from '../hooks/useAccommodationsAndOffers.tsx/api';
 import { NullableDate } from './date';
 import { crowDistance } from './geo';
@@ -44,7 +44,7 @@ export const getActiveEvents = (dateRange: EventSearchParams) => {
 export const getEventsWithinRadius = (
   events: EventItemProps[],
   centerLatLon: [number, number],
-  maxRadius = 3,
+  maxRadius = defaultSearchRadiusInMeters / 1000,
   useKm = true
 ) => {
   return events.filter((evt) => {
@@ -74,7 +74,7 @@ export const getActiveEventsWithinRadius = ({
   fromDate = null,
   toDate = null,
   center = null,
-  radius = 3,
+  radius = defaultSearchRadiusInMeters / 1000,
   focusedEvent
 }: CurrentEventsProps) => {
   const currentEvents =
