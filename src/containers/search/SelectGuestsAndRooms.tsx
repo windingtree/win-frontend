@@ -41,7 +41,6 @@ export const SelectGuestsAndRooms = () => {
               inputMode: 'numeric',
               inputProps: {
                 min: 1,
-                max: 9,
                 step: 1
               }
             }}
