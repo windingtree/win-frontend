@@ -122,14 +122,14 @@ export const SearchForm: React.FC = () => {
     adultCount: Number(adultCount),
     location,
     roomCount: Number(roomCount)
-  }
+  };
 
   /**
    * Logic in relation to executing the query
    */
 
   const { refetch, isFetching, error, isFetched, accommodations, latestQueryParams } =
-    useAccommodationsAndOffers({searchProps});
+    useAccommodationsAndOffers({ searchProps });
 
   const onSubmit = useCallback(() => {
     //TODO: update search params when submitting the form

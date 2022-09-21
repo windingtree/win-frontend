@@ -22,7 +22,6 @@ import defaultIconUrl from 'leaflet/dist/images/marker-icon.png';
 import Logger from '../utils/logger';
 import { useAppDispatch, useAppState } from '../store';
 import {
-  EventInfo,
   LowestPriceFormat,
   useAccommodationsAndOffers
 } from 'src/hooks/useAccommodationsAndOffers.tsx';
@@ -32,7 +31,6 @@ import { useSearchParams } from 'react-router-dom';
 import { currencySymbolMap } from '../utils/currencies';
 import {
   accommodationEventTransform,
-  AccommodationWithId,
   InvalidLocationError
 } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { getActiveEventsWithinRadius } from '../utils/events';
@@ -64,10 +62,6 @@ const getImageIcon = ({
     className: `${rounded ? 'marker-rounded' : ''}`
   });
 };
-
-export interface AccommodationWithEventinfo extends AccommodationWithId {
-  eventInfo: EventInfo;
-}
 
 const MapSettings: React.FC<{
   center: LatLngTuple;
@@ -139,7 +133,7 @@ export const MapBox: React.FC = () => {
     [searchParams]
   );
 
-  // apply a callback function to transform returned accomodation objects
+  // apply a callback function to transform returned accommodation objects
   const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
     focusedEvent
   ]);

@@ -51,7 +51,7 @@ export const Results: React.FC = () => {
   const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers({
     accommodationTransformFn: transformFn
   });
-  
+
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
   const numberOfDays = useMemo(
