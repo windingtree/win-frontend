@@ -78,7 +78,8 @@ export const Checkout = () => {
       search: `?${createSearchParams({
         offerId: checkout.offerId,
         tx: result.tx.hash
-      })}`
+      })}`,
+      hash: latestQueryParams?.location === "Begota" ? "devcon" : ""
     });
   }, []);
 
