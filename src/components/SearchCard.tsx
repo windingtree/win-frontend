@@ -139,7 +139,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                     From
                   </Typography>
                   <Typography variant="subtitle2">
-                    {facility.lowestPrice && currencySymbolMap[facility.lowestPrice.currency]}
+                    {facility.lowestPrice &&
+                      currencySymbolMap[facility.lowestPrice.currency]}
                     {facility.lowestPrice && facility.lowestPrice.price.toFixed(2)}/night
                   </Typography>
                 </Stack>
@@ -153,7 +154,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                       sx={{ color: 'text.secondary' }}
                     >
                       {facility.lowestPrice &&
-                         currencySymbolMap[facility.lowestPrice.currency]}
+                        currencySymbolMap[facility.lowestPrice.currency]}
                       {Math.min(...prices).toFixed(2)} total
                     </Typography>
                   </Stack>

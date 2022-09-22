@@ -114,9 +114,7 @@ export const PaymentCurrencySelector = ({
           </MenuItem>
         ))}
       </Select>
-      <FormHelperText>
-        Select the payment currency
-      </FormHelperText>
+      <FormHelperText>Select the payment currency</FormHelperText>
     </Box>
   );
 };
@@ -246,16 +244,21 @@ export const Checkout = () => {
             textAlign: isDesktop ? 'left' : 'center'
           }}
         >
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 1
-          }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 1
+            }}
+          >
             <Box>
-              <Typography variant="h3" sx={{
-                marginTop: checkout.quote ? '-28px' : '0px'
-              }}>
+              <Typography
+                variant="h3"
+                sx={{
+                  marginTop: checkout.quote ? '-28px' : '0px'
+                }}
+              >
                 Your payment value is
               </Typography>
             </Box>
