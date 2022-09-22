@@ -1,21 +1,20 @@
 import type { RoomTypes } from '@windingtree/glider-types/types/win';
 import type { OfferRecord } from 'src/store/types';
-import { Box, Divider, Grid, Stack, Typography } from '@mui/material';
+import { Box, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
 import { daysBetween } from 'src/utils/date';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { RoomInformation } from './RoomInformation';
 import { RHFTextField } from 'src/components/hook-form';
+import { useFormContext } from 'react-hook-form';
 
 export const RoomCardGroup: React.FC<{
   room: RoomTypes;
   offer: OfferRecord;
   facilityId: string;
-}> = ({ offer, facilityId, room }) => {
-  const { latestQueryParams } = useAccommodationsAndOffers();
-  const arrival = latestQueryParams?.arrival;
-  const departure = latestQueryParams?.departure;
-  const numberOfDays = daysBetween(arrival, departure);
-  const roomsNumber = latestQueryParams?.roomCount;
+  index: number;
+}> = ({ offer, facilityId, room, index }) => {
+  const { register } = useFormContext();
+  const price = `${offer.price?.currency} ${Number(offer.price?.public).toFixed(2)}`;
 
   return (
     <Box mb={5}>
@@ -25,27 +24,24 @@ export const RoomCardGroup: React.FC<{
           <Grid item xs={8}>
             <RoomInformation room={room} />
           </Grid>
-          <Grid item xs={4} alignSelf="end">
-            <Stack spacing={1} sx={{ textAlign: 'right' }}>
+          <Grid item xs={4}>
+            <Stack spacing={1} alignItems="flex-end" sx={{ textAlign: 'end' }}>
               <Typography>Select rooms</Typography>
-
-              {/* Include a select input */}
-              <Typography>
-                {`Price for ${numberOfDays} nights, ${roomsNumber} room(s)`}
-              </Typography>
-              <RHFTextField
-                key={offer.id}
-                name={`offers[${offer.id}].id`}
+              {/* TODO: Prevent a user from being able to select less than 0 when typing */}
+              <TextField
+                sx={{ width: 80 }}
+                {...register(`offers.${index}.quantity`)}
                 size="small"
                 type="number"
                 InputProps={{
                   type: 'number',
                   inputMode: 'numeric',
                   inputProps: {
-                    min: 1
+                    min: 0
                   }
                 }}
               />
+              <Typography variant="body2">{`${price} Estimated price /room/night`}</Typography>
             </Stack>
           </Grid>
         </Grid>

@@ -6,7 +6,6 @@ import { createSearchParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
 import { useMemo } from 'react';
 import { createRef, useCallback } from 'react';
-import { Box } from '@mui/material';
 
 export const Facility = () => {
   const detailImagesRef = createRef<HTMLDivElement>();

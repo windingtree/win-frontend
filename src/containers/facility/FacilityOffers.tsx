@@ -75,6 +75,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
         roomsAvailable={accommodation?.offers?.length ?? 0}
       />
 
+
       {showGroupBooking && (
         <FacilityGroupOffers
           offers={sortedOffers}
