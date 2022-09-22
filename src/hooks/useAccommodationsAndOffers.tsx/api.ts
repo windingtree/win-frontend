@@ -37,9 +37,7 @@ export async function fetchAccommodationsAndOffers({
    */
   const { data: coordinatesData } = await axios
     //TODO: include endpoint in .env or config
-    .get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`, {
-      withCredentials: true
-    })
+    .get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
     .catch((_) => {
       throw new Error(
         `Something went wrong when retrieving the coordinates of ${location}. Please try again.`
@@ -80,14 +78,16 @@ export async function fetchAccommodationsAndOffers({
   const searchPath = isGroupMode ? '/api/groups/search' : '/api/hotels/offers/search';
 
   const uri = baseUri + searchPath;
-  const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch(() => {
-    return {
-      data: {
-        accommodations: {},
-        offers: {}
-      }
-    };
-  });
+  const { data } = await axios
+    .post<SearchResults>(uri, derbySoftBody, { withCredentials: true })
+    .catch(() => {
+      return {
+        data: {
+          accommodations: {},
+          offers: {}
+        }
+      };
+    });
 
   if (!data) {
     throw new Error('Something went wrong. Please try again.');
