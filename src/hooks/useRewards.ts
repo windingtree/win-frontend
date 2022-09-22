@@ -3,6 +3,8 @@ import { RewardOption } from '@windingtree/glider-types/dist/win';
 import axios from 'axios';
 import { backend } from 'src/config';
 
+axios.defaults.withCredentials = true;
+
 type MutationProps = {
   id?: string | null;
   rewardType?: string;

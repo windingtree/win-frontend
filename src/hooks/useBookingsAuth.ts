@@ -10,6 +10,8 @@ import { useAppDispatch, useAppState } from '../store';
 import { backend } from '../config';
 import Logger from '../utils/logger';
 
+axios.defaults.withCredentials = true;
+
 const logger = Logger('useBookingsAuth');
 
 export interface UseBookingsAuthHook {

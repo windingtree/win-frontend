@@ -8,6 +8,8 @@ import { getPassengersBody, InvalidLocationError } from './helpers';
 import { SearchTypeProps } from '.';
 import { defaultSearchRadiusInMeters } from '../../config';
 
+axios.defaults.withCredentials = true;
+
 export interface Coordinates {
   lat: number;
   lon: number;

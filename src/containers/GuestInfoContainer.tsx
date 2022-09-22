@@ -17,6 +17,8 @@ import { regexp } from '@windingtree/org.id-utils';
 import { convertToLocalTime } from '../utils/date';
 import { DateTime } from 'luxon';
 
+axios.defaults.withCredentials = true;
+
 const logger = Logger('GuestInfoContainer');
 
 const defaultValues = {
