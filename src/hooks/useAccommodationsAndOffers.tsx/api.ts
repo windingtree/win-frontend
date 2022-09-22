@@ -4,7 +4,7 @@ import {
   WinAccommodation
 } from '@windingtree/glider-types/dist/win';
 import axios from 'axios';
-import { getPassengersBody, InvalidLocationError } from './helpers';
+import { getGroupMode, getPassengersBody, InvalidLocationError } from './helpers';
 import { SearchTypeProps } from '.';
 import { defaultSearchRadiusInMeters } from '../../config';
 
@@ -75,7 +75,11 @@ export async function fetchAccommodationsAndOffers({
     passengers: passengersBody
   };
 
-  const uri = `${process.env.REACT_APP_API_URL}/api/hotels/offers/search`;
+  const isGroupMode = getGroupMode(roomCount);
+  const baseUri = process.env.REACT_APP_API_URL;
+  const searchPath = isGroupMode ? '/api/groups/search' : '/api/hotels/offers/search';
+
+  const uri = baseUri + searchPath;
   const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch(() => {
     return {
       data: {
@@ -98,7 +102,8 @@ export async function fetchAccommodationsAndOffers({
     arrival,
     roomCount,
     adultCount,
-    childrenCount
+    childrenCount,
+    isGroupMode
   };
 
   return {
