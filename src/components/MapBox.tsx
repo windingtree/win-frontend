@@ -1,4 +1,4 @@
-import { Map, LatLngTuple, DivIcon, Icon } from 'leaflet';
+import { Map, LatLngTuple, DivIcon, Icon, circle } from 'leaflet';
 import {
   Alert,
   Backdrop,
@@ -22,7 +22,6 @@ import defaultIconUrl from 'leaflet/dist/images/marker-icon.png';
 import Logger from '../utils/logger';
 import { useAppDispatch, useAppState } from '../store';
 import {
-  EventInfo,
   LowestPriceFormat,
   useAccommodationsAndOffers
 } from 'src/hooks/useAccommodationsAndOffers.tsx';
@@ -32,13 +31,13 @@ import { useSearchParams } from 'react-router-dom';
 import { currencySymbolMap } from '../utils/currencies';
 import {
   accommodationEventTransform,
-  AccommodationWithId,
   InvalidLocationError
 } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { getActiveEventsWithinRadius } from '../utils/events';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
+const defaultFocusedZoomRadius = 3000; // in meters
 
 const getPriceMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = false) => {
   const currencySymbol = currencySymbolMap[currency];
@@ -64,10 +63,6 @@ const getImageIcon = ({
     className: `${rounded ? 'marker-rounded' : ''}`
   });
 };
-
-export interface AccommodationWithEventinfo extends AccommodationWithId {
-  eventInfo: EventInfo;
-}
 
 const MapSettings: React.FC<{
   center: LatLngTuple;
@@ -139,7 +134,7 @@ export const MapBox: React.FC = () => {
     [searchParams]
   );
 
-  // apply a callback function to transform returned accomodation objects
+  // apply a callback function to transform returned accommodation objects
   const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
     focusedEvent
   ]);
@@ -258,6 +253,7 @@ export const MapBox: React.FC = () => {
         minZoom={10}
         center={normalizedCoordinates}
         zoom={defaultZoom}
+        zoomSnap={0.25} // allow fractional zoom
         style={{
           height: '100vh',
           // width: "100vw",
@@ -308,6 +304,22 @@ export const MapBox: React.FC = () => {
     ),
     [normalizedCoordinates, accommodations, selectedFacilityId]
   );
+
+  useEffect(() => {
+    if (map && focusedCoordinates) {
+      // evaluate bounding rectangle
+      const radiusCircle = circle(focusedCoordinates, {
+        radius: defaultFocusedZoomRadius,
+        opacity: 0,
+        fillOpacity: 0
+      }).addTo(map);
+      const boundingRectangle = radiusCircle.getBounds();
+
+      // zoom to bounding rectangle
+      map.fitBounds(boundingRectangle);
+      map.removeLayer(radiusCircle);
+    }
+  }, [map, focusedCoordinates]);
 
   const invalidLocation = error instanceof InvalidLocationError;
 

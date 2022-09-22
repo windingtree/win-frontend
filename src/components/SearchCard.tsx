@@ -15,7 +15,7 @@ export interface SearchCardProps {
   isSelected?: boolean;
   numberOfDays: number;
   sm?: boolean;
-  focusedEvent?: EventInfo;
+  focusedEvent?: EventInfo[];
   onSelect?: (...args) => void;
 }
 
@@ -103,7 +103,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               </Stack>
             )}
 
-            {focusedEvent && (
+            {focusedEvent?.length ? (
               <Stack
                 direction="row"
                 alignItems="center"
@@ -111,13 +111,13 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               >
                 <Typography variant="caption">
                   {`Approx.  ${Math.ceil(
-                    focusedEvent.durationInMinutes
-                  )}min walking distance, ${focusedEvent.distance.toFixed(1)}km from ${
-                    focusedEvent.eventName
+                    focusedEvent[0].durationInMinutes
+                  )}min walking distance, ${focusedEvent[0].distance.toFixed(1)}km from ${
+                    focusedEvent[0].eventName
                   } `}
                 </Typography>
               </Stack>
-            )}
+            ) : null}
 
             <Stack
               direction={winWidth < 900 || sm ? 'row-reverse' : 'row'}
