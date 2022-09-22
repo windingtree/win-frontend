@@ -12,8 +12,6 @@ import { LoadingButton } from '@mui/lab';
 import { daysBetween } from '../utils/date';
 import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
 
-axios.defaults.withCredentials = true;
-
 const logger = Logger('RoomCard');
 
 export const RoomCard: React.FC<{

@@ -6,8 +6,6 @@ import { backend } from '../config';
 import { usePoller } from './usePoller';
 import Logger from '../utils/logger';
 
-axios.defaults.withCredentials = true;
-
 const logger = Logger('useBookings');
 
 export type UseBookingsHook = BookingResponse;
@@ -34,7 +32,8 @@ export const useBookings = (): UseBookingsHook => {
         {
           headers: {
             Authorization: `Bearer ${walletAuth.accessToken}`
-          }
+          },
+          withCredentials: true
         }
       );
 
