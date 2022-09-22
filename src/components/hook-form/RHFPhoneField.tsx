@@ -477,10 +477,6 @@ export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
     }
   };
 
-  const onFieldInput = (...args) => {
-    console.log('@@@', args);
-  };
-
   const onFieldChange = (e: InputChangeEvent, onChange: OnChangeCallback): void => {
     doSetCountry(e.target.value);
     return onChange(e);
@@ -572,7 +568,6 @@ export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
             value={applyCode(field.value)}
             error={!!error}
             helperText={error?.message}
-            onInput={onFieldInput}
             onChange={(e) => onFieldChange(e, field.onChange)}
             {...other}
           />
