@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material';
-import { MediaItem } from '@windingtree/glider-types/types/win';
+import { MediaItem } from '@windingtree/glider-types/dist/win';
 import { Box, Image } from 'grommet';
 import { forwardRef } from 'react';
 import styled from 'styled-components';

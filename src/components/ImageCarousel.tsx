@@ -4,7 +4,7 @@ import { useTheme, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import Image from './Image';
 import { CarouselDots, CarouselArrows } from './carousel';
-import { MediaItem } from '@windingtree/glider-types/types/win';
+import { MediaItem } from '@windingtree/glider-types/dist/win';
 import FallbackImage from '../images/hotel-fallback.webp';
 
 const RootStyle = styled(Box)(({ theme }) => ({

@@ -387,8 +387,8 @@ export const PaymentCard = ({
   }, [winPayContract, asset, account, permitSignature]);
 
   const openExplorer = useCallback(
-    (address: string) => {
-      if (network) {
+    (address: string | undefined) => {
+      if (network && address) {
         window.open(`${network.blockExplorer}/address/${address}`, '_blank');
       }
     },
@@ -459,7 +459,7 @@ export const PaymentCard = ({
                 <Button
                   size="small"
                   variant="outlined"
-                  onClick={() => openExplorer(asset.address)}
+                  onClick={() => openExplorer(tokenAddress)}
                   endIcon={<Iconify color="inherit" icon="cil:external-link" ml={1} />}
                 >
                   {`${asset.symbol} contract`}

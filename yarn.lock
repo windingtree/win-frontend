@@ -5332,10 +5332,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@windingtree/glider-types@^1.16.0":
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-1.16.0.tgz#7672c6f165b04e7e62f76de778c383a305d58444"
-  integrity sha512-VtcI+ENCfftQTQLokX9/OVdui58xKXThw+pwDkNcTI9ENh4QRaIWxnJc4r7kBgZtmCXyeF/BBY/PTRrPuM774g==
+"@windingtree/glider-types@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-2.6.0.tgz#cbdf1827b8f1bfe301112d3c5da1795e9b5ef07e"
+  integrity sha512-9THHJXVXbm//8Udqj2PcJ99Ei+I2Uf0nkF5sAEMbpAz+WZovhSCX3MAZb2xmLdX4YIgt0b9J+K5zK4/aVppE3w==
 
 "@windingtree/org.id-utils@^1.0.0-beta.47":
   version "1.0.0-beta.47"
@@ -5347,10 +5347,10 @@
     axios "0.24.0"
     ethers "5.5.3"
 
-"@windingtree/win-commons@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.7.0.tgz#e11473f367cf1f6e22bb162f300d70ce72c1a953"
-  integrity sha512-+eEhPavVdElEhZVws79fkOzdo0S5Cy4h+m+GYVKTQWRugIhkzUOId5uS+MXpec/N0ugKoggVnCE0AMYgViLhiA==
+"@windingtree/win-commons@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.8.0.tgz#3860275cb4729a897e34ec7bc598861843c27b1e"
+  integrity sha512-EWJqDBckNdir3XznR2qJ7V/T1sW+hF5So7XNiA/Dmbs0Z2x0f+VMdVajO5s6s39ndcqxwApl66bi+fSFZpaPPw==
   dependencies:
     ethers "^5.6.9"
 
@@ -8658,15 +8658,6 @@ eslint-plugin-react@^7.27.1:
     semver "^6.3.0"
     string.prototype.matchall "^4.0.7"
 
-eslint-plugin-spellcheck@^0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-spellcheck/-/eslint-plugin-spellcheck-0.0.19.tgz#73926b94208ae93ea5be00a8844dcdf1d8d2bf6f"
-  integrity sha512-Vau+oCLT3IGx+inJV5rkuKlIwgka9L2is1SkztviIHN3apNnT2OrZoGy9Jt3gbcjjkfkIFMFSZjB+ijHCimbNA==
-  dependencies:
-    globals "^13.0.0"
-    hunspell-spellchecker "^1.0.2"
-    lodash "^4.17.15"
-
 eslint-plugin-testing-library@^5.0.1:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-testing-library/-/eslint-plugin-testing-library-5.6.0.tgz#91e810ecb838f86decc9b5202876c87e42d73ea7"
@@ -10082,7 +10073,7 @@ globals@^12.1.0:
   dependencies:
     type-fest "^0.8.1"
 
-globals@^13.0.0, globals@^13.15.0:
+globals@^13.15.0:
   version "13.17.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-13.17.0.tgz#902eb1e680a41da93945adbdcb5a9f361ba69bd4"
   integrity sha512-1C+6nQRb1GwGMKm2dH/E7enFAMxGTmGI7/dEdhy/DNelv85w9B72t3uc5frtMNXIbzrarJJ/lTCjcaZwbLJmyw==
@@ -10618,11 +10609,6 @@ human-signals@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-3.0.1.tgz#c740920859dafa50e5a3222da9d3bf4bb0e5eef5"
   integrity sha512-rQLskxnM/5OCldHo+wNXbpVgDn5A17CUoKX+7Sokwaknlq7CdSnphy0W39GU8dw59XiCXmFXDg4fRuckQRKewQ==
-
-hunspell-spellchecker@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/hunspell-spellchecker/-/hunspell-spellchecker-1.0.2.tgz#a10b0bd2fa00a65ab62a4c6b734ce496d318910e"
-  integrity sha512-4DwmFAvlz+ChsqLDsZT2cwBsYNXh+oWboemxXtafwKIyItq52xfR4e4kr017sLAoPaSYVofSOvPUfmOAhXyYvw==
 
 husky@^8.0.1:
   version "8.0.1"

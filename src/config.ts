@@ -3,7 +3,9 @@ import { config } from '@windingtree/win-commons';
 import blockchaineurope2022 from './images/conferences/blockchaineurope2022.png';
 import devcon6 from './images/conferences/devcon6.jpeg';
 import ethdownunder from './images/conferences/ethdownunder.png';
-import devcon6Icon from './images/event-icons/devcon6.jpg';
+import devcon6Icon from './images/event-icons/devcon_pin_50x73px.svg';
+import ethdownunderIcon from './images/event-icons/blockchain_expo_europe_2022.svg';
+import blockchaineurope2022Icon from './images/event-icons/eth_down_under_2022.svg';
 
 export enum AppMode {
   dev = 'dev',
@@ -85,6 +87,9 @@ export const upcomingEvents: EventItemProps[] = [
     dateRange: {
       fromDate: '20-09-2022',
       toDate: '21-09-2022'
+    },
+    mapIcon: {
+      url: blockchaineurope2022Icon
     }
   },
   {
@@ -94,10 +99,9 @@ export const upcomingEvents: EventItemProps[] = [
     conferenceUrl: 'https://devcon.org',
     url: '/search?roomCount=1&adultCount=2&startDate=2022-10-07T00%3A00%3A00%2B02%3A00&endDate=2022-10-16T00%3A00%3A00%2B02%3A00&location=Bogota',
     date: '7-16  October',
-    latlon: [4.6493578, -74.0915278],
+    latlon: [4.6296313, -74.0934695],
     mapIcon: {
-      url: devcon6Icon,
-      rounded: true
+      url: devcon6Icon
     },
     dateRange: {
       fromDate: '7-10-2022',
@@ -115,6 +119,9 @@ export const upcomingEvents: EventItemProps[] = [
     dateRange: {
       fromDate: '1-12-2022',
       toDate: '4-12-2022'
+    },
+    mapIcon: {
+      url: ethdownunderIcon
     }
   } /*
   {
@@ -171,3 +178,6 @@ export const SOCIALS = [
     path: 'https://github.com/windingtree/'
   }
 ];
+
+// default distance used for accommodation API search
+export const defaultSearchRadiusInMeters = 20000;

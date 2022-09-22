@@ -1,9 +1,9 @@
 import type {
-  Accommodation,
+  WinAccommodation,
   Offer,
-  PricedOffer,
+  WinPricedOffer,
   BookingsAuthResponse
-} from '@windingtree/glider-types/types/win';
+} from '@windingtree/glider-types/dist/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import type {
   Web3ModalProvider,
@@ -17,7 +17,7 @@ export interface GenericStateRecord {
 }
 
 export type OfferRecord = Offer & GenericStateRecord;
-export type FacilityRecord = Accommodation & GenericStateRecord;
+export type FacilityRecord = WinAccommodation & GenericStateRecord;
 
 export interface Address {
   addressLine: string[];
@@ -69,7 +69,7 @@ export interface PersonalInfo {
   phone: string;
 }
 
-export interface CheckOut extends PricedOffer {
+export interface CheckOut extends WinPricedOffer {
   personalInfo?: PersonalInfo;
   facilityId: string;
 }
