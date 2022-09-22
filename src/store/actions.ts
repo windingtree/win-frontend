@@ -1,5 +1,5 @@
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import type { BookingsAuthResponse } from '@windingtree/glider-types/types/win';
+import type { BookingsAuthResponse } from '@windingtree/glider-types/dist/win';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,

@@ -1,5 +1,5 @@
 import type { Payment } from '../components/PaymentCard';
-import { utils } from 'ethers';
+import { utils, BigNumber } from 'ethers';
 
 // Makes shorter text with ellipsis in the center
 export const centerEllipsis = (text: string, width = 4, prefix = 2): string =>
@@ -32,6 +32,9 @@ export const copyToClipboard = async (text: string): Promise<void> => {
 
 export const formatCost = (cost: Payment, token?: string): string =>
   `${Number(utils.formatEther(cost.value)).toFixed(2)} ${token || cost.currency}`;
+
+export const formatPrice = (value: BigNumber, currency: string): string =>
+  `${Number(utils.formatEther(value)).toFixed(2)} ${currency}`;
 
 export const stringToNumber = (value: string): number => {
   const numberValue = parseFloat(value);

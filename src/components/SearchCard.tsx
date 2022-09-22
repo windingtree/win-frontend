@@ -5,66 +5,22 @@ import { Stack, Typography, Card, useTheme } from '@mui/material';
 import Iconify from './Iconify';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
-import { assetsCurrencies } from '@windingtree/win-commons/dist/types';
 import { ImageCarousel } from './ImageCarousel';
 import { buildAccommodationAddress } from '../utils/accommodation';
+import { EventInfo } from '../hooks/useAccommodationsAndOffers.tsx';
+import { currencySymbolMap } from '../utils/currencies';
 
 export interface SearchCardProps {
   facility: AccommodationWithId;
   isSelected?: boolean;
   numberOfDays: number;
   sm?: boolean;
+  focusedEvent?: EventInfo[];
   onSelect?: (...args) => void;
 }
-const pricePerNight = (prices: number[], numberOfDays: number) =>
-  (Math.min(...prices) / numberOfDays).toFixed(2);
-
-const currencyIcon = (currency: string) => {
-  if (!assetsCurrencies.includes(currency)) {
-    return '';
-  }
-  switch (currency) {
-    case 'EUR':
-      return <Iconify mb={-0.5} icon={'mdi-light:currency-eur'} width={16} height={16} />;
-    case 'USD':
-      return <Iconify mb={-0.5} icon={'mdi-light:currency-usd'} width={16} height={16} />;
-    case 'JPY':
-      return <Iconify mb={-0.5} icon={'mdi-light:currency-jpy'} width={16} height={16} />;
-    case 'PLN':
-      return 'PLN';
-    case 'CHF':
-      return 'CHF';
-    case 'GBP':
-      return <Iconify mb={-0.5} icon={'mdi-light:currency-gbp'} width={16} height={16} />;
-    case 'AUD':
-      return (
-        <Iconify
-          mb={-0.5}
-          icon={'tabler:currency-dollar-australian'}
-          width={16}
-          height={16}
-        />
-      );
-    case 'CAD':
-      return (
-        <Iconify
-          mb={-0.5}
-          icon={'tabler:currency-dollar-canadian'}
-          width={16}
-          height={16}
-        />
-      );
-    case 'SEK':
-      return 'SEK';
-    case 'SDG':
-      return 'SDG';
-    default:
-      return '';
-  }
-};
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
-  ({ sm, facility, isSelected, numberOfDays, onSelect = emptyFunction }, ref) => {
+  ({ sm, facility, isSelected, onSelect = emptyFunction, focusedEvent }, ref) => {
     const navigate = useNavigate();
     const theme = useTheme();
     const { winWidth } = useWindowsDimension();
@@ -90,7 +46,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
       ? {
           minWidth: '380px',
           marginBottom: '0px',
-          height: '128px'
+          minHeight: '128px'
         }
       : {
           marginBottom: '8px'
@@ -147,6 +103,22 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               </Stack>
             )}
 
+            {focusedEvent?.length ? (
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{ color: 'text.secondary', marginTop: '-8px' }}
+              >
+                <Typography variant="caption">
+                  {`Approx.  ${Math.ceil(
+                    focusedEvent[0].durationInMinutes
+                  )}min walking distance, ${focusedEvent[0].distance.toFixed(1)}km from ${
+                    focusedEvent[0].eventName
+                  } `}
+                </Typography>
+              </Stack>
+            ) : null}
+
             <Stack
               direction={winWidth < 900 || sm ? 'row-reverse' : 'row'}
               alignItems="end"
@@ -167,22 +139,26 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                     From
                   </Typography>
                   <Typography variant="subtitle2">
-                    {currencyIcon(facility.offers[0]?.price?.currency)}
-                    {pricePerNight(prices, numberOfDays)}/night
+                    {facility.lowestPrice &&
+                      currencySymbolMap[facility.lowestPrice.currency]}
+                    {facility.lowestPrice && facility.lowestPrice.price.toFixed(2)}/night
                   </Typography>
                 </Stack>
 
                 {!(winWidth < 900 || sm) && <Typography>|</Typography>}
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <Typography
-                    alignItems="center"
-                    variant="caption"
-                    sx={{ color: 'text.secondary' }}
-                  >
-                    {currencyIcon(facility.offers[0]?.price?.currency)}
-                    {Math.min(...prices).toFixed(2)} total
-                  </Typography>
-                </Stack>
+                {!sm && (
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography
+                      alignItems="center"
+                      variant="caption"
+                      sx={{ color: 'text.secondary' }}
+                    >
+                      {facility.lowestPrice &&
+                        currencySymbolMap[facility.lowestPrice.currency]}
+                      {Math.min(...prices).toFixed(2)} total
+                    </Typography>
+                  </Stack>
+                )}
               </Stack>
               {!sm && <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />}
             </Stack>

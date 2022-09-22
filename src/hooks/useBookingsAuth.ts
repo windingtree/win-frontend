@@ -2,7 +2,7 @@ import type {
   BookingsAuthRequest,
   BookingsAuthResponse,
   BookingsAuthSecretResponse
-} from '@windingtree/glider-types/types/win';
+} from '@windingtree/glider-types/dist/win';
 import { useCallback } from 'react';
 import axios from 'axios';
 import { createAuthSignature } from '@windingtree/win-commons/dist/auth';

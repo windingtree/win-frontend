@@ -1,4 +1,4 @@
-import type { BookingResponse } from '@windingtree/glider-types/types/win';
+import type { BookingResponse } from '@windingtree/glider-types/dist/win';
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAppState } from '../store';

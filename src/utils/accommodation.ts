@@ -1,4 +1,4 @@
-import { MediaItem } from '@windingtree/glider-types/types/win';
+import { MediaItem } from '@windingtree/glider-types/dist/win';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
 
 export const sortByLargestImage = (images: MediaItem[]) =>
