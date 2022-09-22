@@ -164,4 +164,7 @@ export const accommodationEventTransform =
     return { ...accommodation, eventInfo };
   };
 
-export const getGroupMode = (roomCount: number) => roomCount > 9;
+export const getGroupMode = (roomCount: number | string): boolean => {
+  const numRoomCount = Number.isNaN(roomCount) ? 0 : Number(roomCount);
+  return numRoomCount > 9;
+};

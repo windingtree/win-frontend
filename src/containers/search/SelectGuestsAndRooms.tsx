@@ -12,9 +12,9 @@ export const SelectGuestsAndRooms = () => {
   const roomCount = watch('roomCount');
 
   useEffect(() => {
-    const isGroupMode = getGroupMode(Number(roomCount));
+    const isGroupMode = getGroupMode(roomCount);
     setGroupMode(isGroupMode);
-  }, [roomCount]);
+  }, [roomCount, getGroupMode, setGroupMode]);
 
   return (
     <Stack spacing={2} p={4}>
