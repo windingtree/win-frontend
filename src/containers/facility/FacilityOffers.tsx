@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { RoomCard } from 'src/containers/facility/RoomCard/RoomCard';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { styled, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { forwardRef } from 'react';
 import { daysBetween } from '../../utils/date';
 import { DateTime } from 'luxon';
-import { FacilityGroupOffers } from './FacilityGroupOffers';
+import { FacilityGroupOffers } from './GroupBooking/FacilityGroupOffers';
+import { RoomCard } from './RoomCard';
 
 interface SearchCriteriaAndResult {
   rooms?: number;
@@ -75,7 +75,6 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
         roomsAvailable={accommodation?.offers?.length ?? 0}
       />
 
-
       {showGroupBooking && (
         <FacilityGroupOffers
           offers={sortedOffers}
@@ -85,8 +84,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
       )}
       {!showGroupBooking &&
         sortedOffers?.map((offer, index) => {
-          //TODO: revise whether we maybe want to restructure the data in such a way that is more intuitive
-          // pricePlanReferences has a key that refers to the accommodationId, which can be confusing.
+          //TODO: move this to the use accommodations hook
           const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
           const roomId: string = accommodationOfOffer?.roomType || '';
           const rooms = accommodation?.roomTypes || {};

@@ -8,8 +8,6 @@ import { getGroupMode, getPassengersBody, InvalidLocationError } from './helpers
 import { SearchTypeProps } from '.';
 import { defaultSearchRadiusInMeters } from '../../config';
 
-// axios.defaults.withCredentials = true;
-
 export interface Coordinates {
   lat: number;
   lon: number;
@@ -37,8 +35,6 @@ export async function fetchAccommodationsAndOffers({
    * Query the coordinates based on the location input of the user.
    * Coordinates are used to query the accommodations.
    */
-
-  console.log(location);
   const { data: coordinatesData } = await axios
     //TODO: include endpoint in .env or config
     .get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
@@ -82,14 +78,16 @@ export async function fetchAccommodationsAndOffers({
   const searchPath = isGroupMode ? '/api/groups/search' : '/api/hotels/offers/search';
 
   const uri = baseUri + searchPath;
-  const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch(() => {
-    return {
-      data: {
-        accommodations: {},
-        offers: {}
-      }
-    };
-  });
+  const { data } = await axios
+    .post<SearchResults>(uri, derbySoftBody, { withCredentials: true })
+    .catch(() => {
+      return {
+        data: {
+          accommodations: {},
+          offers: {}
+        }
+      };
+    });
 
   if (!data) {
     throw new Error('Something went wrong. Please try again.');

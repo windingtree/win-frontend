@@ -10,8 +10,6 @@ import { useAppDispatch, useAppState } from '../store';
 import { backend } from '../config';
 import Logger from '../utils/logger';
 
-axios.defaults.withCredentials = true;
-
 const logger = Logger('useBookingsAuth');
 
 export interface UseBookingsAuthHook {
@@ -52,7 +50,10 @@ export const useBookingsAuth = (): UseBookingsAuthHook => {
           signature,
           secret,
           wallet
-        } as BookingsAuthRequest
+        } as BookingsAuthRequest,
+        {
+          withCredentials: true
+        }
       );
 
       logger.debug('Auth response', authRes);

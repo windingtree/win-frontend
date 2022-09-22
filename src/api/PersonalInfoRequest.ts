@@ -17,6 +17,7 @@ export class PersonalInfoRequest implements Request {
   public readonly url: string;
   public readonly method = 'post';
   public readonly data: PersonalInfoBody[];
+  public readonly withCredentials = true;
 
   public constructor(offerId: string, personalInfo: PersonalInfo) {
     this.url = `${backend.url}/api/booking/${offerId}/guests`;

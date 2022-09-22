@@ -3,4 +3,5 @@ export interface Request {
   readonly headers?: object;
   readonly method?: 'get' | 'post';
   readonly url: string;
+  readonly withCredentials?: boolean;
 }

@@ -1,13 +1,17 @@
 import type { RoomTypes } from '@windingtree/glider-types/dist/win';
 import type { OfferRecord } from 'src/store/types';
 import { Box, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
-import { RoomInformation } from './RoomInformation';
+import { RoomInformation } from '../RoomCard/RoomInformation';
 import { useFormContext } from 'react-hook-form';
+
+export interface FacilityGalleryProps {
+  offer: OfferRecord;
+  room: RoomTypes;
+}
 
 export const RoomCardGroup: React.FC<{
   room: RoomTypes;
   offer: OfferRecord;
-  facilityId: string;
   index: number;
 }> = ({ offer, room, index }) => {
   const { register } = useFormContext();

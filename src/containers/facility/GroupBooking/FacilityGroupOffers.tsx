@@ -1,11 +1,13 @@
 import { Grid } from '@mui/material';
-import { RoomCardGroup } from './RoomCard/RoomCardGroup';
+import { RoomCardGroup } from './RoomCardGroup';
 import { FormProvider } from 'src/components/hook-form';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
+import type { AccommodationType } from '@windingtree/glider-types/dist/win';
+import type { OfferRecord } from 'src/store/types';
 
 /**
  * Only the quantity can be changed in the form by the User,
@@ -24,11 +26,23 @@ export const GroupOffersSchema = Yup.object().shape({
   )
 });
 
+interface FacilityGroupOffersProps {
+  offers: OfferRecord[];
+  accommodation: AccommodationType;
+}
+
+interface OfferFormType extends OfferRecord {
+  quantity: string;
+}
+
 type FormValuesProps = {
-  offers: Array<{ id: string; quantity: string }>;
+  offers: OfferFormType[];
 };
 
-export const FacilityGroupOffers = ({ offers, accommodation, facilityId }) => {
+export const FacilityGroupOffers = ({
+  offers,
+  accommodation
+}: FacilityGroupOffersProps) => {
   const defaultValues: FormValuesProps = useMemo(
     () => ({
       offers: offers.map((offer) => ({
@@ -49,10 +63,6 @@ export const FacilityGroupOffers = ({ offers, accommodation, facilityId }) => {
     formState: { errors }
   } = methods;
 
-  const { fields } = useFieldArray({
-    name: 'offers' // unique name for your Field Array
-  });
-
   // TODO: on submit store the offers in a state
   const onSubmit = (values) => {
     console.log(values);
@@ -63,7 +73,6 @@ export const FacilityGroupOffers = ({ offers, accommodation, facilityId }) => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           {offers?.map((offer, index) => {
-            // TODO: do this in the useAccommodations hook
             const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
             const roomId: string = accommodationOfOffer?.roomType || '';
             const rooms = accommodation?.roomTypes || {};
@@ -73,7 +82,6 @@ export const FacilityGroupOffers = ({ offers, accommodation, facilityId }) => {
               <RoomCardGroup
                 index={index}
                 key={index}
-                facilityId={facilityId}
                 offer={offer}
                 room={matchedRoomWithOffer}
               />

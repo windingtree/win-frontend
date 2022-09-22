@@ -3,8 +3,6 @@ import { RewardOption } from '@windingtree/glider-types/dist/win';
 import axios from 'axios';
 import { backend } from 'src/config';
 
-axios.defaults.withCredentials = true;
-
 type MutationProps = {
   id?: string | null;
   rewardType?: string;
@@ -26,9 +24,13 @@ const getRewards = async (id: string) => {
 
 const postClaimReward = async ({ id, rewardType }: MutationProps) => {
   const { data } = await axios
-    .post<ClaimRewardResponse>(`${backend.url}/api/booking/${id}/reward`, {
-      rewardType
-    })
+    .post<ClaimRewardResponse>(
+      `${backend.url}/api/booking/${id}/reward`,
+      {
+        rewardType
+      },
+      { withCredentials: true }
+    )
     .catch((_) => {
       throw new Error('Something went wrong with claiming your reward.');
     });

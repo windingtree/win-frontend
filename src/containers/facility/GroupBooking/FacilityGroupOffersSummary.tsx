@@ -4,14 +4,14 @@ import { HEADER } from 'src/config/componentSizes';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { daysBetween } from 'src/utils/date';
 
-const getTotalPrice = (prev, current) => {
+const getTotalPrice: number = (prev, current) => {
   const quantity = Number(current.quantity);
   const amount = current.price.public;
   const totalPricePerOffer = quantity * amount;
   return totalPricePerOffer + prev;
 };
 
-const getRoomCount = (prev, current) => Number(current.quantity) + prev;
+const getRoomCount: number = (prev, current) => Number(current.quantity) + prev;
 
 export const FacilityGroupOffersSummary = () => {
   const { watch } = useFormContext();
