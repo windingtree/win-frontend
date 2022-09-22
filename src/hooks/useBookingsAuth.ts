@@ -2,13 +2,15 @@ import type {
   BookingsAuthRequest,
   BookingsAuthResponse,
   BookingsAuthSecretResponse
-} from '@windingtree/glider-types/types/win';
+} from '@windingtree/glider-types/dist/win';
 import { useCallback } from 'react';
 import axios from 'axios';
 import { createAuthSignature } from '@windingtree/win-commons/dist/auth';
 import { useAppDispatch, useAppState } from '../store';
 import { backend } from '../config';
 import Logger from '../utils/logger';
+
+axios.defaults.withCredentials = true;
 
 const logger = Logger('useBookingsAuth');
 

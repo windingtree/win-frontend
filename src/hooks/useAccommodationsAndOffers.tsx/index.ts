@@ -1,12 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
-import { fetchAccommodationsAndOffers } from './api';
+import { daysBetween } from '../../utils/date';
+import { Coordinates, fetchAccommodationsAndOffers } from './api';
 import {
   getAccommodationById,
   getActiveAccommodations,
   normalizeAccommodations,
   normalizeOffers,
-  getOffersById
+  getOffersById,
+  AccommodationWithId
 } from './helpers';
 
 export interface SearchTypeProps {
@@ -18,14 +20,42 @@ export interface SearchTypeProps {
   childrenCount?: number;
 }
 
-export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
+export interface LowestPriceFormat {
+  price: number;
+  currency: string;
+  decimals?: number;
+}
+
+export interface EventInfo {
+  eventName: string;
+  distance: number;
+  durationInMinutes: number;
+}
+
+export type AccommodationTransformFnParams = {
+  accommodation: AccommodationWithId;
+  searchProps?: SearchTypeProps | void;
+  searchResultsCenter?: Coordinates;
+};
+
+export type AccommodationTransformFn = (
+  params: AccommodationTransformFnParams
+) => AccommodationWithId;
+
+export const useAccommodationsAndOffers = ({
+  searchProps,
+  accommodationTransformFn
+}: {
+  searchProps?: SearchTypeProps | void;
+  accommodationTransformFn?: AccommodationTransformFn;
+} = {}) => {
   const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery(
     ['search-accommodations'],
     async () => {
-      if (!props) {
+      if (!searchProps) {
         return;
       }
-      return await fetchAccommodationsAndOffers(props);
+      return await fetchAccommodationsAndOffers(searchProps);
     },
     {
       enabled: false,
@@ -36,16 +66,52 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     }
   );
 
+  const latestQueryParams = data?.latestQueryParams;
+
   const allAccommodations = useMemo(
     () => normalizeAccommodations(data?.accommodations, data?.offers),
     [data]
   );
 
-  // This includes accommodations with active offers.
-  const accommodations = useMemo(
-    () => allAccommodations.filter((a) => a.offers.length > 0),
-    [allAccommodations]
-  );
+  // Get accommodations with active offer along with the offer with lowest price/room/night
+  // and an optional "accommodation" object transformation via
+  // a transformation callback function
+  const accommodations = useMemo(() => {
+    // This includes accommodations with active offers.
+    const filteredAccommodations = allAccommodations.filter((a) => a.offers.length > 0);
+
+    const numberOfDays = daysBetween(
+      latestQueryParams?.arrival,
+      latestQueryParams?.departure
+    );
+
+    // get offer with lowest price
+    return filteredAccommodations?.map((accommodation) => {
+      const lowestPrice: LowestPriceFormat = accommodation.offers
+        .map((offer) => ({
+          price:
+            Number(offer.price.public) /
+            (numberOfDays * (latestQueryParams?.roomCount ?? 1)),
+          currency: offer.price.currency
+        }))
+        .reduce((prevLowest, currentVal) =>
+          prevLowest.price < currentVal.price ? prevLowest : currentVal
+        );
+
+      // optional accommodation transformation callback function
+      // that can be used to modify or add properties to accomodation object
+      let transformedAccommodation = accommodation;
+      if (accommodationTransformFn && typeof accommodationTransformFn === 'function') {
+        transformedAccommodation = accommodationTransformFn({
+          accommodation,
+          searchProps: latestQueryParams,
+          searchResultsCenter: data?.coordinates
+        });
+      }
+
+      return { ...transformedAccommodation, lowestPrice };
+    });
+  }, [allAccommodations, latestQueryParams]);
 
   const offers = useMemo(
     () => (data?.offers && normalizeOffers(data.offers)) || [],
@@ -68,7 +134,7 @@ export const useAccommodationsAndOffers = (props: SearchTypeProps | void) => {
     error,
     isLoading,
     isFetching,
-    latestQueryParams: data?.latestQueryParams,
+    latestQueryParams,
     isFetched,
     getAccommodationByHotelId
   };

@@ -1,10 +1,12 @@
-import type { BookingResponse } from '@windingtree/glider-types/types/win';
+import type { BookingResponse } from '@windingtree/glider-types/dist/win';
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAppState } from '../store';
 import { backend } from '../config';
 import { usePoller } from './usePoller';
 import Logger from '../utils/logger';
+
+axios.defaults.withCredentials = true;
 
 const logger = Logger('useBookings');
 

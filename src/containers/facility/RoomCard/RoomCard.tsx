@@ -1,4 +1,4 @@
-import type { RoomTypes, PricedOffer } from '@windingtree/glider-types/types/win';
+import type { RoomTypes, WinPricedOffer } from '@windingtree/glider-types/dist/win';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useState } from 'react';
 import axios from 'axios';
@@ -13,6 +13,7 @@ import Logger from 'src/utils/logger';
 import { RoomInformation } from './RoomInformation';
 
 const logger = Logger('RoomCard');
+axios.defaults.withCredentials = true;
 
 export const RoomCard: React.FC<{
   room: RoomTypes;
@@ -37,7 +38,7 @@ export const RoomCard: React.FC<{
       setLoading(true);
 
       //TODO: check how we have to do this request if multipel rooms are being selected.
-      const res = await axios.request<PricedOffer>(new PricedOfferRequest(offer.id));
+      const res = await axios.request<WinPricedOffer>(new PricedOfferRequest(offer.id));
 
       if (res.data) {
         dispatch({

@@ -2,7 +2,7 @@ import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
-import { MediaItem } from '@windingtree/glider-types/types/win';
+import { MediaItem } from '@windingtree/glider-types/dist/win';
 import {
   Button,
   Dialog,

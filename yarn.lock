@@ -5332,10 +5332,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@windingtree/glider-types@^1.16.0":
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-1.16.0.tgz#7672c6f165b04e7e62f76de778c383a305d58444"
-  integrity sha512-VtcI+ENCfftQTQLokX9/OVdui58xKXThw+pwDkNcTI9ENh4QRaIWxnJc4r7kBgZtmCXyeF/BBY/PTRrPuM774g==
+"@windingtree/glider-types@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-2.6.0.tgz#cbdf1827b8f1bfe301112d3c5da1795e9b5ef07e"
+  integrity sha512-9THHJXVXbm//8Udqj2PcJ99Ei+I2Uf0nkF5sAEMbpAz+WZovhSCX3MAZb2xmLdX4YIgt0b9J+K5zK4/aVppE3w==
 
 "@windingtree/org.id-utils@^1.0.0-beta.47":
   version "1.0.0-beta.47"
@@ -5347,10 +5347,10 @@
     axios "0.24.0"
     ethers "5.5.3"
 
-"@windingtree/win-commons@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.7.0.tgz#e11473f367cf1f6e22bb162f300d70ce72c1a953"
-  integrity sha512-+eEhPavVdElEhZVws79fkOzdo0S5Cy4h+m+GYVKTQWRugIhkzUOId5uS+MXpec/N0ugKoggVnCE0AMYgViLhiA==
+"@windingtree/win-commons@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.8.0.tgz#3860275cb4729a897e34ec7bc598861843c27b1e"
+  integrity sha512-EWJqDBckNdir3XznR2qJ7V/T1sW+hF5So7XNiA/Dmbs0Z2x0f+VMdVajO5s6s39ndcqxwApl66bi+fSFZpaPPw==
   dependencies:
     ethers "^5.6.9"
 
@@ -8664,6 +8664,18 @@ eslint-plugin-testing-library@^5.0.1:
   integrity sha512-y63TRzPhGCMNsnUwMGJU1MFWc/3GvYw+nzobp9QiyNTTKsgAt5RKAOT1I34+XqVBpX1lC8bScoOjCkP7iRv0Mw==
   dependencies:
     "@typescript-eslint/utils" "^5.13.0"
+
+eslint-plugin-unused-imports@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-unused-imports/-/eslint-plugin-unused-imports-2.0.0.tgz#d8db8c4d0cfa0637a8b51ce3fd7d1b6bc3f08520"
+  integrity sha512-3APeS/tQlTrFa167ThtP0Zm0vctjr4M44HMpeg1P4bK6wItarumq0Ma82xorMKdFsWpphQBlRPzw/pxiVELX1A==
+  dependencies:
+    eslint-rule-composer "^0.3.0"
+
+eslint-rule-composer@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-rule-composer/-/eslint-rule-composer-0.3.0.tgz#79320c927b0c5c0d3d3d2b76c8b4a488f25bbaf9"
+  integrity sha512-bt+Sh8CtDmn2OajxvNO+BX7Wn4CIWMpTRm3MaiKPCQcnnlm0CS2mhui6QaoeQugs+3Kj2ESKEEGJUdVafwhiCg==
 
 eslint-scope@5.1.1, eslint-scope@^5.0.0, eslint-scope@^5.1.1:
   version "5.1.1"

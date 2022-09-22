@@ -1,20 +1,25 @@
-import { Accommodation, Offer } from '@windingtree/glider-types/types/win';
+import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
 import { OfferRecord } from 'src/store/types';
+import { AccommodationTransformFn, EventInfo, LowestPriceFormat } from '.';
+import { getActiveEventsWithinRadius } from '../../utils/events';
+import { crowDistance } from '../../utils/geo';
 
 enum PassengerType {
   child = 'CHD',
   adult = 'ADT'
 }
 
-export interface AccommodationWithId extends Accommodation {
+export interface AccommodationWithId extends WinAccommodation {
   id: string;
   offers: OfferRecord[];
+  lowestPrice?: LowestPriceFormat;
+  eventInfo?: EventInfo[];
 }
 
 export class InvalidLocationError extends Error {}
 
 export const getActiveAccommodations = (
-  accommodations: Accommodation[],
+  accommodations: WinAccommodation[],
   offers: Offer[]
 ) => {
   if (!accommodations || !offers) return [];
@@ -34,7 +39,7 @@ export const getActiveAccommodations = (
 };
 
 export const normalizeAccommodations = (
-  accommodations: Record<string, Accommodation> | undefined,
+  accommodations: Record<string, WinAccommodation> | undefined,
   offers: Record<string, Offer> | undefined
 ): AccommodationWithId[] => {
   if (!accommodations) return [];
@@ -43,7 +48,7 @@ export const normalizeAccommodations = (
   const normalizedAccommodations = Object.entries(
     accommodations
   ).map<AccommodationWithId>(([keyA, valueA]) => {
-    const filteredOffers: OfferRecord[] = normalizedOffers.filter((offer) =>
+    const filteredOffers = normalizedOffers.filter((offer) =>
       Object.entries(offer.pricePlansReferences)
         .map(([, valueP]) => valueP.accommodation === keyA)
         .includes(true)
@@ -115,4 +120,79 @@ export const getAccommodationById = (
     accommodations.find((accommodation) => accommodation.id === id) ?? null;
 
   return selectedAccommodation;
+};
+
+// function to transform accommodation object to include distance/time from chosen event
+export const accommodationEventTransform =
+  (focusedEvent: string): AccommodationTransformFn =>
+  ({ accommodation, searchProps, searchResultsCenter }) => {
+    // return if no search props
+    if (!searchProps) return accommodation;
+
+    const { arrival, departure } = searchProps;
+
+    const currentEvents = getActiveEventsWithinRadius({
+      fromDate: arrival,
+      toDate: departure,
+      focusedEvent,
+      center: searchResultsCenter
+    });
+
+    const { focusedEventItem = null, currentEventsWithinRadius } = currentEvents ?? {};
+
+    const focusedEventCoordinates = focusedEventItem?.latlon && [
+      focusedEventItem.latlon[0],
+      focusedEventItem.latlon[1]
+    ];
+
+    const eventInfo: EventInfo[] | undefined = [];
+    if (focusedEventCoordinates) {
+      const distance = crowDistance(
+        accommodation.location.coordinates[1],
+        accommodation.location.coordinates[0],
+        focusedEventCoordinates[0],
+        focusedEventCoordinates[1]
+      );
+
+      // return eventInfo as an array of distances with focusedEventInfo at the top if it exists
+      const durationInMinutes = (distance / 5) * 60; // we are assuming 5km/hr walking distance in minutes
+      eventInfo.push({ distance, eventName: focusedEvent, durationInMinutes });
+    }
+
+    if (currentEventsWithinRadius && currentEventsWithinRadius.length) {
+      const infos: EventInfo[] = [];
+
+      for (let idx = 0; idx < currentEventsWithinRadius.length; idx++) {
+        const event = currentEventsWithinRadius[idx];
+
+        const eventCoordinates = event?.latlon && [event.latlon[0], event.latlon[1]];
+
+        if (eventCoordinates) {
+          const distance = crowDistance(
+            accommodation.location.coordinates[1],
+            accommodation.location.coordinates[0],
+            eventCoordinates[0],
+            eventCoordinates[1]
+          );
+
+          // return eventInfo as an array of distances with focusedEventInfo at the top if it exists
+
+          const durationInMinutes = (distance / 5) * 60; // we are assuming 5km/hr walking distance in minutes
+          infos.push({ distance, eventName: event.name, durationInMinutes });
+        }
+      }
+
+      // sort by distance with nearest events first
+      infos.sort((a, b) => a.distance - b.distance);
+
+      // update eventInfo array with focusedEvent at top and other events in ascending distance
+      eventInfo.push(...infos);
+    }
+
+    return { ...accommodation, eventInfo };
+  };
+
+export const getGroupMode = (roomCount: number | string): boolean => {
+  const numRoomCount = Number.isNaN(roomCount) ? 0 : Number(roomCount);
+  return numRoomCount > 9;
 };

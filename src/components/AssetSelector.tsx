@@ -110,7 +110,7 @@ export const AssetSelector = ({
           </MenuItem>
         ))}
       </Select>
-      <FormHelperText>
+      <FormHelperText sx={{ maxWidth: '120px' }}>
         {noOptions
           ? `The selected network does not support payments in ${payment.currency}`
           : notSelected

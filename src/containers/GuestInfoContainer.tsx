@@ -7,7 +7,7 @@ import Logger from '../utils/logger';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import { Alert, Box, Card, Checkbox, Grid, Link, Stack, Typography } from '@mui/material';
+import { Alert, Box, Card, Checkbox, Link, Stack, Typography } from '@mui/material';
 import { useAppDispatch, useAppState } from '../store';
 import { FormProvider, RHFTextField } from '../components/hook-form';
 import { RHFPhoneField } from '../components/hook-form/RHFPhoneField';
@@ -16,6 +16,8 @@ import { RHFDatePicker } from '../components/hook-form/RHFDatePicker';
 import { regexp } from '@windingtree/org.id-utils';
 import { convertToLocalTime } from '../utils/date';
 import { DateTime } from 'luxon';
+
+axios.defaults.withCredentials = true;
 
 const logger = Logger('GuestInfoContainer');
 

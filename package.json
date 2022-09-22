@@ -74,11 +74,12 @@
     "@types/react-blockies": "^1.4.1",
     "@types/react-dom": "^18.0.6",
     "@types/react-lazy-load-image-component": "1.5.2",
+    "@types/react-slick": "^0.23.10",
     "@types/styled-components": "^5.1.25",
     "@walletconnect/web3-provider": "^1.8.0",
-    "@windingtree/glider-types": "^1.16.0",
+    "@windingtree/glider-types": "^2.6.0",
     "@windingtree/org.id-utils": "^1.0.0-beta.47",
-    "@windingtree/win-commons": "^1.7.0",
+    "@windingtree/win-commons": "^1.8.0",
     "@windingtree/win-pay": "^1.6.0",
     "axios": "^0.27.2",
     "babel-plugin-named-exports-order": "^0.0.2",
@@ -89,6 +90,7 @@
     "crypto-browserify": "^3.12.0",
     "date-fns": "^2.29.1",
     "dayjs": "^1.11.5",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "ethers": "^5.6.9",
     "framer-motion": "^7.2.0",
     "git-cz": "^4.9.0",
@@ -114,6 +116,7 @@
     "react-leaflet": "^4.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "react-slick": "^0.23.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "styled-components": "^5.3.5",
@@ -122,9 +125,7 @@
     "uuid": "8.3.2",
     "web-vitals": "^3.0.0-rc.0",
     "web3modal": "^1.9.9",
-    "yup": "^0.32.11",
-    "react-slick": "^0.23.0",
-    "@types/react-slick": "^0.23.10"
+    "yup": "^0.32.11"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"

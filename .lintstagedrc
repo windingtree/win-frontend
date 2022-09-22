@@ -1,5 +1,5 @@
 {
-  "*.{ts,tsxjs,sol,json}": [
+  "*.{ts,tsx,js,sol,json}": [
     "eslint --cache --fix",
     "prettier --write"
   ],
