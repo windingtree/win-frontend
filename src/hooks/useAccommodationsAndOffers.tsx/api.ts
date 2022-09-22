@@ -8,8 +8,6 @@ import { getGroupMode, getPassengersBody, InvalidLocationError } from './helpers
 import { SearchTypeProps } from '.';
 import { defaultSearchRadiusInMeters } from '../../config';
 
-axios.defaults.withCredentials = true;
-
 export interface Coordinates {
   lat: number;
   lon: number;
@@ -39,7 +37,9 @@ export async function fetchAccommodationsAndOffers({
    */
   const { data: coordinatesData } = await axios
     //TODO: include endpoint in .env or config
-    .get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
+    .get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`, {
+      withCredentials: true
+    })
     .catch((_) => {
       throw new Error(
         `Something went wrong when retrieving the coordinates of ${location}. Please try again.`
