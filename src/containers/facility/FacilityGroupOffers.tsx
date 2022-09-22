@@ -7,11 +7,19 @@ import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
 
+/**
+ * Only the quantity can be changed in the form by the User,
+ * but all other properties of the offer object are also included as
+ * 1. ) it is either needed for the or 2. to display certain UI towards the user
+ */
 export const GroupOffersSchema = Yup.object().shape({
   offers: Yup.array().of(
     Yup.object().shape({
+      expiration: Yup.string(),
       id: Yup.string(),
-      quantity: Yup.string()
+      quantity: Yup.string(),
+      price: Yup.object(),
+      pricePlansReferences: Yup.object()
     })
   )
 });
@@ -21,8 +29,9 @@ type FormValuesProps = {
 };
 
 export const FacilityGroupOffers = ({ offers, accommodation, facilityId }) => {
-  const normalizedOffersForForm = offers.map((offer) => ({
-    offerId: offer.id,
+  const normalizedOffersForForm = offers.map(({ id, ...rest }) => ({
+    ...rest,
+    offerId: id,
     quantity: '0'
   }));
 
@@ -43,19 +52,18 @@ export const FacilityGroupOffers = ({ offers, accommodation, facilityId }) => {
     handleSubmit,
     formState: { errors }
   } = methods;
-  const values = watch();
 
+  // TODO: on submit store the offers in a state
   const onSubmit = (values) => {
     console.log(values);
   };
-
-  console.log(values);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           {offers?.map((offer, index) => {
+            // TODO: do this in the useAccommodations hook
             const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
             const roomId: string = accommodationOfOffer?.roomType || '';
             const rooms = accommodation?.roomTypes || {};

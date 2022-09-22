@@ -454,6 +454,7 @@ export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
   const { control, getValues, setValue } = useFormContext();
   const [country, setCountry] = useState<CountryType | null>(null);
 
+  console.log(getValues()[name]);
   const onCountryChange = useCallback(
     (e: InputChangeEvent, value: CountryType) => {
       const phone = getValues()[name];
@@ -478,7 +479,8 @@ export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
   };
 
   const onFieldChange = (e: InputChangeEvent, onChange: OnChangeCallback): void => {
-    doSetCountry(e.target.value);
+    const valueWithoutSpaces = e.target.value.replace(' ', '');
+    doSetCountry(valueWithoutSpaces);
     return onChange(e);
   };
 
