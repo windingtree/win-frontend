@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import { RoomCardGroup } from './RoomCard/RoomCardGroup';
 import { FormProvider } from 'src/components/hook-form';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
@@ -29,15 +29,12 @@ type FormValuesProps = {
 };
 
 export const FacilityGroupOffers = ({ offers, accommodation, facilityId }) => {
-  const normalizedOffersForForm = offers.map(({ id, ...rest }) => ({
-    ...rest,
-    offerId: id,
-    quantity: '0'
-  }));
-
   const defaultValues: FormValuesProps = useMemo(
     () => ({
-      offers: normalizedOffersForForm
+      offers: offers.map((offer) => ({
+        ...offer,
+        quantity: '0'
+      }))
     }),
     [offers]
   );
@@ -48,10 +45,13 @@ export const FacilityGroupOffers = ({ offers, accommodation, facilityId }) => {
   });
 
   const {
-    watch,
     handleSubmit,
     formState: { errors }
   } = methods;
+
+  const { fields } = useFieldArray({
+    name: 'offers' // unique name for your Field Array
+  });
 
   // TODO: on submit store the offers in a state
   const onSubmit = (values) => {

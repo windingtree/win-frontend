@@ -1,10 +1,7 @@
-import type { RoomTypes } from '@windingtree/glider-types/types/win';
+import type { RoomTypes } from '@windingtree/glider-types/dist/win';
 import type { OfferRecord } from 'src/store/types';
 import { Box, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
-import { daysBetween } from 'src/utils/date';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { RoomInformation } from './RoomInformation';
-import { RHFTextField } from 'src/components/hook-form';
 import { useFormContext } from 'react-hook-form';
 
 export const RoomCardGroup: React.FC<{
@@ -12,7 +9,7 @@ export const RoomCardGroup: React.FC<{
   offer: OfferRecord;
   facilityId: string;
   index: number;
-}> = ({ offer, facilityId, room, index }) => {
+}> = ({ offer, room, index }) => {
   const { register } = useFormContext();
   const price = `${offer.price?.currency} ${Number(offer.price?.public).toFixed(2)}`;
 
