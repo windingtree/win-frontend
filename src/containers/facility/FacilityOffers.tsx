@@ -76,11 +76,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
       />
 
       {showGroupBooking && (
-        <FacilityGroupOffers
-          offers={sortedOffers}
-          accommodation={accommodation}
-          facilityId={id}
-        />
+        <FacilityGroupOffers offers={sortedOffers} accommodation={accommodation} />
       )}
       {!showGroupBooking &&
         sortedOffers?.map((offer, index) => {

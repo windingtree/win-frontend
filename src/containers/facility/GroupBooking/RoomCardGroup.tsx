@@ -1,8 +1,8 @@
 import type { RoomTypes } from '@windingtree/glider-types/dist/win';
 import type { OfferRecord } from 'src/store/types';
 import { Box, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
-import { RoomInformation } from '../RoomCard/RoomInformation';
 import { useFormContext } from 'react-hook-form';
+import { RoomInformation } from '../RoomInformation';
 
 export interface FacilityGalleryProps {
   offer: OfferRecord;

@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { RoomCardGroup } from './RoomCardGroup';
 import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
@@ -6,8 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
-import type { AccommodationType } from '@windingtree/glider-types/dist/win';
 import type { OfferRecord } from 'src/store/types';
+import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
 
 /**
  * Only the quantity can be changed in the form by the User,
@@ -27,8 +27,8 @@ export const GroupOffersSchema = Yup.object().shape({
 });
 
 interface FacilityGroupOffersProps {
-  offers: OfferRecord[];
-  accommodation: AccommodationType;
+  offers: OfferRecord[] | null;
+  accommodation: AccommodationWithId | null;
 }
 
 interface OfferFormType extends OfferRecord {
@@ -36,7 +36,7 @@ interface OfferFormType extends OfferRecord {
 }
 
 type FormValuesProps = {
-  offers: OfferFormType[];
+  offers: OfferFormType[] | null;
 };
 
 export const FacilityGroupOffers = ({
@@ -45,7 +45,7 @@ export const FacilityGroupOffers = ({
 }: FacilityGroupOffersProps) => {
   const defaultValues: FormValuesProps = useMemo(
     () => ({
-      offers: offers.map((offer) => ({
+      offers: offers?.map((offer) => ({
         ...offer,
         quantity: '0'
       }))
@@ -58,15 +58,15 @@ export const FacilityGroupOffers = ({
     defaultValues
   });
 
-  const {
-    handleSubmit,
-    formState: { errors }
-  } = methods;
+  const { handleSubmit } = methods;
 
   // TODO: on submit store the offers in a state
   const onSubmit = (values) => {
     console.log(values);
   };
+
+  if (!offers)
+    return <Typography>No rooms available during the selected dates.</Typography>;
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
