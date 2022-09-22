@@ -253,7 +253,9 @@ export const Checkout = () => {
             gap: 1
           }}>
             <Box>
-              <Typography variant="h3" sx={{ marginTop: '-28px' }}>
+              <Typography variant="h3" sx={{
+                marginTop: checkout.quote ? '-28px' : '0px'
+              }}>
                 Your payment value is
               </Typography>
             </Box>
