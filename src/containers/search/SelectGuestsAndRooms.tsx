@@ -1,8 +1,21 @@
 import { Box, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { RHFTextField } from 'src/components/hook-form';
+import { getGroupMode } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
 
 export const SelectGuestsAndRooms = () => {
+  const { watch } = useFormContext();
+  const [groupMode, setGroupMode] = useState<boolean>(false);
   const FIELD_WIDTH = '80px';
+
+  const roomCount = watch('roomCount');
+
+  useEffect(() => {
+    const isGroupMode = getGroupMode(Number(roomCount));
+    setGroupMode(isGroupMode);
+  }, [roomCount]);
+
   return (
     <Stack spacing={2} p={4}>
       <Stack direction="row" justifyContent="space-between">
@@ -27,9 +40,14 @@ export const SelectGuestsAndRooms = () => {
       </Stack>
 
       <Stack direction="row" justifyContent="space-between">
-        <Box>
+        <Box mr={1}>
           <Typography fontWeight="bold">Rooms</Typography>
-          <Typography variant="caption">Select number of rooms. Maximum is 9.</Typography>
+          {groupMode && (
+            <Stack direction={'column'} sx={{ color: 'info.main' }}>
+              <Typography variant="caption">{'More than 9 rooms '}</Typography>
+              <Typography variant="caption">{'qualifies for a group booking'}</Typography>
+            </Stack>
+          )}
         </Box>
 
         <Box width={FIELD_WIDTH}>

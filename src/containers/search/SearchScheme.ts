@@ -9,8 +9,7 @@ export const SearchSchema = Yup.object().shape({
   roomCount: Yup.number()
     .transform((value) => (isNaN(value) ? undefined : value))
     .required('Minimum is 1')
-    .moreThan(0, 'Minimum is 1')
-    .lessThan(10, 'Maximum is 9'),
+    .moreThan(0, 'Minimum is 1'),
   dateRange: Yup.array()
     .of(
       Yup.object().shape({

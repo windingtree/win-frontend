@@ -74,9 +74,7 @@ export async function fetchAccommodationsAndOffers({
 
   const isGroupMode = getGroupMode(roomCount);
   const baseUri = process.env.REACT_APP_API_URL;
-  const searchPath = isGroupMode
-    ? '/api/hotels/offers/search'
-    : '/api/hotels/offers/search';
+  const searchPath = isGroupMode ? '/api/groups/search' : '/api/hotels/offers/search';
 
   const uri = baseUri + searchPath;
   const { data } = await axios.post<SearchResults>(uri, derbySoftBody).catch(() => {
