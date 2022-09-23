@@ -178,7 +178,7 @@ export const SearchForm: React.FC = () => {
   // set local error when error object changes
   useEffect(() => {
     setShowError(error);
-  }, [error, setShowError]);
+  }, [error]);
 
   useEffect(() => {
     setShowAccommodationsError(!(accommodations?.length > 0) ?? false);
