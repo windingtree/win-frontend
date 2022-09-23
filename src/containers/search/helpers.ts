@@ -34,8 +34,7 @@ interface ValidationErrorChunks {
 }
 
 export const buildValidationErrors = (
-  errors: FieldErrorsImpl | FieldErrors,
-  nested = false
+  errors: FieldErrorsImpl | FieldErrors
 ): ValidationErrorChunks => {
   const requiredErrors: string[] = [];
   const otherErrors: string[] = [];
@@ -106,6 +105,7 @@ export const buildValidationErrorMessage = ({
 };
 
 export const getValidationErrorMessage = (errors: FieldErrorsImpl) => {
+  if (!errors) return;
   const builtErrors = buildValidationErrors(errors);
   const message = buildValidationErrorMessage(builtErrors);
 

@@ -70,6 +70,12 @@ export const SearchForm: React.FC = () => {
   const theme = useTheme();
   const { pathname, search } = useLocation();
 
+  // monitor error state locally
+  // generic error message
+  const [showError, setShowError] = useState<unknown>(undefined);
+  // error when no accommodation found
+  const [showAccommodationsError, setShowAccommodationsError] = useState<boolean>(false);
+
   /**
    * Logic in relation to the popovers.
    */
@@ -108,7 +114,8 @@ export const SearchForm: React.FC = () => {
     watch,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
+    clearErrors
   } = methods;
   const values = watch();
 
@@ -158,6 +165,28 @@ export const SearchForm: React.FC = () => {
       return;
     }
   }, [roomCount, adultCount, dateRange, location, refetch]);
+
+  // Prevent error messages from persisting on path change
+  // clear errors when path changes
+  const clearErrorMessages = useCallback(() => {
+    clearErrors();
+    setShowError(undefined);
+    setShowAccommodationsError(false);
+  }, []);
+
+  // set local error when error object changes
+  useEffect(() => {
+    setShowError(error);
+  }, [error, setShowError]);
+
+  useEffect(() => {
+    setShowAccommodationsError(!(accommodations?.length > 0) ?? false);
+  }, [accommodations]);
+
+  // clear error messages on path change
+  useEffect(() => {
+    clearErrorMessages();
+  }, [pathname, search, clearErrorMessages]);
 
   /**
    * Conduct a search on the initial render when conditions are met.
@@ -328,7 +357,7 @@ export const SearchForm: React.FC = () => {
             </Alert>
           )}
 
-          {error && (
+          {showError && (
             <Alert
               sx={{
                 display: 'flex',
@@ -338,12 +367,12 @@ export const SearchForm: React.FC = () => {
               }}
               severity="error"
             >
-              {(error as Error) && (error as Error).message
-                ? (error as Error).message
+              {(showError as Error) && (showError as Error).message
+                ? (showError as Error).message
                 : 'Something went wrong '}
             </Alert>
           )}
-          {!error && isFetched && accommodations.length === 0 && (
+          {!showError && isFetched && showAccommodationsError && (
             <Alert
               sx={{
                 display: 'flex',
