@@ -16,7 +16,12 @@ import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
-import { autocompleteData, endDateDisplay, startDateDisplay } from './helpers';
+import {
+  autocompleteData,
+  endDateDisplay,
+  getValidationErrorMessage,
+  startDateDisplay
+} from './helpers';
 import {
   createSearchParams,
   useNavigate,
@@ -65,6 +70,13 @@ export const SearchForm: React.FC = () => {
   const theme = useTheme();
   const { pathname, search } = useLocation();
 
+  // monitor error state locally
+  // generic error message
+  const [showError, setShowError] = useState<Error | null>(null);
+
+  // error when no accommodation found
+  const [showAccommodationsError, setShowAccommodationsError] = useState<boolean>(false);
+
   /**
    * Logic in relation to the popovers.
    */
@@ -103,14 +115,12 @@ export const SearchForm: React.FC = () => {
     watch,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
+    clearErrors
   } = methods;
   const values = watch();
 
-  const hasLocationValidationError = errors && errors.location ? true : false;
-  const hasDateRangeValidationError = errors && errors.dateRange ? true : false;
-  const hasAdultCountValidationError = errors && errors.adultCount ? true : false;
-  const hasRoomCountValidationError = errors && errors.roomCount ? true : false;
+  const validationErrorMessage = getValidationErrorMessage(errors);
 
   const { roomCount, adultCount, dateRange, location } = values;
   const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
@@ -156,6 +166,28 @@ export const SearchForm: React.FC = () => {
       return;
     }
   }, [roomCount, adultCount, dateRange, location, refetch]);
+
+  // Prevent error messages from persisting on path change
+  // clear errors when path changes
+  const clearErrorMessages = useCallback(() => {
+    clearErrors();
+    setShowError(null);
+    setShowAccommodationsError(false);
+  }, []);
+
+  // set local error when error object changes
+  useEffect(() => {
+    setShowError(error);
+  }, [error]);
+
+  useEffect(() => {
+    setShowAccommodationsError(!(accommodations?.length > 0) ?? false);
+  }, [accommodations]);
+
+  // clear error messages on path change
+  useEffect(() => {
+    clearErrorMessages();
+  }, [pathname, search, clearErrorMessages]);
 
   /**
    * Conduct a search on the initial render when conditions are met.
@@ -317,40 +349,16 @@ export const SearchForm: React.FC = () => {
               and number of rooms to get a quotation.
             </Alert>
           )}
-          {hasLocationValidationError && (
+          {validationErrorMessage && (
             <Alert
               sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
               severity="error"
             >
-              Fill in a proper destination.
-            </Alert>
-          )}
-          {hasDateRangeValidationError && (
-            <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-              severity="error"
-            >
-              Fill in proper dates.
-            </Alert>
-          )}
-          {hasAdultCountValidationError && (
-            <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-              severity="error"
-            >
-              Fill in proper number of guests.
-            </Alert>
-          )}
-          {hasRoomCountValidationError && (
-            <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-              severity="error"
-            >
-              Fill in proper number of rooms.
+              {validationErrorMessage}
             </Alert>
           )}
 
-          {error && (
+          {showError && (
             <Alert
               sx={{
                 display: 'flex',
@@ -360,12 +368,12 @@ export const SearchForm: React.FC = () => {
               }}
               severity="error"
             >
-              {(error as Error) && (error as Error).message
-                ? (error as Error).message
+              {(showError as Error) && (showError as Error).message
+                ? (showError as Error).message
                 : 'Something went wrong '}
             </Alert>
           )}
-          {!error && isFetched && accommodations.length === 0 && (
+          {!showError && isFetched && showAccommodationsError && (
             <Alert
               sx={{
                 display: 'flex',
