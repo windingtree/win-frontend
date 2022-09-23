@@ -7,7 +7,10 @@ import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/hel
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { ImageCarousel } from './ImageCarousel';
 import { buildAccommodationAddress } from '../utils/accommodation';
-import { EventInfo } from '../hooks/useAccommodationsAndOffers.tsx';
+import {
+  EventInfo,
+  useAccommodationsAndOffers
+} from '../hooks/useAccommodationsAndOffers.tsx';
 import { currencySymbolMap } from '../utils/currencies';
 
 export interface SearchCardProps {
@@ -24,6 +27,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const navigate = useNavigate();
     const theme = useTheme();
     const { winWidth } = useWindowsDimension();
+    const { isGroupMode } = useAccommodationsAndOffers();
     const selectedStyle: CSSProperties = isSelected
       ? {
           position: 'relative'
@@ -122,7 +126,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             <Stack
               direction={winWidth < 900 || sm ? 'row-reverse' : 'row'}
               alignItems="end"
-              justifyContent="space-between"
+              justifyContent={winWidth < 900 || sm ? 'start' : 'space-between'}
             >
               <Stack
                 direction={winWidth < 900 || sm ? 'column' : 'row'}
@@ -145,8 +149,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                   </Typography>
                 </Stack>
 
-                {!(winWidth < 900 || sm) && <Typography>|</Typography>}
-                {!sm && (
+                {!(winWidth < 900 || sm) && !isGroupMode && <Typography>|</Typography>}
+                {!sm && !isGroupMode && (
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography
                       alignItems="center"
@@ -162,6 +166,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               </Stack>
               {!sm && <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />}
             </Stack>
+            {isGroupMode && <Typography variant="subtitle2">Select Rooms</Typography>}
           </Stack>
         </Stack>
       </Card>

@@ -128,8 +128,15 @@ export const SearchForm: React.FC = () => {
    * Logic in relation to executing the query
    */
 
-  const { refetch, isFetching, error, isFetched, accommodations, latestQueryParams } =
-    useAccommodationsAndOffers({ searchProps });
+  const {
+    refetch,
+    isFetching,
+    error,
+    isFetched,
+    accommodations,
+    latestQueryParams,
+    isGroupMode
+  } = useAccommodationsAndOffers({ searchProps });
 
   const onSubmit = useCallback(() => {
     //TODO: update search params when submitting the form
@@ -300,6 +307,16 @@ export const SearchForm: React.FC = () => {
           </Stack>
         </ToolbarStyle>
         <>
+          {isGroupMode && accommodations.length && (
+            // show this message when in group mode and there are accommodations with offers
+            <Alert
+              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+              severity="info"
+            >
+              You have entered the group booking mode. Please select your favorite hotel
+              and number of rooms to get a quotation.
+            </Alert>
+          )}
           {hasLocationValidationError && (
             <Alert
               sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}

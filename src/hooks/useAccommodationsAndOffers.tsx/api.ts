@@ -18,6 +18,7 @@ export interface AccommodationsAndOffersResponse {
   offers: Record<string, Offer>;
   coordinates: Coordinates;
   latestQueryParams: SearchTypeProps;
+  isGroupMode: boolean;
 }
 /**
  * This hook fetches accommodations and its related offers.
@@ -102,14 +103,14 @@ export async function fetchAccommodationsAndOffers({
     arrival,
     roomCount,
     adultCount,
-    childrenCount,
-    isGroupMode
+    childrenCount
   };
 
   return {
     accommodations,
     offers,
     coordinates: normalizedCoordinates,
-    latestQueryParams
+    latestQueryParams,
+    isGroupMode
   };
 }

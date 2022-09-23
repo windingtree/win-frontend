@@ -67,6 +67,7 @@ export const useAccommodationsAndOffers = ({
   );
 
   const latestQueryParams = data?.latestQueryParams;
+  const isGroupMode = data?.isGroupMode ?? false;
 
   const allAccommodations = useMemo(
     () => normalizeAccommodations(data?.accommodations, data?.offers),
@@ -136,6 +137,7 @@ export const useAccommodationsAndOffers = ({
     isFetching,
     latestQueryParams,
     isFetched,
-    getAccommodationByHotelId
+    getAccommodationByHotelId,
+    isGroupMode
   };
 };
