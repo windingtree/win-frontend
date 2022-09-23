@@ -72,7 +72,8 @@ export const SearchForm: React.FC = () => {
 
   // monitor error state locally
   // generic error message
-  const [showError, setShowError] = useState<unknown>(undefined);
+  const [showError, setShowError] = useState<Error | null>(null);
+
   // error when no accommodation found
   const [showAccommodationsError, setShowAccommodationsError] = useState<boolean>(false);
 
@@ -170,7 +171,7 @@ export const SearchForm: React.FC = () => {
   // clear errors when path changes
   const clearErrorMessages = useCallback(() => {
     clearErrors();
-    setShowError(undefined);
+    setShowError(null);
     setShowAccommodationsError(false);
   }, []);
 
