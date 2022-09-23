@@ -32,6 +32,9 @@ export const getActiveEvents = (dateRange: EventSearchParams) => {
         'd-MM-yyyy'
       ).toJSDate();
 
+      // exclude past events
+      if (eventToDate < new Date()) return false;
+
       return datesOverlap(dateRange, { fromDate: eventFromDate, toDate: eventToDate });
     } catch (error) {
       // eslint-disable-next-line no-console
