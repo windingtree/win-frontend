@@ -1,5 +1,5 @@
 import { alpha, styled } from '@mui/material/styles';
-import { Box, AppBar, Toolbar, Container } from '@mui/material';
+import { Box, AppBar, Toolbar, Container, Stack, Typography } from '@mui/material';
 import { LogoBeta } from 'src/components/Logo';
 import useOffSetTop from 'src/hooks/useOffsetTop';
 import useResponsive from 'src/hooks/useResponsive';
@@ -8,6 +8,7 @@ import { AccountInfo } from 'src/components/AccountInfo';
 import { SocialsButton } from 'src/components/SocialButton';
 import MenuDesktop from './MenuDesktop';
 import navConfig from './MenuConfig';
+import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
 
 // this is commented out because the navconfig is currently commented out
 // import MenuMobile from './MenuMobile';
@@ -78,6 +79,7 @@ const SOCIALS = [
 export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
   const isOffset = useOffSetTop(HEADER.MAIN_DESKTOP_HEIGHT);
   const isDesktop = useResponsive('up', 'md');
+  const { isGroupMode } = useAccommodationsAndOffers();
 
   return (
     <>
@@ -90,14 +92,32 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
               justifyContent: 'space-between'
             }}
           >
-            <LogoBeta />
+            <Stack direction={'row'} spacing={1}>
+              <LogoBeta />
+              {isGroupMode && (
+                <>
+                  <Typography
+                    variant="h6"
+                    color="primary.darker"
+                    p={1}
+                    borderLeft={(theme) => ({
+                      borderLeft: `${theme.spacing(0.25)} ${
+                        theme.palette.primary.darker
+                      } solid`
+                    })}
+                  >
+                    Group Booking
+                  </Typography>
+                </>
+              )}
+            </Stack>
 
             <Box sx={{ flexGrow: 1 }} />
             <AccountInfo />
 
             {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />}
 
-            {/* Currenlty the navConfig is empty, therefore it is commented out */}
+            {/* Currently the navConfig is empty, therefore it is commented out */}
             {/* {!isDesktop && <MenuMobile isOffset={isOffset} navConfig={navConfig} />} */}
 
             <SocialsButton socials={SOCIALS} sx={{ mx: 0.5 }} />

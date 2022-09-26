@@ -75,7 +75,7 @@ export const BookingRewards = () => {
                 <Typography variant="body1" mb={2} component="ul">
                   <li>
                     {' '}
-                    We purchase and retire on your behalf Nature Carbon Credit (NCT) from
+                    We purchase and retire on your behalf Nature Carbon Tonne (NCT) from
                     Toucan Protocol.
                   </li>
                   <li>Send you a proof as an NFT certificate.</li>

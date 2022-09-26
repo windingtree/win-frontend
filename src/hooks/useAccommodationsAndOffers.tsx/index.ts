@@ -1,7 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import { daysBetween } from '../../utils/date';
-import { Coordinates, fetchAccommodationsAndOffers } from './api';
+import {
+  AccommodationsAndOffersResponse,
+  Coordinates,
+  fetchAccommodationsAndOffers
+} from './api';
 import {
   getAccommodationById,
   getActiveAccommodations,
@@ -49,7 +53,10 @@ export const useAccommodationsAndOffers = ({
   searchProps?: SearchTypeProps | void;
   accommodationTransformFn?: AccommodationTransformFn;
 } = {}) => {
-  const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery(
+  const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery<
+    AccommodationsAndOffersResponse | undefined,
+    Error
+  >(
     ['search-accommodations'],
     async () => {
       if (!searchProps) {
@@ -67,6 +74,7 @@ export const useAccommodationsAndOffers = ({
   );
 
   const latestQueryParams = data?.latestQueryParams;
+  const isGroupMode = data?.isGroupMode ?? false;
 
   const allAccommodations = useMemo(
     () => normalizeAccommodations(data?.accommodations, data?.offers),
@@ -136,6 +144,7 @@ export const useAccommodationsAndOffers = ({
     isFetching,
     latestQueryParams,
     isFetched,
-    getAccommodationByHotelId
+    getAccommodationByHotelId,
+    isGroupMode
   };
 };

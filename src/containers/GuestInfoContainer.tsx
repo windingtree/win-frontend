@@ -48,7 +48,7 @@ export const GuestInfoContainer = () => {
       .email(),
     phone: Yup.string()
       .trim()
-      .matches(regexp.phone, 'Incorrect phone number')
+      .matches(/^\+[1-9]\d{1,14}$/, 'Incorrect phone number')
       .required('Phone number is required'),
     birthdate: Yup.date()
       // .matches(regexp.isoDate, 'Incorrect date')
