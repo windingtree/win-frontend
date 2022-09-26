@@ -5,6 +5,7 @@ import Image from "../../components/Image";
 import {LoadingButton} from "@mui/lab";
 import {useEffect, useState} from "react";
 import process from "process";
+import {useAppState} from "../../store";
 
 const ContainerStyle = styled(Container)(({ theme }) => ({
   position: 'absolute',
@@ -25,6 +26,7 @@ declare global {
 
 export const DevconCashbackReward = () => {
 
+  const { provider } = useAppState();
 
   useEffect(() => {
     window.negotiator = new Client({
@@ -67,14 +69,14 @@ export const DevconCashbackReward = () => {
     });
   });
 
-  async function sendCashbackRequest(data){
+  async function sendCashbackRequest(data: any){
     console.log(data);
 
     try {
 
       const params = new URLSearchParams(document.location.search);
 
-      const res = await fetch("http://localhost:8080/", {
+      const res = await fetch("", {
         method: "POST",
         headers: [
           ["Content-Type", "application/json"]
@@ -86,7 +88,7 @@ export const DevconCashbackReward = () => {
           requestData: {
             offerId: params.get("offerId"),
             txId: params.get("tx"),
-            chainId: parseInt(window.ethereum.chainId)
+            chainId: provider?.network.chainId
           }
         })
       });
