@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
 import type { OfferRecord } from 'src/store/types';
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 /**
  * Only the quantity can be changed in the form by the User,
@@ -18,21 +19,45 @@ export const GroupOffersSchema = Yup.object().shape({
     Yup.object().shape({
       expiration: Yup.string(),
       id: Yup.string(),
-      quantity: Yup.string()
-      // price: Yup.object(),
-      // pricePlansReferences: Yup.object()
+      quantity: Yup.string(),
+      price: Yup.object(),
+      pricePlansReferences: Yup.object()
     })
   )
 });
 
 interface FacilityGroupOffersProps {
-  offers: OfferRecord[];
+  offers: OfferRecord[] | null;
   accommodation: AccommodationWithId | null;
 }
 
-type OfferFormType = OfferRecord;
-
-type FormValuesProps = OfferFormType[];
+type FormValuesProps = {
+  offers: {
+    expiration?: string;
+    price?: {
+      currency: string;
+      private?: string;
+      public: string;
+      commission?: string;
+      taxes?: string;
+      isAmountBeforeTax?: boolean;
+      decimalPlaces?: number;
+    };
+    pricePlansReferences?: {
+      [k: string]: {
+        accommodation: string;
+        roomType: string;
+        roomTypePlan?: {
+          mealPlan?: string;
+          ratePlan?: string;
+          roomTypeId: string;
+        };
+      };
+    };
+    quantity: string;
+    id: string;
+  }[];
+};
 
 export const FacilityGroupOffers = ({
   offers = [],
@@ -40,30 +65,17 @@ export const FacilityGroupOffers = ({
 }: FacilityGroupOffersProps) => {
   const test = useMemo(() => {
     const mappedOffers =
-      offers?.map(
-        (offer): OfferFormType => ({
-          ...offer,
-          quantity: '0'
-        })
-      ) ?? [];
+      offers?.map((offer) => ({
+        ...offer,
+        quantity: '0'
+      })) ?? [];
 
     return mappedOffers;
-
-    // const formValues  = { offers: mappedOffers };
-
-    // return formValues;
-
-    // offers: offers?.map(
-    //   (offer): OfferFormType => ({
-    //     ...offer,
-    //     quantity: '0'
-    //   })
-    // )
   }, [offers]);
 
-  const methods = useForm<{ offers: OfferRecord[] }>({
-    // resolver: yupResolver(GroupOffersSchema),
-    defaultValues: { offers }
+  const methods = useForm<FormValuesProps>({
+    resolver: yupResolver(GroupOffersSchema),
+    defaultValues: { offers: test }
   });
 
   // const roomCount = values.offers.reduce(getRoomCount, 0);
