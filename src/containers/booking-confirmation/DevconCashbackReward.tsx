@@ -28,6 +28,16 @@ export const DevconCashbackReward = () => {
 
   const { provider } = useAppState();
 
+  const theme = useTheme();
+  const paddingContainer = theme.spacing(3);
+
+  const [modalMode, setModalMode] = useState(0);
+  const [ticket, setTicket] = useState(null);
+
+  const [error, setError] = useState({message: "", detail: ""});
+
+  const AUTH_ERROR_STR = "There was an error during Authentication. Please refer to the error message below for more details: ";
+
   useEffect(() => {
     window.negotiator = new Client({
       type: "active",
@@ -52,17 +62,18 @@ export const DevconCashbackReward = () => {
     });
 
     window.negotiator.on("tokens-selected", (tokens) => {
-      console.log(tokens);
 
-      if (tokens.selectedTokens["devcon"]?.tokens?.length > 0){
-        setIsOpen(1);
+      if (tokens.selectedTokens?.["devcon"]?.tokens?.length > 0){
+        setModalMode(1);
         setTicket(tokens.selectedTokens["devcon"]?.tokens[0]);
+      } else {
+        showError("Looks like you don't have Devcon tickets, ensure you have opened your Devcon magic link in this browser.", "");
       }
     });
 
     window.negotiator.on("token-proof", (proof: any) => {
       if (proof.error){
-        console.error(proof.error);
+        showError(AUTH_ERROR_STR, proof.error);
         return;
       }
       sendCashbackRequest(proof.data);
@@ -70,13 +81,12 @@ export const DevconCashbackReward = () => {
   });
 
   async function sendCashbackRequest(data: any){
-    console.log(data);
 
     try {
 
       const params = new URLSearchParams(document.location.search);
 
-      const res = await fetch("http://localhost:3006/attestation-verification", {
+      const res = await fetch("https://d2sc5n1wf6rato.cloudfront.net/attestation-verification", {
         method: "POST",
         headers: [
           ["Content-Type", "application/json"]
@@ -95,30 +105,23 @@ export const DevconCashbackReward = () => {
       });
 
       if (res.status < 200 || res.status > 299){
-        let err;
+        const body = await res.text();
 
-        try {
-          err = await res.json();
-        } catch (e){
-          //no-op
-        }
-
-        throw new Error("Attestation validation failed: " + (err?.message ? err.message : res.statusText));
+        throw new Error("Attestation validation failed: " + (body ? body : res.statusText));
       }
 
     } catch (e){
-      alert(e.message);
+      showError(AUTH_ERROR_STR, e.message);
       return;
     }
 
-    setIsOpen(2);
+    setModalMode(2);
   }
 
-  const theme = useTheme();
-  const paddingContainer = theme.spacing(3);
-
-  const [isOpen, setIsOpen] = useState(0);
-  const [ticket, setTicket] = useState(null);
+  function showError(message: string, detail: string){
+    setError({message: message, detail: detail});
+    setModalMode(3);
+  }
 
   return (
     <>
@@ -171,10 +174,10 @@ export const DevconCashbackReward = () => {
             </Box>
           </Stack>
         </Card>
-        <Modal open={isOpen > 0}>
+        <Modal open={modalMode > 0}>
           <ContainerStyle maxWidth="xs" sx={{ textAlign: 'center' }}>
 
-            { isOpen === 1 &&
+            { modalMode === 1 &&
               <>
                 <Typography sx={{mt: 1}}>
                   In order to get Cashback, you need to get an email attestation to prove ticket ownership.
@@ -188,7 +191,7 @@ export const DevconCashbackReward = () => {
                 fullWidth
                 variant="contained"
                 onClick={() => {
-                setIsOpen(0);
+                setModalMode(0);
                 window.negotiator.authenticate({issuer: "devcon", unsignedToken: ticket})
               }}
                 >
@@ -198,7 +201,7 @@ export const DevconCashbackReward = () => {
               </>
             }
 
-            {isOpen === 2 &&
+            {modalMode === 2 &&
               <>
                 <Typography sx={{mt: 1}}>
                   Request successful! After Devcon week you will receive $50 USD worth of Ethereum at your address.
@@ -211,7 +214,31 @@ export const DevconCashbackReward = () => {
                     fullWidth
                     variant="contained"
                     onClick={() => {
-                      setIsOpen(0);
+                      setModalMode(0);
+                    }}
+                  >
+                    Close
+                  </Button>
+                </Stack>
+              </>
+            }
+
+            {modalMode === 3 &&
+              <>
+                <Typography sx={{mt: 1}}>
+                  {error.message}
+                  <br/><br/>
+                  {error.detail}
+                </Typography>
+
+                <Stack direction="row" mt={1}>
+                  <Button
+                    sx={{mt: 2}}
+                    size="large"
+                    fullWidth
+                    variant="contained"
+                    onClick={() => {
+                      setModalMode(0);
                     }}
                   >
                     Close
