@@ -5332,10 +5332,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@windingtree/glider-types@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-2.6.0.tgz#cbdf1827b8f1bfe301112d3c5da1795e9b5ef07e"
-  integrity sha512-9THHJXVXbm//8Udqj2PcJ99Ei+I2Uf0nkF5sAEMbpAz+WZovhSCX3MAZb2xmLdX4YIgt0b9J+K5zK4/aVppE3w==
+"@windingtree/glider-types@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-2.8.0.tgz#ae3e3485615eba2e01a7cd6d3f4deee7b3eea948"
+  integrity sha512-TKmQBjl43dkCsgVnNtvRb+vc57oii96iJnHvl4esbb7KeoHMW1QxOCiQRa/gxIegNEFzUyas184Cn2s7rJkh1A==
 
 "@windingtree/org.id-utils@^1.0.0-beta.47":
   version "1.0.0-beta.47"
@@ -5354,10 +5354,10 @@
   dependencies:
     ethers "^5.6.9"
 
-"@windingtree/win-pay@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.6.0.tgz#1e22772d915946b28b47aac05e72f0afc2586310"
-  integrity sha512-dAdUnj1NH9M3DBdiCjHfPzHSAEqXOKkQFx8m5POpXSZDZSQO5jMIqMhYjratfo3eg+ScdstOP7wpqI66K+85VA==
+"@windingtree/win-pay@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.7.0.tgz#424c86fb123fafcb485d5a2abe487c0edae25769"
+  integrity sha512-mICLwb6XPvn5mZBfno86lEAg/TKitlPR51O1zNLyGbZMjIQ14ls5gT3fiFiGFlmg2MjTv8XzNgbZknRbIb6m4Q==
   dependencies:
     "@openzeppelin/contracts" "^4.7.1"
     "@openzeppelin/contracts-upgradeable" "^4.7.1"
