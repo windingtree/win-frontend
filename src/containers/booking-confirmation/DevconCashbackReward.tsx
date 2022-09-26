@@ -4,6 +4,7 @@ import {Box, Button, Card, Container, Modal, Stack, styled, Typography, useTheme
 import Image from "../../components/Image";
 import {LoadingButton} from "@mui/lab";
 import {useEffect, useState} from "react";
+import process from "process";
 
 const ContainerStyle = styled(Container)(({ theme }) => ({
   position: 'absolute',
@@ -52,7 +53,7 @@ export const DevconCashbackReward = () => {
       console.log(tokens);
 
       if (tokens.selectedTokens["devcon"]?.tokens?.length > 0){
-        setIsOpen(true);
+        setIsOpen(1);
         setTicket(tokens.selectedTokens["devcon"]?.tokens[0]);
       }
     });
@@ -66,19 +67,60 @@ export const DevconCashbackReward = () => {
     });
   });
 
-  function sendCashbackRequest(proof){
-    console.log(proof);
+  async function sendCashbackRequest(data){
+    console.log(data);
+
+    try {
+
+      const params = new URLSearchParams(document.location.search);
+
+      const res = await fetch("http://localhost:8080/", {
+        method: "POST",
+        headers: [
+          ["Content-Type", "application/json"]
+        ],
+        body: JSON.stringify({
+          perkId: "windingtree",
+          useTicket: data.proof,
+          un: data.useEthKey,
+          requestData: {
+            offerId: params.get("offerId"),
+            txId: params.get("tx"),
+            chainId: parseInt(window.ethereum.chainId)
+          }
+        })
+      });
+
+      if (res.status < 200 || res.status > 299){
+        let err;
+
+        try {
+          err = await res.json();
+        } catch (e){
+          //no-op
+        }
+
+        throw new Error("Attestation validation failed: " + (err?.message ? err.message : res.statusText));
+      }
+
+    } catch (e){
+      alert(e.message);
+      return;
+    }
+
+    setIsOpen(2);
   }
 
   const theme = useTheme();
   const paddingContainer = theme.spacing(3);
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(0);
   const [ticket, setTicket] = useState(null);
 
   return (
     <>
-      {document.location.hash === "#devcon" &&
+      {process.env.REACT_APP_STL_DEVCON &&
+      document.location.hash === "#devcon" &&
       <>
         <Card
           elevation={5}
@@ -126,27 +168,54 @@ export const DevconCashbackReward = () => {
             </Box>
           </Stack>
         </Card>
-        <Modal open={isOpen}>
+        <Modal open={isOpen > 0}>
           <ContainerStyle maxWidth="xs" sx={{ textAlign: 'center' }}>
 
-            <Typography sx={{ mt: 1 }}>
-              In order to get Cashback, you need to get an email attestation to prove ticket ownership.
-              Note, that your email address will be stored in your local storage only. This is fully decentralized.
-            </Typography>
+            { isOpen === 1 &&
+              <>
+                <Typography sx={{mt: 1}}>
+                  In order to get Cashback, you need to get an email attestation to prove ticket ownership.
+                  Note, that your email address will be stored in your local storage only. This is fully decentralized.
+                </Typography>
 
-            <Stack direction="row" mt={1}>
-              <Button
-                sx={{ mt: 2 }}
+                <Stack direction="row" mt={1}>
+                <Button
+                sx={{mt: 2}}
                 size="large"
                 fullWidth
                 variant="contained"
                 onClick={() => {
-                  window.negotiator.authenticate({issuer: "devcon", unsignedToken: ticket})
-                }}
-              >
+                setIsOpen(0);
+                window.negotiator.authenticate({issuer: "devcon", unsignedToken: ticket})
+              }}
+                >
                 Prove Ticket Ownership
-              </Button>
-            </Stack>
+                </Button>
+                </Stack>
+              </>
+            }
+
+            {isOpen === 2 &&
+              <>
+                <Typography sx={{mt: 1}}>
+                  Request successful! After Devcon week you will receive $50 USD worth of Ethereum at your address.
+                </Typography>
+
+                <Stack direction="row" mt={1}>
+                  <Button
+                    sx={{mt: 2}}
+                    size="large"
+                    fullWidth
+                    variant="contained"
+                    onClick={() => {
+                      setIsOpen(0);
+                    }}
+                  >
+                    Close
+                  </Button>
+                </Stack>
+              </>
+            }
           </ContainerStyle>
         </Modal>
         <div className="overlay-tn"></div>
