@@ -4,6 +4,7 @@ import {
   CryptoAsset,
   AssetCurrency
 } from '@windingtree/win-commons/dist/types';
+import { Quote } from '@windingtree/glider-types/dist/simard';
 import {
   BigNumber,
   Wallet,
@@ -37,7 +38,7 @@ import { useWalletRpcApi } from '../hooks/useWalletRpcApi';
 import { useAllowance } from 'src/hooks/useAllowance';
 import { useWinPay } from '../hooks/useWinPay';
 import useResponsive from '../hooks/useResponsive';
-import { centerEllipsis, formatCost } from '../utils/strings';
+import { centerEllipsis, formatPrice } from '../utils/strings';
 import { allowedNetworks, assetsCurrencies } from '../config';
 import Logger from '../utils/logger';
 
@@ -49,6 +50,7 @@ export interface Payment {
   expiration: number;
   providerId: string;
   serviceId: string;
+  quote?: Quote;
 }
 
 export interface PaymentSuccess {
@@ -64,6 +66,7 @@ export interface PaymentCardProps {
   network?: NetworkInfo;
   asset?: CryptoAsset;
   payment: Payment;
+  withQuote: boolean;
   onSuccess: PaymentSuccessCallback;
 }
 
@@ -72,6 +75,7 @@ export const PaymentCard = ({
   network,
   asset,
   payment,
+  withQuote,
   onSuccess
 }: PaymentCardProps) => {
   const isDesktop = useResponsive('up', 'md');
@@ -80,6 +84,7 @@ export const PaymentCard = ({
   const { winPayContract } = useWinPay(provider, network);
   const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
   const tokenAllowance = useAllowance(tokenContract, account, asset);
+  const [paymentValue, setPaymentValue] = useState<BigNumber>(payment.value);
   const [balance, setBalance] = useState<BigNumber>(BN.from(0));
   const [permitSignature, setPermitSignature] = useState<Signature | undefined>();
   const [isAccountContract, setIsAccountContract] = useState<boolean>(false);
@@ -90,6 +95,7 @@ export const PaymentCard = ({
   const [paymentError, setPaymentError] = useState<string | undefined>();
   const [txHash, setTxHash] = useState<string | undefined>();
   const [paymentExpired, setPaymentExpired] = useState<boolean>(false);
+
   const paymentBlocked = useMemo(
     () =>
       paymentExpired ||
@@ -97,23 +103,25 @@ export const PaymentCard = ({
       isTxStarted !== undefined ||
       (asset &&
         !asset.native &&
-        tokenAllowance.lt(payment.value) &&
+        tokenAllowance.lt(paymentValue) &&
         permitSignature === undefined),
     [costError, asset, tokenAllowance, permitSignature]
   );
+
   const permitBlocked = useMemo(
     () =>
       paymentExpired ||
       permitSignature !== undefined ||
-      tokenAllowance.gte(payment.value) ||
+      tokenAllowance.gte(paymentValue) ||
       isAccountContract,
     [permitSignature, tokenAllowance, isAccountContract]
   );
+
   const allowanceBlocked = useMemo(
     () =>
       paymentExpired ||
       !permitBlocked ||
-      (asset && !asset.native && tokenAllowance.gte(payment.value)) ||
+      (asset && !asset.native && tokenAllowance.gte(paymentValue)) ||
       permitSignature !== undefined,
     [asset, tokenAllowance, permitSignature, permitBlocked]
   );
@@ -129,6 +137,12 @@ export const PaymentCard = ({
   };
 
   useEffect(() => resetState(), [provider, network, asset, payment]);
+
+  useEffect(() => {
+    if (payment && withQuote) {
+      setPaymentValue(BN.from(utils.parseEther(payment.quote?.targetAmount ?? '0')));
+    }
+  }, [payment, withQuote]);
 
   useEffect(() => {
     const checkIsAccount = async () => {
@@ -173,7 +187,7 @@ export const PaymentCard = ({
   useEffect(() => {
     setCostError(undefined);
 
-    if (payment && balance && balance.lt(payment.value)) {
+    if (payment && balance && balance.lt(paymentValue)) {
       setCostError('Balance not enough for payment');
     }
   }, [payment, balance]);
@@ -222,7 +236,7 @@ export const PaymentCard = ({
           tokenContract,
           account,
           asset: asset.address,
-          value: payment.value,
+          value: paymentValue,
           expiration: payment.expiration
         });
         const signature = await createPermitSignature(
@@ -230,7 +244,7 @@ export const PaymentCard = ({
           tokenContract,
           account,
           asset.address,
-          payment.value,
+          paymentValue,
           payment.expiration
         );
         logger.debug('Permit signature', signature);
@@ -258,7 +272,7 @@ export const PaymentCard = ({
       setTxStarted('approve');
 
       if (tokenContract && asset) {
-        const tx = await tokenContract.approve(asset.address, payment.value);
+        const tx = await tokenContract.approve(asset.address, paymentValue);
         logger.debug('Approval tx', tx);
         setTxHash(tx.hash);
         const receipt = await tx.wait();
@@ -292,7 +306,7 @@ export const PaymentCard = ({
             payment.serviceId,
             payment.expiration,
             asset.address,
-            payment.value,
+            paymentValue,
             {
               owner: account,
               deadline: payment.expiration,
@@ -308,7 +322,7 @@ export const PaymentCard = ({
             payment.serviceId,
             payment.expiration,
             asset.address,
-            payment.value,
+            paymentValue,
             {
               owner: account,
               deadline: payment.expiration,
@@ -329,9 +343,9 @@ export const PaymentCard = ({
             payment.serviceId,
             payment.expiration,
             asset.address,
-            payment.value,
+            paymentValue,
             {
-              value: payment.value
+              value: paymentValue
             }
           );
           tx = await winPayContract['deal(bytes32,bytes32,uint256,address,uint256)'](
@@ -339,9 +353,9 @@ export const PaymentCard = ({
             payment.serviceId,
             payment.expiration,
             asset.address,
-            payment.value,
+            paymentValue,
             {
-              value: payment.value
+              value: paymentValue
             }
           );
           logger.debug('Payment (native) tx', tx);
@@ -356,14 +370,14 @@ export const PaymentCard = ({
             payment.serviceId,
             payment.expiration,
             asset.address,
-            payment.value
+            paymentValue
           );
           tx = await winPayContract['deal(bytes32,bytes32,uint256,address,uint256)'](
             payment.providerId,
             payment.serviceId,
             payment.expiration,
             asset.address,
-            payment.value
+            paymentValue
           );
           logger.debug('Payment (approved) tx', tx);
           setTxHash(tx.hash);
@@ -500,7 +514,7 @@ export const PaymentCard = ({
               </Button>
             )}
             <Button variant="contained" onClick={makePayment} disabled={paymentBlocked}>
-              Pay {formatCost(payment, asset.symbol)}
+              Pay {formatPrice(paymentValue, asset.symbol)}
               {isTxStarted === 'pay' ? (
                 <CircularProgress size="16px" color="inherit" sx={{ ml: 1 }} />
               ) : undefined}
