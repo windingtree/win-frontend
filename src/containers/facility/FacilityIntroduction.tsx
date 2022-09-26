@@ -11,7 +11,6 @@ import {
   DialogTitle,
   Link,
   Stack,
-  SxProps,
   Typography
 } from '@mui/material';
 import { styled, useTheme } from '@mui/material';
@@ -299,13 +298,6 @@ export const FacilityIntroduction = ({
 
   const handleCloseGallery = () => setGalleryOpen(false);
 
-  // show all photos buttons
-  const buttonStyle: SxProps = {
-    position: 'absolute',
-    right: '2%',
-    bottom: '5%'
-  };
-
   const [mainImage, ...rest] = sortedImages;
   const address = buildAccommodationAddress(accommodation);
 
@@ -325,9 +317,12 @@ export const FacilityIntroduction = ({
         <FacilityDetailImages images={rest} />
         <Button
           variant="contained"
-          color="secondary"
-          size={'large'}
-          sx={buttonStyle}
+          size="large"
+          sx={{
+            position: 'absolute',
+            right: 0,
+            bottom: 0
+          }}
           onClick={handleOpenGallery}
         >
           {largestImages.length > 5 ? 'Show all photos' : 'View Photos'}

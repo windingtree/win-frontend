@@ -2,7 +2,6 @@ import { Grid, Typography } from '@mui/material';
 import { RoomCardGroup } from './RoomCardGroup';
 import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
@@ -19,46 +18,57 @@ export const GroupOffersSchema = Yup.object().shape({
     Yup.object().shape({
       expiration: Yup.string(),
       id: Yup.string(),
-      quantity: Yup.string(),
-      price: Yup.object(),
-      pricePlansReferences: Yup.object()
+      quantity: Yup.string()
+      // price: Yup.object(),
+      // pricePlansReferences: Yup.object()
     })
   )
 });
 
 interface FacilityGroupOffersProps {
-  offers: OfferRecord[] | null;
+  offers: OfferRecord[];
   accommodation: AccommodationWithId | null;
 }
 
-interface OfferFormType extends OfferRecord {
-  quantity: string;
-}
+type OfferFormType = OfferRecord;
 
-type FormValuesProps = {
-  offers: OfferFormType[] | null;
-};
+type FormValuesProps = OfferFormType[];
 
 export const FacilityGroupOffers = ({
-  offers,
+  offers = [],
   accommodation
 }: FacilityGroupOffersProps) => {
-  const defaultValues: FormValuesProps = useMemo(
-    () => ({
-      offers: offers?.map((offer) => ({
-        ...offer,
-        quantity: '0'
-      }))
-    }),
-    [offers]
-  );
+  const test = useMemo(() => {
+    const mappedOffers =
+      offers?.map(
+        (offer): OfferFormType => ({
+          ...offer,
+          quantity: '0'
+        })
+      ) ?? [];
 
-  const methods = useForm<FormValuesProps>({
-    resolver: yupResolver(GroupOffersSchema),
-    defaultValues
+    return mappedOffers;
+
+    // const formValues  = { offers: mappedOffers };
+
+    // return formValues;
+
+    // offers: offers?.map(
+    //   (offer): OfferFormType => ({
+    //     ...offer,
+    //     quantity: '0'
+    //   })
+    // )
+  }, [offers]);
+
+  const methods = useForm<{ offers: OfferRecord[] }>({
+    // resolver: yupResolver(GroupOffersSchema),
+    defaultValues: { offers }
   });
 
-  const { handleSubmit } = methods;
+  // const roomCount = values.offers.reduce(getRoomCount, 0);
+
+  const { handleSubmit, watch } = methods;
 
   // TODO: on submit store the offers in a state
   const onSubmit = (values) => {
@@ -70,7 +80,7 @@ export const FacilityGroupOffers = ({
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
+      <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
           {offers?.map((offer, index) => {
             const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
@@ -88,7 +98,7 @@ export const FacilityGroupOffers = ({
             );
           })}
         </Grid>
-        <Grid item xs={6} md={4}>
+        <Grid item xs={12} md={4}>
           <FacilityGroupOffersSummary />
         </Grid>
       </Grid>

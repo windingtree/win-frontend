@@ -6,14 +6,14 @@ import { OfferRecord } from 'src/store/types';
 
 import { daysBetween } from 'src/utils/date';
 
-const getTotalPrice: number = (prev: number, current: OfferRecord) => {
+const getTotalPrice = (prev: number, current: OfferRecord): number => {
   const quantity = Number(current.quantity);
   const amount = Number(current.price.public);
   const totalPricePerOffer = quantity * amount;
   return totalPricePerOffer + prev;
 };
 
-const getRoomCount: number = (prev: number, current: OfferRecord) =>
+const getRoomCount = (prev: number, current: OfferRecord): number =>
   Number(current.quantity) + prev;
 
 export const FacilityGroupOffersSummary = () => {
@@ -26,7 +26,7 @@ export const FacilityGroupOffersSummary = () => {
     (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
   const values = watch();
   const roomCount = values.offers.reduce(getRoomCount, 0);
-  const totalPrice = values.offers.reduce(getTotalPrice, 0);
+  const totalPrice = values.offers.reduce(getTotalPrice, 0).toFixed(2);
 
   return (
     <Box sx={{ position: { md: 'sticky' }, top: { md: HEADER.MAIN_DESKTOP_HEIGHT } }}>

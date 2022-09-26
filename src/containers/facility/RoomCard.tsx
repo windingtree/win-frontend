@@ -13,7 +13,6 @@ import Logger from 'src/utils/logger';
 import { RoomInformation } from './RoomInformation';
 
 const logger = Logger('RoomCard');
-axios.defaults.withCredentials = true;
 
 export const RoomCard: React.FC<{
   room: RoomTypes;
