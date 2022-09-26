@@ -85,8 +85,8 @@ export const getActiveEventsWithinRadius = ({
     toDate &&
     // add 1 day swing
     getActiveEvents({
-      fromDate: new Date(new Date(fromDate).setDate(fromDate.getDate() - 1)),
-      toDate: new Date(new Date(toDate).setDate(toDate.getDate() + 1))
+      fromDate,
+      toDate
     });
 
   if (!currentEvents) return { currentEventsWithinRadius: [] };
