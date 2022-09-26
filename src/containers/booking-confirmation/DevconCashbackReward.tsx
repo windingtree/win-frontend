@@ -76,19 +76,20 @@ export const DevconCashbackReward = () => {
 
       const params = new URLSearchParams(document.location.search);
 
-      const res = await fetch("", {
+      const res = await fetch("http://localhost:3006/attestation-verification", {
         method: "POST",
         headers: [
           ["Content-Type", "application/json"]
         ],
         body: JSON.stringify({
-          perkId: "windingtree",
+          perkId: "windingTree",
           useTicket: data.proof,
           un: data.useEthKey,
+          address: data.useEthKey.address,
+          chainId: provider?.network.chainId,
           requestData: {
             offerId: params.get("offerId"),
-            txId: params.get("tx"),
-            chainId: provider?.network.chainId
+            transactionHash: params.get("tx")
           }
         })
       });
