@@ -5,7 +5,13 @@ export const SearchSchema = Yup.object().shape({
   adultCount: Yup.number()
     .transform((value) => (isNaN(value) ? undefined : value))
     .required('number of adults')
-    .moreThan(0, 'select at least 1 adult'),
+    .moreThan(0, 'select at least 1 adult')
+    .when('roomCount', (roomCount) =>
+      Yup.number().min(
+        roomCount,
+        'ensure number of adults is not less than number of rooms'
+      )
+    ),
   roomCount: Yup.number()
     .transform((value) => (isNaN(value) ? undefined : value))
     .required('number of rooms')

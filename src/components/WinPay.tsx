@@ -1,13 +1,17 @@
 import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { Payment, PaymentSuccess } from './PaymentCard';
-import { useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppState } from '../store';
+import { CurrencySelector } from './CurrencySelector';
 import { NetworkSelector } from './NetworkSelector';
 import { AssetSelector } from './AssetSelector';
 import { PaymentCard } from './PaymentCard';
 import useResponsive from '../hooks/useResponsive';
+import Logger from '../utils/logger';
+
+const logger = Logger('WinPay');
 
 export interface WinPayProps {
   payment?: Payment;
@@ -19,6 +23,7 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
   const isDesktop = useResponsive('up', 'md');
   const dispatch = useAppDispatch();
   const { provider, account, selectedNetwork, selectedAsset } = useAppState();
+  const [withQuote, setWithQuote] = useState<boolean>(false);
 
   const setNetwork = useCallback(
     (network: NetworkInfo) =>
@@ -38,12 +43,22 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
     [dispatch]
   );
 
+  const onUseQuoteChange = (useQuote: boolean) => {
+    logger.debug('onUseQuoteChange', useQuote);
+    setWithQuote(useQuote);
+  };
+
   if (!payment) {
     return null;
   }
 
   return (
     <>
+      <CurrencySelector
+        payment={payment}
+        network={selectedNetwork}
+        onQuote={onUseQuoteChange}
+      />
       <Box marginBottom={theme.spacing(5)}>
         {account && (
           <Box
@@ -58,6 +73,7 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
             <AssetSelector
               network={selectedNetwork}
               payment={payment}
+              withQuote={withQuote}
               asset={selectedAsset}
               onChange={setAsset}
             />
@@ -69,6 +85,7 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
         network={selectedNetwork}
         asset={selectedAsset}
         payment={payment}
+        withQuote={withQuote}
         onSuccess={onSuccess}
       />
     </>

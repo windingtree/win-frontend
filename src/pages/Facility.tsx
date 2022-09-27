@@ -23,7 +23,8 @@ export const Facility = () => {
       adultCount: latestQueryParams.adultCount.toString(),
       startDate: latestQueryParams.arrival?.toISOString() ?? '',
       endDate: latestQueryParams.departure?.toISOString() ?? '',
-      location: latestQueryParams.location
+      location: latestQueryParams.location,
+      focusedEvent: latestQueryParams.focusedEvent ?? ''
     };
     return createSearchParams(params);
   }, [latestQueryParams, createSearchParams]);

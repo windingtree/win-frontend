@@ -5332,10 +5332,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@windingtree/glider-types@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-2.8.0.tgz#ae3e3485615eba2e01a7cd6d3f4deee7b3eea948"
-  integrity sha512-TKmQBjl43dkCsgVnNtvRb+vc57oii96iJnHvl4esbb7KeoHMW1QxOCiQRa/gxIegNEFzUyas184Cn2s7rJkh1A==
+"@windingtree/glider-types@^2.8.1":
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/@windingtree/glider-types/-/glider-types-2.8.1.tgz#70eeea773dbfea42094f319b047ada7092c23559"
+  integrity sha512-hM+X/FFNbELSrY7U1K0IuN8OnV9o4G14lJMzXBSCmAMyaVEY/yeWfDmUjWcEA7L26c3wKzJWBxwP2Fx8uCtA9g==
 
 "@windingtree/org.id-utils@^1.0.0-beta.47":
   version "1.0.0-beta.47"
@@ -5347,10 +5347,10 @@
     axios "0.24.0"
     ethers "5.5.3"
 
-"@windingtree/win-commons@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.9.0.tgz#cba50ca8c141859e2b5453028bb36cfbc972fb59"
-  integrity sha512-c+0oaHC7v+L31BNChUnyR6SIY4GXZr3CDqlU6yz1JpcT39bAMktE9Iw+d/1q8x1YSWavQulemlIfSWZzRXR5CA==
+"@windingtree/win-commons@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.9.1.tgz#c72ca331e605b8d95a355db21e53775e3d757227"
+  integrity sha512-F/bzmuuAAUUt5Ko3JQVV2P9El4hoLkUJqrcAm7LZMneri2p5AQTn4F51x9kIz6MVps1aq9gfWkeD2z1ay9ZUtg==
   dependencies:
     ethers "^5.6.9"
 

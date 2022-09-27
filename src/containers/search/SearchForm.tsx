@@ -132,7 +132,8 @@ export const SearchForm: React.FC = () => {
     departure: endDate,
     adultCount: Number(adultCount),
     location,
-    roomCount: Number(roomCount)
+    roomCount: Number(roomCount),
+    focusedEvent: useMemo(() => searchParams.get('focusedEvent') ?? '', [searchParams])
   };
 
   /**
