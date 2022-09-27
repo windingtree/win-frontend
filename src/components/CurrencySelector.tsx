@@ -22,7 +22,7 @@ export interface CheckoutPrice {
 export interface PriceSelectProps {
   payment?: Payment;
   network?: NetworkInfo;
-  onQuote(useQuote: boolean): void;
+  onQuote(withQuote: boolean): void;
 }
 
 export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps) => {
@@ -67,9 +67,9 @@ export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps
       setCurrency(newValue);
       logger.debug('Currency selected:', newValue);
       const nextPrice = options.find((o) => o.currency === newValue) ?? null;
-      const useQuote = nextPrice?.currency === 'USD';
-      onQuote(useQuote);
-      logger.debug('Use quote:', useQuote);
+      const withQuote = nextPrice?.currency === 'USD';
+      onQuote(withQuote);
+      logger.debug('Is with quote selected:', withQuote);
     },
     [onQuote]
   );
