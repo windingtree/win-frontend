@@ -22,6 +22,7 @@ export interface SearchTypeProps {
   roomCount: number;
   adultCount: number;
   childrenCount?: number;
+  focusedEvent?: string;
 }
 
 export interface LowestPriceFormat {
@@ -74,6 +75,12 @@ export const useAccommodationsAndOffers = ({
   );
 
   const latestQueryParams = data?.latestQueryParams;
+
+  // append focusedEvent query params if it exists
+  if (latestQueryParams && searchProps?.focusedEvent) {
+    latestQueryParams.focusedEvent = searchProps.focusedEvent;
+  }
+
   const isGroupMode = data?.isGroupMode ?? false;
 
   const allAccommodations = useMemo(
