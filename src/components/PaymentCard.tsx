@@ -84,7 +84,6 @@ export const PaymentCard = ({
   const { winPayContract } = useWinPay(provider, network);
   const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
   const tokenAllowance = useAllowance(tokenContract, account, asset);
-  const [paymentValue, setPaymentValue] = useState<BigNumber>(payment.value);
   const [balance, setBalance] = useState<BigNumber>(BN.from(0));
   const [permitSignature, setPermitSignature] = useState<Signature | undefined>();
   const [isAccountContract, setIsAccountContract] = useState<boolean>(false);
@@ -96,6 +95,14 @@ export const PaymentCard = ({
   const [txHash, setTxHash] = useState<string | undefined>();
   const [paymentExpired, setPaymentExpired] = useState<boolean>(false);
 
+  const paymentValue = useMemo(
+    () =>
+      withQuote
+        ? BN.from(utils.parseEther(payment.quote?.targetAmount ?? '0'))
+        : payment.value,
+    [payment, withQuote]
+  );
+
   const paymentBlocked = useMemo(
     () =>
       paymentExpired ||
@@ -105,7 +112,7 @@ export const PaymentCard = ({
         !asset.native &&
         tokenAllowance.lt(paymentValue) &&
         permitSignature === undefined),
-    [costError, asset, tokenAllowance, permitSignature]
+    [costError, asset, paymentValue, tokenAllowance, permitSignature]
   );
 
   const permitBlocked = useMemo(
@@ -114,7 +121,7 @@ export const PaymentCard = ({
       permitSignature !== undefined ||
       tokenAllowance.gte(paymentValue) ||
       isAccountContract,
-    [permitSignature, tokenAllowance, isAccountContract]
+    [paymentValue, permitSignature, tokenAllowance, isAccountContract]
   );
 
   const allowanceBlocked = useMemo(
@@ -123,10 +130,10 @@ export const PaymentCard = ({
       !permitBlocked ||
       (asset && !asset.native && tokenAllowance.gte(paymentValue)) ||
       permitSignature !== undefined,
-    [asset, tokenAllowance, permitSignature, permitBlocked]
+    [asset, paymentValue, tokenAllowance, permitSignature, permitBlocked]
   );
 
-  const resetState = () => {
+  const resetState = useCallback(() => {
     setPermitSignature(undefined);
     setCostError(undefined);
     setPermitError(undefined);
@@ -134,15 +141,9 @@ export const PaymentCard = ({
     setPaymentError(undefined);
     setTxHash(undefined);
     setTxStarted(undefined);
-  };
+  }, [payment]);
 
-  useEffect(() => resetState(), [provider, network, asset, payment]);
-
-  useEffect(() => {
-    if (payment && withQuote) {
-      setPaymentValue(BN.from(utils.parseEther(payment.quote?.targetAmount ?? '0')));
-    }
-  }, [payment, withQuote]);
+  useEffect(() => resetState(), [provider, network, asset, payment, resetState]);
 
   useEffect(() => {
     const checkIsAccount = async () => {
@@ -190,7 +191,7 @@ export const PaymentCard = ({
     if (payment && balance && balance.lt(paymentValue)) {
       setCostError('Balance not enough for payment');
     }
-  }, [payment, balance]);
+  }, [payment, balance, paymentValue]);
 
   const addTokenToWallet = useCallback(async () => {
     try {
@@ -398,7 +399,7 @@ export const PaymentCard = ({
       setPaymentError(err.message ? err.message.split('[')[0] : 'Unknown payment error');
       setTxStarted(undefined);
     }
-  }, [winPayContract, asset, account, permitSignature]);
+  }, [winPayContract, asset, account, permitSignature, resetState]);
 
   const openExplorer = useCallback(
     (address: string | undefined) => {
