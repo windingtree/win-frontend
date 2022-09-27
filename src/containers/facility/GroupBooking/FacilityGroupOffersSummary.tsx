@@ -2,9 +2,7 @@ import { Box, Button, Typography, Stack, Tooltip, Grid, useTheme } from '@mui/ma
 import { useFormContext } from 'react-hook-form';
 import { IconButtonAnimate } from 'src/components/animate';
 import Iconify from 'src/components/Iconify';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { OfferRecord } from 'src/store/types';
-import { daysBetween } from 'src/utils/date';
 
 const getTotalPrice = (prev: number, current: OfferRecord): number => {
   const quantity = Number(current.quantity);
@@ -16,19 +14,17 @@ const getTotalPrice = (prev: number, current: OfferRecord): number => {
 export interface FacilityGroupOffersSummaryProps {
   roomCount: number;
   height: number;
+  nightCount: number;
+  guestCount: number;
 }
 
 export const FacilityGroupOffersSummary = ({
   height,
-  roomCount
+  roomCount,
+  guestCount,
+  nightCount
 }: FacilityGroupOffersSummaryProps) => {
   const { watch } = useFormContext();
-  const { latestQueryParams } = useAccommodationsAndOffers();
-  const arrival = latestQueryParams?.arrival;
-  const departure = latestQueryParams?.departure;
-  const numberOfNights = daysBetween(arrival, departure);
-  const guests =
-    (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
   const values = watch();
   const totalPrice = values.offers.reduce(getTotalPrice, 0).toFixed(2);
   const theme = useTheme();
@@ -67,7 +63,7 @@ export const FacilityGroupOffersSummary = ({
 
           <Stack direction="row">
             <Typography variant="body2">
-              {`${numberOfNights} nights, ${roomCount} rooms and ${guests} guests`}{' '}
+              {`${nightCount} nights, ${roomCount} rooms and ${guestCount} guests`}{' '}
             </Typography>
           </Stack>
         </Grid>

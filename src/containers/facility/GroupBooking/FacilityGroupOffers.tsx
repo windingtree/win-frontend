@@ -10,6 +10,9 @@ import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers.tsx/he
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
 import useResponsive from 'src/hooks/useResponsive';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { daysBetween } from 'src/utils/date';
+import { FacilityOffersTitle } from '../FacilityOffersTitle';
 
 /**
  * Only the quantity can be changed in the form by the User,
@@ -74,19 +77,31 @@ export const FacilityGroupOffers = ({
   offers = [],
   accommodation
 }: FacilityGroupOffersProps) => {
-  const mappedOffers = useMemo(
+  const { latestQueryParams } = useAccommodationsAndOffers();
+  const defaultOffers = useMemo(
     () =>
-      offers?.map((offer) => ({
-        ...offer,
-        quantity: '0'
-      })),
+      offers?.map((offer, index) => {
+        if (index === 0) {
+          return {
+            ...offer,
+            quantity: latestQueryParams?.roomCount
+              ? latestQueryParams?.roomCount.toString()
+              : '0'
+          };
+        }
+
+        return {
+          ...offer,
+          quantity: '0'
+        };
+      }),
 
     [offers]
   );
 
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(GroupOffersSchema),
-    defaultValues: { offers: mappedOffers }
+    defaultValues: { offers: defaultOffers }
   });
 
   const { handleSubmit, watch } = methods;
@@ -95,6 +110,11 @@ export const FacilityGroupOffers = ({
   const [showError, setShowError] = useState(false);
   const isDesktop = useResponsive('up', 'md');
   const summaryBoxHeight = 130;
+  const arrival = latestQueryParams?.arrival;
+  const departure = latestQueryParams?.departure;
+  const nightCount = daysBetween(arrival, departure);
+  const guestCount =
+    (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
 
   const onSubmit = () => {
     if (roomCount < 10) {
@@ -123,6 +143,13 @@ export const FacilityGroupOffers = ({
           Please select more than 9 rooms to conduct a group booking.
         </Alert>
       </Snackbar>
+      <FacilityOffersTitle
+        rooms={roomCount}
+        guests={guestCount}
+        startDate={latestQueryParams?.arrival?.toUTCString()}
+        nights={nightCount}
+        roomsAvailable={accommodation?.offers?.length ?? 0}
+      />
       <Grid container spacing={4}>
         <Grid
           order={{ xs: 1, md: 2 }}
@@ -138,7 +165,12 @@ export const FacilityGroupOffers = ({
             alignSelf: 'flex-start'
           }}
         >
-          <FacilityGroupOffersSummary height={summaryBoxHeight} roomCount={roomCount} />
+          <FacilityGroupOffersSummary
+            height={summaryBoxHeight}
+            roomCount={roomCount}
+            nightCount={nightCount}
+            guestCount={guestCount}
+          />
         </Grid>
         <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }}>
           {offers?.map((offer, index) => {
