@@ -26,7 +26,9 @@ export interface PriceSelectProps {
 }
 
 export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps) => {
-  const [value, setValue] = useState<string | null>(payment ? payment.currency : null);
+  const [currency, setCurrency] = useState<string | null>(
+    payment ? payment.currency : null
+  );
 
   const options = useMemo<CheckoutPrice[]>(
     () =>
@@ -62,7 +64,7 @@ export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = (event.target as HTMLInputElement).value;
-      setValue(newValue);
+      setCurrency(newValue);
       logger.debug('Currency selected:', newValue);
       const nextPrice = options.find((o) => o.currency === newValue) ?? null;
       const useQuote = nextPrice?.currency === 'USD';
@@ -74,7 +76,7 @@ export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps
 
   useEffect(() => {
     if (payment && payment.quote && tokens.length === 0) {
-      setValue('USD');
+      setCurrency('USD');
       logger.debug('Currency automatically selected: USD');
       onQuote(true);
       logger.debug('Checkout price updated:', true);
@@ -95,7 +97,7 @@ export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps
       <RadioGroup
         aria-labelledby="controlled-currency-selector"
         name="controlled-currency-selector"
-        value={value}
+        value={currency}
         onChange={handleChange}
         sx={{
           display: 'inline-block'
