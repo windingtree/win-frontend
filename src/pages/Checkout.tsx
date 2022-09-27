@@ -13,7 +13,6 @@ import { formatPrice } from '../utils/strings';
 import { useAppState } from '../store';
 import { expirationGap } from '../config';
 import { sortByLargestImage } from '../utils/accommodation';
-import useResponsive from '../hooks/useResponsive';
 import FallbackImage from '../images/hotel-fallback.webp';
 import Logger from '../utils/logger';
 import { Breadcrumbs } from '../components/Breadcrumbs';
@@ -36,7 +35,6 @@ export const normalizeExpiration = (expirationDate: string): number =>
 export const Checkout = () => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const isDesktop = useResponsive('up', 'md');
   const { checkout, account } = useAppState();
   const { latestQueryParams } = useAccommodationsAndOffers();
 
@@ -150,12 +148,7 @@ export const Checkout = () => {
             Please connect your wallet to proceed with the Payment
           </Typography>
         )}
-        <Box
-          sx={{
-            marginBottom: isDesktop ? 5 : 3,
-            textAlign: isDesktop ? 'left' : 'center'
-          }}
-        >
+        <Box textAlign={{ xs: 'center', lg: 'left' }} marginBottom={{ xs: 3, lg: 5 }}>
           <Box
             sx={{
               display: 'inline-block'
@@ -171,12 +164,7 @@ export const Checkout = () => {
             {checkout.quote &&
               checkout.quote.targetAmount &&
               checkout.quote.targetCurrency && (
-                <Typography
-                  variant="h5"
-                  sx={{
-                    textAlign: isDesktop ? 'right' : 'center'
-                  }}
-                >
+                <Typography variant="h5" textAlign={{ xs: 'center', lg: 'right' }}>
                   Equivalent to&nbsp;
                   {formatPrice(
                     utils.parseEther(checkout.quote.targetAmount.toString()),
@@ -188,19 +176,14 @@ export const Checkout = () => {
         </Box>
 
         <Box
+          flexDirection={{ xs: 'column', lg: 'row' }}
           sx={{
             display: 'flex',
-            flexDirection: isDesktop ? 'row' : 'column',
             alignItems: 'center',
-            marginBottom: theme.spacing(5)
+            marginBottom: 5
           }}
         >
-          <Box
-            sx={{
-              marginRight: isDesktop ? theme.spacing(5) : 0,
-              marginBottom: isDesktop ? 0 : theme.spacing(3)
-            }}
-          >
+          <Box marginRight={{ xs: 0, lg: 5 }} marginBottom={{ xs: 3, lg: 0 }}>
             <Card>
               <CardMediaFallback
                 component="img"
