@@ -51,7 +51,7 @@ export const GuestInfoContainer = () => {
       .matches(/^\+[1-9]\d{1,14}$/, 'Incorrect phone number')
       .required('Phone number is required'),
     birthdate: Yup.date()
-      // .matches(regexp.isoDate, 'Incorrect date')
+      .typeError('Please enter a valid birth date')
       .test('birthdate', 'Should be more than 18', (value) => {
         if (value === undefined) {
           return false;
