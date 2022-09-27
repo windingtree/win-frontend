@@ -15,7 +15,7 @@ export const RoomCardGroup: React.FC<{
   index: number;
 }> = ({ offer, room, index }) => {
   const { register } = useFormContext();
-  const price = `${offer.price?.currency} ${Number(offer.price?.public).toFixed(2)}`;
+  const price = `${offer.price.currency} ${Number(offer.price.public).toFixed(2)}`;
 
   return (
     <Box mb={5}>
@@ -28,7 +28,6 @@ export const RoomCardGroup: React.FC<{
           <Grid item xs={4}>
             <Stack spacing={1} alignItems="flex-end" sx={{ textAlign: 'end' }}>
               <Typography>Select rooms</Typography>
-              {/* TODO: Prevent a user from being able to select less than 0 when typing */}
               <TextField
                 sx={{ width: 80 }}
                 {...register(`offers.${index}.quantity`)}
@@ -42,7 +41,7 @@ export const RoomCardGroup: React.FC<{
                   }
                 }}
               />
-              <Typography variant="body2">{`${price} Estimated price /room/night`}</Typography>
+              <Typography variant="body2">{`${price} per night`}</Typography>
             </Stack>
           </Grid>
         </Grid>

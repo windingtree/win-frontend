@@ -1,9 +1,9 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, Stack, Tooltip, Grid, useTheme } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
-import { HEADER } from 'src/config/componentSizes';
+import { IconButtonAnimate } from 'src/components/animate';
+import Iconify from 'src/components/Iconify';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { OfferRecord } from 'src/store/types';
-
 import { daysBetween } from 'src/utils/date';
 
 const getTotalPrice = (prev: number, current: OfferRecord): number => {
@@ -13,10 +13,15 @@ const getTotalPrice = (prev: number, current: OfferRecord): number => {
   return totalPricePerOffer + prev;
 };
 
-const getRoomCount = (prev: number, current: OfferRecord): number =>
-  Number(current.quantity) + prev;
+export interface FacilityGroupOffersSummaryProps {
+  roomCount: number;
+  height: number;
+}
 
-export const FacilityGroupOffersSummary = () => {
+export const FacilityGroupOffersSummary = ({
+  height,
+  roomCount
+}: FacilityGroupOffersSummaryProps) => {
   const { watch } = useFormContext();
   const { latestQueryParams } = useAccommodationsAndOffers();
   const arrival = latestQueryParams?.arrival;
@@ -25,24 +30,59 @@ export const FacilityGroupOffersSummary = () => {
   const guests =
     (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
   const values = watch();
-  const roomCount = values.offers.reduce(getRoomCount, 0);
   const totalPrice = values.offers.reduce(getTotalPrice, 0).toFixed(2);
+  const theme = useTheme();
+  const currency = values.offers[0].price?.currency;
 
   return (
-    <Box sx={{ position: { md: 'sticky' }, top: { md: HEADER.MAIN_DESKTOP_HEIGHT } }}>
-      <Typography>{`Total Price for ${numberOfNights} nights per ${roomCount} rooms and ${guests} guests`}</Typography>
-      <Typography variant="h5">{totalPrice}</Typography>
-      <Typography variant="body2" mb={2}>
-        Estimated price
-      </Typography>
-      <Typography variant="caption">
-        You will have to pay a deposit value 10% from the estimated price. In case you do
-        not proceed with our offer you will be eligible for a full refund. Read more about
-        this process here Deposit policy & Refund{' '}
-      </Typography>
-      <Button type="submit" variant="contained" fullWidth sx={{ mt: 1 }} size="large">
-        Request a quotation
-      </Button>
-    </Box>
+    <Stack
+      direction={{ xs: 'row', md: 'column' }}
+      sx={{
+        height,
+        backgroundColor: theme.palette.background.default,
+        alignItems: 'center',
+        position: 'relative'
+      }}
+    >
+      <Grid container sx={{ position: 'absolute', top: theme.spacing(1) }}>
+        <Grid item xs={6} md={12}>
+          <Box>
+            <Typography component="span" variant="h5">
+              {totalPrice}
+              {'  '}
+            </Typography>
+            <Typography sx={{ fontWeight: 'normal' }} component="span" variant="h5">
+              {currency}
+            </Typography>
+            <Tooltip
+              enterTouchDelay={0}
+              placement="top"
+              title="You will have to pay a deposit value 10% from the estimated price. In case you do not proceed with our offer you will be eligible for a full refund. Read more about this process here Deposit policy and Refund"
+            >
+              <IconButtonAnimate color="primary" size="small">
+                <Iconify icon="eva:info-outline" width={16} height={16} />
+              </IconButtonAnimate>
+            </Tooltip>
+          </Box>
+
+          <Stack direction="row">
+            <Typography variant="body2">
+              {`${numberOfNights} nights, ${roomCount} rooms and ${guests} guests`}{' '}
+            </Typography>
+          </Stack>
+        </Grid>
+        <Grid item xs={6} md={12}>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ mt: 1, zIndex: 1 }}
+            size="large"
+          >
+            Request quote
+          </Button>
+        </Grid>
+      </Grid>
+    </Stack>
   );
 };

@@ -36,7 +36,6 @@ export const RoomCard: React.FC<{
       setError(undefined);
       setLoading(true);
 
-      //TODO: check how we have to do this request if multipel rooms are being selected.
       const res = await axios.request<WinPricedOffer>(new PricedOfferRequest(offer.id));
 
       if (res.data) {
@@ -76,7 +75,7 @@ export const RoomCard: React.FC<{
               rowGap={theme.spacing(2)}
             >
               <Typography variant="body1" textAlign={'right'}>
-                {`${offer.price?.currency} ${Number(offer.price?.public).toFixed(2)} `}
+                {`${offer.price.currency} ${Number(offer.price.public).toFixed(2)} `}
               </Typography>
               <Typography textAlign={'right'}>
                 {`Price for ${numberOfDays} nights, ${roomsNumber} room(s)`}

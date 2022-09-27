@@ -59,7 +59,9 @@ export const SelectGuestsAndRooms = () => {
               inputMode: 'numeric',
               inputProps: {
                 min: 1,
-                step: 1
+                step: 1,
+                // TODO: remove the following line when group booking is enabled
+                max: 9
               }
             }}
           />
