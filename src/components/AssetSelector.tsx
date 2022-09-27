@@ -11,6 +11,7 @@ const logger = Logger('AssetSelector');
 export interface AssetSelectorProps {
   network: NetworkInfo | undefined;
   payment: Payment;
+  withQuote: boolean;
   asset: CryptoAsset | undefined;
   onChange: (asset?: CryptoAsset) => void;
 }
@@ -18,23 +19,31 @@ export interface AssetSelectorProps {
 export const AssetSelector = ({
   network,
   payment,
+  withQuote,
   asset: value,
   onChange
 }: AssetSelectorProps) => {
   const [asset, setAsset] = useState<CryptoAsset | undefined>(
     network ? value : undefined
   );
+
   const options = useMemo<CryptoAsset[]>(() => {
     if (!network) {
       return [];
     }
     const chain = getNetworkInfo(network.chainId);
-    return [...chain.contracts.assets.filter((a) => a.currency === payment.currency)];
-  }, [network, payment]);
+    return [
+      ...chain.contracts.assets.filter(
+        (a) => a.currency === (withQuote ? 'USD' : payment.currency)
+      )
+    ];
+  }, [network, payment, withQuote]);
+
   const notSelected = useMemo(
     () => options.length > 0 && asset === undefined,
     [options, asset]
   );
+
   const noOptions = useMemo(() => options.length === 0, [options]);
 
   useEffect(() => {
