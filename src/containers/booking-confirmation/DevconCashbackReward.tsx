@@ -6,6 +6,10 @@ import {LoadingButton} from "@mui/lab";
 import {useEffect, useState} from "react";
 import process from "process";
 import {useAppState} from "../../store";
+import stlLogo from "../../images/stl/stl-logo.png";
+import emailIcon from "../../images/stl/email-icon.png";
+import tickIcon from "../../images/stl/tick-icon.png";
+import errorIcon from "../../images/stl/error-icon.png";
 
 const ContainerStyle = styled(Container)(({ theme }) => ({
   position: 'absolute',
@@ -86,7 +90,9 @@ export const DevconCashbackReward = () => {
 
       const params = new URLSearchParams(document.location.search);
 
-      const res = await fetch("https://d2sc5n1wf6rato.cloudfront.net/attestation-verification", {
+      const chainId = provider?.network.chainId.toString();
+
+      const res = await fetch("https://attestation-verify.tokenscript.org/attestation-verification", {
         method: "POST",
         headers: [
           ["Content-Type", "application/json"]
@@ -96,7 +102,7 @@ export const DevconCashbackReward = () => {
           useTicket: data.proof,
           un: data.useEthKey,
           address: data.useEthKey.address,
-          chainId: provider?.network.chainId,
+          chainId: chainId ?? "-1",
           requestData: {
             offerId: params.get("offerId"),
             transactionHash: params.get("tx")
@@ -132,25 +138,28 @@ export const DevconCashbackReward = () => {
           elevation={5}
           sx={{
             p: paddingContainer,
-            minHeight: {xs: '400px', md: '420px'},
-            position: 'relative'
+            position: 'relative',
+            marginBottom: '50px'
           }}
         >
           <Stack>
-            <Box>
-              <Stack direction="column" mb={2} alignItems="center">
-                <Image src="" sx={{width: '100px', height: '100px'}}/>
-                <Typography variant="h4" component="h3" mt={2}>
+            <Stack direction={{ xs: 'column', sm: 'row' }}>
+              <Stack direction="column" mb={2}  alignItems={{ xs: 'center', sm: 'left' }}>
+                <Image src={stlLogo} sx={{width: '150px', height: 'auto'}} padding="20px"/>
+              </Stack>
+              <Stack direction="column" mb={2} alignItems="left">
+                <Typography variant="h4" component="h3" mt={2} style={{marginBottom: '20px'}}>
                   Claim $50 Cashback using BrandConnector
                 </Typography>
+                <ul style={{marginBottom: '10px'}}>
+                  <li>Limited to 100 users</li>
+                  <li>$50 USD max</li>
+                </ul>
+                <small>Read more about BrandConnector <a href="https://brandconnector.io/" target="_blank" rel="noreferrer">here</a></small>
               </Stack>
-              <ul>
-                <li>Limited to 100 users (33 left)</li>
-                <li>$50 USD max</li>
-              </ul>
-            </Box>
+            </Stack>
 
-            <Box mt={2}>
+            <Box>
               <LoadingButton
                 variant="contained"
                 size="large"
@@ -160,13 +169,12 @@ export const DevconCashbackReward = () => {
                 }}
                 sx={{
                   mt: 1,
-                  position: 'absolute',
+                  marginTop: '50px',
                   bottom: theme.spacing(3),
                   marginLeft: 'auto',
                   marginRight: 'auto',
                   left: '0',
-                  right: '0',
-                  width: `calc(100% - (2 * ${paddingContainer}));`
+                  right: '0'
                 }}
               >
                 Claim
@@ -179,30 +187,37 @@ export const DevconCashbackReward = () => {
 
             { modalMode === 1 &&
               <>
+                <Stack direction="column" mb={2}  alignItems={{ xs: 'center', sm: 'left' }}>
+                  <Image src={emailIcon} sx={{width: '120px', height: 'auto'}} padding="10px" />
+                </Stack>
                 <Typography sx={{mt: 1}}>
                   In order to get Cashback, you need to get an email attestation to prove ticket ownership.
                   Note, that your email address will be stored in your local storage only. This is fully decentralized.
                 </Typography>
 
                 <Stack direction="row" mt={1}>
-                <Button
-                sx={{mt: 2}}
-                size="large"
-                fullWidth
-                variant="contained"
-                onClick={() => {
-                setModalMode(0);
-                window.negotiator.authenticate({issuer: "devcon", unsignedToken: ticket})
-              }}
-                >
-                Prove Ticket Ownership
-                </Button>
+                  <Button
+                  sx={{mt: 2}}
+                  size="large"
+                  fullWidth
+                  variant="contained"
+                  onClick={() => {
+                  setModalMode(0);
+                  window.negotiator.authenticate({issuer: "devcon", unsignedToken: ticket})
+                }}
+                  >
+                  Prove Ticket Ownership
+                  </Button>
                 </Stack>
               </>
             }
 
             {modalMode === 2 &&
               <>
+                <Stack direction="column" mb={2}  alignItems={{ xs: 'center', sm: 'left' }}>
+                  <Image src={tickIcon} sx={{width: '120px', height: 'auto'}} padding="10px" />
+                </Stack>
+
                 <Typography sx={{mt: 1}}>
                   Request successful! After Devcon week you will receive $50 USD worth of Ethereum at your address.
                 </Typography>
@@ -225,6 +240,10 @@ export const DevconCashbackReward = () => {
 
             {modalMode === 3 &&
               <>
+                <Stack direction="column" mb={2}  alignItems={{ xs: 'center', sm: 'left' }}>
+                  <Image src={errorIcon} sx={{width: '120px', height: 'auto'}} padding="10px" />
+                </Stack>
+
                 <Typography sx={{mt: 1}}>
                   {error.message}
                   <br/><br/>
