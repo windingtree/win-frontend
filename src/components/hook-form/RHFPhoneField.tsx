@@ -455,7 +455,7 @@ export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
   const [country, setCountry] = useState<CountryType | null>(null);
 
   const onCountryChange = useCallback(
-    (e: InputChangeEvent, value: CountryType) => {
+    (_: InputChangeEvent, value: CountryType) => {
       const phone = getValues()[name];
       if (country && phone) {
         setValue(
@@ -468,19 +468,19 @@ export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
     [name, getValues, setValue, country]
   );
 
-  const doSetCountry = (phone: string): void => {
+  const doSetCountry = (e: InputChangeEvent): InputChangeEvent => {
+    e.target.value = normalizePhone(e.target.value);
     const phoneCountry = countries.filter((c) =>
-      normalizePhone(phone).startsWith(normalizePhone(c.phone))
+      e.target.value.startsWith(normalizePhone(c.phone))
     )[0];
     if (phoneCountry) {
       setCountry(phoneCountry);
     }
+    return e;
   };
 
-  const onFieldChange = (e: InputChangeEvent, onChange: OnChangeCallback): void => {
-    doSetCountry(e.target.value);
-    return onChange(e);
-  };
+  const onFieldChange = (e: InputChangeEvent, onChange: OnChangeCallback): void =>
+    onChange(doSetCountry(e));
 
   useEffect(() => {
     if (country === null) {
