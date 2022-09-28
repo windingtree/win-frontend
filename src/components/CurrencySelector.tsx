@@ -92,7 +92,7 @@ export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps
       <FormLabel id="controlled-currency-selector">
         {tokens.length > 0
           ? 'Select which currency you would like to pay with'
-          : 'Please select a USD-pegged stablecoin'}
+          : 'There is no supported stablecoin for this currency, please select a USD pegged stablecoin'}
       </FormLabel>
       <RadioGroup
         aria-labelledby="controlled-currency-selector"
