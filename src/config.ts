@@ -80,6 +80,9 @@ export const backend = Object.freeze({
   url: process.env.REACT_APP_API_URL
 });
 
+export const DISABLE_FEATURES =
+  process.env.REACT_APP_DISABLE_FEATURES === 'true' ? true : false;
+
 export const expirationGap = Number(process.env.REACT_APP_EXPIRATION_GAP);
 
 export const upcomingEvents: EventItemProps[] = [

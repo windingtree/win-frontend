@@ -28,6 +28,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const theme = useTheme();
     const { winWidth } = useWindowsDimension();
     const { isGroupMode } = useAccommodationsAndOffers();
+
     const selectedStyle: CSSProperties = isSelected
       ? {
           position: 'relative'

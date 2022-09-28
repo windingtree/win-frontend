@@ -1,4 +1,5 @@
 import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
+import { DISABLE_FEATURES } from 'src/config';
 import { OfferRecord } from 'src/store/types';
 import { AccommodationTransformFn, EventInfo, LowestPriceFormat } from '.';
 import { getActiveEventsWithinRadius } from '../../utils/events';
@@ -193,7 +194,7 @@ export const accommodationEventTransform =
   };
 
 export const getGroupMode = (roomCount: number | string | undefined): boolean => {
-  if (process.env.REACT_APP_DISABLE_FEATURES === 'true') return false;
+  if (DISABLE_FEATURES) return false;
   if (roomCount === undefined) false;
   const numRoomCount = Number.isNaN(roomCount) ? 0 : Number(roomCount);
   return numRoomCount > 9;
