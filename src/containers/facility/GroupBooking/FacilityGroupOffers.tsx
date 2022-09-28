@@ -32,8 +32,8 @@ export const GroupOffersSchema = Yup.object().shape({
 });
 
 export interface FacilityGroupOffersProps {
-  offers: OfferRecord[];
-  accommodation: AccommodationWithId;
+  offers: OfferRecord[] | null;
+  accommodation: AccommodationWithId | null;
 }
 
 export interface OfferFormType extends OfferRecord {
