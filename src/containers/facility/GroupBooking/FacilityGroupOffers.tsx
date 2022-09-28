@@ -66,11 +66,15 @@ type FormOfferType = {
   id: string;
 };
 
+interface OfferFormType extends OfferRecord {
+  quantity: string;
+}
+
 type FormValuesProps = {
-  offers: FormOfferType[];
+  offers: OfferFormType[];
 };
 
-const getRoomCount = (prev: number, current: FormOfferType): number =>
+const getRoomCount = (prev: number, current: OfferFormType): number =>
   Number(current.quantity) + prev;
 
 export const FacilityGroupOffers = ({
