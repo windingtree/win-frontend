@@ -35,6 +35,7 @@ jobs:
           BROWSER: none
           HTTPS: true
           REACT_APP_LOG_LEVEL: info
+          REACT_APP_STL_DEVCON: 1
           NODE_ENV: development
           REACT_APP_MODE: prod
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
