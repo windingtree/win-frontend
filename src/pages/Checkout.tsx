@@ -117,8 +117,9 @@ export const Checkout = () => {
   }
 
   return (
-    <MainLayout>
+    <MainLayout maxWidth="lg">
       <Breadcrumbs
+        sx={{ mb: 5 }}
         links={[
           {
             name: 'Home',
@@ -138,73 +139,68 @@ export const Checkout = () => {
           }
         ]}
       />
-      <Container
-        sx={{
-          marginBottom: theme.spacing(5)
-        }}
-      >
-        {!account && (
-          <Typography variant="h3" mb={3}>
-            Please connect your wallet to proceed with the Payment
-          </Typography>
-        )}
-        <Box textAlign={{ xs: 'center', lg: 'left' }} marginBottom={{ xs: 3, lg: 5 }}>
-          <Box
-            sx={{
-              display: 'inline-block'
-            }}
-          >
-            <Typography variant="h3">
-              Your payment value is&nbsp;
-              {formatPrice(
-                utils.parseEther(checkout.offer.price.public.toString()),
-                checkout.offer.price.currency
-              )}
-            </Typography>
-            {checkout.quote &&
-              checkout.quote.targetAmount &&
-              checkout.quote.targetCurrency && (
-                <Typography variant="h5" textAlign={{ xs: 'center', lg: 'right' }}>
-                  Equivalent to&nbsp;
-                  {formatPrice(
-                    utils.parseEther(checkout.quote.targetAmount.toString()),
-                    checkout.quote.targetCurrency
-                  )}
-                </Typography>
-              )}
-          </Box>
-        </Box>
 
+      {!account && (
+        <Typography variant="h3" mb={3}>
+          Please connect your wallet to proceed with the Payment
+        </Typography>
+      )}
+      <Box textAlign={{ xs: 'center', lg: 'left' }} marginBottom={{ xs: 3, lg: 5 }}>
         <Box
-          flexDirection={{ xs: 'column', lg: 'row' }}
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: 5
+            display: 'inline-block'
           }}
         >
-          <Box marginRight={{ xs: 0, lg: 5 }} marginBottom={{ xs: 3, lg: 0 }}>
-            <Card>
-              <CardMediaFallback
-                component="img"
-                height="200"
-                src={hotelImage?.url}
-                fallback={FallbackImage}
-                alt={checkout.accommodation.name}
-              />
-            </Card>
-          </Box>
-          <Box>
-            <Typography>
-              You are paying for stay in {checkout.accommodation.name}
-            </Typography>
-          </Box>
+          <Typography variant="h3">
+            Your payment value is&nbsp;
+            {formatPrice(
+              utils.parseEther(checkout.offer.price.public.toString()),
+              checkout.offer.price.currency
+            )}
+          </Typography>
+          {checkout.quote &&
+            checkout.quote.targetAmount &&
+            checkout.quote.targetCurrency && (
+              <Typography variant="h5" textAlign={{ xs: 'center', lg: 'right' }}>
+                Equivalent to&nbsp;
+                {formatPrice(
+                  utils.parseEther(checkout.quote.targetAmount.toString()),
+                  checkout.quote.targetCurrency
+                )}
+              </Typography>
+            )}
         </Box>
+      </Box>
 
-        {!account && <SignInButton size="large" sx={{ padding: 5 }} />}
+      <Box
+        flexDirection={{ xs: 'column', lg: 'row' }}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          marginBottom: 5
+        }}
+      >
+        <Box marginRight={{ xs: 0, lg: 5 }} marginBottom={{ xs: 3, lg: 0 }}>
+          <Card>
+            <CardMediaFallback
+              component="img"
+              height="200"
+              src={hotelImage?.url}
+              fallback={FallbackImage}
+              alt={checkout.accommodation.name}
+            />
+          </Card>
+        </Box>
+        <Box>
+          <Typography>
+            You are paying for stay in {checkout.accommodation.name}
+          </Typography>
+        </Box>
+      </Box>
 
-        <WinPay payment={payment} onSuccess={onPaymentSuccess} />
-      </Container>
+      {!account && <SignInButton size="large" sx={{ padding: 5 }} />}
+
+      <WinPay payment={payment} onSuccess={onPaymentSuccess} />
     </MainLayout>
   );
 };

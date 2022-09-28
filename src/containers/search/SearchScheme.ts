@@ -15,7 +15,8 @@ export const SearchSchema = Yup.object().shape({
   roomCount: Yup.number()
     .transform((value) => (isNaN(value) ? undefined : value))
     .required('number of rooms')
-    .moreThan(0, 'select at least 1 room'),
+    .moreThan(0, 'select at least 1 room')
+    .lessThan(10, 'Maximum is 9'),
   dateRange: Yup.array()
     .required('a start date and an end date')
     .of(

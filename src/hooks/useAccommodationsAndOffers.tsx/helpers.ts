@@ -44,6 +44,7 @@ export const normalizeAccommodations = (
 ): AccommodationWithId[] => {
   if (!accommodations) return [];
   const normalizedOffers = offers ? normalizeOffers(offers) : [];
+
   const normalizedAccommodations = Object.entries(
     accommodations
   ).map<AccommodationWithId>(([keyA, valueA]) => {
@@ -191,7 +192,9 @@ export const accommodationEventTransform =
     return { ...accommodation, eventInfo };
   };
 
-export const getGroupMode = (roomCount: number | string): boolean => {
+export const getGroupMode = (roomCount: number | string | undefined): boolean => {
+  if (process.env.REACT_APP_DISABLE_FEATURES) return false;
+  if (roomCount === undefined) false;
   const numRoomCount = Number.isNaN(roomCount) ? 0 : Number(roomCount);
   return numRoomCount > 9;
 };

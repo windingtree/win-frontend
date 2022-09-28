@@ -6,7 +6,6 @@ import { createSearchParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
 import { useMemo } from 'react';
 import { createRef, useCallback } from 'react';
-import { Box } from '@mui/material';
 
 export const Facility = () => {
   const detailImagesRef = createRef<HTMLDivElement>();
@@ -31,8 +30,9 @@ export const Facility = () => {
   }, [latestQueryParams, createSearchParams]);
 
   return (
-    <MainLayout>
+    <MainLayout maxWidth="lg">
       <Breadcrumbs
+        sx={{ mb: 2 }}
         links={[
           {
             name: 'Home',
@@ -44,10 +44,9 @@ export const Facility = () => {
           }
         ]}
       />
-      <Box sx={{ px: 8 }}>
-        <FacilityIntroduction scrollToDetailImages={scrollToDetailImages} />
-        <FacilityOffers ref={detailImagesRef} />
-      </Box>
+
+      <FacilityIntroduction scrollToDetailImages={scrollToDetailImages} />
+      <FacilityOffers ref={detailImagesRef} />
     </MainLayout>
   );
 };

@@ -111,6 +111,7 @@ export const SearchForm: React.FC = () => {
     resolver: yupResolver(SearchSchema),
     defaultValues
   });
+
   const {
     watch,
     handleSubmit,
