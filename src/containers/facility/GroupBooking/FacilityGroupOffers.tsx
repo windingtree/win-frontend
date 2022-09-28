@@ -31,7 +31,7 @@ export const GroupOffersSchema = Yup.object().shape({
   )
 });
 
-export interface FacilityGroupOffersProps {
+interface FacilityGroupOffersProps {
   offers: OfferRecord[] | null;
   accommodation: AccommodationWithId | null;
 }
