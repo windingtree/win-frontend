@@ -1,4 +1,4 @@
-import { Box, styled, Typography, useTheme } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 import { DateTime } from 'luxon';
 
 interface FacilityOffersTitleProps {
@@ -16,7 +16,6 @@ export const FacilityOffersTitle = ({
   nights
 }: FacilityOffersTitleProps) => {
   const SubHeader = styled(Box)(() => ({}));
-  const theme = useTheme();
   const dateStr =
     startDate && DateTime.fromJSDate(new Date(startDate)).toFormat('ccc, LLL d, yyyy');
 
