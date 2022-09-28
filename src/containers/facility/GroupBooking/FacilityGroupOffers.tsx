@@ -1,7 +1,7 @@
 import { Alert, Grid, Snackbar, Typography } from '@mui/material';
 import { RoomCardGroup } from './RoomCardGroup';
 import { FormProvider } from 'src/components/hook-form';
-import { useForm } from 'react-hook-form';
+import { useForm, FieldValues } from 'react-hook-form';
 import * as Yup from 'yup';
 import { useMemo, useState } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
@@ -31,46 +31,16 @@ export const GroupOffersSchema = Yup.object().shape({
   )
 });
 
-interface FacilityGroupOffersProps {
-  offers: OfferRecord[] | null;
-  accommodation: AccommodationWithId | null;
+export interface FacilityGroupOffersProps {
+  offers: OfferRecord[];
+  accommodation: AccommodationWithId;
 }
 
-/**
- * Instead of using an OfferType we create seperate type for the form,
- * because react-hook-form is otherwise complaining about the dynamic types.
- */
-type FormOfferType = {
-  expiration?: string;
-  price?: {
-    currency: string;
-    private?: string;
-    public: string;
-    commission?: string;
-    taxes?: string;
-    isAmountBeforeTax?: boolean;
-    decimalPlaces?: number;
-  };
-  pricePlansReferences?: {
-    [k: string]: {
-      accommodation: string;
-      roomType: string;
-      roomTypePlan?: {
-        mealPlan?: string;
-        ratePlan?: string;
-        roomTypeId: string;
-      };
-    };
-  };
-  quantity: string;
-  id: string;
-};
-
-interface OfferFormType extends OfferRecord {
+export interface OfferFormType extends OfferRecord {
   quantity: string;
 }
 
-type FormValuesProps = {
+export type FormValuesProps = {
   offers: OfferFormType[];
 };
 
@@ -84,7 +54,7 @@ export const FacilityGroupOffers = ({
   const { latestQueryParams } = useAccommodationsAndOffers();
   const defaultOffers = useMemo(
     () =>
-      offers?.map((offer, index) => {
+      offers?.map<OfferFormType>((offer, index) => {
         if (index === 0) {
           return {
             ...offer,
@@ -98,14 +68,14 @@ export const FacilityGroupOffers = ({
           ...offer,
           quantity: '0'
         };
-      }),
+      }) ?? [],
 
     [offers]
   );
 
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(GroupOffersSchema),
-    defaultValues: { offers: defaultOffers }
+    defaultValues: { offers: defaultOffers } as FieldValues
   });
 
   const { handleSubmit, watch } = methods;
