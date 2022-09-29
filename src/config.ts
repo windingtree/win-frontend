@@ -1,4 +1,4 @@
-import { LocalStorageConnectorConfig } from './store/localStorage';
+import { LocalStorageConnectorConfig } from './store/storage';
 import { Settings } from 'luxon';
 import { config } from '@windingtree/win-commons';
 import blockchaineurope2022 from './images/conferences/blockchaineurope2022.png';

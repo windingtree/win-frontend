@@ -6,7 +6,7 @@ import { web3ModalReducer } from './web3ModalReducer';
 import { cryptoReducer } from './cryptoReducer';
 import { recordsReducer } from './recordsReducer';
 import { searchReducer } from './searchReducer';
-import { getState, storageReducer } from './localStorage';
+import { getState, storageReducer } from './storage';
 import Logger from '../utils/logger';
 import { checkOutReducer } from './checkOutReducer';
 import { selectedFacilityReducer } from './selectedFacilityReducer';
