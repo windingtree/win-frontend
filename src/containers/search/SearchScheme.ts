@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { daysBetween } from '../../utils/date';
 //TODO: update this when group booking should be enabled
 export const SearchSchema =
   process.env.REACT_APP_DISABLE_FEATURES === 'true'
@@ -21,13 +22,15 @@ export const SearchSchema =
           .lessThan(10, 'Maximum is 9'),
 
         dateRange: Yup.array()
-          .required('a start date and an end date')
+          .required('a check-in date and an check-out date')
           .of(
             Yup.object().shape({
               startDate: Yup.date()
-                .typeError('a valid start date')
-                .required('a start date'),
-              endDate: Yup.date().typeError('a valid end date').required('an end date')
+                .typeError('a valid check-in date')
+                .required('a check-in date'),
+              endDate: Yup.date()
+                .typeError('a valid check-out date')
+                .required('an check-out date')
             })
           )
       })
@@ -49,13 +52,26 @@ export const SearchSchema =
           .moreThan(0, 'select at least 1 room'),
 
         dateRange: Yup.array()
-          .required('a start date and an end date')
+          .required('a check-in date and an check-out date')
           .of(
             Yup.object().shape({
               startDate: Yup.date()
-                .typeError('a valid start date')
-                .required('a start date'),
-              endDate: Yup.date().typeError('a valid end date').required('an end date')
+                .typeError('a valid check-in date')
+                .required('a check-in date'),
+              endDate: Yup.date()
+                .typeError('a valid check-out date')
+                .required('an check-out date')
+                .test(
+                  'startEndDate',
+                  'ensure check-out date is at least 1 day from check-in date',
+                  (value, { parent }) => {
+                    const numDays = daysBetween(
+                      new Date(parent.startDate as string),
+                      value
+                    );
+                    return numDays >= 1;
+                  }
+                )
             })
           )
       });
