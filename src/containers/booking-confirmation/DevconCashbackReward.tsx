@@ -4,12 +4,8 @@ import {Box, Button, Card, Container, Modal, Stack, styled, Typography, useTheme
 import Image from "../../components/Image";
 import {LoadingButton} from "@mui/lab";
 import {useEffect, useState} from "react";
-import process from "process";
 import {useAppState} from "../../store";
-import stlLogo from "../../images/stl/stl-logo.png";
-import emailIcon from "../../images/stl/email-icon.png";
-import tickIcon from "../../images/stl/tick-icon.png";
-import errorIcon from "../../images/stl/error-icon.png";
+import {useLocation} from "react-router-dom";
 
 const ContainerStyle = styled(Container)(({ theme }) => ({
   position: 'absolute',
@@ -28,17 +24,27 @@ declare global {
   }
 }
 
+enum ModalMode {
+  NONE,
+  ATTEST,
+  SUCCESS,
+  ERROR
+}
+
+const ENABLED = process.env.REACT_APP_STL_DEVCON ?? 0;
+
 export const DevconCashbackReward = () => {
 
   const { provider } = useAppState();
+  const loc = useLocation();
 
   const theme = useTheme();
   const paddingContainer = theme.spacing(3);
 
-  const [modalMode, setModalMode] = useState(0);
-  const [ticket, setTicket] = useState(null);
+  const [modalMode, setModalMode] = useState<ModalMode>(ModalMode.NONE);
+  const [ticket, setTicket] = useState<null|Record<string, unknown>>(null);
 
-  const [error, setError] = useState({message: "", detail: ""});
+  const [error, setError] = useState<{message: string, detail: string}>({message: "", detail: ""});
 
   const AUTH_ERROR_STR = "There was an error during Authentication. Please refer to the error message below for more details: ";
 
@@ -54,9 +60,8 @@ export const DevconCashbackReward = () => {
           "collectionID": "devcon",
           "onChain": false,
           "title": "Devcon Test Ticket",
-          "image": "https://raw.githubusercontent.com/TokenScript/token-negotiator/main/mock-images/devcon.svg",
-          "tokenOrigin": "https://stltesting.tk/token-outlet/",
-          "unEndPoint": "https://crypto-verify.herokuapp.com/use-devcon-ticket",
+          "image": "https://devconnect.smarttokenlabs.com/img/devconNFT.svg",
+          "tokenOrigin": "https://stage-perks.smarttokenlabs.com/outlet.html",
           "base64senderPublicKeys": {
             "6": "MIIBMzCB7AYHKoZIzj0CATCB4AIBATAsBgcqhkjOPQEBAiEA/////////////////////////////////////v///C8wRAQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHBEEEeb5mfvncu6xVoGKVzocLBwKb/NstzijZWfKBWxb4F5hIOtp3JqPEZV2k+/wOEQio/Re0SKaFVBmcR9CP+xDUuAIhAP////////////////////66rtzmr0igO7/SXozQNkFBAgEBA0IABGMxHraqggr2keTXszIcchTjYjH5WXpDaBOYgXva82mKcGnKgGRORXSmcjWN2suUCMkLQj3UNlZCFWF10wIrrlw="
           },
@@ -65,17 +70,17 @@ export const DevconCashbackReward = () => {
       ]
     });
 
-    window.negotiator.on("tokens-selected", (tokens) => {
+    window.negotiator.on("tokens-selected", (tokens: {selectedTokens: {tokens: unknown[]}}) => {
 
       if (tokens.selectedTokens?.["devcon"]?.tokens?.length > 0){
-        setModalMode(1);
+        setModalMode(ModalMode.ATTEST);
         setTicket(tokens.selectedTokens["devcon"]?.tokens[0]);
       } else {
         showError("Looks like you don't have Devcon tickets, ensure you have opened your Devcon magic link in this browser.", "");
       }
     });
 
-    window.negotiator.on("token-proof", (proof: any) => {
+    window.negotiator.on("token-proof", (proof: {error: string, data: {proof: string}, issuer: string}) => {
       if (proof.error){
         showError(AUTH_ERROR_STR, proof.error);
         return;
@@ -84,11 +89,11 @@ export const DevconCashbackReward = () => {
     });
   });
 
-  async function sendCashbackRequest(data: any){
+  async function sendCashbackRequest(data: {proof: string}){
 
     try {
 
-      const params = new URLSearchParams(document.location.search);
+      const params = new URLSearchParams(loc.search);
 
       const chainId = provider?.network.chainId.toString();
 
@@ -100,8 +105,6 @@ export const DevconCashbackReward = () => {
         body: JSON.stringify({
           perkId: "windingTree",
           useTicket: data.proof,
-          un: data.useEthKey,
-          address: data.useEthKey.address,
           chainId: chainId ?? "-1",
           requestData: {
             offerId: params.get("offerId"),
@@ -121,17 +124,17 @@ export const DevconCashbackReward = () => {
       return;
     }
 
-    setModalMode(2);
+    setModalMode(ModalMode.SUCCESS);
   }
 
   function showError(message: string, detail: string){
     setError({message: message, detail: detail});
-    setModalMode(3);
+    setModalMode(ModalMode.ERROR);
   }
 
   return (
     <>
-      {process.env.REACT_APP_STL_DEVCON &&
+      {ENABLED &&
       document.location.hash === "#devcon" &&
       <>
         <Card
@@ -145,7 +148,7 @@ export const DevconCashbackReward = () => {
           <Stack>
             <Stack direction={{ xs: 'column', sm: 'row' }}>
               <Stack direction="column" mb={2}  alignItems={{ xs: 'center', sm: 'left' }}>
-                <Image src={stlLogo} sx={{width: '150px', height: 'auto'}} padding="20px"/>
+                <Image src="/images/stl/stl-logo.png" sx={{width: '150px', height: 'auto'}} padding="20px"/>
               </Stack>
               <Stack direction="column" mb={2} alignItems="left">
                 <Typography variant="h4" component="h3" mt={2} style={{marginBottom: '20px'}}>
@@ -182,13 +185,13 @@ export const DevconCashbackReward = () => {
             </Box>
           </Stack>
         </Card>
-        <Modal open={modalMode > 0}>
+        <Modal open={modalMode > ModalMode.NONE}>
           <ContainerStyle maxWidth="xs" sx={{ textAlign: 'center' }}>
 
-            { modalMode === 1 &&
+            { modalMode === ModalMode.ATTEST &&
               <>
                 <Stack direction="column" mb={2}  alignItems={{ xs: 'center', sm: 'left' }}>
-                  <Image src={emailIcon} sx={{width: '120px', height: 'auto'}} padding="10px" />
+                  <Image src="/images/stl/email-icon.png" sx={{width: '120px', height: 'auto'}} padding="10px" />
                 </Stack>
                 <Typography sx={{mt: 1}}>
                   In order to get Cashback, you need to get an email attestation to prove ticket ownership.
@@ -202,7 +205,7 @@ export const DevconCashbackReward = () => {
                   fullWidth
                   variant="contained"
                   onClick={() => {
-                  setModalMode(0);
+                  setModalMode(ModalMode.NONE);
                   window.negotiator.authenticate({issuer: "devcon", unsignedToken: ticket})
                 }}
                   >
@@ -212,10 +215,10 @@ export const DevconCashbackReward = () => {
               </>
             }
 
-            {modalMode === 2 &&
+            {modalMode === ModalMode.SUCCESS &&
               <>
                 <Stack direction="column" mb={2}  alignItems={{ xs: 'center', sm: 'left' }}>
-                  <Image src={tickIcon} sx={{width: '120px', height: 'auto'}} padding="10px" />
+                  <Image src="/images/stl/tick-icon.png" sx={{width: '120px', height: 'auto'}} padding="10px" />
                 </Stack>
 
                 <Typography sx={{mt: 1}}>
@@ -229,7 +232,7 @@ export const DevconCashbackReward = () => {
                     fullWidth
                     variant="contained"
                     onClick={() => {
-                      setModalMode(0);
+                      setModalMode(ModalMode.NONE);
                     }}
                   >
                     Close
@@ -238,10 +241,10 @@ export const DevconCashbackReward = () => {
               </>
             }
 
-            {modalMode === 3 &&
+            {modalMode === ModalMode.ERROR &&
               <>
                 <Stack direction="column" mb={2}  alignItems={{ xs: 'center', sm: 'left' }}>
-                  <Image src={errorIcon} sx={{width: '120px', height: 'auto'}} padding="10px" />
+                  <Image src="/images/stl/error-icon.png" sx={{width: '120px', height: 'auto'}} padding="10px" />
                 </Stack>
 
                 <Typography sx={{mt: 1}}>
@@ -257,7 +260,7 @@ export const DevconCashbackReward = () => {
                     fullWidth
                     variant="contained"
                     onClick={() => {
-                      setModalMode(0);
+                      setModalMode(ModalMode.NONE);
                     }}
                   >
                     Close
