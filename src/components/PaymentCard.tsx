@@ -119,22 +119,24 @@ export const PaymentCard = ({
 
   const permitBlocked = useMemo(
     () =>
+      (asset && (!asset.permit || asset.native)) ||
       paymentValue.eq(BN.from(0)) ||
       balance.eq(BN.from(0)) ||
       paymentExpired ||
       permitSignature !== undefined ||
       tokenAllowance.gte(paymentValue) ||
       isAccountContract,
-    [paymentValue, balance, permitSignature, tokenAllowance, isAccountContract]
+    [asset, paymentValue, balance, permitSignature, tokenAllowance, isAccountContract]
   );
 
   const allowanceBlocked = useMemo(
     () =>
+      (asset && (asset.permit || asset.native)) ||
       paymentValue.eq(BN.from(0)) ||
       balance.eq(BN.from(0)) ||
       paymentExpired ||
       !permitBlocked ||
-      (asset && !asset.native && tokenAllowance.gte(paymentValue)) ||
+      tokenAllowance.gte(paymentValue) ||
       permitSignature !== undefined,
     [asset, paymentValue, balance, tokenAllowance, permitSignature, permitBlocked]
   );
