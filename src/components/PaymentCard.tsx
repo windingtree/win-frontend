@@ -105,6 +105,8 @@ export const PaymentCard = ({
 
   const paymentBlocked = useMemo(
     () =>
+      paymentValue.eq(BN.from(0)) ||
+      balance.eq(BN.from(0)) ||
       paymentExpired ||
       !!costError ||
       isTxStarted !== undefined ||
@@ -112,25 +114,31 @@ export const PaymentCard = ({
         !asset.native &&
         tokenAllowance.lt(paymentValue) &&
         permitSignature === undefined),
-    [costError, asset, paymentValue, tokenAllowance, permitSignature]
+    [costError, asset, paymentValue, balance, tokenAllowance, permitSignature]
   );
 
   const permitBlocked = useMemo(
     () =>
+      (asset && (!asset.permit || asset.native)) ||
+      paymentValue.eq(BN.from(0)) ||
+      balance.eq(BN.from(0)) ||
       paymentExpired ||
       permitSignature !== undefined ||
       tokenAllowance.gte(paymentValue) ||
       isAccountContract,
-    [paymentValue, permitSignature, tokenAllowance, isAccountContract]
+    [asset, paymentValue, balance, permitSignature, tokenAllowance, isAccountContract]
   );
 
   const allowanceBlocked = useMemo(
     () =>
+      (asset && (asset.permit || asset.native)) ||
+      paymentValue.eq(BN.from(0)) ||
+      balance.eq(BN.from(0)) ||
       paymentExpired ||
       !permitBlocked ||
-      (asset && !asset.native && tokenAllowance.gte(paymentValue)) ||
+      tokenAllowance.gte(paymentValue) ||
       permitSignature !== undefined,
-    [asset, paymentValue, tokenAllowance, permitSignature, permitBlocked]
+    [asset, paymentValue, balance, tokenAllowance, permitSignature, permitBlocked]
   );
 
   const resetState = useCallback(() => {
@@ -497,7 +505,7 @@ export const PaymentCard = ({
               gap: 2
             }}
           >
-            {!allowanceBlocked && !asset.native && (
+            {!asset.permit && tokenAllowance.lt(paymentValue) && (
               <Button
                 variant="contained"
                 onClick={approveTokens}
@@ -509,7 +517,7 @@ export const PaymentCard = ({
                 ) : undefined}
               </Button>
             )}
-            {!permitBlocked && asset.permit && (
+            {asset.permit && permitSignature === undefined && (
               <Button variant="contained" onClick={createPermit} disabled={permitBlocked}>
                 Permit the tokens
               </Button>
