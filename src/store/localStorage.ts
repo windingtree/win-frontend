@@ -9,17 +9,7 @@ export interface LocalStorageConnectorConfig {
   properties: string[];
 }
 
-export const storageConnectorConfig: LocalStorageConnectorConfig = {
-  properties: ['selectedNetwork', 'selectedAsset', 'searchParams', 'walletAuth']
-};
-
-export const sessionConnectorConfig: LocalStorageConnectorConfig = {
-  properties: []
-};
-
-export type StoredStateProps = typeof storageConnectorConfig.properties[number];
-
-export type StoredState = Pick<State, StoredStateProps>;
+export type StoredState = Pick<State, LocalStorageConnectorConfig['properties'][number]>;
 
 export type TransformCallback = <T>(serializedState: string) => T;
 
@@ -101,12 +91,13 @@ export const setState = (
 // Returns combined reducer
 // `transform` callback can be used for encryption
 export const storageReducer =
-  (transform?: TransformCallback) =>
+  (
+    localStorageConfig: LocalStorageConnectorConfig,
+    sessionStorageConfig: LocalStorageConnectorConfig,
+    transform?: TransformCallback
+  ) =>
   (state: State, _: Action): State => {
-    // Update the localStorage
-    setState(selectedState(state, storageConnectorConfig), localStorage, transform);
-
-    // Updated the sessionStorage
-    setState(selectedState(state, sessionConnectorConfig), sessionStorage, transform);
+    setState(selectedState(state, localStorageConfig), localStorage, transform);
+    setState(selectedState(state, sessionStorageConfig), sessionStorage, transform);
     return state;
   };

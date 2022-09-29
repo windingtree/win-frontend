@@ -11,6 +11,7 @@ import Logger from '../utils/logger';
 import { checkOutReducer } from './checkOutReducer';
 import { selectedFacilityReducer } from './selectedFacilityReducer';
 import { bookingsReducer } from './bookingsReducer';
+import { localStorageConfig, sessionStorageConfig } from '../config';
 
 const logger = Logger('mainReducer');
 
@@ -73,7 +74,8 @@ export const useAppReducer = () => {
       recordsReducer,
       selectedFacilityReducer,
       bookingsReducer,
-      storageReducer() // Always must be the last
+      // Always must be the last
+      storageReducer(localStorageConfig, sessionStorageConfig)
     ]),
     {
       ...initialState,
