@@ -505,7 +505,7 @@ export const PaymentCard = ({
               gap: 2
             }}
           >
-            {!allowanceBlocked && !asset.native && (
+            {!asset.permit && tokenAllowance.lt(paymentValue) && (
               <Button
                 variant="contained"
                 onClick={approveTokens}
@@ -517,7 +517,7 @@ export const PaymentCard = ({
                 ) : undefined}
               </Button>
             )}
-            {!permitBlocked && asset.permit && (
+            {asset.permit && permitSignature === undefined && (
               <Button variant="contained" onClick={createPermit} disabled={permitBlocked}>
                 Permit the tokens
               </Button>
