@@ -121,7 +121,7 @@ export const PaymentCard = ({
     () =>
       (asset && (!asset.permit || asset.native)) ||
       paymentValue.eq(BN.from(0)) ||
-      balance.eq(BN.from(0)) ||
+      balance.lt(paymentValue) ||
       paymentExpired ||
       permitSignature !== undefined ||
       tokenAllowance.gte(paymentValue) ||
@@ -133,7 +133,7 @@ export const PaymentCard = ({
     () =>
       (asset && (asset.permit || asset.native)) ||
       paymentValue.eq(BN.from(0)) ||
-      balance.eq(BN.from(0)) ||
+      balance.lt(paymentValue) ||
       paymentExpired ||
       !permitBlocked ||
       tokenAllowance.gte(paymentValue) ||
