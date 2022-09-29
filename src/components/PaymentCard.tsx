@@ -105,6 +105,8 @@ export const PaymentCard = ({
 
   const paymentBlocked = useMemo(
     () =>
+      paymentValue.eq(BN.from(0)) ||
+      balance.eq(BN.from(0)) ||
       paymentExpired ||
       !!costError ||
       isTxStarted !== undefined ||
@@ -112,25 +114,29 @@ export const PaymentCard = ({
         !asset.native &&
         tokenAllowance.lt(paymentValue) &&
         permitSignature === undefined),
-    [costError, asset, paymentValue, tokenAllowance, permitSignature]
+    [costError, asset, paymentValue, balance, tokenAllowance, permitSignature]
   );
 
   const permitBlocked = useMemo(
     () =>
+      paymentValue.eq(BN.from(0)) ||
+      balance.eq(BN.from(0)) ||
       paymentExpired ||
       permitSignature !== undefined ||
       tokenAllowance.gte(paymentValue) ||
       isAccountContract,
-    [paymentValue, permitSignature, tokenAllowance, isAccountContract]
+    [paymentValue, balance, permitSignature, tokenAllowance, isAccountContract]
   );
 
   const allowanceBlocked = useMemo(
     () =>
+      paymentValue.eq(BN.from(0)) ||
+      balance.eq(BN.from(0)) ||
       paymentExpired ||
       !permitBlocked ||
       (asset && !asset.native && tokenAllowance.gte(paymentValue)) ||
       permitSignature !== undefined,
-    [asset, paymentValue, tokenAllowance, permitSignature, permitBlocked]
+    [asset, paymentValue, balance, tokenAllowance, permitSignature, permitBlocked]
   );
 
   const resetState = useCallback(() => {
