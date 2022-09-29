@@ -51,6 +51,7 @@ interface Props extends IProps {
   customIcon?: IconifyIcon | string;
   onNext?: VoidFunction;
   onPrevious?: VoidFunction;
+  hideArrows?: boolean;
 }
 
 export default function CarouselArrows({
@@ -59,6 +60,7 @@ export default function CarouselArrows({
   onNext,
   onPrevious,
   children,
+  hideArrows = false,
   ...other
 }: Props) {
   const theme = useTheme();
@@ -70,6 +72,10 @@ export default function CarouselArrows({
     top: '50%',
     zIndex: 9
   } as const;
+
+  if (hideArrows) {
+    return <>{children ?? null}</>;
+  }
 
   if (children) {
     return (

@@ -55,6 +55,7 @@ export const ImageCarousel: React.FC<{ media: MediaItem[]; size: string }> = ({
             '&.right': { right: 16 }
           }
         }}
+        hideArrows={media?.length > 1 ? false : true} // hide arrows when image is less than 2
       >
         <Slider ref={carouselRef} {...settings}>
           {media && media.length > 0 ? (
