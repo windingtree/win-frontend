@@ -1,7 +1,8 @@
-import { LazyLoadImage, LazyLoadImageProps } from 'react-lazy-load-image-component';
 // @mui
 import { Theme } from '@mui/material/styles';
 import { Box, BoxProps, SxProps } from '@mui/material';
+import { LazyLoadImage, LazyLoadImageProps } from './LazyLoadImage';
+import LoadingImage from '../images/no-image.png';
 
 // ----------------------------------------------------------------------
 
@@ -18,19 +19,13 @@ export type ImageRato =
 
 type IProps = BoxProps & LazyLoadImageProps;
 
-interface Props extends IProps {
+interface ImageProps extends IProps {
   sx?: SxProps<Theme>;
   ratio?: ImageRato;
   disabledEffect?: boolean;
 }
 
-export default function Image({
-  ratio,
-  disabledEffect = false,
-  effect = 'blur',
-  sx,
-  ...other
-}: Props) {
+export default function Image({ ratio, sx, ...other }: ImageProps) {
   if (ratio) {
     return (
       <Box
@@ -57,8 +52,8 @@ export default function Image({
         <Box
           component={LazyLoadImage}
           wrapperClassName="wrapper"
-          effect={disabledEffect ? undefined : effect}
-          placeholderSrc="hotel-fallback.webp"
+          placeholderImgSrc={LoadingImage}
+          showLoadingEffect={true}
           sx={{ width: 1, height: 1, objectFit: 'cover' }}
           {...other}
         />
@@ -80,8 +75,8 @@ export default function Image({
       <Box
         component={LazyLoadImage}
         wrapperClassName="wrapper"
-        effect={disabledEffect ? undefined : effect}
-        placeholderSrc="/assets/placeholder.svg"
+        placeholderImgSrc={LoadingImage}
+        showLoadingEffect={true}
         sx={{ width: 1, height: 1, objectFit: 'cover' }}
         {...other}
       />
