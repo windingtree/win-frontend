@@ -13,6 +13,10 @@ export const storageConnectorConfig: LocalStorageConnectorConfig = {
   properties: ['selectedNetwork', 'selectedAsset', 'searchParams', 'walletAuth']
 };
 
+export const sessionConnectorConfig: LocalStorageConnectorConfig = {
+  properties: []
+};
+
 export type StoredStateProps = typeof storageConnectorConfig.properties[number];
 
 export type StoredState = Pick<State, StoredStateProps>;
@@ -23,8 +27,11 @@ export type TransformCallback = <T>(serializedState: string) => T;
 export const defaultTransform = (serializedState: string) => serializedState;
 
 // Extracts selected properties into a new object
-export const selectedState = (state: State): StoredState =>
-  storageConnectorConfig.properties.reduce<StoredState>(
+export const selectedState = (
+  state: State,
+  config: LocalStorageConnectorConfig
+): StoredState =>
+  config.properties.reduce<StoredState>(
     (a, v) => ({
       ...a,
       [v]: state[v]
@@ -32,9 +39,11 @@ export const selectedState = (state: State): StoredState =>
     {}
   );
 
-// Return stored sate
-export const getState = (transform?: TransformCallback): StoredState => {
-  const storage = localStorage;
+// Return stored state from specific storage
+export const getStorageState = (
+  storage: Storage,
+  transform?: TransformCallback
+): StoredState => {
   try {
     let serializedState = storage.getItem(storagePropertyName);
 
@@ -57,9 +66,23 @@ export const getState = (transform?: TransformCallback): StoredState => {
   }
 };
 
+// Return common state
+// `transform` callback can be used for decryption
+export const getState = (transform?: TransformCallback): StoredState => {
+  const localState = getStorageState(localStorage, transform);
+  const sessionState = getStorageState(sessionStorage, transform);
+  return {
+    ...localState,
+    ...sessionState
+  };
+};
+
 // Saves state to localStorage
-export const setState = (state: StoredState, transform?: TransformCallback): void => {
-  const storage = localStorage;
+export const setState = (
+  state: StoredState,
+  storage: Storage,
+  transform?: TransformCallback
+): void => {
   try {
     const serializedState = safeObjectStringify(state);
     storage.setItem(
@@ -76,10 +99,14 @@ export const setState = (state: StoredState, transform?: TransformCallback): voi
 };
 
 // Returns combined reducer
+// `transform` callback can be used for encryption
 export const storageReducer =
   (transform?: TransformCallback) =>
   (state: State, _: Action): State => {
-    const stateToStore = selectedState(state);
-    setState(stateToStore, transform);
+    // Update the localStorage
+    setState(selectedState(state, storageConnectorConfig), localStorage, transform);
+
+    // Updated the sessionStorage
+    setState(selectedState(state, sessionConnectorConfig), sessionStorage, transform);
     return state;
   };
