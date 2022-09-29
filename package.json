@@ -100,7 +100,6 @@
     "leaflet": "^1.8.0",
     "lint-staged": "^13.0.3",
     "luxon": "^3.0.1",
-    "node-polyfill-webpack-plugin": "^2.0.1",
     "os-browserify": "^0.3.0",
     "prettier": "^2.6.2",
     "prop-types": "^15.8.1",
@@ -131,6 +130,6 @@
     "autoprefixer": "10.4.5"
   },
   "dependencies": {
-    "@tokenscript/token-negotiator": "2.2.0-dc.3"
+    "@tokenscript/token-negotiator": "2.2.0-dc.6"
   }
 }
