@@ -39,7 +39,7 @@ import { useAllowance } from 'src/hooks/useAllowance';
 import { useWinPay } from '../hooks/useWinPay';
 import useResponsive from '../hooks/useResponsive';
 import { centerEllipsis, formatPrice } from '../utils/strings';
-import { allowedNetworks, assetsCurrencies } from '../config';
+import { allowedNetworks } from '../config';
 import Logger from '../utils/logger';
 
 const logger = Logger('PaymentCard');
@@ -98,7 +98,7 @@ export const PaymentCard = ({
   const paymentValue = useMemo(
     () =>
       withQuote
-        ? BN.from(utils.parseEther(payment.quote?.targetAmount ?? '0'))
+        ? BN.from(utils.parseEther(payment.quote?.sourceAmount ?? '0'))
         : payment.value,
     [payment, withQuote]
   );
@@ -164,11 +164,11 @@ export const PaymentCard = ({
     checkIsAccount();
   }, [provider, account]);
 
-  useEffect(() => {
-    if (!assetsCurrencies.includes(payment.currency)) {
-      throw new Error(`Unsupported currency ${payment.currency}`);
-    }
-  }, [payment]);
+  // useEffect(() => {
+  //   if (!assetsCurrencies.includes(payment.currency)) {
+  //     throw new Error(`Unsupported currency ${payment.currency}`);
+  //   }
+  // }, [payment]);
 
   useEffect(() => {
     const getAccount = async () => {

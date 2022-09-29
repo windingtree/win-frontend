@@ -159,13 +159,13 @@ export const Checkout = () => {
             )}
           </Typography>
           {checkout.quote &&
-            checkout.quote.targetAmount &&
-            checkout.quote.targetCurrency && (
+            checkout.quote.sourceAmount &&
+            checkout.quote.sourceCurrency && (
               <Typography variant="h5" textAlign={{ xs: 'center', lg: 'right' }}>
                 Equivalent to&nbsp;
                 {formatPrice(
-                  utils.parseEther(checkout.quote.targetAmount.toString()),
-                  checkout.quote.targetCurrency
+                  utils.parseEther(checkout.quote.sourceAmount.toString()),
+                  checkout.quote.sourceCurrency
                 )}
               </Typography>
             )}

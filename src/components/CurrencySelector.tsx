@@ -42,9 +42,9 @@ export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps
               ? [
                   {
                     value: BigNumber.from(
-                      utils.parseEther(payment.quote.targetAmount ?? '0')
+                      utils.parseEther(payment.quote.sourceAmount ?? '0')
                     ),
-                    currency: payment.quote.targetCurrency ?? 'USD'
+                    currency: payment.quote.sourceCurrency ?? 'USD'
                   }
                 ]
               : [])
