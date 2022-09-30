@@ -92,17 +92,17 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
               justifyContent: 'space-between'
             }}
           >
-            <Stack direction={'row'} spacing={1}>
+            <Stack direction={'row'} spacing={2}>
               <LogoBeta />
               {isGroupMode && (
                 <>
                   <Typography
                     variant="h6"
-                    color="primary.darker"
-                    p={1}
+                    color="common.black"
+                    px={2}
                     borderLeft={(theme) => ({
-                      borderLeft: `${theme.spacing(0.25)} ${
-                        theme.palette.primary.darker
+                      borderLeft: `${theme.spacing(0.5)} ${
+                        theme.palette.common.black
                       } solid`
                     })}
                   >
