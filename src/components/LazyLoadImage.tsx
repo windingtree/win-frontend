@@ -1,10 +1,13 @@
-import { Box, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import {
+  forwardRef,
   FunctionComponent,
   ImgHTMLAttributes,
   ReactElement,
   useCallback,
   useEffect,
+  useMemo,
+  useRef,
   useState
 } from 'react';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
@@ -22,6 +25,25 @@ export interface LazyLoadImageProps
   showLoadingEffect?: boolean;
 }
 
+const ImageComponent = forwardRef<HTMLImageElement, ImgHTMLAttributes<HTMLImageElement>>(
+  ({ src, style, ...props }, ref) => {
+    return (
+      <img
+        {...props}
+        src={src}
+        loading="lazy"
+        width="100%"
+        height="100%"
+        style={{
+          objectFit: 'cover',
+          ...style
+        }}
+        ref={ref}
+      />
+    );
+  }
+);
+
 export const LazyLoadImage: FunctionComponent<LazyLoadImageProps> = ({
   src,
   placeholderImgSrc,
@@ -32,41 +54,48 @@ export const LazyLoadImage: FunctionComponent<LazyLoadImageProps> = ({
   showLoadingEffect = false,
   ...props
 }: LazyLoadImageProps) => {
-  const [imgSrc, setImgSrc] = useState(placeholderImgSrc || src);
-  const [showPlaceHolder, setShowPlaceHolder] = useState<boolean>(
-    !!placeholderComponent || false
-  );
+  const [imgSrc, setImgSrc] = useState(placeholderImgSrc);
+
   const [showFallback, setShowFallback] = useState(false);
+  const [loadComplete, setLoadComplete] = useState(false);
+  const [loading, setLoading] = useState(!!src);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   const onLoad = useCallback(() => {
-    setImgSrc(src);
-    setShowPlaceHolder(false);
-  }, [src]);
+    setLoading(false);
+  }, []);
 
   const onError = useCallback(() => {
-    if (fallbackComponent) {
+    if (!showFallback) {
       setShowFallback(true);
-    } else if (fallbackImgSrc || placeholderImgSrc) {
-      setImgSrc(fallbackImgSrc || placeholderImgSrc);
-    } else if (placeholderComponent) {
-      setShowPlaceHolder(true);
+      setImgSrc(fallbackImgSrc);
+    } else {
+      setLoading(false);
     }
-  }, [fallbackImgSrc, placeholderImgSrc, fallbackComponent, placeholderComponent]);
+  }, [fallbackImgSrc, showFallback]);
 
   useEffect(() => {
-    const img = new Image();
-    img.src = src as string;
-    img.addEventListener('load', onLoad);
-    img.addEventListener('error', onError);
-    return () => {
-      img.removeEventListener('load', onLoad);
-      img.removeEventListener('error', onError);
-    };
-  }, [src, onLoad, onError]);
+    if (src && imgRef && imgRef.current) {
+      setImgSrc(src);
+      imgRef.current.addEventListener('load', onLoad);
+      imgRef.current.addEventListener('error', onError);
 
-  const ImageContainer = styled(Box)(() => ({
+      return () => {
+        if (imgRef && imgRef.current) {
+          imgRef.current.removeEventListener('load', onLoad);
+          imgRef.current.removeEventListener('error', onError);
+        }
+      };
+    }
+  }, [src, onLoad, onError, imgRef]);
+
+  useEffect(() => {
+    imgRef?.current?.complete ? setLoadComplete(true) : setLoadComplete(false);
+    setLoading(false);
+  }, [imgRef?.current?.complete]);
+
+  const ImageContainer = styled('span')(() => ({
     '&.img-loading': {
-      overflow: 'hidden',
       '&::after': {
         content: '""',
         display: 'block',
@@ -78,7 +107,7 @@ export const LazyLoadImage: FunctionComponent<LazyLoadImageProps> = ({
         width: '50%',
         height: '100%',
         transform: 'translateX(0)',
-        animation: '1.2s loading-placeholder ease-in-out 15s'
+        animation: '1.2s loading-placeholder ease-in-out infinite'
       }
     },
     '@keyframes loading-placeholder': {
@@ -91,28 +120,45 @@ export const LazyLoadImage: FunctionComponent<LazyLoadImageProps> = ({
     }
   }));
 
+  const placeholderImage = useMemo(() => {
+    return (
+      <LazyLoadComponent>
+        {placeholderComponent ?? <ImageComponent src={placeholderImgSrc} />}
+      </LazyLoadComponent>
+    );
+  }, [placeholderComponent, placeholderImgSrc]);
+
+  // console.log('img load complete', imgRef?.current?.complete);
+  // console.log({loadComplete})
+
   return (
     <LazyLoadComponent>
-      {showFallback ? (
-        fallbackComponent
-      ) : showPlaceHolder ? (
-        placeholderComponent
+      {showFallback && fallbackComponent ? (
+        <LazyLoadComponent>
+          <ImageContainer>{fallbackComponent}</ImageContainer>
+        </LazyLoadComponent>
       ) : (
-        <ImageContainer
-          className={`${showLoadingEffect && showPlaceHolder ? 'img-loading' : ''}`}
-        >
-          <img
-            {...props}
-            loading="lazy"
-            src={imgSrc}
-            width="100%"
-            height="100%"
-            style={{
-              objectFit: 'cover'
-            }}
-            className={`${wrapperClassName}`}
-          />
-        </ImageContainer>
+        <>
+          {useMemo(
+            () => (
+              <ImageContainer
+                className={`${wrapperClassName} ${
+                  showLoadingEffect && loading ? 'img-loading' : ''
+                }`}
+                key={src}
+              >
+                {loading ? placeholderImage : null}
+                <ImageComponent
+                  src={imgSrc}
+                  ref={imgRef}
+                  style={{ visibility: loading ? 'hidden' : 'visible' }}
+                  {...props}
+                />
+              </ImageContainer>
+            ),
+            [imgSrc]
+          )}
+        </>
       )}
     </LazyLoadComponent>
   );

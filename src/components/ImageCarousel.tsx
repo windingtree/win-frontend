@@ -5,7 +5,6 @@ import { Box } from '@mui/material';
 import Image from './Image';
 import { CarouselDots, CarouselArrows } from './carousel';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
-import FallbackImage from '../images/hotel-fallback.webp';
 
 const RootStyle = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -63,7 +62,7 @@ export const ImageCarousel: React.FC<{ media: MediaItem[]; size: string }> = ({
               <Image key={i} src={item.url} ratio={size === 'small' ? '1/1' : '6/4'} />
             ))
           ) : (
-            <Image src={FallbackImage} ratio={size === 'small' ? '1/1' : '6/4'} />
+            <Image ratio={size === 'small' ? '1/1' : '6/4'} />
           )}
         </Slider>
       </CarouselArrows>
