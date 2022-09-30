@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { Client } from '@tokenscript/token-negotiator';
 import '@tokenscript/token-negotiator/dist/theme/style.css';
 import {
@@ -50,7 +50,7 @@ const AUTH_ERROR_STR =
 export const DevconCashbackReward = () => {
   const { provider } = useAppState();
   const location = useLocation();
-  const params = useParams();
+  const [params] = useSearchParams();
   const [modalMode, setModalMode] = useState<ModalMode>(ModalMode.NONE);
   const [ticket, setTicket] = useState<null | Record<string, unknown>>(null);
   const [error, setError] = useState<{ message: string; detail: string }>({
@@ -74,8 +74,8 @@ export const DevconCashbackReward = () => {
           useTicket: data.proof,
           chainId: chainId ?? '-1',
           requestData: {
-            offerId: params.offerId,
-            transactionHash: params.tx
+            offerId: params.get('offerId'),
+            transactionHash: params.get('tx')
           }
         };
         logger.debug('Attestation request', verifyRequest);
