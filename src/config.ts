@@ -1,3 +1,4 @@
+import { LocalStorageConnectorConfig } from './store/storage';
 import { Settings } from 'luxon';
 import { config } from '@windingtree/win-commons';
 import blockchaineurope2022 from './images/conferences/blockchaineurope2022.png';
@@ -630,3 +631,11 @@ export const countries: readonly CountryType[] = [
   { code: 'ZM', label: 'Zambia', phone: '260' },
   { code: 'ZW', label: 'Zimbabwe', phone: '263' }
 ];
+
+export const localStorageConfig: LocalStorageConnectorConfig = {
+  properties: ['selectedNetwork', 'selectedAsset', 'searchParams', 'walletAuth']
+};
+
+export const sessionStorageConfig: LocalStorageConnectorConfig = {
+  properties: []
+};
