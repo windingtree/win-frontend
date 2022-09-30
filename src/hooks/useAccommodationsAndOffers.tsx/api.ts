@@ -6,7 +6,7 @@ import {
 import axios from 'axios';
 import { getGroupMode, getPassengersBody, InvalidLocationError } from './helpers';
 import { SearchTypeProps } from '.';
-import { defaultSearchRadiusInMeters } from '../../config';
+import { defaultSearchRadiusInMeters, backend } from '../../config';
 
 export interface Coordinates {
   lat: number;
@@ -75,7 +75,7 @@ export async function fetchAccommodationsAndOffers({
   };
 
   const isGroupMode = getGroupMode(roomCount);
-  const baseUri = process.env.REACT_APP_API_URL;
+  const baseUri = backend.url;
   const searchPath = isGroupMode ? '/api/groups/search' : '/api/hotels/offers/search';
 
   const uri = baseUri + searchPath;
