@@ -1,8 +1,9 @@
 import * as Yup from 'yup';
 import { daysBetween } from '../../utils/date';
+import { DISABLE_FEATURES } from 'src/config';
 //TODO: update this when group booking should be enabled
 export const SearchSchema =
-  process.env.REACT_APP_DISABLE_FEATURES === 'true'
+  DISABLE_FEATURES === true
     ? Yup.object().shape({
         location: Yup.string().required('location'),
         adultCount: Yup.number()

@@ -39,7 +39,6 @@ jobs:
           REACT_APP_EXPIRATION_GAP: ${{ secrets.REACT_APP_EXPIRATION_GAP }}
           REACT_APP_HOTJAR_ID: ${{ secrets.REACT_APP_HOTJAR_ID }}
           REACT_APP_DISABLE_FEATURES: 'false'
-
         run: |
           rm -rf ./build
           yarn build
