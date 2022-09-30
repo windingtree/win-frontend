@@ -2,7 +2,6 @@ import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { Payment, PaymentSuccess } from './PaymentCard';
 import { useState, useCallback } from 'react';
 import { Box } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppState } from '../store';
 import { CurrencySelector } from './CurrencySelector';
 import { NetworkSelector } from './NetworkSelector';
@@ -19,7 +18,6 @@ export interface WinPayProps {
 }
 
 export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
-  const theme = useTheme();
   const isDesktop = useResponsive('up', 'md');
   const dispatch = useAppDispatch();
   const { provider, account, selectedNetwork, selectedAsset } = useAppState();
@@ -54,19 +52,21 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
 
   return (
     <>
-      <CurrencySelector
-        payment={payment}
-        network={selectedNetwork}
-        onQuote={onUseQuoteChange}
-      />
-      <Box marginBottom={theme.spacing(5)}>
+      {account && (
+        <CurrencySelector
+          payment={payment}
+          network={selectedNetwork}
+          onQuote={onUseQuoteChange}
+        />
+      )}
+      <Box marginBottom={5}>
         {account && (
           <Box
             sx={{
               display: 'flex',
               flexDirection: isDesktop ? 'row' : 'column',
               alignItems: isDesktop ? 'top' : 'stretch',
-              gap: theme.spacing(2)
+              gap: 2
             }}
           >
             <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
