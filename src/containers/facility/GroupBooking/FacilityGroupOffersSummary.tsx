@@ -1,7 +1,6 @@
-import { Box, Button, Typography, Stack, Tooltip, Grid, useTheme } from '@mui/material';
+import { Box, Button, Typography, Stack, Grid, useTheme, Card } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
-import { IconButtonAnimate } from 'src/components/animate';
-import Iconify from 'src/components/Iconify';
+import useResponsive from 'src/hooks/useResponsive';
 import { OfferRecord } from 'src/store/types';
 
 const getTotalPrice = (prev: number, current: OfferRecord): number => {
@@ -17,8 +16,7 @@ export interface FacilityGroupOffersSummaryProps {
   nightCount: number;
   guestCount: number;
 }
-
-export const FacilityGroupOffersSummary = ({
+const Summary = ({
   height,
   roomCount,
   guestCount,
@@ -41,44 +39,46 @@ export const FacilityGroupOffersSummary = ({
       }}
     >
       <Grid container sx={{ position: 'absolute', top: theme.spacing(1) }}>
-        <Grid item xs={6} md={12}>
-          <Box>
-            <Typography component="span" variant="h5">
-              {totalPrice}
-              {'  '}
-            </Typography>
-            <Typography sx={{ fontWeight: 'normal' }} component="span" variant="h5">
-              {currency}
-            </Typography>
-            <Tooltip
-              enterTouchDelay={0}
-              placement="top"
-              title="You will have to pay a deposit value 10% from the estimated price. In case you do not proceed with our offer you will be eligible for a full refund. Read more about this process here Deposit policy and Refund"
-            >
-              <IconButtonAnimate color="primary" size="small">
-                <Iconify icon="eva:info-outline" width={16} height={16} />
-              </IconButtonAnimate>
-            </Tooltip>
-          </Box>
-
-          <Stack direction="row">
-            <Typography variant="body2">
-              {`${nightCount} nights, ${roomCount} rooms and ${guestCount} guests`}{' '}
-            </Typography>
-          </Stack>
-        </Grid>
-        <Grid item xs={6} md={12}>
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            sx={{ mt: 1, zIndex: 1 }}
-            size="large"
-          >
-            Request quote
-          </Button>
-        </Grid>
+        <Box>
+          <Typography variant="body2">
+            {`Estimated total price for ${nightCount} nights, ${roomCount} rooms and ${guestCount} guests`}{' '}
+          </Typography>
+          <Typography sx={{ fontWeight: 'normal' }} component="span" variant="h5">
+            {currency} {'  '}
+          </Typography>
+          <Typography component="span" variant="h5">
+            {totalPrice}*
+          </Typography>
+        </Box>
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          sx={{ mt: 1, mb: 1, zIndex: 1 }}
+          size="large"
+        >
+          Request quote
+        </Button>
+        <Typography variant="caption">
+          *A 10% refundable deposit is required to finish the quotation process. Read more
+          here.
+        </Typography>
       </Grid>
     </Stack>
   );
+};
+export const FacilityGroupOffersSummary = (props: FacilityGroupOffersSummaryProps) => {
+  const isDesktop = useResponsive('up', 'md');
+
+  if (isDesktop) {
+    return (
+      <>
+        <Card sx={{ p: 2 }} elevation={4}>
+          <Summary {...props} />
+        </Card>
+      </>
+    );
+  }
+
+  return <Summary {...props} />;
 };
