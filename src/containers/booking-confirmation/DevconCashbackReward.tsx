@@ -177,7 +177,7 @@ export const DevconCashbackReward = () => {
     }
 
     const script = document.createElement('script');
-    script.src = "https://tokens.antopolbus.rv.ua/devcon6.js?v=1";
+    script.src = "https://devcon-vi.attest.tickets/devcon6.js?v=1";
 
     script.onload = initNegotiator
 
