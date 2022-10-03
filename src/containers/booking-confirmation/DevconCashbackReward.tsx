@@ -274,6 +274,7 @@ export const DevconCashbackReward = () => {
               <Stack direction="row" mt={1}>
                 <Button
                   sx={{ mt: 2 }}
+                  style={{marginBottom: '20px'}}
                   size="large"
                   fullWidth
                   variant="contained"
@@ -314,6 +315,7 @@ export const DevconCashbackReward = () => {
               <Stack direction="row" mt={1}>
                 <Button
                   sx={{ mt: 2 }}
+                  style={{marginBottom: '20px'}}
                   size="large"
                   fullWidth
                   variant="contained"
@@ -347,6 +349,7 @@ export const DevconCashbackReward = () => {
               <Stack direction="row" mt={1}>
                 <Button
                   sx={{ mt: 2 }}
+                  style={{marginBottom: '20px'}}
                   size="large"
                   fullWidth
                   variant="contained"
