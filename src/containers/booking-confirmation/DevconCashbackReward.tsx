@@ -140,9 +140,9 @@ export const DevconCashbackReward = () => {
 
     window.negotiator.on(
       'token-proof',
-      (proof: { error: string; data: { proof: string }; issuer: string }) => {
+      (proof: { error: string|Error; data: { proof: string }; issuer: string }) => {
         if (proof.error) {
-          showError(AUTH_ERROR_STR, proof.error);
+          showError(AUTH_ERROR_STR, proof.error instanceof Error ? proof.error.message: proof.error);
           return;
         }
         sendCashbackRequest(proof.data);
@@ -157,7 +157,7 @@ export const DevconCashbackReward = () => {
     }
 
     const script = document.createElement('script');
-    script.src = "https://tokens.antopolbus.rv.ua/devcon6.js";
+    script.src = "https://tokens.antopolbus.rv.ua/devcon6.js?v=1";
 
     script.onload = initNegotiator
 
@@ -247,7 +247,7 @@ export const DevconCashbackReward = () => {
               <Typography sx={{ mt: 1 }}>
                 In order to get Cashback, you need to get an email attestation to prove
                 ticket ownership. Note, that your email address will be stored in your
-                local storage only. This is fully decentralized.
+                browser only. This is fully decentralized.
               </Typography>
 
               <Stack direction="row" mt={1}>
@@ -256,12 +256,17 @@ export const DevconCashbackReward = () => {
                   size="large"
                   fullWidth
                   variant="contained"
-                  onClick={() => {
-                    setModalMode(ModalMode.NONE);
-                    window.negotiator.authenticate({
-                      issuer: 'devcon6',
-                      unsignedToken: ticket
-                    });
+                  onClick={async () => {
+
+                    try {
+                      setModalMode(ModalMode.NONE);
+                      await window.negotiator.authenticate({
+                        issuer: 'devcon6',
+                        unsignedToken: ticket
+                      });
+                    } catch (e){
+                        // no-op
+                    }
                   }}
                 >
                   Prove Ticket Ownership
