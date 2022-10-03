@@ -171,15 +171,15 @@ export const DevconCashbackReward = () => {
   }
 
   useEffect(() => {
-    if (window.negotiator instanceof Client) {
+    if (window.negotiator instanceof Client || document.getElementById('negotiator')) {
       // preventing of re-initialization
       return;
     }
 
     const script = document.createElement('script');
     script.src = "https://devcon-vi.attest.tickets/devcon6.js?v=1";
-
-    script.onload = initNegotiator
+    script.id = "negotiator";
+    script.onload = initNegotiator;
 
     document.body.appendChild(script);
 
