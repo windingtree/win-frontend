@@ -17,6 +17,7 @@ import Image from '../../components/Image';
 import { useAppState } from '../../store';
 import { devconCashbackEnabled } from '../../config';
 import Logger from '../../utils/logger';
+import {OffChainTokenConfig} from "@tokenscript/token-negotiator/dist/client/interface";
 
 const logger = Logger('DevconCashbackReward');
 
@@ -34,6 +35,7 @@ const ContainerStyle = styled(Container)(({ theme }) => ({
 declare global {
   interface Window {
     negotiator: Client;
+    devconTokenConfig: OffChainTokenConfig
   }
 }
 
@@ -107,11 +109,9 @@ export const DevconCashbackReward = () => {
     [params, provider]
   );
 
-  useEffect(() => {
-    if (window.negotiator instanceof Client) {
-      // preventing of re-initialization
-      return;
-    }
+  function initNegotiator(){
+
+    const devconConfig = window.devconTokenConfig;
 
     window.negotiator = new Client({
       type: 'active',
@@ -119,29 +119,16 @@ export const DevconCashbackReward = () => {
         openingHeading: 'Validate your Devcon ticket ownership to apply for cashback',
         issuerHeading: 'Your tickets'
       },
-      issuers: [
-        {
-          collectionID: 'devcon',
-          onChain: false,
-          title: 'Devcon Test Ticket',
-          image: 'https://devconnect.smarttokenlabs.com/img/devconNFT.svg',
-          tokenOrigin: 'https://stage-perks.smarttokenlabs.com/outlet.html',
-          base64senderPublicKeys: {
-            '6': 'MIIBMzCB7AYHKoZIzj0CATCB4AIBATAsBgcqhkjOPQEBAiEA/////////////////////////////////////v///C8wRAQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHBEEEeb5mfvncu6xVoGKVzocLBwKb/NstzijZWfKBWxb4F5hIOtp3JqPEZV2k+/wOEQio/Re0SKaFVBmcR9CP+xDUuAIhAP////////////////////66rtzmr0igO7/SXozQNkFBAgEBA0IABGMxHraqggr2keTXszIcchTjYjH5WXpDaBOYgXva82mKcGnKgGRORXSmcjWN2suUCMkLQj3UNlZCFWF10wIrrlw='
-          },
-          base64attestorPubKey:
-            'MIIBMzCB7AYHKoZIzj0CATCB4AIBATAsBgcqhkjOPQEBAiEA/////////////////////////////////////v///C8wRAQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHBEEEeb5mfvncu6xVoGKVzocLBwKb/NstzijZWfKBWxb4F5hIOtp3JqPEZV2k+/wOEQio/Re0SKaFVBmcR9CP+xDUuAIhAP////////////////////66rtzmr0igO7/SXozQNkFBAgEBA0IABL+y43T1OJFScEep69/yTqpqnV/jzONz9Sp4TEHyAJ7IPN9+GHweCX1hT4OFxt152sBN3jJc1s0Ymzd8pNGZNoQ='
-        }
-      ]
+      issuers: [devconConfig]
     });
     logger.debug('Negotiator initialized', window.negotiator);
 
     window.negotiator.on(
       'tokens-selected',
       (tokens: { selectedTokens: { tokens: unknown[] } }) => {
-        if (tokens.selectedTokens?.['devcon']?.tokens?.length > 0) {
+        if (tokens.selectedTokens?.['devcon6']?.tokens?.length > 0) {
           setModalMode(ModalMode.ATTEST);
-          setTicket(tokens.selectedTokens['devcon']?.tokens[0]);
+          setTicket(tokens.selectedTokens['devcon6']?.tokens[0]);
         } else {
           showError(
             "Looks like you don't have Devcon tickets, ensure you have opened your Devcon magic link in this browser.",
@@ -161,6 +148,21 @@ export const DevconCashbackReward = () => {
         sendCashbackRequest(proof.data);
       }
     );
+  }
+
+  useEffect(() => {
+    if (window.negotiator instanceof Client) {
+      // preventing of re-initialization
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = "https://tokens.antopolbus.rv.ua/devcon6.js";
+
+    script.onload = initNegotiator
+
+    document.body.appendChild(script);
+
   });
 
   if (!devconCashbackEnabled || location.hash !== '#devcon') {
@@ -257,7 +259,7 @@ export const DevconCashbackReward = () => {
                   onClick={() => {
                     setModalMode(ModalMode.NONE);
                     window.negotiator.authenticate({
-                      issuer: 'devcon',
+                      issuer: 'devcon6',
                       unsignedToken: ticket
                     });
                   }}
