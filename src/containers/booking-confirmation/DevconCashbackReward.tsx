@@ -218,8 +218,9 @@ export const DevconCashbackReward = () => {
                 Claim $50 Cashback using BrandConnector
               </Typography>
               <ul style={{ marginBottom: '10px' }}>
-                <li>Limited to 100 users</li>
-                <li>$50 USD max</li>
+                <li>Available to valid Devcon VI ticket holders</li>
+                <li>Limited to the first 100 users</li>
+                <li>$50 USD max, sent to your Ethereum address after Devcon week</li>
               </ul>
               <small>
                 Read more about BrandConnector{' '}
