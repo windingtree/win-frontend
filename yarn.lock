@@ -4314,10 +4314,10 @@
     string.prototype.matchall "^4.0.4"
     url "^0.11.0"
 
-"@tokenscript/token-negotiator@2.2.0-dc.6":
-  version "2.2.0-dc.6"
-  resolved "https://registry.yarnpkg.com/@tokenscript/token-negotiator/-/token-negotiator-2.2.0-dc.6.tgz#b663ffcec3f49dcf8e3b1c7806974235462557b9"
-  integrity sha512-x42nziEUX87junODp+GDORSABkfYRKjEINntnVvmc+3T7nAAEXmao0yF3dH1lNOMLu/BGmOjdyWIdtbz4qlIGg==
+"@tokenscript/token-negotiator@2.2.0-dc.11":
+  version "2.2.0-dc.11"
+  resolved "https://registry.yarnpkg.com/@tokenscript/token-negotiator/-/token-negotiator-2.2.0-dc.11.tgz#8722bb86cf740fc7fa6484f3993736588d9845c0"
+  integrity sha512-SukHtW9/X8OK5LdoCcOAqOe7gRpyKcskgJ+dAfSPqVNWuJxMoKf+IQjaVfhbtmpUOdUo3ODoR7MgNqYFIy9Stg==
   dependencies:
     "@peculiar/asn1-schema" "^2.2.0"
     "@tokenscript/attestation" "^0.3.9-sc.6"

@@ -17,6 +17,7 @@ import Image from '../../components/Image';
 import { useAppState } from '../../store';
 import { devconCashbackEnabled } from '../../config';
 import Logger from '../../utils/logger';
+import {OffChainTokenConfig} from "@tokenscript/token-negotiator/dist/client/interface";
 
 const logger = Logger('DevconCashbackReward');
 
@@ -34,6 +35,7 @@ const ContainerStyle = styled(Container)(({ theme }) => ({
 declare global {
   interface Window {
     negotiator: Client;
+    devconTokenConfig: OffChainTokenConfig
   }
 }
 
@@ -107,11 +109,9 @@ export const DevconCashbackReward = () => {
     [params, provider]
   );
 
-  useEffect(() => {
-    if (window.negotiator instanceof Client) {
-      // preventing of re-initialization
-      return;
-    }
+  function initNegotiator(){
+
+    const devconConfig = window.devconTokenConfig;
 
     window.negotiator = new Client({
       type: 'active',
@@ -119,29 +119,36 @@ export const DevconCashbackReward = () => {
         openingHeading: 'Validate your Devcon ticket ownership to apply for cashback',
         issuerHeading: 'Your tickets'
       },
-      issuers: [
-        {
-          collectionID: 'devcon',
-          onChain: false,
-          title: 'Devcon Test Ticket',
-          image: 'https://devconnect.smarttokenlabs.com/img/devconNFT.svg',
-          tokenOrigin: 'https://stage-perks.smarttokenlabs.com/outlet.html',
-          base64senderPublicKeys: {
-            '6': 'MIIBMzCB7AYHKoZIzj0CATCB4AIBATAsBgcqhkjOPQEBAiEA/////////////////////////////////////v///C8wRAQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHBEEEeb5mfvncu6xVoGKVzocLBwKb/NstzijZWfKBWxb4F5hIOtp3JqPEZV2k+/wOEQio/Re0SKaFVBmcR9CP+xDUuAIhAP////////////////////66rtzmr0igO7/SXozQNkFBAgEBA0IABGMxHraqggr2keTXszIcchTjYjH5WXpDaBOYgXva82mKcGnKgGRORXSmcjWN2suUCMkLQj3UNlZCFWF10wIrrlw='
+      issuers: [devconConfig],
+      unSupportedUserAgent: {
+        authentication: {
+          config: {
+            metaMaskAndroid: true,
+            alphaWalletAndroid: true,
+            mewAndroid: true,
+            imTokenAndroid: true,
           },
-          base64attestorPubKey:
-            'MIIBMzCB7AYHKoZIzj0CATCB4AIBATAsBgcqhkjOPQEBAiEA/////////////////////////////////////v///C8wRAQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHBEEEeb5mfvncu6xVoGKVzocLBwKb/NstzijZWfKBWxb4F5hIOtp3JqPEZV2k+/wOEQio/Re0SKaFVBmcR9CP+xDUuAIhAP////////////////////66rtzmr0igO7/SXozQNkFBAgEBA0IABL+y43T1OJFScEep69/yTqpqnV/jzONz9Sp4TEHyAJ7IPN9+GHweCX1hT4OFxt152sBN3jJc1s0Ymzd8pNGZNoQ='
-        }
-      ]
+          errorMessage:
+            "No Support for Authentication with this user agent. Try Chrome, Safari or Edge instead.",
+        },
+        full: {
+          config: {
+            iE: true,
+            iE9: true,
+          },
+          errorMessage:
+            "This browser is not supported. Please try using Chrome, Edge, FireFox or Safari.",
+        },
+      }
     });
     logger.debug('Negotiator initialized', window.negotiator);
 
     window.negotiator.on(
       'tokens-selected',
       (tokens: { selectedTokens: { tokens: unknown[] } }) => {
-        if (tokens.selectedTokens?.['devcon']?.tokens?.length > 0) {
+        if (tokens.selectedTokens?.['devcon6']?.tokens?.length > 0) {
           setModalMode(ModalMode.ATTEST);
-          setTicket(tokens.selectedTokens['devcon']?.tokens[0]);
+          setTicket(tokens.selectedTokens['devcon6']?.tokens[0]);
         } else {
           showError(
             "Looks like you don't have Devcon tickets, ensure you have opened your Devcon magic link in this browser.",
@@ -153,14 +160,29 @@ export const DevconCashbackReward = () => {
 
     window.negotiator.on(
       'token-proof',
-      (proof: { error: string; data: { proof: string }; issuer: string }) => {
+      (proof: { error: string|Error; data: { proof: string }; issuer: string }) => {
         if (proof.error) {
-          showError(AUTH_ERROR_STR, proof.error);
+          showError(AUTH_ERROR_STR, proof.error instanceof Error ? proof.error.message: proof.error);
           return;
         }
         sendCashbackRequest(proof.data);
       }
     );
+  }
+
+  useEffect(() => {
+    if (window.negotiator instanceof Client || document.getElementById('negotiator')) {
+      // preventing of re-initialization
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = "https://devcon-vi.attest.tickets/devcon6.js?v=1";
+    script.id = "negotiator";
+    script.onload = initNegotiator;
+
+    document.body.appendChild(script);
+
   });
 
   if (!devconCashbackEnabled || location.hash !== '#devcon') {
@@ -196,8 +218,9 @@ export const DevconCashbackReward = () => {
                 Claim $50 Cashback using BrandConnector
               </Typography>
               <ul style={{ marginBottom: '10px' }}>
-                <li>Limited to 100 users</li>
-                <li>$50 USD max</li>
+                <li>Available to valid Devcon VI ticket holders</li>
+                <li>Limited to the first 100 users</li>
+                <li>$50 USD max, sent to your Ethereum address after Devcon week</li>
               </ul>
               <small>
                 Read more about BrandConnector{' '}
@@ -245,7 +268,7 @@ export const DevconCashbackReward = () => {
               <Typography sx={{ mt: 1 }}>
                 In order to get Cashback, you need to get an email attestation to prove
                 ticket ownership. Note, that your email address will be stored in your
-                local storage only. This is fully decentralized.
+                browser only. This is fully decentralized.
               </Typography>
 
               <Stack direction="row" mt={1}>
@@ -254,12 +277,17 @@ export const DevconCashbackReward = () => {
                   size="large"
                   fullWidth
                   variant="contained"
-                  onClick={() => {
-                    setModalMode(ModalMode.NONE);
-                    window.negotiator.authenticate({
-                      issuer: 'devcon',
-                      unsignedToken: ticket
-                    });
+                  onClick={async () => {
+
+                    try {
+                      setModalMode(ModalMode.NONE);
+                      await window.negotiator.authenticate({
+                        issuer: 'devcon6',
+                        unsignedToken: ticket
+                      });
+                    } catch (e){
+                        // no-op
+                    }
                   }}
                 >
                   Prove Ticket Ownership
