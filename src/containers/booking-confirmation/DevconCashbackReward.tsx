@@ -119,7 +119,27 @@ export const DevconCashbackReward = () => {
         openingHeading: 'Validate your Devcon ticket ownership to apply for cashback',
         issuerHeading: 'Your tickets'
       },
-      issuers: [devconConfig]
+      issuers: [devconConfig],
+      unSupportedUserAgent: {
+        authentication: {
+          config: {
+            metaMaskAndroid: true,
+            alphaWalletAndroid: true,
+            mewAndroid: true,
+            imTokenAndroid: true,
+          },
+          errorMessage:
+            "No Support for Authentication with this user agent. Try Chrome, Safari or Edge instead.",
+        },
+        full: {
+          config: {
+            iE: true,
+            iE9: true,
+          },
+          errorMessage:
+            "This browser is not supported. Please try using Chrome, Edge, FireFox or Safari.",
+        },
+      }
     });
     logger.debug('Negotiator initialized', window.negotiator);
 
