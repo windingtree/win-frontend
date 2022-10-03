@@ -17,7 +17,7 @@ import Image from '../../components/Image';
 import { useAppState } from '../../store';
 import { devconCashbackEnabled } from '../../config';
 import Logger from '../../utils/logger';
-import {OffChainTokenConfig} from "@tokenscript/token-negotiator/dist/client/interface";
+import { OffChainTokenConfig } from '@tokenscript/token-negotiator/dist/client/interface';
 
 const logger = Logger('DevconCashbackReward');
 
@@ -35,7 +35,7 @@ const ContainerStyle = styled(Container)(({ theme }) => ({
 declare global {
   interface Window {
     negotiator: Client;
-    devconTokenConfig: OffChainTokenConfig
+    devconTokenConfig: OffChainTokenConfig;
   }
 }
 
@@ -109,8 +109,7 @@ export const DevconCashbackReward = () => {
     [params, provider]
   );
 
-  function initNegotiator(){
-
+  function initNegotiator() {
     const devconConfig = window.devconTokenConfig;
 
     window.negotiator = new Client({
@@ -126,19 +125,19 @@ export const DevconCashbackReward = () => {
             metaMaskAndroid: true,
             alphaWalletAndroid: true,
             mewAndroid: true,
-            imTokenAndroid: true,
+            imTokenAndroid: true
           },
           errorMessage:
-            "No Support for Authentication with this user agent. Try Chrome, Safari or Edge instead.",
+            'No Support for Authentication with this user agent. Try Chrome, Safari or Edge instead.'
         },
         full: {
           config: {
             iE: true,
-            iE9: true,
+            iE9: true
           },
           errorMessage:
-            "This browser is not supported. Please try using Chrome, Edge, FireFox or Safari.",
-        },
+            'This browser is not supported. Please try using Chrome, Edge, FireFox or Safari.'
+        }
       }
     });
     logger.debug('Negotiator initialized', window.negotiator);
@@ -160,9 +159,12 @@ export const DevconCashbackReward = () => {
 
     window.negotiator.on(
       'token-proof',
-      (proof: { error: string|Error; data: { proof: string }; issuer: string }) => {
+      (proof: { error: string | Error; data: { proof: string }; issuer: string }) => {
         if (proof.error) {
-          showError(AUTH_ERROR_STR, proof.error instanceof Error ? proof.error.message: proof.error);
+          showError(
+            AUTH_ERROR_STR,
+            proof.error instanceof Error ? proof.error.message : proof.error
+          );
           return;
         }
         sendCashbackRequest(proof.data);
@@ -177,12 +179,11 @@ export const DevconCashbackReward = () => {
     }
 
     const script = document.createElement('script');
-    script.src = "https://devcon-vi.attest.tickets/devcon6.js?v=1";
-    script.id = "negotiator";
+    script.src = 'https://devcon-vi.attest.tickets/devcon6.js?v=1';
+    script.id = 'negotiator';
     script.onload = initNegotiator;
 
     document.body.appendChild(script);
-
   });
 
   if (!devconCashbackEnabled || location.hash !== '#devcon') {
@@ -278,15 +279,14 @@ export const DevconCashbackReward = () => {
                   fullWidth
                   variant="contained"
                   onClick={async () => {
-
                     try {
                       setModalMode(ModalMode.NONE);
                       await window.negotiator.authenticate({
                         issuer: 'devcon6',
                         unsignedToken: ticket
                       });
-                    } catch (e){
-                        // no-op
+                    } catch (e) {
+                      // no-op
                     }
                   }}
                 >

@@ -15,6 +15,7 @@ import { TermsAndConditions } from './pages/TermsAndConditions';
 import { Developers } from './pages/Developers';
 import { Checkout } from './pages/Checkout';
 import { GuestInfo } from './pages/GuestInfo';
+import { OrgInfo } from './pages/OrgInfo';
 import { BookingConfirmation } from './pages/BookingConfirmation';
 import { Search } from './pages/Search';
 
@@ -112,6 +113,12 @@ export const pagesRoutesConfig: Routes = [
     element: <GuestInfo />,
     title: 'Guest Info',
     label: 'Guest Info'
+  },
+  {
+    path: '/org-details',
+    element: <OrgInfo />,
+    title: 'Organizer details',
+    label: 'Organizer details'
   },
   {
     path: '/search',
