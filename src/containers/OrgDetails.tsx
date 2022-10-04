@@ -60,6 +60,9 @@ export const OrgDetails = () => {
   // const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { groupCheckout } = useAppState();
+  const [vatValid, setVatValid] = useState<boolean>(false);
+  const [privacy, setPrivacy] = useState<boolean>(false);
+  const [error, setError] = useState<undefined | string>();
 
   const organizerSchema = Yup.object().shape({
     firstname: Yup.string()
@@ -90,12 +93,20 @@ export const OrgDetails = () => {
       ),
     city: Yup.string().trim(),
     streetName: Yup.string().trim(),
-    vat: Yup.string().trim()
+    vat: Yup.string()
+      .trim()
+      .test('is-vat-valid', 'VAT number is not valid', async (value) => {
+        if (value && value.length === 11) {
+          const vatParsed = eeRegExp.exec(value) as EeRegExp | null;
+          if (vatParsed?.groups.NUM) {
+            const isValid = await isVatValid(vatParsed.groups.NUM);
+            setVatValid(isValid);
+            return isValid;
+          }
+        }
+        return true;
+      })
   });
-
-  const [vatValid, setVatValid] = useState<boolean>(false);
-  const [privacy, setPrivacy] = useState<boolean>(false);
-  const [error, setError] = useState<undefined | string>();
 
   const methods = useForm<OrganizerInfo>({
     resolver: yupResolver(organizerSchema),
@@ -120,16 +131,6 @@ export const OrgDetails = () => {
           }
         } as GroupCheckOut
       });
-
-      if (values['vat'] && values['vat'].length === 11) {
-        const vatParsed = eeRegExp.exec(values['vat']) as EeRegExp | null;
-        if (vatParsed?.groups.NUM) {
-          isVatValid(vatParsed.groups.NUM)
-            .then(setVatValid)
-            // eslint-disable-next-line no-console
-            .catch(console.error);
-        }
-      }
     });
     return () => subscription.unsubscribe();
   }, [watch]);
