@@ -15,12 +15,9 @@ import { daysBetween } from 'src/utils/date';
 import { FacilityOffersTitle } from '../FacilityOffersTitle';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { useNavigate } from 'react-router-dom';
-import {
-  getOffersWithQuantity,
-  getSelectedOffers,
-  getTotalRoomCountReducer
-} from '../helpers';
+import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
 import { useSnackbar } from 'notistack';
+import { getTotalRoomCountReducer } from 'src/utils/offers';
 
 /**
  * Only the quantity can be changed in the form by the User,

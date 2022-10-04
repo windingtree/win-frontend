@@ -2,7 +2,9 @@ import type {
   WinAccommodation,
   Offer,
   WinPricedOffer,
-  BookingsAuthResponse
+  BookingsAuthResponse,
+  OrganizerInformation,
+  OfferIdAndQuantity
 } from '@windingtree/glider-types/dist/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import type {
@@ -83,6 +85,20 @@ export interface SearchParams {
   adults: number;
 }
 
+export interface BookingInfoType {
+  date: {
+    arrival: Date;
+    departure: Date;
+  };
+  offers: OfferIdAndQuantity[];
+  guestCount: number;
+}
+
+export interface OrganizerInfoAndInvoiceType {
+  invoice: boolean;
+  organizerInfo: OrganizerInformation;
+}
+
 export interface State {
   isConnecting: boolean;
   provider?: Web3ModalProvider;
@@ -95,6 +111,8 @@ export interface State {
     token?: string;
     timestamp: number;
   };
+  organizerInfo?: OrganizerInfoAndInvoiceType;
+  bookingInfo?: BookingInfoType;
   checkout?: CheckOut;
   selectedNetwork?: NetworkInfo;
   selectedAsset?: CryptoAsset;

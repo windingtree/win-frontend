@@ -9,6 +9,16 @@ export const checkOutReducer = (state: State, action: Action): State => {
 
   try {
     switch (type) {
+      case 'SET_ORGANIZER_INFO':
+        return {
+          ...state,
+          organizerInfo: action.payload
+        };
+      case 'SET_BOOKING_INFO':
+        return {
+          ...state,
+          bookingInfo: action.payload
+        };
       case 'SET_CHECKOUT':
         return {
           ...state,

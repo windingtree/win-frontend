@@ -2,6 +2,7 @@ import { Box, Button, Typography, Stack, Grid, useTheme, Card } from '@mui/mater
 import { useFormContext } from 'react-hook-form';
 import useResponsive from 'src/hooks/useResponsive';
 import { OfferRecord } from 'src/store/types';
+import { Link } from 'react-router-dom';
 
 const getTotalPrice = (prev: number, current: OfferRecord): number => {
   const quantity = Number(current.quantity);
@@ -60,8 +61,8 @@ const Summary = ({
           Request quote
         </Button>
         <Typography variant="caption">
-          *A 10% refundable deposit is required to finish the quotation process. Read more
-          here.
+          *A 10% refundable deposit is required to finish the quotation process. Read more{' '}
+          <Link to="/faq">here</Link>.
         </Typography>
       </Grid>
     </Stack>

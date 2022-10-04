@@ -5,7 +5,13 @@ import type {
   Web3ModalSignInFunction,
   Web3ModalSignOutFunction
 } from '../hooks/useWeb3Modal';
-import type { CheckOut, GenericStateRecord, SearchParams } from './types';
+import type {
+  BookingInfoType,
+  CheckOut,
+  GenericStateRecord,
+  OrganizerInfoAndInvoiceType,
+  SearchParams
+} from './types';
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';
@@ -98,6 +104,21 @@ export interface SetWalletAuthAction {
   payload?: BookingsAuthResponse;
 }
 
+export interface SetWalletAuthAction {
+  type: 'SET_WALLET_AUTH';
+  payload?: BookingsAuthResponse;
+}
+
+export interface SetOrganizerInfo {
+  type: 'SET_ORGANIZER_INFO';
+  payload?: OrganizerInfoAndInvoiceType;
+}
+
+export interface SetBookingInfo {
+  type: 'SET_BOOKING_INFO';
+  payload?: BookingInfoType;
+}
+
 export type Action =
   | SetSearchParams
   | SetCheckOutAction
@@ -114,4 +135,6 @@ export type Action =
   | RemoveRecordAction
   | ResetRecordAction
   | SetSelectedFacilityId
-  | ResetSelectedFacilityId;
+  | ResetSelectedFacilityId
+  | SetOrganizerInfo
+  | SetBookingInfo;
