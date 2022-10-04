@@ -3,11 +3,12 @@ import { TextField, TextFieldProps } from '@mui/material';
 
 type IProps = {
   name: string;
+  width?: string;
 };
 
 type Props = IProps & TextFieldProps;
 
-export default function RHFTextField({ name, ...other }: Props) {
+export default function RHFTextField({ name, width, fullWidth = true, ...other }: Props) {
   const { control } = useFormContext();
 
   return (
@@ -16,8 +17,11 @@ export default function RHFTextField({ name, ...other }: Props) {
       control={control}
       render={({ field, fieldState: { error } }) => (
         <TextField
+          sx={{
+            width
+          }}
           {...field}
-          fullWidth
+          fullWidth={width ? false : fullWidth}
           value={typeof field.value === 'number' && field.value === 0 ? '' : field.value}
           error={!!error}
           helperText={error?.message}

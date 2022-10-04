@@ -56,7 +56,9 @@ export const RHFPhoneField = ({ name, ...other }: PhoneFieldProps) => {
     if (country === null) {
       const phone = getValues()[name];
       if (phone) {
-        doSetCountry(phone);
+        doSetCountry({
+          target: { value: phone }
+        } as InputChangeEvent);
       }
     }
   }, [name, getValues, country]);

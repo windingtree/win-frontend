@@ -13,6 +13,7 @@ import useResponsive from 'src/hooks/useResponsive';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { daysBetween } from 'src/utils/date';
 import { FacilityOffersTitle } from '../FacilityOffersTitle';
+import { useParams } from 'react-router-dom';
 
 /**
  * Only the quantity can be changed in the form by the User,
@@ -51,6 +52,7 @@ export const FacilityGroupOffers = ({
   offers = [],
   accommodation
 }: FacilityGroupOffersProps) => {
+  const params = useParams<{ id: string }>();
   const { latestQueryParams } = useAccommodationsAndOffers();
   const defaultOffers = useMemo(
     () =>
@@ -144,6 +146,7 @@ export const FacilityGroupOffers = ({
             roomCount={roomCount}
             nightCount={nightCount}
             guestCount={guestCount}
+            facilityId={params.id}
           />
         </Grid>
         <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }}>

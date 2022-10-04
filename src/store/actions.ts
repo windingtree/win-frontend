@@ -5,7 +5,7 @@ import type {
   Web3ModalSignInFunction,
   Web3ModalSignOutFunction
 } from '../hooks/useWeb3Modal';
-import type { CheckOut, GenericStateRecord, SearchParams } from './types';
+import type { CheckOut, GroupCheckOut, GenericStateRecord, SearchParams } from './types';
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';
@@ -68,6 +68,11 @@ export interface SetCheckOutAction {
   payload: CheckOut;
 }
 
+export interface SetGroupCheckOutAction {
+  type: 'SET_GROUP_CHECKOUT';
+  payload: GroupCheckOut;
+}
+
 export interface SetSelectedNetwork {
   type: 'SET_SELECTED_NETWORK';
   payload: NetworkInfo;
@@ -101,6 +106,7 @@ export interface SetWalletAuthAction {
 export type Action =
   | SetSearchParams
   | SetCheckOutAction
+  | SetGroupCheckOutAction
   | SetAuthenticationTokenAction
   | SetConnectingAction
   | SetProviderAction
