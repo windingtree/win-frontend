@@ -1,5 +1,8 @@
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import type { BookingsAuthResponse } from '@windingtree/glider-types/dist/win';
+import type {
+  BookingsAuthResponse,
+  OrganizerInformation
+} from '@windingtree/glider-types/dist/win';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
@@ -9,7 +12,6 @@ import type {
   BookingInfoType,
   CheckOut,
   GenericStateRecord,
-  OrganizerInfoAndInvoiceType,
   SearchParams
 } from './types';
 
@@ -111,7 +113,7 @@ export interface SetWalletAuthAction {
 
 export interface SetOrganizerInfo {
   type: 'SET_ORGANIZER_INFO';
-  payload?: OrganizerInfoAndInvoiceType;
+  payload?: OrganizerInformation;
 }
 
 export interface SetBookingInfo {

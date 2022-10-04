@@ -71,26 +71,8 @@ export interface PersonalInfo {
   phone: string;
 }
 
-export interface OrganizerInfo {
-  firstname: string;
-  lastname: string;
-  email: string;
-  phone: string;
-  companyName?: string;
-  country?: string;
-  city?: string;
-  streetName?: string;
-  vat?: string;
-  invoiceRequired?: boolean;
-}
-
 export interface CheckOut extends WinPricedOffer {
   personalInfo?: PersonalInfo;
-  facilityId: string;
-}
-
-export interface GroupCheckOut {
-  organizerInfo?: OrganizerInfo;
   facilityId: string;
 }
 
@@ -104,17 +86,14 @@ export interface SearchParams {
 }
 
 export interface BookingInfoType {
-  date: {
+  invoice?: boolean;
+  facilityId?: string;
+  date?: {
     arrival: Date;
     departure: Date;
   };
-  offers: OfferIdAndQuantity[];
-  guestCount: number;
-}
-
-export interface OrganizerInfoAndInvoiceType {
-  invoice: boolean;
-  organizerInfo: OrganizerInformation;
+  offers?: OfferIdAndQuantity[];
+  guestCount?: number;
 }
 
 export interface State {
@@ -129,10 +108,9 @@ export interface State {
     token?: string;
     timestamp: number;
   };
-  organizerInfo?: OrganizerInfoAndInvoiceType;
+  organizerInfo?: OrganizerInformation;
   bookingInfo?: BookingInfoType;
   checkout?: CheckOut;
-  groupCheckout?: GroupCheckOut;
   selectedNetwork?: NetworkInfo;
   selectedAsset?: CryptoAsset;
   searchParams?: SearchParams;

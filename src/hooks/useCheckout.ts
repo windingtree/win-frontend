@@ -2,12 +2,13 @@ import { useMutation } from '@tanstack/react-query';
 import {
   GroupBookingRequest,
   GroupBookingRequestResponse,
-  OfferIdAndQuantity
+  OfferIdAndQuantity,
+  OrganizerInformation
 } from '@windingtree/glider-types/dist/win';
 import axios from 'axios';
 import { backend } from 'src/config';
 import { useAppDispatch, useAppState } from 'src/store';
-import { BookingInfoType, OrganizerInfoAndInvoiceType } from 'src/store/types';
+import { BookingInfoType } from 'src/store/types';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
 import { getGroupMode } from './useAccommodationsAndOffers.tsx/helpers';
 
@@ -49,7 +50,7 @@ export const useCheckout = () => {
   const dispatch = useAppDispatch();
   const { organizerInfo, bookingInfo } = useAppState();
 
-  const setOrganizerInfo = (info: OrganizerInfoAndInvoiceType) => {
+  const setOrganizerInfo = (info: OrganizerInformation) => {
     dispatch({
       type: 'SET_ORGANIZER_INFO',
       payload: info
@@ -59,24 +60,39 @@ export const useCheckout = () => {
   const setBookingInfo = (info: BookingInfoType) => {
     dispatch({
       type: 'SET_BOOKING_INFO',
-      payload: info
+      payload: {
+        ...bookingInfo,
+        ...info
+      }
     });
   };
 
   const bookingMode = getBookingMode(bookingInfo?.offers);
 
-  const bookGroup = useMutation<GroupBookingRequestResponse, Error, void>(() => {
-    if (!organizerInfo || !bookingInfo?.offers || bookingInfo?.guestCount) {
+  const bookGroup = useMutation<GroupBookingRequestResponse, Error>(async () => {
+    if (!organizerInfo || !bookingInfo?.offers || !bookingInfo?.guestCount) {
       throw new Error(
-        'Missing information to do a booking. Please try again from the beginning'
+        'Missing information to do a booking. Please try selecting your rooms again.'
       );
     }
 
-    bookGroupRequest({
-      ...organizerInfo,
+    const { corporateInfo, ...restOrganizerInfo } = organizerInfo;
+    const includeCorporateInfo = corporateInfo?.companyName !== '';
+
+    const result = await bookGroupRequest({
+      //TODO: this can be removed eventually when the BE is compatible.
+      deposit: {},
+      organizerInfo: {
+        ...restOrganizerInfo,
+        ...(includeCorporateInfo && { corporateInfo })
+      },
       offers: bookingInfo.offers,
-      guestCount: bookingInfo?.guestCount
+      guestCount: bookingInfo.guestCount || 0,
+      invoice: bookingInfo.invoice || true
     });
+
+    //TODO: most likely we have to save the serviceId in a state for the payment;
+    return result;
   });
 
   return {
