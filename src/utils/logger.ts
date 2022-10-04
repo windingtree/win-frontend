@@ -1,3 +1,5 @@
+import { APP_LOG_LEVEL } from 'src/config';
+
 export interface LoggerApi {
   error: (...message: unknown[]) => void;
   debug: (...message: unknown[]) => void;
@@ -13,7 +15,7 @@ const logLevels: Record<string, number> = {
 };
 
 // Getting log level from the ENV
-const logLevel = logLevels[process?.env?.REACT_APP_LOG_LEVEL || 'none'] || 0;
+const logLevel = logLevels[APP_LOG_LEVEL] || 0;
 
 // Default logging function
 const logFunction = (subject: string, args: unknown[]) =>

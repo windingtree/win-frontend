@@ -1,3 +1,4 @@
+import { LocalStorageConnectorConfig } from './store/storage';
 import { Settings } from 'luxon';
 import { config } from '@windingtree/win-commons';
 import blockchaineurope2022 from './images/conferences/blockchaineurope2022.png';
@@ -50,7 +51,13 @@ export const checkEnvVariables = (vars: string[]): void =>
     }
   });
 
-checkEnvVariables(['REACT_APP_API_URL', 'REACT_APP_EXPIRATION_GAP', 'REACT_APP_MODE']);
+checkEnvVariables([
+  'REACT_APP_API_URL',
+  'REACT_APP_EXPIRATION_GAP',
+  'REACT_APP_MODE',
+  'REACT_APP_DISABLE_FEATURES',
+  'REACT_APP_LOG_LEVEL'
+]);
 
 // Configure the time zone
 Settings.defaultZone = config.defaultZone;
@@ -82,6 +89,14 @@ export const backend = Object.freeze({
 
 export const DISABLE_FEATURES =
   process.env.REACT_APP_DISABLE_FEATURES === 'true' ? true : false;
+
+const availableLogLevels = ['none', 'error', 'debug', 'info'];
+export const APP_LOG_LEVEL =
+  typeof process.env.REACT_APP_LOG_LEVEL === 'string' &&
+  process.env.REACT_APP_LOG_LEVEL.length &&
+  availableLogLevels.includes(process.env.REACT_APP_LOG_LEVEL)
+    ? process.env.REACT_APP_LOG_LEVEL
+    : 'debug';
 
 export const expirationGap = Number(process.env.REACT_APP_EXPIRATION_GAP);
 
@@ -616,3 +631,13 @@ export const countries: readonly CountryType[] = [
   { code: 'ZM', label: 'Zambia', phone: '260' },
   { code: 'ZW', label: 'Zimbabwe', phone: '263' }
 ];
+
+export const localStorageConfig: LocalStorageConnectorConfig = {
+  properties: ['selectedNetwork', 'selectedAsset', 'searchParams', 'walletAuth']
+};
+
+export const sessionStorageConfig: LocalStorageConnectorConfig = {
+  properties: ['groupCheckout']
+};
+
+export const devconCashbackEnabled = process.env.REACT_APP_STL_DEVCON ?? 0;

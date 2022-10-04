@@ -1,7 +1,6 @@
 import { PaymentSuccessCallback } from '../components/PaymentCard';
 import { utils } from 'ethers';
 import { Container, Box, CircularProgress, Typography, Card } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
@@ -14,9 +13,9 @@ import { useAppState } from '../store';
 import { expirationGap } from '../config';
 import { sortByLargestImage } from '../utils/accommodation';
 import FallbackImage from '../images/hotel-fallback.webp';
-import Logger from '../utils/logger';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
+import Logger from '../utils/logger';
 
 const logger = Logger('Checkout');
 
@@ -34,7 +33,6 @@ export const normalizeExpiration = (expirationDate: string): number =>
 
 export const Checkout = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
   const { checkout, account } = useAppState();
   const { latestQueryParams } = useAccommodationsAndOffers();
 
@@ -78,7 +76,8 @@ export const Checkout = () => {
       search: `?${createSearchParams({
         offerId: checkout.offerId,
         tx: result.tx.hash
-      })}`
+      })}`,
+      hash: latestQueryParams?.location === 'Bogota' ? 'devcon' : ''
     });
   }, []);
 
@@ -107,7 +106,7 @@ export const Checkout = () => {
         />
         <Container
           sx={{
-            mb: theme.spacing(5)
+            mb: 5
           }}
         >
           <CircularProgress />

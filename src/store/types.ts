@@ -71,8 +71,26 @@ export interface PersonalInfo {
   phone: string;
 }
 
+export interface OrganizerInfo {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  companyName?: string;
+  country?: string;
+  city?: string;
+  streetName?: string;
+  vat?: string;
+  invoiceRequired?: boolean;
+}
+
 export interface CheckOut extends WinPricedOffer {
   personalInfo?: PersonalInfo;
+  facilityId: string;
+}
+
+export interface GroupCheckOut {
+  organizerInfo?: OrganizerInfo;
   facilityId: string;
 }
 
@@ -114,6 +132,7 @@ export interface State {
   organizerInfo?: OrganizerInfoAndInvoiceType;
   bookingInfo?: BookingInfoType;
   checkout?: CheckOut;
+  groupCheckout?: GroupCheckOut;
   selectedNetwork?: NetworkInfo;
   selectedAsset?: CryptoAsset;
   searchParams?: SearchParams;

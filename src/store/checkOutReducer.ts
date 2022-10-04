@@ -24,6 +24,11 @@ export const checkOutReducer = (state: State, action: Action): State => {
           ...state,
           checkout: action.payload
         };
+      case 'SET_GROUP_CHECKOUT':
+        return {
+          ...state,
+          groupCheckout: action.payload
+        };
       default:
         return state;
     }

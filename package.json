@@ -77,7 +77,7 @@
     "@types/react-slick": "^0.23.10",
     "@types/styled-components": "^5.1.25",
     "@walletconnect/web3-provider": "^1.8.0",
-    "@windingtree/glider-types": "^2.10.0",
+    "@windingtree/glider-types": "^2.12.0",
     "@windingtree/org.id-utils": "^1.0.0-beta.47",
     "@windingtree/win-commons": "^1.9.1",
     "@windingtree/win-pay": "^1.7.0",
@@ -113,7 +113,6 @@
     "react-hook-form": "^7.34.2",
     "react-image-gallery": "1.2.8",
     "react-image-lightbox": "^5.1.4",
-    "react-lazy-load-image-component": "^1.5.5",
     "react-leaflet": "^4.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
@@ -131,5 +130,7 @@
   "resolutions": {
     "autoprefixer": "10.4.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@tokenscript/token-negotiator": "2.2.0-dc.11"
+  }
 }

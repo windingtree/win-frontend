@@ -14,7 +14,6 @@ export default function RHFTAutocomplete({
   name,
   options,
   freeSolo = true,
-  width = '300px',
   ...other
 }: Props) {
   const { control } = useFormContext();
@@ -25,13 +24,13 @@ export default function RHFTAutocomplete({
       control={control}
       render={({ field, fieldState: { error } }) => (
         <Autocomplete
+          fullWidth
           {...field}
           freeSolo={freeSolo}
           isOptionEqualToValue={(option, value) => option === value}
           onChange={(event, newValue) => field.onChange(newValue ?? '')}
           onInputChange={(event, newValue) => field.onChange(newValue ?? '')}
           options={options}
-          sx={{ width }}
           renderInput={({ InputProps, inputProps, ...restParams }) => (
             <TextField
               label={other.label}
