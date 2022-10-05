@@ -17,6 +17,7 @@ import { regexp } from '@windingtree/org.id-utils';
 import { countries } from '../config';
 import { isVatValid } from '../utils/vat';
 import { useCheckout } from 'src/hooks/useCheckout';
+import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
 
 const countriesOptions = countries.map((c) => c.label);
 const eeRegExp = /^(?<EE>((EE)?(?<NUM>[0-9]{9})))$/i;
@@ -43,7 +44,9 @@ export interface OrganizerInformationForm {
   privacy: boolean;
 }
 
-const getFormattedOrganizerInfo = (values: OrganizerInformationForm) => {
+const getFormattedOrganizerInfo = (
+  values: OrganizerInformationForm
+): OrganizerInformation => {
   const {
     firstName,
     lastName,
@@ -156,6 +159,8 @@ export const OrgDetails = () => {
   useEffect(() => {
     const subscription = watch((values) => {
       const { privacy: _, ...rest } = values;
+
+      //TODO: Somehow the RHF package returns types that can be undefined, find a way to prevent that.
       const formattedOrganizerInfo = getFormattedOrganizerInfo(
         rest as OrganizerInformationForm
       );

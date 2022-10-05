@@ -9,8 +9,11 @@ import axios from 'axios';
 import { backend } from 'src/config';
 import { useAppDispatch, useAppState } from 'src/store';
 import { BookingInfoType } from 'src/store/types';
+import Logger from 'src/utils/logger';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
 import { getGroupMode } from './useAccommodationsAndOffers.tsx/helpers';
+
+const logger = Logger('useCheckout');
 
 export type BookingModeType = 'group' | 'normal' | undefined;
 
@@ -32,7 +35,9 @@ const bookGroupRequest = async (mutationProps: GroupBookingRequest) => {
         withCredentials: true
       }
     )
-    .catch((_) => {
+    .catch((e) => {
+      //eslint-disable-next-line
+      logger.error(e);
       throw new Error('Something went wrong with your booking. Please try again.');
     });
 
