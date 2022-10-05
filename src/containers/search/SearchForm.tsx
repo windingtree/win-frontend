@@ -315,6 +315,7 @@ export const SearchForm: React.FC = () => {
                 }}
                 color="inherit"
                 ref={dateRef}
+                disableRipple={isMobileView}
               >
                 {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
               </Button>
@@ -333,6 +334,7 @@ export const SearchForm: React.FC = () => {
                 variant={isMobileView ? 'outlined' : 'text'}
                 color="inherit"
                 ref={guestsRef}
+                disableRipple={isMobileView}
               >
                 {guestDetailsText}
               </Button>
