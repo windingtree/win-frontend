@@ -1,7 +1,10 @@
 import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
-import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
+import {
+  AccommodationWithId,
+  getGroupMode
+} from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
 import {
   Button,
@@ -28,6 +31,7 @@ import 'react-image-lightbox/style.css';
 import { LightboxModal } from '../../components/LightboxModal';
 import FallbackImage from '../../images/hotel-fallback.webp';
 import Iconify from '../../components/Iconify';
+import { currencySymbolMap } from '../../utils/currencies';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -98,20 +102,25 @@ const HeaderButton = ({ scrollToDetailImages }) => {
     latestQueryParams?.arrival,
     latestQueryParams?.departure
   );
-  const numberOfRooms = latestQueryParams?.roomCount ?? 1;
+  const isGroupMode = getGroupMode(latestQueryParams?.roomCount);
+  const numberOfRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
   const lowestAveragePrice =
     lowestTotalPrice && Number(lowestTotalPrice.price) / (numberOfDays * numberOfRooms);
+  const currencySymbol =
+    lowestTotalPrice?.currency && currencySymbolMap[lowestTotalPrice?.currency]
+      ? currencySymbolMap[lowestTotalPrice?.currency]
+      : lowestTotalPrice?.currency;
 
   return (
     <HeaderButtonContainer>
       <Box display={'flex'} alignItems={'end'}>
         <Typography>From</Typography>
         <Typography variant="h5" marginLeft={theme.spacing(1)}>
-          {lowestTotalPrice?.currency} {lowestAveragePrice?.toFixed(2)}
+          {currencySymbol} {lowestAveragePrice?.toFixed(2)}
         </Typography>
       </Box>
       <div>
-        <Typography textAlign={'right'}>Average price per night / per room</Typography>
+        <Typography textAlign={'right'}>Average price / room / night</Typography>
       </div>
 
       <div>
