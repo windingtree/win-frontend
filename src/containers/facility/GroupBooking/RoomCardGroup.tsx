@@ -3,6 +3,7 @@ import type { OfferRecord } from 'src/store/types';
 import { Box, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { RoomInformation } from '../RoomInformation';
+import { currencySymbolMap } from '../../../utils/currencies';
 
 export interface FacilityGalleryProps {
   offer: OfferRecord;
@@ -17,6 +18,7 @@ export const RoomCardGroup: React.FC<{
 }> = ({ offer, room, index, nightCount }) => {
   const { register } = useFormContext();
   const pricePerNight: number = Number(offer.price.public) / nightCount;
+  const currencySymbol = currencySymbolMap[offer.price.currency] ?? offer.price.currency;
 
   return (
     <Box mb={5}>
@@ -42,11 +44,11 @@ export const RoomCardGroup: React.FC<{
                   }
                 }}
               />
-              <Typography variant="body2">{`${
-                offer.price.currency
-              } ${pricePerNight.toFixed(2)} / room / night`}</Typography>
+              <Typography variant="body2">{`${currencySymbol} ${pricePerNight.toFixed(
+                2
+              )} / room / night`}</Typography>
               {nightCount > 1 && (
-                <Typography variant="body2">{`${offer.price.currency} ${offer.price.public} / room / ${nightCount} nights`}</Typography>
+                <Typography variant="body2">{`${currencySymbol} ${offer.price.public} / room / ${nightCount} nights`}</Typography>
               )}
             </Stack>
           </Grid>
