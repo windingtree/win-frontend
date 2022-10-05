@@ -1,5 +1,5 @@
 import { Box, styled, Typography } from '@mui/material';
-import { DateTime } from 'luxon';
+import { getFormattedDate } from 'src/utils/date';
 
 interface FacilityOffersTitleProps {
   rooms?: number;
@@ -16,8 +16,7 @@ export const FacilityOffersTitle = ({
   nights
 }: FacilityOffersTitleProps) => {
   const SubHeader = styled(Box)(() => ({}));
-  const dateStr =
-    startDate && DateTime.fromJSDate(new Date(startDate)).toFormat('ccc, LLL d, yyyy');
+  const formattedDate = startDate && getFormattedDate(startDate);
 
   return (
     <Box mb={5}>
@@ -25,7 +24,7 @@ export const FacilityOffersTitle = ({
         Available Rooms
       </Typography>
       <SubHeader>
-        Results for {rooms || ''} room, {guests} guests, staying from {dateStr} for{' '}
+        Results for {rooms || 0} room, {guests} guests, staying from {formattedDate} for{' '}
         {nights} nights.
       </SubHeader>
     </Box>

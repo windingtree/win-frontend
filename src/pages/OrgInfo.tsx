@@ -4,10 +4,10 @@ import { OrgDetails } from '../containers/OrgDetails';
 import { useMemo } from 'react';
 import { createSearchParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { useAppState } from '../store';
+import { useCheckout } from 'src/hooks/useCheckout';
 
 export const OrgInfo = () => {
-  const { groupCheckout } = useAppState();
+  const { bookingInfo } = useCheckout();
   const { latestQueryParams } = useAccommodationsAndOffers();
 
   const query = useMemo(() => {
@@ -38,9 +38,7 @@ export const OrgInfo = () => {
           },
           {
             name: 'Facility',
-            href: groupCheckout
-              ? `/facility/${groupCheckout.facilityId}`
-              : `/search?${query}`
+            href: bookingInfo ? `/facility/${bookingInfo.facilityId}` : `/search?${query}`
           }
         ]}
       />

@@ -637,7 +637,7 @@ export const localStorageConfig: LocalStorageConnectorConfig = {
 };
 
 export const sessionStorageConfig: LocalStorageConnectorConfig = {
-  properties: ['groupCheckout']
+  properties: ['bookingInfo', 'organizerInfo']
 };
 
 export const devconCashbackEnabled = process.env.REACT_APP_STL_DEVCON ?? 0;

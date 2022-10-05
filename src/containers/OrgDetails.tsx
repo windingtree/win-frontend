@@ -1,21 +1,10 @@
 import * as Yup from 'yup';
-import { useCallback, useState, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import {
-  Alert,
-  Box,
-  Card,
-  FormControlLabel,
-  Checkbox,
-  Link,
-  Stack,
-  Typography
-} from '@mui/material';
-import { useAppState, useAppDispatch } from '../store';
+import { Alert, Box, Card, Link, Stack, Typography } from '@mui/material';
 import {
   FormProvider,
   RHFTextField,
@@ -24,16 +13,13 @@ import {
   RHFCheckbox
 } from '../components/hook-form';
 import Iconify from '../components/Iconify';
-import type { GroupCheckOut, OrganizerInfo } from '../store/types';
 import { regexp } from '@windingtree/org.id-utils';
 import { countries } from '../config';
 import { isVatValid } from '../utils/vat';
-import Logger from '../utils/logger';
+import { useCheckout } from 'src/hooks/useCheckout';
+import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
 
-const logger = Logger('OrgDetails');
-
-const countriesOptions = countries.map((c) => c.label); // just countries names
-
+const countriesOptions = countries.map((c) => c.label);
 const eeRegExp = /^(?<EE>((EE)?(?<NUM>[0-9]{9})))$/i;
 
 export interface EeRegExp extends Array<string> {
@@ -43,47 +29,99 @@ export interface EeRegExp extends Array<string> {
   };
 }
 
-const defaultValues: OrganizerInfo = {
-  firstname: '',
-  lastname: '',
-  phone: '',
-  email: '',
+export interface OrganizerInformationForm {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  emailAddress: string;
+  companyName?: string;
+  countryCode: string;
+  postalCode?: string;
+  cityName: string;
+  street: string;
+  vatNumber?: string;
+  invoice: boolean;
+  privacy: boolean;
+}
+
+const getFormattedOrganizerInfo = (
+  values: OrganizerInformationForm
+): OrganizerInformation => {
+  const {
+    firstName,
+    lastName,
+    phoneNumber,
+    emailAddress,
+    companyName,
+    vatNumber,
+    countryCode,
+    postalCode,
+    cityName,
+    street
+  } = values;
+  const billingAddress = { countryCode, postalCode, cityName, street };
+  const corporateInfo = { companyName, vatNumber, billingAddress };
+  const organizerInfo = {
+    firstName,
+    lastName,
+    phoneNumber,
+    emailAddress,
+    corporateInfo
+  };
+
+  return organizerInfo;
+};
+
+const defaultValues: OrganizerInformationForm = {
+  firstName: '',
+  lastName: '',
+  phoneNumber: '',
+  emailAddress: '',
   companyName: '',
-  country: '',
-  city: '',
-  streetName: '',
-  vat: '',
-  invoiceRequired: false
+  countryCode: '',
+  postalCode: '',
+  cityName: '',
+  street: '',
+  vatNumber: '',
+  invoice: false,
+  privacy: false
 };
 
 export const OrgDetails = () => {
-  // const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { groupCheckout } = useAppState();
+  const navigate = useNavigate();
   const [vatValid, setVatValid] = useState<boolean>(false);
-  const [privacy, setPrivacy] = useState<boolean>(false);
-  const [error, setError] = useState<undefined | string>();
+  const { setOrganizerInfo, organizerInfo, setBookingInfo, bookGroup } = useCheckout();
+
+  const { corporateInfo, ...restOrganizerInfo } = organizerInfo || {};
+  const { billingAddress, ...restCorporateInfo } = corporateInfo || {};
+  const defaultValuesSessionStorage = {
+    ...defaultValues,
+    ...restOrganizerInfo,
+    ...restCorporateInfo,
+    ...billingAddress
+  };
 
   const organizerSchema = Yup.object().shape({
-    firstname: Yup.string()
+    firstName: Yup.string()
       .trim()
       .matches(/^[a-z ,.'-]+$/i, 'Only a-z, A-Z chars')
       .required('First name is required'),
-    lastname: Yup.string()
+    lastName: Yup.string()
       .trim()
       .matches(/^[a-z ,.'-]+$/i, 'Only a-z, A-Z chars')
       .required('Last name is required'),
-    phone: Yup.string()
+    phoneNumber: Yup.string()
       .trim()
       .matches(/^\+[1-9]\d{1,14}$/, 'Incorrect phone number')
       .required('Phone number is required'),
-    email: Yup.string()
+    emailAddress: Yup.string()
       .trim()
       .required('Email is required')
       .matches(regexp.email, 'Incorrect email')
       .email(),
     companyName: Yup.string().trim(),
-    country: Yup.string()
+    postalCode: Yup.string().trim(),
+    countryCode: Yup.string()
       .trim()
       .test(
         'is-allowed-country',
@@ -91,9 +129,9 @@ export const OrgDetails = () => {
         (value) =>
           value !== undefined && (value === '' || countriesOptions.includes(value))
       ),
-    city: Yup.string().trim(),
-    streetName: Yup.string().trim(),
-    vat: Yup.string()
+    cityName: Yup.string().trim(),
+    street: Yup.string().trim(),
+    vatNumber: Yup.string()
       .trim()
       .test('is-vat-valid', 'VAT number is not valid', async (value) => {
         if (value && value.length === 11) {
@@ -107,71 +145,55 @@ export const OrgDetails = () => {
         return true;
       })
   });
-
-  const methods = useForm<OrganizerInfo>({
+  const methods = useForm<OrganizerInformationForm>({
     resolver: yupResolver(organizerSchema),
-    defaultValues: groupCheckout?.organizerInfo ?? defaultValues
+    defaultValues: defaultValuesSessionStorage || defaultValues
   });
+  const { watch, handleSubmit } = methods;
+  const { privacy } = watch();
 
-  const {
-    watch,
-    handleSubmit,
-    formState: { isSubmitting }
-  } = methods;
-
+  /**
+   * In this useEffect data is being stored in the session storage state,
+   * while a user is updating the form.
+   */
   useEffect(() => {
     const subscription = watch((values) => {
-      dispatch({
-        type: 'SET_GROUP_CHECKOUT',
-        payload: {
-          ...groupCheckout,
-          organizerInfo: {
-            ...groupCheckout?.organizerInfo,
-            ...values
-          }
-        } as GroupCheckOut
-      });
+      const { privacy: _, ...rest } = values;
+
+      //TODO: Somehow the RHF package returns types that can be undefined, find a way to prevent that.
+      const formattedOrganizerInfo = getFormattedOrganizerInfo(
+        rest as OrganizerInformationForm
+      );
+      const { invoice } = rest;
+      setOrganizerInfo(formattedOrganizerInfo);
+      setBookingInfo({ invoice });
     });
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const onSubmit = useCallback(
-    async (values: OrganizerInfo) => {
-      logger.info('Submit organizer data', values);
-      try {
-        setError(undefined);
-
-        // navigate('/checkout/' + ...);
-      } catch (error) {
-        const message = (error as Error).message || 'Unknown error';
-        setError(message);
-      }
-    },
-    [groupCheckout]
-  );
+  const onSubmit = async () => {
+    try {
+      const { serviceId } = await bookGroup.mutateAsync();
+      navigate(`/checkout/${serviceId}`);
+    } catch (_) {
+      return;
+    }
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      {error && <Alert severity="error">{error}</Alert>}
       <Card sx={{ my: 3, p: 3 }}>
         <Typography variant="h3">Get a quotation for your stay</Typography>
         <Typography sx={{ mb: 3 }}>
-          This Information will be strictly used by the hotel and win.so to confirm the
-          booking issue the invoice.
+          This information will be strictly used by the hotel and win.so to confirm your
+          booking.
         </Typography>
-        <Box
-          sx={{
-            display: 'grid',
-            columnGap: 2,
-            rowGap: 3,
-            gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' }
-          }}
-        >
-          <RHFTextField name="firstname" label="First Name *" />
-          <RHFTextField name="lastname" label="Last Name *" />
-          <RHFPhoneField name="phone" label="Phone Number *" />
-          <RHFTextField name="email" label="Email Address *" />
-          <RHFTextField name="companyName" label="Company Name" />
+        <Stack spacing={3}>
+          <RHFTextField name="firstName" label="First Name*" />
+          <RHFTextField name="lastName" label="Last Name*" />
+          <RHFPhoneField name="phoneNumber" label="Phone Number*" />
+          <RHFTextField name="emailAddress" label="Email Address*" />
+          <RHFTextField name="companyName" label="Company Name (Optional)" />
           <Box
             sx={{
               display: 'flex',
@@ -181,15 +203,16 @@ export const OrgDetails = () => {
             }}
           >
             <RHFAutocomplete
-              name="country"
+              name="countryCode"
               label="Country (Optional)"
               options={countriesOptions}
             />
-            <RHFTextField name="city" label="City (Optional)" />
+            <RHFTextField name="cityName" label="City (Optional)" />
           </Box>
-          <RHFTextField name="streetName" label="Street name and number (Optional)" />
+          <RHFTextField name="postalCode" label="Postal code (Optional)" />
+          <RHFTextField name="street" label="Street name and number (Optional)" />
           <RHFTextField
-            name="vat"
+            name="vatNumber"
             label="VAT Number (optional)"
             InputProps={{
               // Show green checkmark if VAT is valid only
@@ -203,25 +226,18 @@ export const OrgDetails = () => {
             }}
           />
           <RHFCheckbox
-            sx={{
-              pl: 2
-            }}
-            name="invoiceRequired"
+            name="invoice"
             label={<Typography variant="subtitle1">I will need an invoice</Typography>}
           />
 
-          <FormControlLabel
-            sx={{
-              alignItems: 'flex-start',
-              pl: 2
-            }}
-            control={<Checkbox checked={privacy} onChange={() => setPrivacy(!privacy)} />}
+          <RHFCheckbox
+            name="privacy"
             label={
               <Box>
                 <Typography variant="subtitle1">
                   I agree with terms and conditions
                 </Typography>
-                <Typography>
+                <Typography variant="caption">
                   I have read and approved win.so&nbsp;
                   <Link href="/terms" underline="hover" target="_blank" rel="noopener">
                     General Terms & Conditions
@@ -235,14 +251,22 @@ export const OrgDetails = () => {
               </Box>
             }
           />
-        </Box>
+        </Stack>
+
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+          {bookGroup.error && (
+            <Alert sx={{ mb: 2 }} severity="error">
+              {bookGroup.error.message}
+            </Alert>
+          )}
           <LoadingButton
+            size="large"
+            fullWidth
             disableElevation
             disabled={!privacy}
             type="submit"
             variant="contained"
-            loading={isSubmitting}
+            loading={bookGroup.isLoading}
           >
             Proceed to Pay the Deposit
           </LoadingButton>

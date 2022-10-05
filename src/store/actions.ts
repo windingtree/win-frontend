@@ -1,11 +1,19 @@
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import type { BookingsAuthResponse } from '@windingtree/glider-types/dist/win';
+import type {
+  BookingsAuthResponse,
+  OrganizerInformation
+} from '@windingtree/glider-types/dist/win';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
   Web3ModalSignOutFunction
 } from '../hooks/useWeb3Modal';
-import type { CheckOut, GroupCheckOut, GenericStateRecord, SearchParams } from './types';
+import type {
+  BookingInfoType,
+  CheckOut,
+  GenericStateRecord,
+  SearchParams
+} from './types';
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';
@@ -68,11 +76,6 @@ export interface SetCheckOutAction {
   payload: CheckOut;
 }
 
-export interface SetGroupCheckOutAction {
-  type: 'SET_GROUP_CHECKOUT';
-  payload: GroupCheckOut;
-}
-
 export interface SetSelectedNetwork {
   type: 'SET_SELECTED_NETWORK';
   payload: NetworkInfo;
@@ -103,10 +106,19 @@ export interface SetWalletAuthAction {
   payload?: BookingsAuthResponse;
 }
 
+export interface SetOrganizerInfo {
+  type: 'SET_ORGANIZER_INFO';
+  payload: OrganizerInformation;
+}
+
+export interface SetBookingInfo {
+  type: 'SET_BOOKING_INFO';
+  payload?: BookingInfoType;
+}
+
 export type Action =
   | SetSearchParams
   | SetCheckOutAction
-  | SetGroupCheckOutAction
   | SetAuthenticationTokenAction
   | SetConnectingAction
   | SetProviderAction
@@ -120,4 +132,6 @@ export type Action =
   | RemoveRecordAction
   | ResetRecordAction
   | SetSelectedFacilityId
-  | ResetSelectedFacilityId;
+  | ResetSelectedFacilityId
+  | SetOrganizerInfo
+  | SetBookingInfo;

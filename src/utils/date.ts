@@ -20,3 +20,7 @@ export const daysBetween = (fromDate: NullableDate, toDate: NullableDate): numbe
   if (!fromDate || !toDate) return -1;
   return (toDate.getTime() - fromDate.getTime()) / (1000 * 24 * 3600);
 };
+
+export const getFormattedDate = (date: Date | string) => {
+  return DateTime.fromJSDate(new Date(date)).toFormat('ccc, LLL d, yyyy');
+};

@@ -101,6 +101,7 @@
     "leaflet": "^1.8.0",
     "lint-staged": "^13.0.3",
     "luxon": "^3.0.1",
+    "notistack": "^2.0.5",
     "os-browserify": "^0.3.0",
     "prettier": "^2.6.2",
     "prop-types": "^15.8.1",

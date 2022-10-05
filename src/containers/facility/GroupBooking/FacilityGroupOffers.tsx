@@ -6,14 +6,21 @@ import * as Yup from 'yup';
 import { useMemo, useState } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
 import type { OfferRecord } from 'src/store/types';
-import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
+import {
+  AccommodationWithId,
+  GROUP_MODE_ROOM_COUNT
+} from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
 import useResponsive from 'src/hooks/useResponsive';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { daysBetween } from 'src/utils/date';
 import { FacilityOffersTitle } from '../FacilityOffersTitle';
-import { useParams } from 'react-router-dom';
+import { useCheckout } from 'src/hooks/useCheckout';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
+import { useSnackbar } from 'notistack';
+import { getTotalRoomCountReducer } from 'src/utils/offers';
 
 /**
  * Only the quantity can be changed in the form by the User,
@@ -41,37 +48,21 @@ export interface OfferFormType extends OfferRecord {
   quantity: string;
 }
 
-export type FormValuesProps = {
+type FormValuesProps = {
   offers: OfferFormType[];
 };
-
-const getRoomCount = (prev: number, current: OfferFormType): number =>
-  Number(current.quantity) + prev;
 
 export const FacilityGroupOffers = ({
   offers = [],
   accommodation
 }: FacilityGroupOffersProps) => {
-  const params = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const { latestQueryParams } = useAccommodationsAndOffers();
+  const defaultRoomCount = latestQueryParams?.roomCount
+    ? latestQueryParams.roomCount
+    : 10;
   const defaultOffers = useMemo(
-    () =>
-      offers?.map<OfferFormType>((offer, index) => {
-        if (index === 0) {
-          return {
-            ...offer,
-            quantity: latestQueryParams?.roomCount
-              ? latestQueryParams?.roomCount.toString()
-              : '0'
-          };
-        }
-
-        return {
-          ...offer,
-          quantity: '0'
-        };
-      }) ?? [],
-
+    () => getOffersWithQuantity(offers, defaultRoomCount),
     [offers]
   );
 
@@ -82,21 +73,47 @@ export const FacilityGroupOffers = ({
 
   const { handleSubmit, watch } = methods;
   const values = watch();
-  const roomCount = values.offers.reduce(getRoomCount, 0);
+  const roomCount = values.offers.reduce(getTotalRoomCountReducer, 0);
+  const { setBookingInfo } = useCheckout();
   const [showError, setShowError] = useState(false);
   const isDesktop = useResponsive('up', 'md');
-  const summaryBoxHeight = 130;
+  const summaryBoxHeight = 210;
   const arrival = latestQueryParams?.arrival;
   const departure = latestQueryParams?.departure;
   const nightCount = daysBetween(arrival, departure);
   const guestCount =
     (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const onSubmit = () => {
-    if (roomCount < 10) {
-      setShowError(true);
+  const onSubmit = (values: FormValuesProps) => {
+    if (roomCount < GROUP_MODE_ROOM_COUNT) {
+      enqueueSnackbar(`Please ${GROUP_MODE_ROOM_COUNT} or more rooms to continue.`, {
+        variant: 'error'
+      });
       return;
     }
+
+    if (!arrival || !departure) {
+      enqueueSnackbar('Please fill in an arrival and departure date to continue.', {
+        variant: 'error'
+      });
+      return;
+    }
+
+    const selectedOffers = getSelectedOffers(values.offers);
+
+    setBookingInfo({
+      date: {
+        arrival,
+        departure
+      },
+      guestCount: guestCount,
+      offers: selectedOffers,
+      facilityId: id
+    });
+
+    navigate('/org-details');
   };
 
   const handleClose = () => {
@@ -126,6 +143,7 @@ export const FacilityGroupOffers = ({
         nights={nightCount}
         roomsAvailable={accommodation?.offers?.length ?? 0}
       />
+
       <Grid container spacing={4}>
         <Grid
           order={{ xs: 1, md: 2 }}
@@ -146,7 +164,6 @@ export const FacilityGroupOffers = ({
             roomCount={roomCount}
             nightCount={nightCount}
             guestCount={guestCount}
-            facilityId={params.id}
           />
         </Grid>
         <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }}>

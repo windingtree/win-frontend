@@ -193,9 +193,10 @@ export const accommodationEventTransform =
     return { ...accommodation, eventInfo };
   };
 
+export const GROUP_MODE_ROOM_COUNT = 10;
 export const getGroupMode = (roomCount: number | string | undefined): boolean => {
   if (DISABLE_FEATURES) return false;
   if (roomCount === undefined) false;
   const numRoomCount = Number.isNaN(roomCount) ? 0 : Number(roomCount);
-  return numRoomCount > 9;
+  return numRoomCount >= GROUP_MODE_ROOM_COUNT;
 };
