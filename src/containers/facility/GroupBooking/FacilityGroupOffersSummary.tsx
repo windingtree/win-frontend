@@ -90,7 +90,7 @@ export const FacilityGroupOffersSummary = ({
 
           <Stack direction="row">
             <Typography variant="body2">
-              {`${nightCount} nights, ${roomCount} rooms and ${guestCount} guests`}{' '}
+              {`${guestCount} adults, ${roomCount} rooms and ${nightCount} nights`}{' '}
             </Typography>
           </Stack>
         </Grid>

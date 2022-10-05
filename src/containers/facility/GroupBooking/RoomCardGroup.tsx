@@ -44,7 +44,10 @@ export const RoomCardGroup: React.FC<{
               />
               <Typography variant="body2">{`${
                 offer.price.currency
-              } ${pricePerNight.toFixed(2)} per night`}</Typography>
+              } ${pricePerNight.toFixed(2)} / room / night`}</Typography>
+              {nightCount > 1 && (
+                <Typography variant="body2">{`${offer.price.currency} ${offer.price.public} / room / ${nightCount} nights`}</Typography>
+              )}
             </Stack>
           </Grid>
         </Grid>
