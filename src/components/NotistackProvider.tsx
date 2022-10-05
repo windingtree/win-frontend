@@ -47,11 +47,11 @@ function SnackbarStyles() {
   );
 }
 
-type Props = {
+type NotistackProviderProps = {
   children: ReactNode;
 };
 
-export default function NotistackProvider({ children }: Props) {
+export default function NotistackProvider({ children }: NotistackProviderProps) {
   // eslint-disable-next-line
   const notistackRef = useRef<any>(null);
   const onClose = (key: SnackbarKey) => () => {

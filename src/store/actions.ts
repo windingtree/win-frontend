@@ -106,14 +106,9 @@ export interface SetWalletAuthAction {
   payload?: BookingsAuthResponse;
 }
 
-export interface SetWalletAuthAction {
-  type: 'SET_WALLET_AUTH';
-  payload?: BookingsAuthResponse;
-}
-
 export interface SetOrganizerInfo {
   type: 'SET_ORGANIZER_INFO';
-  payload?: OrganizerInformation;
+  payload: OrganizerInformation;
 }
 
 export interface SetBookingInfo {

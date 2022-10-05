@@ -6,7 +6,10 @@ import * as Yup from 'yup';
 import { useMemo, useState } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
 import type { OfferRecord } from 'src/store/types';
-import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
+import {
+  AccommodationWithId,
+  GROUP_MODE_ROOM_COUNT
+} from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
 import useResponsive from 'src/hooks/useResponsive';
@@ -83,8 +86,8 @@ export const FacilityGroupOffers = ({
   const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = (values: FormValuesProps) => {
-    if (roomCount < 10) {
-      enqueueSnackbar('Please select more then 10 rooms to continue', {
+    if (roomCount < GROUP_MODE_ROOM_COUNT) {
+      enqueueSnackbar(`Please ${GROUP_MODE_ROOM_COUNT} or more rooms to continue.`, {
         variant: 'error'
       });
       return;
@@ -141,6 +144,7 @@ export const FacilityGroupOffers = ({
         nights={nightCount}
         roomsAvailable={accommodation?.offers?.length ?? 0}
       />
+
       <Grid container spacing={4}>
         <Grid
           order={{ xs: 1, md: 2 }}
