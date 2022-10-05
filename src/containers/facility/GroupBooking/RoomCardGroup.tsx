@@ -13,9 +13,10 @@ export const RoomCardGroup: React.FC<{
   room: RoomTypes;
   offer: OfferRecord;
   index: number;
-}> = ({ offer, room, index }) => {
+  nightCount: number;
+}> = ({ offer, room, index, nightCount }) => {
   const { register } = useFormContext();
-  const price = `${offer.price.currency} ${Number(offer.price.public).toFixed(2)}`;
+  const pricePerNight: number = Number(offer.price.public) / nightCount;
 
   return (
     <Box mb={5}>
@@ -41,7 +42,9 @@ export const RoomCardGroup: React.FC<{
                   }
                 }}
               />
-              <Typography variant="body2">{`${price} per night`}</Typography>
+              <Typography variant="body2">{`${
+                offer.price.currency
+              } ${pricePerNight.toFixed(2)} per night`}</Typography>
             </Stack>
           </Grid>
         </Grid>

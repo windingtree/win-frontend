@@ -113,7 +113,7 @@ export const useAccommodationsAndOffers = ({
         );
 
       // optional accommodation transformation callback function
-      // that can be used to modify or add properties to accomodation object
+      // that can be used to modify or add properties to accommodation object
       let transformedAccommodation = accommodation;
       if (accommodationTransformFn && typeof accommodationTransformFn === 'function') {
         transformedAccommodation = accommodationTransformFn({
