@@ -147,7 +147,13 @@ export default function LandingCities() {
 
       <Carousel
         items={citiesComponents}
-        settings={{ slidesToShow, responsiveSlidesToShow, dots: false, centerMode: true }}
+        settings={{
+          slidesToShow,
+          responsiveSlidesToShow,
+          dots: false,
+          centerMode: true,
+          hideArrows: isMobileView
+        }}
       />
     </Stack>
   );

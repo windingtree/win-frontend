@@ -23,6 +23,7 @@ export interface CarouselSettings {
     breakpoint: number;
     slidesToShow: number;
   }[];
+  hideArrows?: boolean;
 }
 
 export const Carousel: React.FC<{
@@ -36,6 +37,7 @@ export const Carousel: React.FC<{
     spacing = 2,
     responsiveSlidesToShow = [],
     centerMode = false,
+    hideArrows = false,
     ...settings
   } = {}
 }) => {
@@ -89,6 +91,10 @@ export const Carousel: React.FC<{
 
   const allowCenterMode = items.length > (actualSlidesToShow || 1);
 
+  // hide arrows when all items are visible
+  const allSlidesVisible = items?.length > (actualSlidesToShow || 1) ? false : true;
+  const shouldHideArrows = hideArrows || allSlidesVisible;
+
   return (
     <RootStyle>
       <CarouselArrows
@@ -102,7 +108,7 @@ export const Carousel: React.FC<{
           }
         }}
         customIcon={customArrowIcon}
-        hideArrows={items?.length > (settings?.slidesToShow || 1) ? false : true} // hide arrows when image is less than 2
+        hideArrows={shouldHideArrows}
       >
         <Slider
           ref={carouselRef}

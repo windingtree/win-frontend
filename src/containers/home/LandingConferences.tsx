@@ -55,7 +55,13 @@ export default function LandingConferences() {
       </Box>
       <Carousel
         items={eventsComponents}
-        settings={{ slidesToShow, responsiveSlidesToShow, dots: false, centerMode: true }}
+        settings={{
+          slidesToShow,
+          responsiveSlidesToShow,
+          dots: false,
+          centerMode: true,
+          hideArrows: isMobileView
+        }}
       />
     </Stack>
   );
