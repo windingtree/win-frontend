@@ -82,8 +82,12 @@ export const SearchForm: React.FC = () => {
    * Logic in relation to the popovers.
    */
   const formRef = useRef<HTMLDivElement>(null);
-  const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLDivElement | null>(null);
-  const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLDivElement | null>(null);
+  const dateRef = useRef<HTMLButtonElement>(null);
+  const guestsRef = useRef<HTMLButtonElement>(null);
+  const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
+    null
+  );
+  const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
   const isDatePopoverOpen = Boolean(dateRangeAnchorEl);
   const isGuestsPopoverOpen = Boolean(guestsAnchorEl);
 
@@ -286,7 +290,8 @@ export const SearchForm: React.FC = () => {
                 style: {
                   ...fontStyling,
                   textAlign: isMobileView ? 'center' : 'left'
-                }
+                },
+                id: 'location-input'
               }}
               InputProps={{
                 ...(!isMobileView ? { disableUnderline: true } : {}),
@@ -299,7 +304,7 @@ export const SearchForm: React.FC = () => {
             />
             <Box>
               <Button
-                onClick={() => setDateRangeAnchorEl(formRef.current)}
+                onClick={() => setDateRangeAnchorEl(dateRef.current)}
                 size={buttonSize}
                 variant={isMobileView ? 'outlined' : 'text'}
                 sx={{
@@ -309,6 +314,7 @@ export const SearchForm: React.FC = () => {
                   ...formButtonStyle
                 }}
                 color="inherit"
+                ref={dateRef}
               >
                 {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
               </Button>
@@ -322,10 +328,11 @@ export const SearchForm: React.FC = () => {
                   ...fontStyling,
                   ...formButtonStyle
                 }}
-                onClick={() => setGuestsAnchorEl(formRef.current)}
+                onClick={() => setGuestsAnchorEl(guestsRef.current)}
                 size={buttonSize}
                 variant={isMobileView ? 'outlined' : 'text'}
                 color="inherit"
+                ref={guestsRef}
               >
                 {guestDetailsText}
               </Button>
