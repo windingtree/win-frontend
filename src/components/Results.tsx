@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
-import { createRef, useCallback, useEffect, useMemo } from 'react';
+import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { createRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { SearchCard } from './SearchCard';
 import { useAppState, useAppDispatch } from '../store';
@@ -13,12 +13,13 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   position: 'absolute',
   zIndex: '1',
   width: '100%',
-  height: '45%',
-  top: '55%',
+  height: '50%',
+  top: '50%',
   left: 0,
   padding: theme.spacing(2),
   backgroundColor: '#fff',
   overflow: 'scroll',
+  transition: 'all 0.4s ease',
 
   [theme.breakpoints.up('md')]: {
     top: 110 + HEADER.MAIN_DESKTOP_HEIGHT,
@@ -37,6 +38,33 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const Results: React.FC = () => {
+  const theme = useTheme();
+
+  const showResultsNumber = useMediaQuery(theme.breakpoints.down('md'));
+  const [view, setView] = useState({});
+  const [preventMapView, setPreventMapView] = useState(true);
+
+  // handle mobile list scrolling
+  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    if (e.currentTarget.scrollTop > 10) {
+      setView({
+        height: '75%',
+        top: '25%'
+      });
+    }
+    if (e.currentTarget.scrollTop === 0) {
+      if (preventMapView) {
+        setPreventMapView(false);
+        return;
+      }
+      setView({
+        height: '10%',
+        top: '90%'
+      });
+      setPreventMapView(true);
+    }
+  };
+
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();
   const focusedEvent = useMemo(
@@ -90,19 +118,38 @@ export const Results: React.FC = () => {
   }
 
   return (
-    <StyledContainer className="noScrollBar">
-      {!isFetching &&
-        accommodations.map((facility, idx) => (
-          <SearchCard
-            key={facility.id}
-            facility={facility}
-            numberOfDays={numberOfDays}
-            isSelected={facility.id === selectedFacilityId}
-            onSelect={handleFacilitySelection}
-            ref={SearchCardsRefs[idx]}
-            focusedEvent={facility.eventInfo}
+    <StyledContainer className="noScrollBar" sx={view} onScroll={handleScroll}>
+      {showResultsNumber && (
+        <Stack direction="column" alignItems="center">
+          <Box
+            sx={{
+              justifySelf: 'center',
+              alignSelf: 'center',
+              background: 'black',
+              width: '10rem',
+              height: '4px',
+              borderRadius: '2px'
+            }}
           />
-        ))}
+          <Typography marginBottom={1} textAlign="center">
+            {accommodations.length} stays
+          </Typography>
+        </Stack>
+      )}
+      <Stack>
+        {!isFetching &&
+          accommodations.map((facility, idx) => (
+            <SearchCard
+              key={facility.id}
+              facility={facility}
+              numberOfDays={numberOfDays}
+              isSelected={facility.id === selectedFacilityId}
+              onSelect={handleFacilitySelection}
+              ref={SearchCardsRefs[idx]}
+              focusedEvent={facility.eventInfo}
+            />
+          ))}
+      </Stack>
     </StyledContainer>
   );
 };
