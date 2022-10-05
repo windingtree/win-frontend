@@ -17,6 +17,7 @@ export const FacilityOffersTitle = ({
 }: FacilityOffersTitleProps) => {
   const SubHeader = styled(Box)(() => ({}));
   const formattedDate = startDate && getFormattedDate(startDate);
+  const roomText = rooms ? (rooms > 1 ? `${rooms} rooms, ` : '1 room, ') : '';
 
   return (
     <Box mb={5}>
@@ -24,8 +25,8 @@ export const FacilityOffersTitle = ({
         Available Rooms
       </Typography>
       <SubHeader>
-        Results for {rooms || 0} room, {guests} guests, staying from {formattedDate} for{' '}
-        {nights} nights.
+        Results for {roomText} {guests} guests, staying from {formattedDate} for {nights}{' '}
+        nights.
       </SubHeader>
     </Box>
   );

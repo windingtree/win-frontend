@@ -101,12 +101,11 @@ export const useAccommodationsAndOffers = ({
     );
 
     // get offer with lowest price
+    const nbRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
     return filteredAccommodations?.map((accommodation) => {
       const lowestPrice: LowestPriceFormat = accommodation.offers
         .map((offer) => ({
-          price:
-            Number(offer.price.public) /
-            (numberOfDays * (latestQueryParams?.roomCount ?? 1)),
+          price: Number(offer.price.public) / (numberOfDays * nbRooms),
           currency: offer.price.currency
         }))
         .reduce((prevLowest, currentVal) =>
@@ -114,7 +113,7 @@ export const useAccommodationsAndOffers = ({
         );
 
       // optional accommodation transformation callback function
-      // that can be used to modify or add properties to accomodation object
+      // that can be used to modify or add properties to accommodation object
       let transformedAccommodation = accommodation;
       if (accommodationTransformFn && typeof accommodationTransformFn === 'function') {
         transformedAccommodation = accommodationTransformFn({

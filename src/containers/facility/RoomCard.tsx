@@ -75,7 +75,7 @@ export const RoomCard: React.FC<{
               rowGap={theme.spacing(2)}
             >
               <Typography variant="body1" textAlign={'right'}>
-                {`${offer.price.currency} ${Number(offer.price.public).toFixed(2)} `}
+                {`${offer.price.currency} ${offer.price.public} `}
               </Typography>
               <Typography textAlign={'right'}>
                 {`Price for ${numberOfDays} nights, ${roomsNumber} room(s)`}
