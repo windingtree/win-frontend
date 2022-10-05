@@ -18,15 +18,15 @@ export const FacilityOffersTitle = ({
   const SubHeader = styled(Box)(() => ({}));
   const dateStr =
     startDate && DateTime.fromJSDate(new Date(startDate)).toFormat('ccc, LLL d, yyyy');
-
+  const roomText = rooms ? (rooms > 1 ? `${rooms} rooms, ` : '1 room, ') : '';
   return (
     <Box mb={5}>
       <Typography mb={1.5} variant="h3">
         Available Rooms
       </Typography>
       <SubHeader>
-        Results for {rooms || ''} room, {guests} guests, staying from {dateStr} for{' '}
-        {nights} nights.
+        Results for {roomText} {guests} guests, staying from {dateStr} for {nights}{' '}
+        nights.
       </SubHeader>
     </Box>
   );
