@@ -12,6 +12,7 @@ import { Carousel, CarouselSettings } from '../../components/Carousel';
 import Iconify from '../../components/Iconify';
 import Image from '../../components/Image';
 import { EventItemProps, upcomingEvents } from '../../config';
+import { CarouselContainer } from './CarouselContainer';
 
 export default function LandingConferences() {
   const theme = useTheme();
@@ -38,10 +39,7 @@ export default function LandingConferences() {
 
   return (
     <Stack sx={{ pb: 5 }}>
-      <Box
-        sx={{ position: 'relative', textAlign: isMobileView ? 'center' : 'left' }}
-        mb={1}
-      >
+      <Box sx={{ position: 'relative', textAlign: 'left' }} mb={1}>
         <Typography variant={isMobileView ? 'h4' : 'h3'}>
           Upcoming Blockchain Events
         </Typography>
@@ -53,16 +51,18 @@ export default function LandingConferences() {
           Need a place to stay for an event. Checkout our favourite stays below!
         </Typography>
       </Box>
-      <Carousel
-        items={eventsComponents}
-        settings={{
-          slidesToShow,
-          responsiveSlidesToShow,
-          dots: false,
-          centerMode: true,
-          hideArrows: isMobileView
-        }}
-      />
+      <CarouselContainer>
+        <Carousel
+          items={eventsComponents}
+          settings={{
+            slidesToShow,
+            responsiveSlidesToShow,
+            dots: false,
+            centerMode: true,
+            hideArrows: isMobileView
+          }}
+        />
+      </CarouselContainer>
     </Stack>
   );
 }

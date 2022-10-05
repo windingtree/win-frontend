@@ -14,6 +14,7 @@ import berlin from '../../images/cities/berlin.jpeg';
 import bogota from '../../images/cities/bogota.jpeg';
 import sydney from '../../images/cities/sydney.jpeg';
 import taipei from '../../images/cities/taipei.jpeg';
+import { CarouselContainer } from './CarouselContainer';
 
 const Gradient = styled('div')(() => ({
   background:
@@ -131,10 +132,7 @@ export default function LandingCities() {
   const slidesToShow = cities.length > 4 ? 4 : cities.length;
   return (
     <Stack sx={{ pb: 5 }}>
-      <Box
-        sx={{ p: 1, position: 'relative', textAlign: isMobileView ? 'center' : 'left' }}
-        mb={1}
-      >
+      <Box sx={{ position: 'relative', textAlign: 'left' }} mb={1}>
         <Typography variant={isMobileView ? 'h4' : 'h3'}>Scenic Cities</Typography>
         <Typography
           color="text.secondary"
@@ -144,17 +142,18 @@ export default function LandingCities() {
           Our current favorite cities to visit and travel to
         </Typography>
       </Box>
-
-      <Carousel
-        items={citiesComponents}
-        settings={{
-          slidesToShow,
-          responsiveSlidesToShow,
-          dots: false,
-          centerMode: true,
-          hideArrows: isMobileView
-        }}
-      />
+      <CarouselContainer>
+        <Carousel
+          items={citiesComponents}
+          settings={{
+            slidesToShow,
+            responsiveSlidesToShow,
+            dots: false,
+            centerMode: true,
+            hideArrows: isMobileView
+          }}
+        />
+      </CarouselContainer>
     </Stack>
   );
 }
