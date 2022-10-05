@@ -6,6 +6,7 @@ import { IconButtonAnimate } from 'src/components/animate';
 import Iconify from 'src/components/Iconify';
 import { OfferRecord } from 'src/store/types';
 import { useAppDispatch, useAppState } from '../../../store';
+import { currencySymbolMap } from '../../../utils/currencies';
 
 const getTotalPrice = (prev: number, current: OfferRecord): number => {
   const quantity = Number(current.quantity);
@@ -37,6 +38,7 @@ export const FacilityGroupOffersSummary = ({
   const totalPrice = values.offers.reduce(getTotalPrice, 0).toFixed(2);
   const theme = useTheme();
   const currency = values.offers[0].price?.currency;
+  const currencySymbol = currencySymbolMap[currency] ?? currency;
 
   const handleBook = useCallback(async () => {
     if (facilityId) {
@@ -71,11 +73,8 @@ export const FacilityGroupOffersSummary = ({
         <Grid item xs={6} md={12}>
           <Box>
             <Typography component="span" variant="h5">
-              {totalPrice}
+              {currencySymbol} {totalPrice}
               {'  '}
-            </Typography>
-            <Typography sx={{ fontWeight: 'normal' }} component="span" variant="h5">
-              {currency}
             </Typography>
             <Tooltip
               enterTouchDelay={0}
@@ -90,7 +89,7 @@ export const FacilityGroupOffersSummary = ({
 
           <Stack direction="row">
             <Typography variant="body2">
-              {`${guestCount} adults, ${roomCount} rooms and ${nightCount} nights`}{' '}
+              {`${guestCount} adults, ${roomCount} rooms for ${nightCount} nights`}{' '}
             </Typography>
           </Stack>
         </Grid>
