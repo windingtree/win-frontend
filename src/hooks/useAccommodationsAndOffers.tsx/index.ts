@@ -100,13 +100,12 @@ export const useAccommodationsAndOffers = ({
       latestQueryParams?.departure
     );
 
+    const nbRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
     // get offer with lowest price
     return filteredAccommodations?.map((accommodation) => {
       const lowestPrice: LowestPriceFormat = accommodation.offers
         .map((offer) => ({
-          price:
-            Number(offer.price.public) /
-            (numberOfDays * (latestQueryParams?.roomCount ?? 1)),
+          price: Number(offer.price.public) / (numberOfDays * nbRooms),
           currency: offer.price.currency
         }))
         .reduce((prevLowest, currentVal) =>
