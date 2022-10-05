@@ -10,7 +10,8 @@ import {
   Divider,
   useMediaQuery,
   Alert,
-  styled
+  styled,
+  SxProps
 } from '@mui/material';
 import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
@@ -240,7 +241,7 @@ export const SearchForm: React.FC = () => {
   const roomText = roomCount === 1 ? 'room' : 'rooms';
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
   const fontStyling = theme.typography.body2;
-  const buttonSize = useMediaQuery(theme.breakpoints.down('md')) ? 'small' : 'large';
+  const buttonSize = 'large';
 
   const popOversState = {
     isGuestsPopoverOpen,
@@ -251,6 +252,19 @@ export const SearchForm: React.FC = () => {
     setDateRangeAnchorEl
   };
 
+  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
+
+  const formButtonStyle: SxProps = isMobileView
+    ? {
+        '&:hover': {
+          backgroundColor: 'transparent'
+        },
+        '&:focus': {
+          border: `1px solid ${theme.palette.primary.main}`
+        }
+      }
+    : {};
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <SearchPopovers {...popOversState} />
@@ -260,31 +274,22 @@ export const SearchForm: React.FC = () => {
             direction={{ xs: 'column', md: 'row' }}
             alignItems="center"
             spacing={1}
-            divider={
-              <Divider
-                orientation={
-                  useMediaQuery(theme.breakpoints.down('md')) ? 'horizontal' : 'vertical'
-                }
-                flexItem
-              />
-            }
+            divider={!isMobileView ? <Divider orientation={'vertical'} flexItem /> : null}
           >
             <RHFTAutocomplete
-              variant="standard"
+              variant={isMobileView ? 'outlined' : 'standard'}
               placeholder="Where are you going?"
               name="location"
               options={autocompleteData}
-              width="230px"
+              width={isMobileView ? '320px' : '230px'}
               inputProps={{
                 style: {
                   ...fontStyling,
-                  textAlign: useMediaQuery(theme.breakpoints.down('md'))
-                    ? 'center'
-                    : 'left'
+                  textAlign: isMobileView ? 'center' : 'left'
                 }
               }}
               InputProps={{
-                disableUnderline: true,
+                ...(!isMobileView ? { disableUnderline: true } : {}),
                 startAdornment: (
                   <InputAdornment position="start">
                     <LocationIcon />
@@ -296,11 +301,12 @@ export const SearchForm: React.FC = () => {
               <Button
                 onClick={() => setDateRangeAnchorEl(formRef.current)}
                 size={buttonSize}
-                variant="text"
+                variant={isMobileView ? 'outlined' : 'text'}
                 sx={{
-                  minWidth: '230px',
+                  minWidth: isMobileView ? '320px' : '230px',
                   whiteSpace: 'nowrap',
-                  ...fontStyling
+                  ...fontStyling,
+                  ...formButtonStyle
                 }}
                 color="inherit"
               >
@@ -311,13 +317,14 @@ export const SearchForm: React.FC = () => {
             <Box>
               <Button
                 sx={{
-                  minWidth: '144px',
+                  minWidth: isMobileView ? '320px' : '144px',
                   whiteSpace: 'nowrap',
-                  ...fontStyling
+                  ...fontStyling,
+                  ...formButtonStyle
                 }}
                 onClick={() => setGuestsAnchorEl(formRef.current)}
                 size={buttonSize}
-                variant="text"
+                variant={isMobileView ? 'outlined' : 'text'}
                 color="inherit"
               >
                 {guestDetailsText}
@@ -331,6 +338,7 @@ export const SearchForm: React.FC = () => {
                 variant="contained"
                 size={buttonSize}
                 sx={{
+                  minWidth: isMobileView ? '320px' : '230px',
                   whiteSpace: 'nowrap',
                   ...fontStyling
                 }}
