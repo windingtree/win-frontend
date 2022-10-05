@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { createRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { SearchCard } from './SearchCard';
@@ -8,6 +8,11 @@ import { daysBetween } from '../utils/date';
 import { HEADER } from 'src/config/componentSizes';
 import { useSearchParams } from 'react-router-dom';
 import { accommodationEventTransform } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
+
+export enum ResultsMode {
+  map,
+  list
+}
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -39,28 +44,37 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 
 export const Results: React.FC = () => {
   const theme = useTheme();
-
   const showResultsNumber = useMediaQuery(theme.breakpoints.down('md'));
+
   const [view, setView] = useState({});
+  const [mode, setMode] = useState<ResultsMode>(ResultsMode.map);
   const [preventMapView, setPreventMapView] = useState(true);
 
-  // handle mobile list scrolling
-  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    if (e.currentTarget.scrollTop > 10) {
+  useEffect(() => {
+    if (mode === ResultsMode.map) {
+      setView({
+        height: '10%',
+        top: '90%'
+      });
+    } else {
       setView({
         height: '75%',
         top: '25%'
       });
+    }
+  }, [mode]);
+
+  // handle mobile list scrolling
+  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    if (e.currentTarget.scrollTop > 10) {
+      setMode(ResultsMode.list);
     }
     if (e.currentTarget.scrollTop === 0) {
       if (preventMapView) {
         setPreventMapView(false);
         return;
       }
-      setView({
-        height: '10%',
-        top: '90%'
-      });
+      setMode(ResultsMode.map);
       setPreventMapView(true);
     }
   };
@@ -135,6 +149,20 @@ export const Results: React.FC = () => {
             {accommodations.length} stays
           </Typography>
         </Stack>
+      )}
+      {mode === ResultsMode.list && (
+        <Box
+          position="fixed"
+          bottom={10}
+          left="50%"
+          width={'64px'}
+          marginLeft={'-32px'}
+          zIndex={2}
+        >
+          <Button variant="contained" onClick={() => setMode(ResultsMode.map)}>
+            Map
+          </Button>
+        </Box>
       )}
       <Stack>
         {!isFetching &&

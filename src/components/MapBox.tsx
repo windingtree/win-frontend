@@ -332,7 +332,14 @@ export const MapBox: React.FC = () => {
         sx={{ background: 'transparent', backdropFilter: 'blur(8px)', zIndex: 1 }}
         open={isLoading || isFetching}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            mx: 1
+          }}
+        >
           <CircularProgress />
           <Alert
             sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center', mt: 2 }}
