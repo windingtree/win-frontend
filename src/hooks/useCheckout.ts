@@ -67,21 +67,16 @@ export const useCheckout = () => {
     });
   };
 
-  const bookingMode = getBookingMode(bookingInfo?.offers);
-
   const bookGroup = useMutation<GroupBookingRequestResponse, Error>(async () => {
     if (!organizerInfo || !bookingInfo?.offers || !bookingInfo?.guestCount) {
       throw new Error(
         'Missing information to do a booking. Please try selecting your rooms again.'
       );
     }
-
     const { corporateInfo, ...restOrganizerInfo } = organizerInfo;
     const includeCorporateInfo = corporateInfo?.companyName !== '';
 
     const result = await bookGroupRequest({
-      //TODO: this can be removed eventually when the BE is compatible.
-      deposit: {},
       organizerInfo: {
         ...restOrganizerInfo,
         ...(includeCorporateInfo && { corporateInfo })
@@ -91,13 +86,16 @@ export const useCheckout = () => {
       invoice: bookingInfo.invoice || true
     });
 
-    //TODO: most likely we have to save the serviceId in a state for the payment;
+    const { depositOptions, serviceId, providerId } = result;
+
+    setBookingInfo({ depositOptions, serviceId, providerId });
+
     return result;
   });
 
   return {
     bookGroup,
-    bookingMode,
+    bookingMode: getBookingMode(bookingInfo?.offers),
     organizerInfo,
     setOrganizerInfo,
     bookingInfo,

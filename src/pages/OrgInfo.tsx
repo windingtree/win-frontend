@@ -38,7 +38,9 @@ export const OrgInfo = () => {
           },
           {
             name: 'Facility',
-            href: bookingInfo ? `/facility/${bookingInfo.facilityId}` : `/search?${query}`
+            href: bookingInfo
+              ? `/facility/${bookingInfo?.accommodation?.id}`
+              : `/search?${query}`
           }
         ]}
       />

@@ -167,12 +167,8 @@ export const OrgDetails = () => {
   }, [watch]);
 
   const onSubmit = async () => {
-    try {
-      const { serviceId } = await bookGroup.mutateAsync();
-      navigate(`/checkout/${serviceId}`);
-    } catch (_) {
-      return;
-    }
+    const { serviceId } = await bookGroup.mutateAsync();
+    navigate(`/checkout/${serviceId}`);
   };
 
   return (

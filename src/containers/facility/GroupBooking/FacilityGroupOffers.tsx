@@ -14,7 +14,7 @@ import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers
 import { daysBetween } from 'src/utils/date';
 import { FacilityOffersTitle } from '../FacilityOffersTitle';
 import { useCheckout } from 'src/hooks/useCheckout';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
 import { useSnackbar } from 'notistack';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
@@ -53,7 +53,6 @@ export const FacilityGroupOffers = ({
   offers = [],
   accommodation
 }: FacilityGroupOffersProps) => {
-  const { id } = useParams<{ id: string }>();
   const { latestQueryParams } = useAccommodationsAndOffers();
   const defaultRoomCount = latestQueryParams?.roomCount
     ? latestQueryParams.roomCount
@@ -100,14 +99,16 @@ export const FacilityGroupOffers = ({
 
     const selectedOffers = getSelectedOffers(values.offers);
 
+    if (!accommodation) return;
     setBookingInfo({
+      accommodation,
+      expiration: values.offers[0].expiration,
       date: {
         arrival,
         departure
       },
       guestCount: guestCount,
-      offers: selectedOffers,
-      facilityId: id
+      offers: selectedOffers
     });
 
     navigate('/org-details');

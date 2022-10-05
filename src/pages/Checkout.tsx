@@ -1,6 +1,6 @@
-import { PaymentSuccessCallback } from '../components/PaymentCard';
+import { Payment, PaymentSuccessCallback } from '../components/PaymentCard';
 import { utils } from 'ethers';
-import { Container, Box, CircularProgress, Typography, Card } from '@mui/material';
+import { Box, CircularProgress, Typography, Card } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
@@ -16,6 +16,7 @@ import FallbackImage from '../images/hotel-fallback.webp';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
 import Logger from '../utils/logger';
+import { useCheckout } from 'src/hooks/useCheckout';
 
 const logger = Logger('Checkout');
 
@@ -33,9 +34,17 @@ export const normalizeExpiration = (expirationDate: string): number =>
 
 export const Checkout = () => {
   const navigate = useNavigate();
+  const { bookingMode, bookingInfo } = useCheckout();
   const { checkout, account } = useAppState();
   const { latestQueryParams } = useAccommodationsAndOffers();
+  const isGroupMode = bookingMode === 'group' ? true : false;
+  const accommodationName = isGroupMode
+    ? bookingInfo?.accommodation?.name
+    : checkout?.accommodation.name;
 
+  /**
+   * Currently
+   */
   const query = useMemo(() => {
     if (latestQueryParams === undefined) {
       return '';
@@ -47,21 +56,56 @@ export const Checkout = () => {
       endDate: latestQueryParams.departure?.toISOString() ?? '',
       location: latestQueryParams.location
     };
+
     return createSearchParams(params);
   }, [latestQueryParams, createSearchParams]);
 
-  const payment = useMemo(
-    () =>
-      checkout && {
+  const payment = useMemo(() => {
+    let paymentValue: Payment;
+
+    if (
+      isGroupMode &&
+      bookingInfo &&
+      bookingInfo.depositOptions &&
+      bookingInfo.expiration &&
+      bookingInfo.serviceId &&
+      bookingInfo.providerId
+    ) {
+      const { depositOptions, expiration, providerId, serviceId } = bookingInfo;
+      if (!depositOptions.usd) return;
+
+      paymentValue = {
+        currency: depositOptions.offerCurrency.currency,
+        value: utils.parseEther(bookingInfo.depositOptions.offerCurrency.amount),
+        expiration: Number(expiration),
+        providerId,
+        serviceId,
+        quote: {
+          quoteId: 'dummy',
+          sourceCurrency: 'USD',
+          sourceAmount: depositOptions.usd,
+          targetCurrency: 'dummy',
+          targetAmount: 'dummy',
+          rate: 'dummy'
+        }
+      };
+      return paymentValue;
+    }
+
+    if (checkout) {
+      paymentValue = {
         currency: checkout.offer.price.currency,
         value: utils.parseEther(checkout.offer.price.public.toString()),
         expiration: normalizeExpiration(checkout.offer.expiration),
-        providerId: String(checkout.provider),
-        serviceId: String(checkout.serviceId),
+        providerId: checkout?.provider.toString(),
+        serviceId: checkout?.serviceId.toString(),
         quote: checkout.quote
-      },
-    [checkout]
-  );
+      };
+
+      return paymentValue;
+    }
+    return;
+  }, [checkout]);
 
   const hotelImage = useMemo(
     () => checkout && sortByLargestImage(checkout.accommodation.media)[0],
@@ -81,9 +125,9 @@ export const Checkout = () => {
     });
   }, []);
 
-  if (!checkout || !payment) {
+  if (!payment) {
     return (
-      <MainLayout>
+      <MainLayout maxWidth="lg">
         <Breadcrumbs
           links={[
             {
@@ -104,13 +148,8 @@ export const Checkout = () => {
             }
           ]}
         />
-        <Container
-          sx={{
-            mb: 5
-          }}
-        >
-          <CircularProgress />
-        </Container>
+
+        <CircularProgress />
       </MainLayout>
     );
   }
@@ -152,22 +191,17 @@ export const Checkout = () => {
         >
           <Typography variant="h3">
             Your payment value is&nbsp;
-            {formatPrice(
-              utils.parseEther(checkout.offer.price.public.toString()),
-              checkout.offer.price.currency
-            )}
+            {formatPrice(payment.value, payment.currency)}
           </Typography>
-          {checkout.quote &&
-            checkout.quote.sourceAmount &&
-            checkout.quote.sourceCurrency && (
-              <Typography variant="h5" textAlign={{ xs: 'center', lg: 'right' }}>
-                Equivalent to&nbsp;
-                {formatPrice(
-                  utils.parseEther(checkout.quote.sourceAmount.toString()),
-                  checkout.quote.sourceCurrency
-                )}
-              </Typography>
-            )}
+          {payment?.quote && (
+            <Typography variant="h5" textAlign={{ xs: 'center', lg: 'right' }}>
+              Equivalent to&nbsp;
+              {formatPrice(
+                utils.parseEther(payment.quote.sourceAmount.toString()),
+                payment.quote.sourceCurrency
+              )}
+            </Typography>
+          )}
         </Box>
       </Box>
 
@@ -186,14 +220,12 @@ export const Checkout = () => {
               height="200"
               src={hotelImage?.url}
               fallback={FallbackImage}
-              alt={checkout.accommodation.name}
+              alt={accommodationName}
             />
           </Card>
         </Box>
         <Box>
-          <Typography>
-            You are paying for stay in {checkout.accommodation.name}
-          </Typography>
+          <Typography>You are paying for stay in {accommodationName}</Typography>
         </Box>
       </Box>
 
