@@ -2,7 +2,7 @@ import Slider, { Settings as SliderSettings } from 'react-slick';
 import { useRef } from 'react';
 import { useTheme, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { CarouselDots, CarouselArrows } from './carousel';
+import { CarouselDots, CarouselArrows } from './carousel/';
 import { IconifyIcon } from '@iconify/react';
 import { useWindowsDimension } from '../hooks/useWindowsDimension';
 

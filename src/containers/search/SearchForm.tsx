@@ -11,7 +11,10 @@ import {
   useMediaQuery,
   Alert,
   styled,
-  SxProps
+  SxProps,
+  IconButton,
+  Typography,
+  Grid
 } from '@mui/material';
 import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
@@ -64,12 +67,17 @@ type FormValuesProps = {
 };
 
 const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={12} />;
+const SearchIcon = () => <Iconify icon={'akar-icons:search'} width={24} height={24} />;
+const FilterIcon = () => <Iconify icon={'mi:filter'} width={30} height={30} />;
 
-export const SearchForm: React.FC = () => {
+export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const theme = useTheme();
   const { pathname, search } = useLocation();
+
+  const [open, setOpen] = useState<boolean>(!closed);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   // monitor error state locally
   // generic error message
@@ -165,11 +173,11 @@ export const SearchForm: React.FC = () => {
         endDate: formatISO(dateRange[0].endDate),
         location
       };
-
       navigate({
         pathname: '/search',
         search: `?${createSearchParams(params)}`
       });
+      setOpen(false);
       return;
     }
   }, [roomCount, adultCount, dateRange, location, refetch]);
@@ -272,7 +280,44 @@ export const SearchForm: React.FC = () => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <SearchPopovers {...popOversState} />
-      <Stack direction="column">
+      <Box
+        sx={
+          !open && isMobile && closed
+            ? { background: theme.palette.common.white, width: '100%', p: 2 }
+            : { display: 'none' }
+        }
+      >
+        <Grid
+          container
+          py={0.5}
+          border={2}
+          borderColor={theme.palette.primary.main}
+          alignItems="center"
+          borderRadius={1}
+        >
+          <Grid item xs={'auto'}>
+            <IconButton onClick={() => setOpen(true)} color="primary" component="label">
+              <SearchIcon />
+            </IconButton>
+          </Grid>
+          <Grid item xs>
+            <Box>
+              <Typography variant="subtitle2">{location}</Typography>
+              <Typography variant="caption">
+                {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)},{' '}
+                {guestDetailsText}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={'auto'} mx={1}>
+            <FilterIcon />
+          </Grid>
+        </Grid>
+      </Box>
+      <Stack
+        sx={!open && isMobile && closed ? { display: 'none' } : {}}
+        direction="column"
+      >
         <ToolbarStyle ref={formRef}>
           <Stack
             direction={{ xs: 'column', md: 'row' }}
