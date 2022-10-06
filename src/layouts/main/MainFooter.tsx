@@ -66,9 +66,14 @@ export default function MainFooter() {
         <Grid
           container
           justifyContent={{ xs: 'center', md: 'space-between' }}
-          sx={{ textAlign: { xs: 'center', md: 'left' } }}
+          sx={{ textAlign: { xs: 'left' } }}
         >
-          <Grid item xs={12} sx={{ mb: 3 }}>
+          <Grid
+            item
+            xs={12}
+            sx={{ mb: 3, textAlign: 'left' }}
+            style={{ display: 'flex', justifyContent: 'flex-start' }}
+          >
             <Logo sx={{ mx: { xs: 'auto', md: 'inherit' } }} />
           </Grid>
 
@@ -94,15 +99,10 @@ export default function MainFooter() {
               <SocialsButton socials={SOCIALS} sx={{ mx: 0.5 }} />
             </Stack>
           </Grid>
-
           <Grid item xs={12} md={6}>
-            <Stack
-              spacing={3}
-              direction={{ xs: 'column', md: 'row' }}
-              justifyContent="space-between"
-            >
+            <Grid container>
               {LINKS.map((list) => (
-                <Stack key={list.headline} spacing={2}>
+                <Grid item key={list.headline} xs={6} md={4} padding={2}>
                   <Typography component="p" variant="overline">
                     {list.headline}
                   </Typography>
@@ -122,9 +122,9 @@ export default function MainFooter() {
                       {link.name}
                     </Link>
                   ))}
-                </Stack>
+                </Grid>
               ))}
-            </Stack>
+            </Grid>
           </Grid>
         </Grid>
       </Container>
