@@ -283,7 +283,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
       <Box
         sx={
           !open && isMobile && closed
-            ? { background: 'white', width: '100%', p: 2 }
+            ? { background: theme.palette.common.white, width: '100%', p: 2 }
             : { display: 'none' }
         }
       >
