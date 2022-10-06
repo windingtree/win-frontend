@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { styled } from '@mui/material';
 import { Box } from '@mui/material';
-import { forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { FacilityGroupOffers } from './GroupBooking/FacilityGroupOffers';
 import { RoomCard } from './RoomCard';
 import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
@@ -18,7 +18,10 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     useAccommodationsAndOffers();
   const params = useParams();
   const id: string = params.id as string;
-  const accommodation = getAccommodationById(accommodations, id);
+  const accommodation = useMemo(
+    () => getAccommodationById(accommodations, id),
+    [accommodations, id]
+  );
   const guests =
     (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
   const nights = daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure);

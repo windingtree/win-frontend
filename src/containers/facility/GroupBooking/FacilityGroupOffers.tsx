@@ -104,13 +104,14 @@ export const FacilityGroupOffers = ({
 
     if (!accommodation) return;
     setBookingInfo({
+      location: latestQueryParams?.location,
       accommodation,
       expiration: values.offers[0].expiration,
       date: {
         arrival,
         departure
       },
-      guestCount: guestCount,
+      adultCount: latestQueryParams?.adultCount,
       offers: selectedOffers
     });
 

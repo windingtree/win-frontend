@@ -23,9 +23,9 @@ export class PersonalInfoRequest implements Request {
     this.url = `${backend.url}/api/booking/${offerId}/guests`;
     this.data = [
       {
-        firstnames: [personalInfo.firstname],
-        lastnames: [personalInfo.lastname],
-        contactInformation: [personalInfo.email, personalInfo.phone],
+        firstnames: [personalInfo.firstName],
+        lastnames: [personalInfo.lastName],
+        contactInformation: [personalInfo.emailAddress, personalInfo.phoneNumber],
         birthdate: personalInfo.birthdate,
         type: PassengerType.adult
       }

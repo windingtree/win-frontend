@@ -17,6 +17,15 @@ const logger = Logger('useCheckout');
 
 export type BookingModeType = 'group' | 'normal' | undefined;
 
+/**
+ * Get the id of a offer if only one offer is used for a booking.
+ */
+export const getOfferById = (offers: OfferIdAndQuantity[] | undefined) => {
+  if (!offers) return;
+
+  return offers.map(({ offerId }) => offerId)[0];
+};
+
 const getBookingMode = (offers: OfferIdAndQuantity[] | undefined): BookingModeType => {
   if (!offers) return undefined;
 
@@ -63,20 +72,21 @@ export const useCheckout = () => {
   };
 
   const setBookingInfo = (info: BookingInfoType) => {
+    const roomCount = info?.offers?.reduce(getTotalRoomCountReducer, 0);
+
     dispatch({
       type: 'SET_BOOKING_INFO',
       payload: {
         ...bookingInfo,
-        ...info
+        ...info,
+        ...(roomCount && { roomCount })
       }
     });
   };
 
   const bookGroup = useMutation<GroupBookingRequestResponse, Error>(async () => {
-    if (!organizerInfo || !bookingInfo?.offers || !bookingInfo?.guestCount) {
-      throw new Error(
-        'Missing information to do a booking. Please try selecting your rooms again.'
-      );
+    if (!organizerInfo || !bookingInfo?.offers || !bookingInfo?.adultCount) {
+      throw new Error('Something went wrong. Please try selecting your rooms again.');
     }
     const { corporateInfo, ...restOrganizerInfo } = organizerInfo;
     const includeCorporateInfo = corporateInfo?.companyName !== '';
@@ -87,14 +97,13 @@ export const useCheckout = () => {
         ...(includeCorporateInfo && { corporateInfo })
       },
       offers: bookingInfo.offers,
-      guestCount: bookingInfo.guestCount || 0,
-      invoice: bookingInfo.invoice || true
+      guestCount: bookingInfo.adultCount,
+      invoice: bookingInfo.invoice ?? false
     });
 
     const { depositOptions, serviceId, providerId } = result;
 
     setBookingInfo({ depositOptions, serviceId, providerId });
-
     return result;
   });
 

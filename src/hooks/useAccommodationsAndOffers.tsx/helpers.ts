@@ -194,6 +194,7 @@ export const accommodationEventTransform =
   };
 
 export const GROUP_MODE_ROOM_COUNT = 10;
+
 export const getGroupMode = (roomCount: number | string | undefined): boolean => {
   if (DISABLE_FEATURES) return false;
   if (roomCount === undefined) false;

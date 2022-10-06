@@ -66,11 +66,11 @@ export interface CheckInOutPolicy {
   checkInTime: `${number}:${number}:${number}`;
 }
 export interface PersonalInfo {
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   birthdate: Date | null;
-  email: string;
-  phone: string;
+  emailAddress: string;
+  phoneNumber: string;
 }
 
 export interface CheckOut extends WinPricedOffer {
@@ -94,12 +94,14 @@ export interface BookingInfoType {
   providerId?: string;
   serviceId?: string;
   invoice?: boolean;
+  location?: string;
   date?: {
     arrival: Date;
     departure: Date;
   };
   offers?: OfferIdAndQuantity[];
-  guestCount?: number;
+  adultCount?: number;
+  roomCount?: number;
 }
 
 export interface State {

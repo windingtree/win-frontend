@@ -1,22 +1,20 @@
-import { Payment, PaymentSuccessCallback } from '../components/PaymentCard';
 import { utils } from 'ethers';
-import { Box, CircularProgress, Typography, Card } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
-import MainLayout from '../layouts/main';
-import { WinPay } from '../components/WinPay';
-import { SignInButton } from '../components/Web3Modal';
-import { CardMediaFallback } from '../components/CardMediaFallback';
-import { formatPrice } from '../utils/strings';
-import { useAppState } from '../store';
-import { expirationGap } from '../config';
-import { sortByLargestImage } from '../utils/accommodation';
-import FallbackImage from '../images/hotel-fallback.webp';
-import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
-import Logger from '../utils/logger';
 import { useCheckout } from 'src/hooks/useCheckout';
+import { Quote } from '@windingtree/glider-types/dist/win';
+import { CheckoutSummary } from 'src/containers/checkout/CheckoutSummary';
+import { sortByLargestImage } from 'src/utils/accommodation';
+import { Typography } from '@mui/material';
+import MainLayout from 'src/layouts/main';
+import { WinPay } from 'src/containers/checkout/WinPay';
+import { useAppState } from 'src/store';
+import { expirationGap } from 'src/config';
+import Logger from 'src/utils/logger';
+import { Breadcrumbs } from 'src/components/Breadcrumbs';
+import { Payment, PaymentSuccessCallback } from 'src/components/PaymentCard';
 
 const logger = Logger('Checkout');
 
@@ -35,30 +33,24 @@ export const normalizeExpiration = (expirationDate: string): number =>
 export const Checkout = () => {
   const navigate = useNavigate();
   const { bookingMode, bookingInfo } = useCheckout();
-  const { checkout, account } = useAppState();
+  const { checkout } = useAppState();
   const { latestQueryParams } = useAccommodationsAndOffers();
   const isGroupMode = bookingMode === 'group' ? true : false;
-  const accommodationName = isGroupMode
-    ? bookingInfo?.accommodation?.name
-    : checkout?.accommodation.name;
+  const accommodationName = bookingInfo?.accommodation?.name;
 
-  /**
-   * Currently
-   */
   const query = useMemo(() => {
-    if (latestQueryParams === undefined) {
-      return '';
-    }
+    const roomCount = bookingInfo?.roomCount?.toString() || ' ';
+    const adultCount = bookingInfo?.adultCount?.toString() || ' ';
     const params = {
-      roomCount: latestQueryParams.roomCount.toString(),
-      adultCount: latestQueryParams.adultCount.toString(),
-      startDate: latestQueryParams.arrival?.toISOString() ?? '',
-      endDate: latestQueryParams.departure?.toISOString() ?? '',
-      location: latestQueryParams.location
+      roomCount,
+      adultCount,
+      startDate: bookingInfo?.date?.arrival.toString() ?? '',
+      endDate: bookingInfo?.date?.arrival.toString() ?? '',
+      location: latestQueryParams?.location ?? ''
     };
 
     return createSearchParams(params);
-  }, [latestQueryParams, createSearchParams]);
+  }, [bookingInfo, createSearchParams]);
 
   const payment = useMemo(() => {
     let paymentValue: Payment;
@@ -72,23 +64,24 @@ export const Checkout = () => {
       bookingInfo.providerId
     ) {
       const { depositOptions, expiration, providerId, serviceId } = bookingInfo;
-      if (!depositOptions.usd) return;
+      const quote: Quote = {
+        quoteId: 'dummy',
+        sourceCurrency: 'USD',
+        sourceAmount: depositOptions.usd || 'dummy',
+        targetCurrency: 'dummy',
+        targetAmount: 'dummy',
+        rate: 'dummy'
+      };
 
       paymentValue = {
         currency: depositOptions.offerCurrency.currency,
         value: utils.parseEther(bookingInfo.depositOptions.offerCurrency.amount),
-        expiration: Number(expiration),
+        expiration: normalizeExpiration(expiration),
         providerId,
         serviceId,
-        quote: {
-          quoteId: 'dummy',
-          sourceCurrency: 'USD',
-          sourceAmount: depositOptions.usd,
-          targetCurrency: 'dummy',
-          targetAmount: 'dummy',
-          rate: 'dummy'
-        }
+        quote: depositOptions.usd ? quote : undefined
       };
+
       return paymentValue;
     }
 
@@ -107,11 +100,6 @@ export const Checkout = () => {
     return;
   }, [checkout]);
 
-  const hotelImage = useMemo(
-    () => checkout && sortByLargestImage(checkout.accommodation.media)[0],
-    [checkout]
-  );
-
   const onPaymentSuccess = useCallback<PaymentSuccessCallback>((result) => {
     if (!checkout) return;
     logger.debug(`Payment result:`, result);
@@ -125,34 +113,13 @@ export const Checkout = () => {
     });
   }, []);
 
-  if (!payment) {
-    return (
-      <MainLayout maxWidth="lg">
-        <Breadcrumbs
-          links={[
-            {
-              name: 'Home',
-              href: '/'
-            },
-            {
-              name: 'Search',
-              href: `/search?${query}`
-            },
-            {
-              name: 'Facility',
-              href: checkout ? `/facility/${checkout.facilityId}` : `/search?${query}`
-            },
-            {
-              name: 'Guest Info',
-              href: '/guest-info'
-            }
-          ]}
-        />
+  const accommodationImage = useMemo(() => {
+    if (isGroupMode && bookingInfo?.accommodation) {
+      return sortByLargestImage(bookingInfo.accommodation.media)[0];
+    }
 
-        <CircularProgress />
-      </MainLayout>
-    );
-  }
+    if (checkout) return sortByLargestImage(checkout.accommodation.media)[0];
+  }, [checkout]);
 
   return (
     <MainLayout maxWidth="lg">
@@ -177,61 +144,19 @@ export const Checkout = () => {
           }
         ]}
       />
-
-      {!account && (
-        <Typography variant="h3" mb={3}>
-          Please connect your wallet to proceed with the Payment
-        </Typography>
+      {!payment && (
+        <Typography>Missing data to do the payment. Please try again.</Typography>
       )}
-      <Box textAlign={{ xs: 'center', lg: 'left' }} marginBottom={{ xs: 3, lg: 5 }}>
-        <Box
-          sx={{
-            display: 'inline-block'
-          }}
-        >
-          <Typography variant="h3">
-            Your payment value is&nbsp;
-            {formatPrice(payment.value, payment.currency)}
-          </Typography>
-          {payment?.quote && (
-            <Typography variant="h5" textAlign={{ xs: 'center', lg: 'right' }}>
-              Equivalent to&nbsp;
-              {formatPrice(
-                utils.parseEther(payment.quote.sourceAmount.toString()),
-                payment.quote.sourceCurrency
-              )}
-            </Typography>
-          )}
-        </Box>
-      </Box>
-
-      <Box
-        flexDirection={{ xs: 'column', lg: 'row' }}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: 5
-        }}
-      >
-        <Box marginRight={{ xs: 0, lg: 5 }} marginBottom={{ xs: 3, lg: 0 }}>
-          <Card>
-            <CardMediaFallback
-              component="img"
-              height="200"
-              src={hotelImage?.url}
-              fallback={FallbackImage}
-              alt={accommodationName}
-            />
-          </Card>
-        </Box>
-        <Box>
-          <Typography>You are paying for stay in {accommodationName}</Typography>
-        </Box>
-      </Box>
-
-      {!account && <SignInButton size="large" sx={{ padding: 5 }} />}
-
-      <WinPay payment={payment} onSuccess={onPaymentSuccess} />
+      {payment && (
+        <>
+          <CheckoutSummary
+            payment={payment}
+            accommodationName={accommodationName}
+            accommodationImage={accommodationImage}
+          />
+          <WinPay payment={payment} onSuccess={onPaymentSuccess} />
+        </>
+      )}
     </MainLayout>
   );
 };

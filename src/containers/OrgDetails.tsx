@@ -249,7 +249,7 @@ export const OrgDetails = () => {
           />
         </Stack>
 
-        <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+        <Stack sx={{ mt: 3 }}>
           {bookGroup.error && (
             <Alert sx={{ mb: 2 }} severity="error">
               {bookGroup.error.message}
