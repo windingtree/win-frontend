@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   Alert,
   styled,
-  SxProps
+  SxProps,
   IconButton,
   Typography,
   Grid
