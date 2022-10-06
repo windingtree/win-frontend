@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useTheme, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import Image from './Image';
-import { CarouselDots, CarouselArrows } from './carousel';
+import { CarouselDots, CarouselArrows } from './carousel/';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
 
 const RootStyle = styled(Box)(({ theme }) => ({
