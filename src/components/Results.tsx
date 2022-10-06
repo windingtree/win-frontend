@@ -46,18 +46,18 @@ export const Results: React.FC = () => {
   const theme = useTheme();
   const showResultsNumber = useMediaQuery(theme.breakpoints.down('md'));
 
-  const [view, setView] = useState({});
+  const [viewSx, setViewSx] = useState({});
   const [mode, setMode] = useState<ResultsMode>(ResultsMode.map);
   const [preventMapView, setPreventMapView] = useState(true);
 
   useEffect(() => {
     if (mode === ResultsMode.map) {
-      setView({
+      setViewSx({
         height: '10%',
         top: '90%'
       });
     } else {
-      setView({
+      setViewSx({
         height: '75%',
         top: '25%'
       });
@@ -132,7 +132,7 @@ export const Results: React.FC = () => {
   }
 
   return (
-    <StyledContainer className="noScrollBar" sx={view} onScroll={handleScroll}>
+    <StyledContainer className="noScrollBar" sx={viewSx} onScroll={handleScroll}>
       {showResultsNumber && (
         <Stack direction="column" alignItems="center">
           <Box
