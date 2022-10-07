@@ -154,7 +154,8 @@ export const Checkout = () => {
             Your payment value is&nbsp;
             {formatPrice(
               utils.parseEther(checkout.offer.price.public.toString()),
-              checkout.offer.price.currency
+              checkout.offer.price.currency,
+              checkout.offer.price.decimalPlaces
             )}
           </Typography>
           {checkout.quote &&
@@ -164,7 +165,8 @@ export const Checkout = () => {
                 Equivalent to&nbsp;
                 {formatPrice(
                   utils.parseEther(checkout.quote.sourceAmount.toString()),
-                  checkout.quote.sourceCurrency
+                  checkout.quote.sourceCurrency,
+                  checkout.offer.price.decimalPlaces
                 )}
               </Typography>
             )}
