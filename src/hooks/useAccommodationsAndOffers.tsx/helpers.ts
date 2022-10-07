@@ -1,5 +1,5 @@
 import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
-import { DISABLE_FEATURES } from 'src/config';
+import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { OfferRecord } from 'src/store/types';
 import { AccommodationTransformFn, EventInfo, LowestPriceFormat } from '.';
 import { getActiveEventsWithinRadius } from '../../utils/events';
@@ -193,7 +193,6 @@ export const accommodationEventTransform =
     return { ...accommodation, eventInfo };
   };
 
-export const GROUP_MODE_ROOM_COUNT = 10;
 export const getGroupMode = (roomCount: number | string | undefined): boolean => {
   if (DISABLE_FEATURES) return false;
   if (roomCount === undefined) false;
