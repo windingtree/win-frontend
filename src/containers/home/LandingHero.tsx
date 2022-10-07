@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { SearchForm } from '../search/SearchForm';
 
 const betaEllipsisStyle: SxProps = {
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-  maxWidth: '17ch',
+  //overflow: 'hidden',
+  //textOverflow: 'ellipsis',
+  //whiteSpace: 'nowrap',
+  //maxWidth: '100ch',
   textAlign: 'center'
 };
 export default function LandingHero() {
@@ -16,8 +16,10 @@ export default function LandingHero() {
     <>
       <Alert severity="info" sx={{ justifyContent: 'center' }}>
         <Typography sx={isMobileView ? betaEllipsisStyle : {}} variant={'body2'}>
-          WIN is still in Beta. If you experience any instabilities please share your
-          feedback with us{' '}
+          WIN is still in Beta.{' '}
+          {isMobileView
+            ? 'Please use desktop for a better viewing experience'
+            : 'If you experience any instabilities please share your feedback with us'}
         </Typography>
         {!isMobileView && (
           <a
