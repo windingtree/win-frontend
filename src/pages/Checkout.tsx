@@ -8,7 +8,6 @@ import MainLayout from '../layouts/main';
 import { WinPay } from '../components/WinPay';
 import { SignInButton } from '../components/Web3Modal';
 import { CardMediaFallback } from '../components/CardMediaFallback';
-import { formatPrice } from '../utils/strings';
 import { useAppState } from '../store';
 import { expirationGap } from '../config';
 import { sortByLargestImage } from '../utils/accommodation';
@@ -152,20 +151,14 @@ export const Checkout = () => {
         >
           <Typography variant="h3">
             Your payment value is&nbsp;
-            {formatPrice(
-              utils.parseEther(checkout.offer.price.public.toString()),
-              checkout.offer.price.currency
-            )}
+            {`${checkout.offer.price.public} ${checkout.offer.price.currency}`}
           </Typography>
           {checkout.quote &&
             checkout.quote.sourceAmount &&
             checkout.quote.sourceCurrency && (
               <Typography variant="h5" textAlign={{ xs: 'center', lg: 'right' }}>
                 Equivalent to&nbsp;
-                {formatPrice(
-                  utils.parseEther(checkout.quote.sourceAmount.toString()),
-                  checkout.quote.sourceCurrency
-                )}
+                {`${checkout.quote.sourceAmount} ${checkout.quote.sourceCurrency}`}
               </Typography>
             )}
         </Box>

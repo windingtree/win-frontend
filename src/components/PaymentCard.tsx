@@ -493,7 +493,9 @@ export const PaymentCard = ({
 
           {account && balance && (
             <Typography mb={3}>
-              Your balance: {Number(utils.formatEther(balance)).toFixed(2)} {asset.symbol}
+              Your balance:{' '}
+              {Number(utils.formatUnits(balance, asset.decimals)).toFixed(2)}{' '}
+              {asset.symbol}
             </Typography>
           )}
 
