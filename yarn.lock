@@ -5513,10 +5513,10 @@
     axios "0.24.0"
     ethers "5.5.3"
 
-"@windingtree/win-commons@^1.9.2":
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.9.2.tgz#6783182099e5e042977606094aea99b063646a80"
-  integrity sha512-/MbJcUcCfKN464jvvTDb1R7P+zZsyJ0lBcXtrsKzjl7zCNCMEDkAQd1Xj3aJ23uojhoMj2oyoA/a7AoeqK8kag==
+"@windingtree/win-commons@^1.9.3":
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.9.3.tgz#7f763b0bf021d9c5e176d550b76494432633df54"
+  integrity sha512-t+8EKiifURAdJwaGLr62iXUqxSQ7H/aTa23J62pDEjjd6w6tiuOfGgdChFv+iCTBaHHlHj4dJLdGWwIVrl/SPQ==
   dependencies:
     ethers "^5.6.9"
 
