@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,13 +18,15 @@ import { countries } from '../config';
 import { isVatValid } from '../utils/vat';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
+import Logger from '../utils/logger';
+import { debouncedFn } from '../utils/common';
 
 const countriesOptions = countries.map((c) => c.label);
-const eeRegExp = /^(?<EE>((EE)?(?<NUM>[0-9]{9})))$/i;
+const euRegExp = /^(?<CODE>[a-zA-Z]{2})(?<NUM>[a-zA-Z0-9]{5,})$/i;
 
-export interface EeRegExp extends Array<string> {
+export interface EuRegExp extends Array<string> {
   groups: {
-    EE?: string;
+    CODE?: string;
     NUM?: string;
   };
 }
@@ -134,12 +136,19 @@ export const OrgDetails = () => {
     vatNumber: Yup.string()
       .trim()
       .test('is-vat-valid', 'VAT number is not valid', async (value) => {
-        if (value && value.length === 11) {
-          const vatParsed = eeRegExp.exec(value) as EeRegExp | null;
-          if (vatParsed?.groups.NUM) {
-            const isValid = await isVatValid(vatParsed.groups.NUM);
-            setVatValid(isValid);
-            return isValid;
+        if (value && value.trim().length >= 7) {
+          const vatParsed = euRegExp.exec(value.trim()) as EuRegExp | null;
+          if (vatParsed?.groups.CODE && vatParsed?.groups.NUM) {
+            try {
+              const isValid = await isVatValid(
+                vatParsed.groups.CODE,
+                vatParsed.groups.NUM
+              );
+              setVatValid(isValid);
+            } catch (error) {
+              Logger('OrgDetails-VAT-validation').error((error as Error).message);
+            }
+            return true;
           }
         }
         return true;
@@ -149,8 +158,20 @@ export const OrgDetails = () => {
     resolver: yupResolver(organizerSchema),
     defaultValues: defaultValuesSessionStorage || defaultValues
   });
-  const { watch, handleSubmit } = methods;
-  const { privacy, invoice } = watch();
+  const { watch, handleSubmit, trigger } = methods;
+  const { privacy, vatNumber } = watch();
+
+  const vatValidation = useCallback(
+    debouncedFn(() => trigger('vatNumber'), 1500),
+    [debouncedFn, trigger]
+  );
+
+  useEffect(() => {
+    setVatValid(false);
+    const cancelDebounce = vatValidation();
+
+    return cancelDebounce;
+  }, [vatValidation, vatNumber]);
 
   /**
    * In this useEffect data is being stored in the session storage state,
