@@ -103,6 +103,11 @@ export const OrgDetails = () => {
     ...billingAddress
   };
 
+  const invoiceSiblingsValidation = (errorMessage: string) => ({
+    is: true,
+    then: Yup.string().required(errorMessage)
+  });
+
   const organizerSchema = Yup.object().shape({
     firstName: Yup.string()
       .trim()
@@ -121,8 +126,12 @@ export const OrgDetails = () => {
       .required('Email is required')
       .matches(regexp.email, 'Incorrect email')
       .email(),
-    companyName: Yup.string().trim(),
-    postalCode: Yup.string().trim(),
+    companyName: Yup.string()
+      .trim()
+      .when('invoice', invoiceSiblingsValidation('Company name is required')),
+    postalCode: Yup.string()
+      .trim()
+      .when('invoice', invoiceSiblingsValidation('Postal code is required')),
     countryCode: Yup.string()
       .trim()
       .test(
@@ -130,9 +139,14 @@ export const OrgDetails = () => {
         'Unknown country name',
         (value) =>
           value !== undefined && (value === '' || countriesOptions.includes(value))
-      ),
-    cityName: Yup.string().trim(),
-    street: Yup.string().trim(),
+      )
+      .when('invoice', invoiceSiblingsValidation('Country is required')),
+    cityName: Yup.string()
+      .trim()
+      .when('invoice', invoiceSiblingsValidation('City is required')),
+    street: Yup.string()
+      .trim()
+      .when('invoice', invoiceSiblingsValidation('Street is required')),
     vatNumber: Yup.string()
       .trim()
       .test('is-vat-valid', 'VAT number is not valid', async (value) => {
@@ -159,7 +173,7 @@ export const OrgDetails = () => {
     defaultValues: defaultValuesSessionStorage || defaultValues
   });
   const { watch, handleSubmit, trigger } = methods;
-  const { privacy, vatNumber } = watch();
+  const { privacy, vatNumber, invoice } = watch();
 
   const vatValidation = useCallback(
     debouncedFn(() => trigger('vatNumber'), 1500),
@@ -253,6 +267,48 @@ export const OrgDetails = () => {
                 }}
               />
             </>
+          )}
+
+          {invoice && (
+            <Box mt={3} mb={3}>
+              <Typography variant="h5" mb={3}>
+                Enter Billing Details
+              </Typography>
+              <Stack spacing={3}>
+                <RHFTextField name="companyName" label="Company/Legal Entity Name" />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    gap: 1
+                  }}
+                >
+                  <RHFAutocomplete
+                    name="countryCode"
+                    label="Country"
+                    options={countriesOptions}
+                  />
+                  <RHFTextField name="cityName" label="City" />
+                </Box>
+                <RHFTextField name="postalCode" label="Postal code" />
+                <RHFTextField name="street" label="Street name and number" />
+                <RHFTextField
+                  name="vatNumber"
+                  label="VAT Number (optional)"
+                  InputProps={{
+                    // Show green checkmark if VAT is valid only
+                    endAdornment: vatValid ? (
+                      <Iconify
+                        color="green"
+                        icon="akar-icons:circle-check-fill"
+                        marginLeft={1}
+                      />
+                    ) : null
+                  }}
+                />
+              </Stack>
+            </Box>
           )}
 
           <RHFCheckbox
