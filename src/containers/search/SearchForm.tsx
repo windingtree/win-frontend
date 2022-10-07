@@ -40,12 +40,14 @@ import { SearchPopovers } from './SearchPopovers';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
-  paddingBottom: theme.spacing(1),
+  padding: theme.spacing(2),
+  marginTop: theme.spacing(1),
   display: 'flex',
   justifyContent: 'center',
   border: 'none',
-  width: '100%',
+  // width: '100%',
   backgroundColor: theme.palette.background.default,
+  borderRadius: 10,
 
   [theme.breakpoints.up('md')]: {
     padding: theme.spacing(2),
@@ -317,6 +319,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
       <Stack
         sx={!open && isMobile && closed ? { display: 'none' } : {}}
         direction="column"
+        alignItems="center"
       >
         <ToolbarStyle ref={formRef}>
           <Stack
