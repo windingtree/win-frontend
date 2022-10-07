@@ -120,7 +120,7 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
             {/* Currently the navConfig is empty, therefore it is commented out */}
             {/* {!isDesktop && <MenuMobile isOffset={isOffset} navConfig={navConfig} />} */}
 
-            <SocialsButton socials={SOCIALS} sx={{ mx: 0.5 }} />
+            {isDesktop && <SocialsButton socials={SOCIALS} sx={{ mx: 0.5 }} />}
           </Container>
         </ToolbarStyle>
 
