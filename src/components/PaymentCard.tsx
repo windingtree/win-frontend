@@ -98,9 +98,11 @@ export const PaymentCard = ({
   const paymentValue = useMemo(
     () =>
       withQuote
-        ? BN.from(utils.parseEther(payment.quote?.sourceAmount ?? '0'))
+        ? BN.from(
+            utils.parseUnits(payment.quote?.sourceAmount ?? '0', asset?.decimals ?? 18)
+          )
         : payment.value,
-    [payment, withQuote]
+    [asset, payment, withQuote]
   );
 
   const paymentBlocked = useMemo(
@@ -525,7 +527,7 @@ export const PaymentCard = ({
               </Button>
             )}
             <Button variant="contained" onClick={makePayment} disabled={paymentBlocked}>
-              Pay {formatPrice(paymentValue, asset.symbol)}
+              Pay {formatPrice(paymentValue, asset.symbol, asset.decimals)}
               {isTxStarted === 'pay' ? (
                 <CircularProgress size="16px" color="inherit" sx={{ ml: 1 }} />
               ) : undefined}
