@@ -103,17 +103,20 @@ export const FacilityGroupOffers = ({
     const selectedOffers = getSelectedOffers(values.offers);
 
     if (!accommodation) return;
-    setBookingInfo({
-      location: latestQueryParams?.location,
-      accommodation,
-      expiration: values.offers[0].expiration,
-      date: {
-        arrival,
-        departure
+    setBookingInfo(
+      {
+        location: latestQueryParams?.location,
+        accommodation,
+        expiration: values.offers[0].expiration,
+        date: {
+          arrival,
+          departure
+        },
+        adultCount: latestQueryParams?.adultCount,
+        offers: selectedOffers
       },
-      adultCount: latestQueryParams?.adultCount,
-      offers: selectedOffers
-    });
+      true
+    );
 
     navigate('/org-details');
   };

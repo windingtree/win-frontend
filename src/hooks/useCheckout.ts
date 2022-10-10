@@ -3,7 +3,8 @@ import {
   GroupBookingRequest,
   GroupBookingRequestResponse,
   OfferIdAndQuantity,
-  OrganizerInformation
+  OrganizerInformation,
+  Quote
 } from '@windingtree/glider-types/dist/win';
 import axios from 'axios';
 import { backend } from 'src/config';
@@ -64,6 +65,8 @@ export const useCheckout = () => {
   const dispatch = useAppDispatch();
   const { organizerInfo, bookingInfo } = useAppState();
 
+  console.log(bookingInfo);
+
   const setOrganizerInfo = (info: OrganizerInformation) => {
     dispatch({
       type: 'SET_ORGANIZER_INFO',
@@ -71,16 +74,21 @@ export const useCheckout = () => {
     });
   };
 
-  const setBookingInfo = (info: BookingInfoType) => {
+  /**
+   * @param info : info of a booking
+   * @param cleanPrevStore overwrite existing storage with new state, or spread the new state over the existing storage.
+   */
+  const setBookingInfo = (info: BookingInfoType, cleanPrevStore = false) => {
     const roomCount = info?.offers?.reduce(getTotalRoomCountReducer, 0);
+
+    const newStore = {
+      ...info,
+      ...(roomCount && { roomCount })
+    };
 
     dispatch({
       type: 'SET_BOOKING_INFO',
-      payload: {
-        ...bookingInfo,
-        ...info,
-        ...(roomCount && { roomCount })
-      }
+      payload: cleanPrevStore ? newStore : { ...bookingInfo, ...newStore }
     });
   };
 
@@ -103,7 +111,17 @@ export const useCheckout = () => {
 
     const { depositOptions, serviceId, providerId } = result;
 
-    setBookingInfo({ depositOptions, serviceId, providerId });
+    // TODO: This needs to be revisited for the story to convert to different currencies
+    const quote: Quote = {
+      quoteId: 'dummy',
+      sourceCurrency: 'USD',
+      sourceAmount: depositOptions.usd || 'dummy',
+      targetCurrency: 'dummy',
+      targetAmount: 'dummy',
+      rate: 'dummy'
+    };
+
+    setBookingInfo({ quote, pricing: depositOptions, serviceId, providerId });
     return result;
   });
 

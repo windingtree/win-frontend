@@ -54,21 +54,34 @@ export const RoomCard: React.FC<{
         return;
       }
 
+      //TODO: move this to the useCheckout hook
       const res = await axios.request<WinPricedOffer>(new PricedOfferRequest(offer.id));
 
       if (res.data) {
-        setBookingInfo({
-          accommodation,
-          expiration: res.data.offer.expiration,
-          date: {
-            arrival,
-            departure
+        setBookingInfo(
+          {
+            accommodation,
+            expiration: res.data.offer.expiration,
+            date: {
+              arrival,
+              departure
+            },
+            pricing: {
+              offerCurrency: {
+                amount: res.data.offer.price.public,
+                currency: res.data.offer.price.currency
+              },
+              // Currently the sourceAmount that we are getting back is always USD, there `usd` is hardcoded.
+              // BE is likely to update the data structure the same way as for group booking, in the mean time we hardcode the usd value like this.
+              usd: res.data.quote?.sourceAmount
+            },
+            adultCount: latestQueryParams?.adultCount,
+            serviceId: res.data.serviceId,
+            providerId: res.data.provider,
+            offers: [{ offerId: res.data.offerId, quantity: 1 }]
           },
-          adultCount: latestQueryParams?.adultCount,
-          serviceId: res.data.serviceId,
-          providerId: res.data.provider,
-          offers: [{ offerId: res.data.offerId, quantity: 1 }]
-        });
+          true
+        );
 
         logger.info('Get priced offer successfully');
         navigate('/guest-info');

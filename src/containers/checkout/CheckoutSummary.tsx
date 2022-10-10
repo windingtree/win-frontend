@@ -4,20 +4,42 @@ import { formatPrice } from 'src/utils/strings';
 import { useAppState } from 'src/store';
 import { CardMediaFallback } from 'src/components/CardMediaFallback';
 import FallbackImage from 'src/images/hotel-fallback.webp';
-import { MediaItem } from '@windingtree/glider-types/dist/win';
-import { Payment } from 'src/components/PaymentCard';
 
-interface CheckoutSummaryProps {
-  payment: Payment;
-  accommodationName: string | undefined;
-  accommodationImage: MediaItem | undefined;
-}
-export const CheckoutSummary = ({
-  payment,
-  accommodationName,
-  accommodationImage
-}: CheckoutSummaryProps) => {
+import { useMemo } from 'react';
+import { sortByLargestImage } from 'src/utils/accommodation';
+import { useCheckout } from 'src/hooks/useCheckout';
+import { Link } from 'react-router-dom';
+
+export const CheckoutSummary = () => {
+  const { bookingMode, bookingInfo } = useCheckout();
+  const isGroupMode = bookingMode === 'group' ? true : false;
+  const accommodationName = bookingInfo?.accommodation?.name;
   const { account } = useAppState();
+
+  const accommodationImage = useMemo(() => {
+    if (bookingInfo?.accommodation) {
+      return sortByLargestImage(bookingInfo.accommodation.media)[0];
+    }
+  }, [bookingInfo]);
+
+  if (!bookingInfo?.pricing) return <></>;
+
+  const formattedOfferPrice = formatPrice(
+    utils.parseEther(bookingInfo.pricing?.offerCurrency.amount.toString()),
+    bookingInfo.pricing?.offerCurrency.currency
+  );
+
+  const title = isGroupMode
+    ? `The refundable deposit is ${formattedOfferPrice}`
+    : `Your payment value is ${formattedOfferPrice}`;
+
+  const formattedUsdPrice =
+    bookingInfo.pricing?.usd &&
+    formatPrice(utils.parseEther(bookingInfo.pricing.usd.toString()), 'USD');
+  const subTitle = `Equivalent to ${formattedUsdPrice}`;
+
+  const showUSDPrice =
+    formattedUsdPrice && bookingInfo.pricing?.offerCurrency.currency != 'USD';
 
   return (
     <Box>
@@ -32,17 +54,18 @@ export const CheckoutSummary = ({
             display: 'inline-block'
           }}
         >
-          <Typography variant="h3">
-            Your payment value is&nbsp;
-            {formatPrice(payment.value, payment.currency)}
-          </Typography>
-          {payment?.quote && (
+          <Typography variant="h3">{title}</Typography>
+          {showUSDPrice && (
             <Typography variant="h5" textAlign={{ xs: 'center', lg: 'right' }}>
-              Equivalent to&nbsp;
-              {formatPrice(
-                utils.parseEther(payment.quote.sourceAmount.toString()),
-                payment.quote.sourceCurrency
-              )}
+              {subTitle}
+            </Typography>
+          )}
+
+          {isGroupMode && (
+            <Typography textAlign={{ xs: 'center', lg: 'right' }}>
+              This 10% deposit is required to pre-book the rooms and get the best offer
+              from the hotel. You can get it back anytime. Check out the{' '}
+              <Link to="faq">group booking guide</Link>.
             </Typography>
           )}
         </Box>
