@@ -1,4 +1,4 @@
-import { alpha, styled } from '@mui/material/styles';
+import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Box, AppBar, Toolbar, Container, Stack, Typography } from '@mui/material';
 import { LogoBeta } from 'src/components/Logo';
 import useOffSetTop from 'src/hooks/useOffsetTop';
@@ -80,10 +80,11 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
   const isOffset = useOffSetTop(HEADER.MAIN_DESKTOP_HEIGHT);
   const isDesktop = useResponsive('up', 'md');
   const { isGroupMode } = useAccommodationsAndOffers();
+  const theme = useTheme();
 
   return (
     <>
-      <AppBar sx={{ boxShadow: 0, bgcolor: 'transparent' }}>
+      <AppBar sx={{ boxShadow: 0, bgcolor: theme.palette.background.default }}>
         <ToolbarStyle disableGutters>
           <Container
             sx={{
@@ -120,7 +121,7 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
             {/* Currently the navConfig is empty, therefore it is commented out */}
             {/* {!isDesktop && <MenuMobile isOffset={isOffset} navConfig={navConfig} />} */}
 
-            <SocialsButton socials={SOCIALS} sx={{ mx: 0.5 }} />
+            {isDesktop && <SocialsButton socials={SOCIALS} sx={{ mx: 0.5 }} />}
           </Container>
         </ToolbarStyle>
 

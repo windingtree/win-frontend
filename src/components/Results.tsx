@@ -21,9 +21,8 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   height: '50%',
   top: '50%',
   left: 0,
-  padding: theme.spacing(2),
+  padding: theme.spacing(0, 2),
   backgroundColor: '#fff',
-  overflow: 'scroll',
   transition: 'all 0.4s ease',
 
   [theme.breakpoints.up('md')]: {
@@ -48,7 +47,6 @@ export const Results: React.FC = () => {
 
   const [viewSx, setViewSx] = useState({});
   const [mode, setMode] = useState<ResultsMode>(ResultsMode.map);
-  const [preventMapView, setPreventMapView] = useState(true);
 
   useEffect(() => {
     if (mode === ResultsMode.map) {
@@ -63,21 +61,6 @@ export const Results: React.FC = () => {
       });
     }
   }, [mode]);
-
-  // handle mobile list scrolling
-  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    if (e.currentTarget.scrollTop > 10) {
-      setMode(ResultsMode.list);
-    }
-    if (e.currentTarget.scrollTop === 0) {
-      if (preventMapView) {
-        setPreventMapView(false);
-        return;
-      }
-      setMode(ResultsMode.map);
-      setPreventMapView(true);
-    }
-  };
 
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();
@@ -132,9 +115,16 @@ export const Results: React.FC = () => {
   }
 
   return (
-    <StyledContainer className="noScrollBar" sx={viewSx} onScroll={handleScroll}>
+    <StyledContainer sx={viewSx}>
       {showResultsNumber && (
-        <Stack direction="column" alignItems="center">
+        <Stack
+          direction="column"
+          alignItems="center"
+          paddingTop={2}
+          onClick={() =>
+            setMode(mode === ResultsMode.map ? ResultsMode.list : ResultsMode.map)
+          }
+        >
           <Box
             sx={{
               justifySelf: 'center',
@@ -145,15 +135,13 @@ export const Results: React.FC = () => {
               borderRadius: '2px'
             }}
           />
-          <Typography marginBottom={1} textAlign="center">
-            {accommodations.length} stays
-          </Typography>
+          <Typography textAlign="center">{accommodations.length} stays</Typography>
         </Stack>
       )}
       {mode === ResultsMode.list && (
         <Box
           position="fixed"
-          bottom={10}
+          bottom={theme.spacing(4)}
           left="50%"
           width={'64px'}
           marginLeft={'-32px'}
@@ -164,20 +152,27 @@ export const Results: React.FC = () => {
           </Button>
         </Box>
       )}
-      <Stack>
-        {!isFetching &&
-          accommodations.map((facility, idx) => (
-            <SearchCard
-              key={facility.id}
-              facility={facility}
-              numberOfDays={numberOfDays}
-              isSelected={facility.id === selectedFacilityId}
-              onSelect={handleFacilitySelection}
-              ref={SearchCardsRefs[idx]}
-              focusedEvent={facility.eventInfo}
-            />
-          ))}
-      </Stack>
+      {(mode === ResultsMode.list || !showResultsNumber) && (
+        <Box
+          sx={{ overflow: 'scroll', height: { sx: '90%', md: '95%' }, mt: 1 }}
+          className="noScrollBar"
+        >
+          <Stack>
+            {!isFetching &&
+              accommodations.map((facility, idx) => (
+                <SearchCard
+                  key={facility.id}
+                  facility={facility}
+                  numberOfDays={numberOfDays}
+                  isSelected={facility.id === selectedFacilityId}
+                  onSelect={handleFacilitySelection}
+                  ref={SearchCardsRefs[idx]}
+                  focusedEvent={facility.eventInfo}
+                />
+              ))}
+          </Stack>
+        </Box>
+      )}
     </StyledContainer>
   );
 };
