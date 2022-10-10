@@ -166,9 +166,9 @@ export const Results: React.FC = () => {
           </Button>
         </Box>
       )}
-      {mode === ResultsMode.list && (
+      {(mode === ResultsMode.list || !showResultsNumber) && (
         <Box
-          sx={{ overflow: 'scroll', height: '90%', p: 0, m: 0 }}
+          sx={{ overflow: 'scroll', height: { sx: '90%', md: '95%' }, mt: 1 }}
           className="noScrollBar"
         >
           <Stack>
