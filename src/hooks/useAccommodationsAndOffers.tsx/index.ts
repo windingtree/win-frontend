@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
+import { getLargestImages, sortByLargestImage } from '../../utils/accommodation';
 import { daysBetween } from '../../utils/date';
 import {
   AccommodationsAndOffersResponse,
@@ -101,20 +102,25 @@ export const useAccommodationsAndOffers = ({
     );
 
     // get offer with lowest price
+    const nbRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
     return filteredAccommodations?.map((accommodation) => {
       const lowestPrice: LowestPriceFormat = accommodation.offers
         .map((offer) => ({
-          price:
-            Number(offer.price.public) /
-            (numberOfDays * (latestQueryParams?.roomCount ?? 1)),
+          price: Number(offer.price.public) / (numberOfDays * nbRooms),
           currency: offer.price.currency
         }))
         .reduce((prevLowest, currentVal) =>
           prevLowest.price < currentVal.price ? prevLowest : currentVal
         );
 
+      // return only high res images
+      const sortedImages = sortByLargestImage(accommodation.media ?? []);
+      const largestImages = getLargestImages(sortedImages);
+
+      accommodation.media = largestImages;
+
       // optional accommodation transformation callback function
-      // that can be used to modify or add properties to accomodation object
+      // that can be used to modify or add properties to accommodation object
       let transformedAccommodation = accommodation;
       if (accommodationTransformFn && typeof accommodationTransformFn === 'function') {
         transformedAccommodation = accommodationTransformFn({

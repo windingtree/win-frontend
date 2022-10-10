@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import useResponsive from 'src/hooks/useResponsive';
 import { OfferRecord } from 'src/store/types';
 import { Link } from 'react-router-dom';
+import { currencySymbolMap } from '../../../utils/currencies';
 
 const getTotalPrice = (prev: number, current: OfferRecord): number => {
   const quantity = Number(current.quantity);
@@ -28,6 +29,7 @@ const Summary = ({
   const totalPrice = values.offers.reduce(getTotalPrice, 0).toFixed(2);
   const theme = useTheme();
   const currency = values.offers[0].price?.currency;
+  const currencySymbol = currencySymbolMap[currency] ?? currency;
 
   return (
     <Stack
@@ -42,13 +44,10 @@ const Summary = ({
       <Grid container sx={{ position: 'absolute', top: theme.spacing(1) }}>
         <Box>
           <Typography variant="body2">
-            {`Estimated total price for ${nightCount} nights, ${roomCount} rooms and ${guestCount} guests`}{' '}
-          </Typography>
-          <Typography sx={{ fontWeight: 'normal' }} component="span" variant="h5">
-            {currency} {'  '}
+            {`Estimated total price for ${guestCount} adults, ${roomCount} rooms and ${nightCount} nights`}{' '}
           </Typography>
           <Typography component="span" variant="h5">
-            {totalPrice}*
+            {currencySymbol} {totalPrice}*
           </Typography>
         </Box>
         <Button

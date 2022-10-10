@@ -23,7 +23,7 @@ export const normalizeExpiration = (expirationDate: string): number =>
 export const Checkout = () => {
   const navigate = useNavigate();
   const { bookingInfo, bookingMode } = useCheckout();
-  const { account } = useAppState();
+  const { account, selectedAsset } = useAppState();
   const isGroupMode = bookingMode === 'group';
   const offerId = !isGroupMode && bookingInfo?.offers && getOfferId(bookingInfo.offers);
 
@@ -46,7 +46,11 @@ export const Checkout = () => {
 
     return {
       currency: pricing?.offerCurrency.currency,
-      value: utils.parseEther(pricing.offerCurrency.amount.toString()),
+      value: utils.parseUnits(
+        pricing.offerCurrency.amount.toString(),
+        selectedAsset?.decimals ?? 18
+      ),
+
       expiration: normalizeExpiration(expiration),
       providerId: providerId.toString(),
       serviceId: serviceId.toString(),

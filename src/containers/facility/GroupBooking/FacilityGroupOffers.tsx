@@ -184,6 +184,7 @@ export const FacilityGroupOffers = ({
                 key={index}
                 offer={offer}
                 room={matchedRoomWithOffer}
+                nightCount={nightCount}
               />
             );
           })}

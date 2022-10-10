@@ -14,6 +14,7 @@ export default function RHFTAutocomplete({
   name,
   options,
   freeSolo = true,
+  width = '100%',
   ...other
 }: Props) {
   const { control } = useFormContext();
@@ -24,7 +25,7 @@ export default function RHFTAutocomplete({
       control={control}
       render={({ field, fieldState: { error } }) => (
         <Autocomplete
-          fullWidth
+          sx={{ width }}
           {...field}
           freeSolo={freeSolo}
           isOptionEqualToValue={(option, value) => option === value}

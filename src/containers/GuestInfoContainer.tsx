@@ -96,6 +96,7 @@ export const GuestInfoContainer = () => {
           return;
         }
 
+        //TODO: move this to the useCheckout hook
         const formattedDate = convertToLocalTime(values.birthdate);
         await axios
           .request(
@@ -122,7 +123,7 @@ export const GuestInfoContainer = () => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       {error && <Alert severity="error">{error}</Alert>}
-      <Card sx={{ my: 3, p: 3 }}>
+      <Card sx={{ my: 3, p: { xs: 1, md: 3 } }}>
         <Typography sx={{ mb: 2 }}>
           This Information will be strictly used by the hotel and win.so to confirm your
           booking! It is mandatory in order for the hotel to reserve your room.

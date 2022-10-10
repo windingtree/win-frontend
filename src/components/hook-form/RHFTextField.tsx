@@ -10,7 +10,6 @@ type Props = IProps & TextFieldProps;
 
 export default function RHFTextField({ name, width, fullWidth = true, ...other }: Props) {
   const { control } = useFormContext();
-
   return (
     <Controller
       name={name}

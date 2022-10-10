@@ -1,6 +1,5 @@
-import { CSSProperties, forwardRef, useCallback, useMemo } from 'react';
+import { CSSProperties, forwardRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { emptyFunction } from '../utils/common';
 import { Stack, Typography, Card, useTheme } from '@mui/material';
 import Iconify from './Iconify';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
@@ -23,7 +22,7 @@ export interface SearchCardProps {
 }
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
-  ({ sm, facility, isSelected, onSelect = emptyFunction, focusedEvent }, ref) => {
+  ({ sm, facility, isSelected, focusedEvent }, ref) => {
     const navigate = useNavigate();
     const theme = useTheme();
     const { winWidth } = useWindowsDimension();
@@ -61,18 +60,13 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
       () => facility.offers.map((o) => Number(o.price.public)),
       [facility]
     );
-    const handleSelect = useCallback(() => onSelect(facility.id), []);
 
     if (facility.offers.length < 1) {
       return null;
     }
 
     return (
-      <Card
-        ref={ref}
-        onMouseOver={handleSelect}
-        style={{ ...selectedStyle, ...smallCardStyle }}
-      >
+      <Card ref={ref} style={{ ...selectedStyle, ...smallCardStyle }}>
         <Stack sx={{ ...responsiveStyle }}>
           <Stack
             width={theme.spacing(sm || winWidth < 900 ? 16 : 36)}

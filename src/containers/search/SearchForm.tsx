@@ -10,7 +10,11 @@ import {
   Divider,
   useMediaQuery,
   Alert,
-  styled
+  styled,
+  SxProps,
+  IconButton,
+  Typography,
+  Grid
 } from '@mui/material';
 import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
@@ -36,12 +40,14 @@ import { SearchPopovers } from './SearchPopovers';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
-  paddingBottom: theme.spacing(1),
+  padding: theme.spacing(2),
+  marginTop: theme.spacing(1),
   display: 'flex',
   justifyContent: 'center',
   border: 'none',
-  width: '100%',
+  // width: '100%',
   backgroundColor: theme.palette.background.default,
+  borderRadius: 10,
 
   [theme.breakpoints.up('md')]: {
     padding: theme.spacing(2),
@@ -63,12 +69,17 @@ type FormValuesProps = {
 };
 
 const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={12} />;
+const SearchIcon = () => <Iconify icon={'akar-icons:search'} width={24} height={24} />;
+const FilterIcon = () => <Iconify icon={'mi:filter'} width={30} height={30} />;
 
-export const SearchForm: React.FC = () => {
+export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const theme = useTheme();
   const { pathname, search } = useLocation();
+
+  const [open, setOpen] = useState<boolean>(!closed);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   // monitor error state locally
   // generic error message
@@ -81,8 +92,12 @@ export const SearchForm: React.FC = () => {
    * Logic in relation to the popovers.
    */
   const formRef = useRef<HTMLDivElement>(null);
-  const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLDivElement | null>(null);
-  const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLDivElement | null>(null);
+  const dateRef = useRef<HTMLButtonElement>(null);
+  const guestsRef = useRef<HTMLButtonElement>(null);
+  const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
+    null
+  );
+  const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
   const isDatePopoverOpen = Boolean(dateRangeAnchorEl);
   const isGuestsPopoverOpen = Boolean(guestsAnchorEl);
 
@@ -160,11 +175,11 @@ export const SearchForm: React.FC = () => {
         endDate: formatISO(dateRange[0].endDate),
         location
       };
-
       navigate({
         pathname: '/search',
         search: `?${createSearchParams(params)}`
       });
+      setOpen(false);
       return;
     }
   }, [roomCount, adultCount, dateRange, location, refetch]);
@@ -240,7 +255,7 @@ export const SearchForm: React.FC = () => {
   const roomText = roomCount === 1 ? 'room' : 'rooms';
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
   const fontStyling = theme.typography.body2;
-  const buttonSize = useMediaQuery(theme.breakpoints.down('md')) ? 'small' : 'large';
+  const buttonSize = 'large';
 
   const popOversState = {
     isGuestsPopoverOpen,
@@ -251,40 +266,83 @@ export const SearchForm: React.FC = () => {
     setDateRangeAnchorEl
   };
 
+  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
+
+  const formButtonStyle: SxProps = isMobileView
+    ? {
+        '&:hover': {
+          backgroundColor: 'transparent'
+        },
+        '&:focus': {
+          border: `1px solid ${theme.palette.primary.main}`
+        }
+      }
+    : {};
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <SearchPopovers {...popOversState} />
-      <Stack direction="column">
+      <Box
+        sx={
+          !open && isMobile && closed
+            ? { background: theme.palette.common.white, width: '100%', p: 2 }
+            : { display: 'none' }
+        }
+      >
+        <Grid
+          container
+          py={0.5}
+          border={2}
+          borderColor={theme.palette.primary.main}
+          alignItems="center"
+          borderRadius={1}
+        >
+          <Grid item xs={'auto'}>
+            <IconButton onClick={() => setOpen(true)} color="primary" component="label">
+              <SearchIcon />
+            </IconButton>
+          </Grid>
+          <Grid item xs>
+            <Box>
+              <Typography variant="subtitle2">{location}</Typography>
+              <Typography variant="caption">
+                {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)},{' '}
+                {guestDetailsText}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={'auto'} mx={1}>
+            <FilterIcon />
+          </Grid>
+        </Grid>
+      </Box>
+      <Stack
+        sx={!open && isMobile && closed ? { display: 'none' } : {}}
+        direction="column"
+        alignItems="center"
+      >
         <ToolbarStyle ref={formRef}>
           <Stack
             direction={{ xs: 'column', md: 'row' }}
             alignItems="center"
             spacing={1}
-            divider={
-              <Divider
-                orientation={
-                  useMediaQuery(theme.breakpoints.down('md')) ? 'horizontal' : 'vertical'
-                }
-                flexItem
-              />
-            }
+            divider={!isMobileView ? <Divider orientation={'vertical'} flexItem /> : null}
           >
             <RHFTAutocomplete
-              variant="standard"
+              variant={isMobileView ? 'outlined' : 'standard'}
               placeholder="Where are you going?"
               name="location"
               options={autocompleteData}
-              width="230px"
+              width={isMobileView ? '320px' : '230px'}
               inputProps={{
                 style: {
                   ...fontStyling,
-                  textAlign: useMediaQuery(theme.breakpoints.down('md'))
-                    ? 'center'
-                    : 'left'
-                }
+                  textAlign: isMobileView ? 'center' : 'left'
+                },
+                id: 'location-input'
               }}
               InputProps={{
-                disableUnderline: true,
+                ...(!isMobileView ? { disableUnderline: true } : {}),
                 startAdornment: (
                   <InputAdornment position="start">
                     <LocationIcon />
@@ -294,15 +352,18 @@ export const SearchForm: React.FC = () => {
             />
             <Box>
               <Button
-                onClick={() => setDateRangeAnchorEl(formRef.current)}
+                onClick={() => setDateRangeAnchorEl(dateRef.current)}
                 size={buttonSize}
-                variant="text"
+                variant={isMobileView ? 'outlined' : 'text'}
                 sx={{
-                  minWidth: '230px',
+                  minWidth: isMobileView ? '320px' : '230px',
                   whiteSpace: 'nowrap',
-                  ...fontStyling
+                  ...fontStyling,
+                  ...formButtonStyle
                 }}
                 color="inherit"
+                ref={dateRef}
+                disableRipple={isMobileView}
               >
                 {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
               </Button>
@@ -311,14 +372,17 @@ export const SearchForm: React.FC = () => {
             <Box>
               <Button
                 sx={{
-                  minWidth: '144px',
+                  minWidth: isMobileView ? '320px' : '144px',
                   whiteSpace: 'nowrap',
-                  ...fontStyling
+                  ...fontStyling,
+                  ...formButtonStyle
                 }}
-                onClick={() => setGuestsAnchorEl(formRef.current)}
+                onClick={() => setGuestsAnchorEl(guestsRef.current)}
                 size={buttonSize}
-                variant="text"
+                variant={isMobileView ? 'outlined' : 'text'}
                 color="inherit"
+                ref={guestsRef}
+                disableRipple={isMobileView}
               >
                 {guestDetailsText}
               </Button>
@@ -331,6 +395,7 @@ export const SearchForm: React.FC = () => {
                 variant="contained"
                 size={buttonSize}
                 sx={{
+                  minWidth: isMobileView ? '320px' : '230px',
                   whiteSpace: 'nowrap',
                   ...fontStyling
                 }}
@@ -340,56 +405,56 @@ export const SearchForm: React.FC = () => {
             </Box>
           </Stack>
         </ToolbarStyle>
-        <>
-          {isGroupMode && accommodations.length && (
-            // show this message when in group mode and there are accommodations with offers
-            <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-              severity="info"
-            >
-              You have entered the group booking mode. Please select your favorite hotel
-              and number of rooms to get a quotation.
-            </Alert>
-          )}
-          {validationErrorMessage && (
-            <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-              severity="error"
-            >
-              {validationErrorMessage}
-            </Alert>
-          )}
+      </Stack>
+      <Stack>
+        {isGroupMode && accommodations.length && (
+          // show this message when in group mode and there are accommodations with offers
+          <Alert
+            sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+            severity="info"
+          >
+            You have entered the group booking mode. Please select your favorite hotel and
+            number of rooms to get a quotation.
+          </Alert>
+        )}
+        {validationErrorMessage && (
+          <Alert
+            sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+            severity="error"
+          >
+            {validationErrorMessage}
+          </Alert>
+        )}
 
-          {showError && (
-            <Alert
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                textAlign: 'center',
-                mt: 1
-              }}
-              severity="error"
-            >
-              {(showError as Error) && (showError as Error).message
-                ? (showError as Error).message
-                : 'Something went wrong '}
-            </Alert>
-          )}
-          {!showError && isFetched && showAccommodationsError && (
-            <Alert
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                textAlign: 'center',
-                mt: 1
-              }}
-              severity="error"
-            >
-              {/* use query params value instead of form value, to show only actually searched value */}
-              No accommodations found for {latestQueryParams?.location}.
-            </Alert>
-          )}
-        </>
+        {showError && (
+          <Alert
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              textAlign: 'center',
+              mt: 1
+            }}
+            severity="error"
+          >
+            {(showError as Error) && (showError as Error).message
+              ? (showError as Error).message
+              : 'Something went wrong '}
+          </Alert>
+        )}
+        {!showError && isFetched && showAccommodationsError && (
+          <Alert
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              textAlign: 'center',
+              mt: 1
+            }}
+            severity="error"
+          >
+            {/* use query params value instead of form value, to show only actually searched value */}
+            No accommodations found for {latestQueryParams?.location}.
+          </Alert>
+        )}
       </Stack>
     </FormProvider>
   );
