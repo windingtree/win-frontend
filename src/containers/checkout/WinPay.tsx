@@ -45,7 +45,6 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
     setWithQuote(useQuote);
   };
 
-  console.log(account, payment);
   if (!payment) {
     return null;
   }
