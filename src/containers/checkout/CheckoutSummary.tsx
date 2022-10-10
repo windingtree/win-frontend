@@ -7,7 +7,7 @@ import FallbackImage from 'src/images/hotel-fallback.webp';
 
 import { useMemo } from 'react';
 import { sortByLargestImage } from 'src/utils/accommodation';
-import { useCheckout } from 'src/hooks/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { Link } from 'react-router-dom';
 
 export const CheckoutSummary = () => {

@@ -15,8 +15,9 @@ import { RHFDatePicker } from '../components/hook-form/RHFDatePicker';
 import { regexp } from '@windingtree/org.id-utils';
 import { convertToLocalTime } from '../utils/date';
 import { DateTime } from 'luxon';
-import { getOfferById, useCheckout } from 'src/hooks/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { useSnackbar } from 'notistack';
+import { getOfferId } from 'src/hooks/useCheckout/helpers';
 
 const logger = Logger('GuestInfoContainer');
 
@@ -67,7 +68,7 @@ export const GuestInfoContainer = () => {
   const [error, setError] = useState<undefined | string>();
   const accommodationId = bookingInfo?.accommodation?.id;
   const { enqueueSnackbar } = useSnackbar();
-  const offerId = getOfferById(bookingInfo?.offers);
+  const offerId = getOfferId(bookingInfo?.offers);
 
   const methods = useForm<PersonalInfo>({
     resolver: yupResolver(NewUserSchema),

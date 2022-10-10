@@ -1,72 +1,23 @@
 import { useMutation } from '@tanstack/react-query';
 import {
-  GroupBookingRequest,
   GroupBookingRequestResponse,
-  OfferIdAndQuantity,
   OrganizerInformation,
   Quote
 } from '@windingtree/glider-types/dist/win';
-import axios from 'axios';
-import { backend } from 'src/config';
 import { useAppDispatch, useAppState } from 'src/store';
 import { BookingInfoType } from 'src/store/types';
-import Logger from 'src/utils/logger';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
-import { getGroupMode } from './useAccommodationsAndOffers.tsx/helpers';
+import { bookGroupRequest } from './api';
+import { getBookingMode } from './helpers';
 
-const logger = Logger('useCheckout');
-
-export type BookingModeType = 'group' | 'normal' | undefined;
-
-/**
- * Get the id of a offer if only one offer is used for a booking.
- */
-export const getOfferById = (offers: OfferIdAndQuantity[] | undefined) => {
-  if (!offers) return;
-
-  return offers.map(({ offerId }) => offerId)[0];
-};
-
-const getBookingMode = (offers: OfferIdAndQuantity[] | undefined): BookingModeType => {
-  if (!offers) return undefined;
-
-  const roomCount = offers.reduce(getTotalRoomCountReducer, 0);
-  const isGroupMode = getGroupMode(roomCount);
-  const bookingMode = isGroupMode ? 'group' : 'normal';
-  return bookingMode;
-};
-
-const bookGroupRequest = async (mutationProps: GroupBookingRequest) => {
-  const { data } = await axios
-    .post<GroupBookingRequestResponse>(
-      `${backend.url}/api/groups/bookingRequest`,
-      mutationProps,
-      {
-        withCredentials: true
-      }
-    )
-    .catch((e) => {
-      //eslint-disable-next-line
-      logger.error(e);
-      throw new Error('Something went wrong with your booking. Please try again.');
-    });
-
-  if (!data.depositOptions || !data.requestId) {
-    throw new Error('Something went wrong with your booking. Please try again.');
-  }
-
-  return data;
-};
-
-/**
- * This hook is currently only compatible for group bookings, not normal bookings.
- */
 export const useCheckout = () => {
   const dispatch = useAppDispatch();
   const { organizerInfo, bookingInfo } = useAppState();
 
-  console.log(bookingInfo);
-
+  /**
+   * Save the organizer info in global state
+   * @param info : info of the organizer
+   */
   const setOrganizerInfo = (info: OrganizerInformation) => {
     dispatch({
       type: 'SET_ORGANIZER_INFO',
@@ -75,10 +26,11 @@ export const useCheckout = () => {
   };
 
   /**
+   * Save the booking info in global state
    * @param info : info of a booking
-   * @param cleanPrevStore overwrite existing storage with new state, or spread the new state over the existing storage.
+   * @param cleanPrevState : overwrite existing state with new state (TRUE), or spread the new state over the existing storage (FALSE).
    */
-  const setBookingInfo = (info: BookingInfoType, cleanPrevStore = false) => {
+  const setBookingInfo = (info: BookingInfoType, cleanPrevState = false) => {
     const roomCount = info?.offers?.reduce(getTotalRoomCountReducer, 0);
 
     const newStore = {
@@ -88,10 +40,14 @@ export const useCheckout = () => {
 
     dispatch({
       type: 'SET_BOOKING_INFO',
-      payload: cleanPrevStore ? newStore : { ...bookingInfo, ...newStore }
+      payload: cleanPrevState ? newStore : { ...bookingInfo, ...newStore }
     });
   };
 
+  /**
+   * Send a mutation in order to register the group booking,
+   * and get necessary information to pay for the deposit.
+   */
   const bookGroup = useMutation<GroupBookingRequestResponse, Error>(async () => {
     if (!organizerInfo || !bookingInfo?.offers || !bookingInfo?.adultCount) {
       throw new Error('Something went wrong. Please try selecting your rooms again.');

@@ -16,7 +16,7 @@ import useResponsive from 'src/hooks/useResponsive';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { daysBetween } from 'src/utils/date';
 import { FacilityOffersTitle } from '../FacilityOffersTitle';
-import { useCheckout } from 'src/hooks/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { useNavigate } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
 import { useSnackbar } from 'notistack';

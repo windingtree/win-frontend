@@ -2,7 +2,7 @@ import { utils } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
-import { useCheckout } from 'src/hooks/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { CheckoutSummary } from 'src/containers/checkout/CheckoutSummary';
 import { Typography } from '@mui/material';
 import MainLayout from 'src/layouts/main';
@@ -13,6 +13,7 @@ import { Breadcrumbs } from 'src/components/Breadcrumbs';
 import { PaymentSuccessCallback } from 'src/components/PaymentCard';
 import { SignInButton } from 'src/components/Web3Modal';
 import { useAppState } from 'src/store';
+import { getOfferId } from 'src/hooks/useCheckout/helpers';
 
 const logger = Logger('Checkout');
 
@@ -21,8 +22,10 @@ export const normalizeExpiration = (expirationDate: string): number =>
 
 export const Checkout = () => {
   const navigate = useNavigate();
-  const { bookingInfo } = useCheckout();
+  const { bookingInfo, bookingMode } = useCheckout();
   const { account } = useAppState();
+  const isGroupMode = bookingMode === 'group';
+  const offerId = !isGroupMode && bookingInfo?.offers && getOfferId(bookingInfo.offers);
 
   const query = useMemo(() => {
     const params = {
@@ -58,8 +61,7 @@ export const Checkout = () => {
     navigate({
       pathname: '/bookings/confirmation',
       search: `?${createSearchParams({
-        //TODO: include offerId
-        // offerId: checkout.offerId,
+        offerId: offerId || ' ',
         tx: result.tx.hash
       })}`,
       hash: bookingInfo?.location === 'Bogota' ? 'devcon' : ''
@@ -87,7 +89,7 @@ export const Checkout = () => {
           },
           {
             name: 'Guest Info',
-            href: '/guest-info'
+            href: isGroupMode ? '/org-details' : '/guest-info'
           }
         ]}
       />

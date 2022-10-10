@@ -11,7 +11,7 @@ import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
 import Logger from 'src/utils/logger';
 import { RoomInformation } from './RoomInformation';
-import { useCheckout } from 'src/hooks/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { useSnackbar } from 'notistack';
 
 const logger = Logger('RoomCard');
@@ -39,7 +39,6 @@ export const RoomCard: React.FC<{
     [accommodations, facilityId]
   );
 
-  //TODO: consider including this in a seperate hook
   const handleBook = useCallback(async () => {
     try {
       setError(undefined);
@@ -60,6 +59,8 @@ export const RoomCard: React.FC<{
       if (res.data) {
         setBookingInfo(
           {
+            //TODO: review whether passing the quote is still needed
+            quote: res.data.quote,
             accommodation,
             expiration: res.data.offer.expiration,
             date: {
@@ -71,7 +72,7 @@ export const RoomCard: React.FC<{
                 amount: res.data.offer.price.public,
                 currency: res.data.offer.price.currency
               },
-              // Currently the sourceAmount that we are getting back is always USD, there `usd` is hardcoded.
+              // Currently the sourceAmount that we are getting back is always USD, therefore `usd` is hardcoded.
               // BE is likely to update the data structure the same way as for group booking, in the mean time we hardcode the usd value like this.
               usd: res.data.quote?.sourceAmount
             },

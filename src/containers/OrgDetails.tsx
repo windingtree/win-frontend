@@ -16,7 +16,7 @@ import Iconify from '../components/Iconify';
 import { regexp } from '@windingtree/org.id-utils';
 import { countries } from '../config';
 import { isVatValid } from '../utils/vat';
-import { useCheckout } from 'src/hooks/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
 
 const countriesOptions = countries.map((c) => c.label);
