@@ -32,7 +32,7 @@ export const normalizeExpiration = (expirationDate: string): number =>
 
 export const Checkout = () => {
   const navigate = useNavigate();
-  const { checkout, account } = useAppState();
+  const { checkout, account, selectedAsset } = useAppState();
   const { latestQueryParams } = useAccommodationsAndOffers();
 
   const query = useMemo(() => {
@@ -53,7 +53,10 @@ export const Checkout = () => {
     () =>
       checkout && {
         currency: checkout.offer.price.currency,
-        value: utils.parseEther(checkout.offer.price.public.toString()),
+        value: utils.parseUnits(
+          checkout.offer.price.public.toString(),
+          selectedAsset?.decimals ?? 18
+        ),
         expiration: normalizeExpiration(checkout.offer.expiration),
         providerId: String(checkout.provider),
         serviceId: String(checkout.serviceId),
