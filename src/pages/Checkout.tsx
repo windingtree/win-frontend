@@ -108,7 +108,10 @@ export const Checkout = () => {
         />
         <Container
           sx={{
-            mb: 5
+            my: 5,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
           }}
         >
           <CircularProgress />
