@@ -21,7 +21,6 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   height: '50%',
   top: '50%',
   left: 0,
-  // m: 0,
   padding: theme.spacing(0, 2),
   backgroundColor: '#fff',
   transition: 'all 0.4s ease',
@@ -62,19 +61,6 @@ export const Results: React.FC = () => {
       });
     }
   }, [mode]);
-
-  // handle mobile list scrolling
-  // const handleScroll = useCallback(
-  //   (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-  //     if (e.currentTarget.scrollTop > 10) {
-  //       setMode(ResultsMode.list);
-  //     }
-  //     if (e.currentTarget.scrollTop === 0) {
-  //       setMode(ResultsMode.map);
-  //     }
-  //   },
-  //   [setMode]
-  // );
 
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();
