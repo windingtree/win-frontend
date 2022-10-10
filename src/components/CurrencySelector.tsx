@@ -23,9 +23,15 @@ export interface PriceSelectProps {
   payment?: Payment;
   network?: NetworkInfo;
   onQuote(withQuote: boolean): void;
+  asset: CryptoAsset | undefined;
 }
 
-export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps) => {
+export const CurrencySelector = ({
+  payment,
+  network,
+  onQuote,
+  asset
+}: PriceSelectProps) => {
   const [currency, setCurrency] = useState<string | null>(
     payment ? payment.currency : null
   );
@@ -42,7 +48,10 @@ export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps
               ? [
                   {
                     value: BigNumber.from(
-                      utils.parseEther(payment.quote.sourceAmount ?? '0')
+                      utils.parseUnits(
+                        payment.quote.sourceAmount ?? '0',
+                        asset?.decimals ?? 18
+                      )
                     ),
                     currency: payment.quote.sourceCurrency ?? 'USD'
                   }

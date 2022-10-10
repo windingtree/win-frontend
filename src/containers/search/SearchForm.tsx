@@ -402,56 +402,56 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
             </Box>
           </Stack>
         </ToolbarStyle>
-        <>
-          {isGroupMode && accommodations.length && (
-            // show this message when in group mode and there are accommodations with offers
-            <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-              severity="info"
-            >
-              You have entered the group booking mode. Please select your favorite hotel
-              and number of rooms to get a quotation.
-            </Alert>
-          )}
-          {validationErrorMessage && (
-            <Alert
-              sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-              severity="error"
-            >
-              {validationErrorMessage}
-            </Alert>
-          )}
+      </Stack>
+      <Stack>
+        {isGroupMode && accommodations.length && (
+          // show this message when in group mode and there are accommodations with offers
+          <Alert
+            sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+            severity="info"
+          >
+            You have entered the group booking mode. Please select your favorite hotel and
+            number of rooms to get a quotation.
+          </Alert>
+        )}
+        {validationErrorMessage && (
+          <Alert
+            sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+            severity="error"
+          >
+            {validationErrorMessage}
+          </Alert>
+        )}
 
-          {showError && (
-            <Alert
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                textAlign: 'center',
-                mt: 1
-              }}
-              severity="error"
-            >
-              {(showError as Error) && (showError as Error).message
-                ? (showError as Error).message
-                : 'Something went wrong '}
-            </Alert>
-          )}
-          {!showError && isFetched && showAccommodationsError && (
-            <Alert
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                textAlign: 'center',
-                mt: 1
-              }}
-              severity="error"
-            >
-              {/* use query params value instead of form value, to show only actually searched value */}
-              No accommodations found for {latestQueryParams?.location}.
-            </Alert>
-          )}
-        </>
+        {showError && (
+          <Alert
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              textAlign: 'center',
+              mt: 1
+            }}
+            severity="error"
+          >
+            {(showError as Error) && (showError as Error).message
+              ? (showError as Error).message
+              : 'Something went wrong '}
+          </Alert>
+        )}
+        {!showError && isFetched && showAccommodationsError && (
+          <Alert
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              textAlign: 'center',
+              mt: 1
+            }}
+            severity="error"
+          >
+            {/* use query params value instead of form value, to show only actually searched value */}
+            No accommodations found for {latestQueryParams?.location}.
+          </Alert>
+        )}
       </Stack>
     </FormProvider>
   );
