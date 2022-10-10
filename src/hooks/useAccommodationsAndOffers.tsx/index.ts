@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
+import { getLargestImages, sortByLargestImage } from '../../utils/accommodation';
 import { daysBetween } from '../../utils/date';
 import {
   AccommodationsAndOffersResponse,
@@ -111,6 +112,12 @@ export const useAccommodationsAndOffers = ({
         .reduce((prevLowest, currentVal) =>
           prevLowest.price < currentVal.price ? prevLowest : currentVal
         );
+
+      // return only high res images
+      const sortedImages = sortByLargestImage(accommodation.media ?? []);
+      const largestImages = getLargestImages(sortedImages);
+
+      accommodation.media = largestImages;
 
       // optional accommodation transformation callback function
       // that can be used to modify or add properties to accommodation object
