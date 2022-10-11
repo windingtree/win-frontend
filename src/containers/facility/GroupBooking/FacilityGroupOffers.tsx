@@ -6,10 +6,7 @@ import * as Yup from 'yup';
 import { useMemo, useState } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
 import type { OfferRecord } from 'src/store/types';
-import {
-  AccommodationWithId,
-  GROUP_MODE_ROOM_COUNT
-} from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
+import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
 import useResponsive from 'src/hooks/useResponsive';
@@ -21,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
 import { useSnackbar } from 'notistack';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
+import { GROUP_MODE_ROOM_COUNT } from '../../../config';
 
 /**
  * Only the quantity can be changed in the form by the User,
@@ -59,7 +57,7 @@ export const FacilityGroupOffers = ({
   const { latestQueryParams } = useAccommodationsAndOffers();
   const defaultRoomCount = latestQueryParams?.roomCount
     ? latestQueryParams.roomCount
-    : 10;
+    : GROUP_MODE_ROOM_COUNT;
   const defaultOffers = useMemo(
     () => getOffersWithQuantity(offers, defaultRoomCount),
     [offers]

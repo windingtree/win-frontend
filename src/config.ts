@@ -7,6 +7,7 @@ import ethdownunder from './images/conferences/ethdownunder.png';
 import devcon6Icon from './images/event-icons/devcon_pin_50x73px.svg';
 import ethdownunderIcon from './images/event-icons/blockchain_expo_europe_2022.svg';
 import blockchaineurope2022Icon from './images/event-icons/eth_down_under_2022.svg';
+import { stringToNumber } from './utils/strings';
 
 export enum AppMode {
   dev = 'dev',
@@ -87,8 +88,14 @@ export const backend = Object.freeze({
   url: process.env.REACT_APP_API_URL
 });
 
+export const PROXY_SERVER = process.env.REACT_APP_PROXY_SERVER || backend + '/proxy';
+
 export const DISABLE_FEATURES =
   process.env.REACT_APP_DISABLE_FEATURES === 'true' ? true : false;
+
+export const GROUP_MODE_ROOM_COUNT = stringToNumber(
+  process.env.REACT_APP_GROUP_MODE_ROOM_COUNT || '10'
+);
 
 const availableLogLevels = ['none', 'error', 'debug', 'info'];
 export const APP_LOG_LEVEL =

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { httpProxyClient } from './http';
 
 export interface EuVatResponse {
   isValid: boolean;
@@ -22,9 +22,9 @@ export interface EuVatResponse {
   };
 }
 
-export const isVatValid = async (vat: string): Promise<boolean> => {
-  const res = await axios.get<EuVatResponse>(
-    `https://ec.europa.eu/taxation_customs/vies/rest-api/ms/EE/vat/${vat.trim()}`
+export const isVatValid = async (countryCode: string, vat: string): Promise<boolean> => {
+  const res = await httpProxyClient<EuVatResponse>(
+    `https://ec.europa.eu/taxation_customs/vies/rest-api/ms/${countryCode.trim()}/vat/${vat.trim()}`
   );
   return res && res.data && res.data.isValid;
 };

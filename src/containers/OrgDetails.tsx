@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,13 +18,15 @@ import { countries } from '../config';
 import { isVatValid } from '../utils/vat';
 import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
+import Logger from '../utils/logger';
+import { debouncedFn } from '../utils/common';
 
 const countriesOptions = countries.map((c) => c.label);
-const eeRegExp = /^(?<EE>((EE)?(?<NUM>[0-9]{9})))$/i;
+const euRegExp = /^(?<CODE>[a-zA-Z]{2})(?<NUM>[a-zA-Z0-9]{5,})$/i;
 
-export interface EeRegExp extends Array<string> {
+export interface EuRegExp extends Array<string> {
   groups: {
-    EE?: string;
+    CODE?: string;
     NUM?: string;
   };
 }
@@ -101,6 +103,14 @@ export const OrgDetails = () => {
     ...billingAddress
   };
 
+  // temp var to enable VAT validation
+  const validateVAT = false;
+
+  const invoiceSiblingsValidation = (errorMessage: string) => ({
+    is: true,
+    then: Yup.string().required(errorMessage)
+  });
+
   const organizerSchema = Yup.object().shape({
     firstName: Yup.string()
       .trim()
@@ -120,7 +130,9 @@ export const OrgDetails = () => {
       .matches(regexp.email, 'Incorrect email')
       .email(),
     companyName: Yup.string().trim(),
-    postalCode: Yup.string().trim(),
+    postalCode: Yup.string()
+      .trim()
+      .when('invoice', invoiceSiblingsValidation('Postal code is required')),
     countryCode: Yup.string()
       .trim()
       .test(
@@ -128,18 +140,33 @@ export const OrgDetails = () => {
         'Unknown country name',
         (value) =>
           value !== undefined && (value === '' || countriesOptions.includes(value))
-      ),
-    cityName: Yup.string().trim(),
-    street: Yup.string().trim(),
+      )
+      .when('invoice', invoiceSiblingsValidation('Country is required')),
+    cityName: Yup.string()
+      .trim()
+      .when('invoice', invoiceSiblingsValidation('City is required')),
+    street: Yup.string()
+      .trim()
+      .when('invoice', invoiceSiblingsValidation('Street is required')),
     vatNumber: Yup.string()
       .trim()
       .test('is-vat-valid', 'VAT number is not valid', async (value) => {
-        if (value && value.length === 11) {
-          const vatParsed = eeRegExp.exec(value) as EeRegExp | null;
-          if (vatParsed?.groups.NUM) {
-            const isValid = await isVatValid(vatParsed.groups.NUM);
-            setVatValid(isValid);
-            return isValid;
+        // switch to disable this validation
+        if (!validateVAT) return true;
+
+        if (value && value.trim().length >= 7) {
+          const vatParsed = euRegExp.exec(value.trim()) as EuRegExp | null;
+          if (vatParsed?.groups.CODE && vatParsed?.groups.NUM) {
+            try {
+              const isValid = await isVatValid(
+                vatParsed.groups.CODE,
+                vatParsed.groups.NUM
+              );
+              setVatValid(isValid);
+            } catch (error) {
+              Logger('OrgDetails-VAT-validation').error((error as Error).message);
+            }
+            return true;
           }
         }
         return true;
@@ -149,8 +176,20 @@ export const OrgDetails = () => {
     resolver: yupResolver(organizerSchema),
     defaultValues: defaultValuesSessionStorage || defaultValues
   });
-  const { watch, handleSubmit } = methods;
-  const { privacy, invoice } = watch();
+  const { watch, handleSubmit, trigger } = methods;
+  const { privacy, vatNumber, invoice } = watch();
+
+  const vatValidation = useCallback(
+    debouncedFn(() => trigger('vatNumber'), 1500),
+    [debouncedFn, trigger]
+  );
+
+  useEffect(() => {
+    setVatValid(false);
+    const cancelDebounce = vatValidation();
+
+    return cancelDebounce;
+  }, [vatValidation, vatNumber]);
 
   /**
    * In this useEffect data is being stored in the session storage state,
@@ -194,40 +233,53 @@ export const OrgDetails = () => {
             label={<Typography variant="subtitle1">I will need an invoice</Typography>}
           />
 
-          <>
-            <RHFTextField name="companyName" label="Company Name (Optional)" />
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                gap: 1
-              }}
-            >
-              <RHFAutocomplete
-                name="countryCode"
-                label="Country (Optional)"
-                options={countriesOptions}
-              />
-              <RHFTextField name="cityName" label="City (Optional)" />
-            </Box>
-            <RHFTextField name="postalCode" label="Postal code (Optional)" />
-            <RHFTextField name="street" label="Street name and number (Optional)" />
-            <RHFTextField
-              name="vatNumber"
-              label="VAT Number (optional)"
-              InputProps={{
-                // Show green checkmark if VAT is valid only
-                endAdornment: vatValid ? (
-                  <Iconify
-                    color="green"
-                    icon="akar-icons:circle-check-fill"
-                    marginLeft={1}
+          {invoice && (
+            <Box mt={3} mb={3}>
+              <Typography variant="h5" mb={3}>
+                Enter Billing Details
+              </Typography>
+              <Stack spacing={3}>
+                <RHFTextField
+                  name="companyName"
+                  label="Company/Legal Entity Name (Optional)"
+                  helperText={
+                    'Invoices will be issued using the company/ legal entity name provided above. If you are an individual, please use your name.'
+                  }
+                />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    gap: 1
+                  }}
+                >
+                  <RHFAutocomplete
+                    name="countryCode"
+                    label="Country"
+                    options={countriesOptions}
                   />
-                ) : null
-              }}
-            />
-          </>
+                  <RHFTextField name="cityName" label="City" />
+                </Box>
+                <RHFTextField name="postalCode" label="Postal code" />
+                <RHFTextField name="street" label="Street name and number" />
+                <RHFTextField
+                  name="vatNumber"
+                  label="VAT Number (optional)"
+                  InputProps={{
+                    // Show green checkmark if VAT is valid only
+                    endAdornment: vatValid ? (
+                      <Iconify
+                        color="green"
+                        icon="akar-icons:circle-check-fill"
+                        marginLeft={1}
+                      />
+                    ) : null
+                  }}
+                />
+              </Stack>
+            </Box>
+          )}
 
           <RHFCheckbox
             name="privacy"

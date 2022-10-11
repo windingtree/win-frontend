@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { daysBetween } from '../../utils/date';
-import { DISABLE_FEATURES } from 'src/config';
+import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
 //TODO: update this when group booking should be enabled
 export const SearchSchema =
   DISABLE_FEATURES === true
@@ -20,10 +20,13 @@ export const SearchSchema =
           .transform((value) => (isNaN(value) ? undefined : value))
           .required('number of rooms')
           .moreThan(0, 'select at least 1 room')
-          .lessThan(10, 'Maximum is 9'),
+          .lessThan(
+            GROUP_MODE_ROOM_COUNT,
+            `select at most ${GROUP_MODE_ROOM_COUNT - 1} rooms`
+          ),
 
         dateRange: Yup.array()
-          .required('a check-in date and an check-out date')
+          .required('a check-in date and a check-out date')
           .of(
             Yup.object().shape({
               startDate: Yup.date()
@@ -31,7 +34,7 @@ export const SearchSchema =
                 .required('a check-in date'),
               endDate: Yup.date()
                 .typeError('a valid check-out date')
-                .required('an check-out date')
+                .required('a check-out date')
             })
           )
       })
