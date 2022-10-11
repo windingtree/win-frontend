@@ -85,12 +85,9 @@ export const FacilityGroupOffers = ({
 
   const onSubmit = (values: FormValuesProps) => {
     if (roomCount > guestCount) {
-      return enqueueSnackbar(
-        `Please select more persons than rooms in order to continue.`,
-        {
-          variant: 'error'
-        }
-      );
+      return enqueueSnackbar(`Please select more persons than rooms to continue.`, {
+        variant: 'error'
+      });
     }
 
     if (roomCount < GROUP_MODE_ROOM_COUNT) {

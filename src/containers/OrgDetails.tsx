@@ -61,14 +61,14 @@ const getFormattedOrganizerInfo = (
     cityName,
     street
   } = values;
-  const billingAddress = { countryCode, postalCode, cityName, street };
-  const corporateInfo = { companyName, vatNumber, billingAddress };
+  const address = { countryCode, postalCode, cityName, street };
+  const billingInfo = { companyName, vatNumber, address };
   const organizerInfo = {
     firstName,
     lastName,
     phoneNumber,
     emailAddress,
-    corporateInfo
+    billingInfo
   };
 
   return organizerInfo;
@@ -94,13 +94,13 @@ export const OrgDetails = () => {
   const [vatValid, setVatValid] = useState<boolean>(false);
   const { setOrganizerInfo, organizerInfo, setBookingInfo, bookGroup } = useCheckout();
 
-  const { corporateInfo, ...restOrganizerInfo } = organizerInfo || {};
-  const { billingAddress, ...restCorporateInfo } = corporateInfo || {};
+  const { billingInfo, ...restOrganizerInfo } = organizerInfo || {};
+  const { address, ...restCorporateInfo } = billingInfo || {};
   const defaultValuesSessionStorage = {
     ...defaultValues,
     ...restOrganizerInfo,
     ...restCorporateInfo,
-    ...billingAddress
+    ...address
   };
 
   // temp var to enable VAT validation

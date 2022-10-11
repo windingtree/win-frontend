@@ -52,13 +52,15 @@ export const useCheckout = () => {
     if (!organizerInfo || !bookingInfo?.offers || !bookingInfo?.adultCount) {
       throw new Error('Something went wrong. Please try selecting your rooms again.');
     }
-    const { corporateInfo, ...restOrganizerInfo } = organizerInfo;
-    const includeCorporateInfo = corporateInfo?.companyName !== '';
+    const { billingInfo, ...restOrganizerInfo } = organizerInfo;
+    const includeBillingInfo = bookingInfo?.invoice;
+
+    console.log(bookingInfo.invoice, billingInfo);
 
     const result = await bookGroupRequest({
       organizerInfo: {
         ...restOrganizerInfo,
-        ...(includeCorporateInfo && { corporateInfo })
+        ...(includeBillingInfo && { billingInfo })
       },
       offers: bookingInfo.offers,
       guestCount: bookingInfo.adultCount,
