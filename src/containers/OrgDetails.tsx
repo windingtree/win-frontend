@@ -103,6 +103,9 @@ export const OrgDetails = () => {
     ...billingAddress
   };
 
+  // temp var to enable VAT validation
+  const validateVAT = false;
+
   const invoiceSiblingsValidation = (errorMessage: string) => ({
     is: true,
     then: Yup.string().required(errorMessage)
@@ -126,9 +129,7 @@ export const OrgDetails = () => {
       .required('Email is required')
       .matches(regexp.email, 'Incorrect email')
       .email(),
-    companyName: Yup.string()
-      .trim()
-      .when('invoice', invoiceSiblingsValidation('Company name is required')),
+    companyName: Yup.string().trim(),
     postalCode: Yup.string()
       .trim()
       .when('invoice', invoiceSiblingsValidation('Postal code is required')),
@@ -150,6 +151,9 @@ export const OrgDetails = () => {
     vatNumber: Yup.string()
       .trim()
       .test('is-vat-valid', 'VAT number is not valid', async (value) => {
+        // switch to disable this validation
+        if (!validateVAT) return true;
+
         if (value && value.trim().length >= 7) {
           const vatParsed = euRegExp.exec(value.trim()) as EuRegExp | null;
           if (vatParsed?.groups.CODE && vatParsed?.groups.NUM) {
@@ -232,42 +236,6 @@ export const OrgDetails = () => {
             name="invoice"
             label={<Typography variant="subtitle1">I will need an invoice</Typography>}
           />
-          {invoice && (
-            <>
-              <RHFTextField name="companyName" label="Company Name (Optional)" />
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'flex-start',
-                  gap: 1
-                }}
-              >
-                <RHFAutocomplete
-                  name="countryCode"
-                  label="Country (Optional)"
-                  options={countriesOptions}
-                />
-                <RHFTextField name="cityName" label="City (Optional)" />
-              </Box>
-              <RHFTextField name="postalCode" label="Postal code (Optional)" />
-              <RHFTextField name="street" label="Street name and number (Optional)" />
-              <RHFTextField
-                name="vatNumber"
-                label="VAT Number (optional)"
-                InputProps={{
-                  // Show green checkmark if VAT is valid only
-                  endAdornment: vatValid ? (
-                    <Iconify
-                      color="green"
-                      icon="akar-icons:circle-check-fill"
-                      marginLeft={1}
-                    />
-                  ) : null
-                }}
-              />
-            </>
-          )}
 
           {invoice && (
             <Box mt={3} mb={3}>
@@ -275,7 +243,13 @@ export const OrgDetails = () => {
                 Enter Billing Details
               </Typography>
               <Stack spacing={3}>
-                <RHFTextField name="companyName" label="Company/Legal Entity Name" />
+                <RHFTextField
+                  name="companyName"
+                  label="Company/Legal Entity Name (Optional)"
+                  helperText={
+                    'Invoices will be issued using the company/ legal entity name provided above. If you are an individual, please use your name.'
+                  }
+                />
                 <Box
                   sx={{
                     display: 'flex',
