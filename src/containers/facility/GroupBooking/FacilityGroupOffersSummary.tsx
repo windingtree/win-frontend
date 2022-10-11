@@ -57,7 +57,7 @@ const Summary = ({
           sx={{ mt: 1, mb: 1, zIndex: 1 }}
           size="large"
         >
-          Request quote
+          Request a quotation
         </Button>
         <Typography variant="caption">
           *A 10% refundable deposit is required to finish the quotation process. Read more{' '}

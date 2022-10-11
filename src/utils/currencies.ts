@@ -201,7 +201,7 @@ const dups = Object.entries(currencySymbols).reduce((result, [_, symbol]) => {
 export const currencySymbolMap: Record<string, string> = Object.entries(
   currencySymbols
 ).reduce((result, [key, symbol]) => {
-  if (key === 'GBP') {
+  if (['GBP', 'USD'].includes(key)) {
     // special case for GBP - no prefix
     result[key] = symbol;
   } else if (dups[symbol] > 1) {

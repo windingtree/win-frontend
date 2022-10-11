@@ -21,15 +21,15 @@ export const RoomCardGroup: React.FC<{
   const currencySymbol = currencySymbolMap[offer.price.currency] ?? offer.price.currency;
 
   return (
-    <Box mb={5}>
+    <Box>
       <Divider />
       <Box py={5}>
-        <Grid container spacing={5}>
-          <Grid item xs={8}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={8}>
             <RoomInformation room={room} />
           </Grid>
-          <Grid item xs={4}>
-            <Stack spacing={1} alignItems="flex-end" sx={{ textAlign: 'end' }}>
+          <Grid item xs={12} md={4}>
+            <Stack alignItems={{ md: 'flex-end' }} sx={{ textAlign: { md: 'end' } }}>
               <Typography>Select rooms</Typography>
               <TextField
                 sx={{ width: 80 }}
@@ -44,11 +44,40 @@ export const RoomCardGroup: React.FC<{
                   }
                 }}
               />
-              <Typography variant="body2">{`${currencySymbol} ${pricePerNight.toFixed(
-                2
-              )} / room / night`}</Typography>
+              <Box mt={{ xs: 2, mb: 0 }}>
+                <Typography
+                  color="text.secondary"
+                  variant="body2"
+                  component="span"
+                  fontWeight="bold"
+                  sx={{ display: 'inline-block' }}
+                >
+                  {`${currencySymbol} ${pricePerNight.toFixed(2)}`}
+                </Typography>
+                <Typography color="text.secondary" variant="body2" component="span">
+                  {' '}
+                  / room / night
+                </Typography>
+              </Box>
+
               {nightCount > 1 && (
-                <Typography variant="body2">{`${currencySymbol} ${offer.price.public} / room / ${nightCount} nights`}</Typography>
+                <Box>
+                  <Typography
+                    sx={{ display: 'inline-block' }}
+                    component="span"
+                    variant="body2"
+                    color="text.secondary"
+                    fontWeight="bold"
+                  >{`${currencySymbol} ${offer.price.public}`}</Typography>
+                  <Typography
+                    sx={{ display: 'inline-block' }}
+                    component="span"
+                    variant="body2"
+                    color="text.secondary"
+                  >
+                    &nbsp;{`/ room / ${nightCount} nights`}
+                  </Typography>
+                </Box>
               )}
             </Stack>
           </Grid>

@@ -193,42 +193,41 @@ export const OrgDetails = () => {
             name="invoice"
             label={<Typography variant="subtitle1">I will need an invoice</Typography>}
           />
-          {invoice && (
-            <>
-              <RHFTextField name="companyName" label="Company Name (Optional)" />
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'flex-start',
-                  gap: 1
-                }}
-              >
-                <RHFAutocomplete
-                  name="countryCode"
-                  label="Country (Optional)"
-                  options={countriesOptions}
-                />
-                <RHFTextField name="cityName" label="City (Optional)" />
-              </Box>
-              <RHFTextField name="postalCode" label="Postal code (Optional)" />
-              <RHFTextField name="street" label="Street name and number (Optional)" />
-              <RHFTextField
-                name="vatNumber"
-                label="VAT Number (optional)"
-                InputProps={{
-                  // Show green checkmark if VAT is valid only
-                  endAdornment: vatValid ? (
-                    <Iconify
-                      color="green"
-                      icon="akar-icons:circle-check-fill"
-                      marginLeft={1}
-                    />
-                  ) : null
-                }}
+
+          <>
+            <RHFTextField name="companyName" label="Company Name (Optional)" />
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                gap: 1
+              }}
+            >
+              <RHFAutocomplete
+                name="countryCode"
+                label="Country (Optional)"
+                options={countriesOptions}
               />
-            </>
-          )}
+              <RHFTextField name="cityName" label="City (Optional)" />
+            </Box>
+            <RHFTextField name="postalCode" label="Postal code (Optional)" />
+            <RHFTextField name="street" label="Street name and number (Optional)" />
+            <RHFTextField
+              name="vatNumber"
+              label="VAT Number (optional)"
+              InputProps={{
+                // Show green checkmark if VAT is valid only
+                endAdornment: vatValid ? (
+                  <Iconify
+                    color="green"
+                    icon="akar-icons:circle-check-fill"
+                    marginLeft={1}
+                  />
+                ) : null
+              }}
+            />
+          </>
 
           <RHFCheckbox
             name="privacy"

@@ -64,7 +64,7 @@ export const CheckoutSummary = () => {
           {isGroupMode && (
             <Typography textAlign={{ xs: 'center', lg: 'right' }}>
               This 10% deposit is required to pre-book the rooms and get the best offer
-              from the hotel. You can get it back anytime. Check out the{' '}
+              from the hotel. <b>You can get it back anytime.</b> Check out the{' '}
               <Link to="faq">group booking guide</Link>.
             </Typography>
           )}
