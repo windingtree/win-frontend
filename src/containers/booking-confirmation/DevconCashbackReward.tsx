@@ -179,7 +179,7 @@ export const DevconCashbackReward = () => {
     }
 
     const script = document.createElement('script');
-    script.src = 'https://devcon-vi.attest.tickets/devcon6.js?v=1';
+    script.src = 'https://devcon-vi.attest.tickets/devcon6.js?v=0.35';
     script.id = 'negotiator';
     script.onload = initNegotiator;
 
