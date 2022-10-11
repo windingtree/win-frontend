@@ -8,7 +8,7 @@ import { useAppDispatch, useAppState } from 'src/store';
 import { BookingInfoType } from 'src/store/types';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
 import { bookGroupRequest } from './api';
-import { getBookingMode } from './helpers';
+import { getBookingMode, getNormalizedOrganizerInfo } from './helpers';
 
 export const useCheckout = () => {
   const dispatch = useAppDispatch();
@@ -49,19 +49,22 @@ export const useCheckout = () => {
    * and get necessary information to pay for the deposit.
    */
   const bookGroup = useMutation<GroupBookingRequestResponse, Error>(async () => {
-    if (!organizerInfo || !bookingInfo?.offers || !bookingInfo?.adultCount) {
+    if (
+      !organizerInfo ||
+      !bookingInfo?.offers ||
+      !bookingInfo?.adultCount ||
+      typeof bookingInfo?.invoice != 'boolean'
+    ) {
       throw new Error('Something went wrong. Please try selecting your rooms again.');
     }
-    const { billingInfo, ...restOrganizerInfo } = organizerInfo;
-    const includeBillingInfo = bookingInfo?.invoice;
 
-    console.log(bookingInfo.invoice, billingInfo);
+    const normalizedOrganizerInfo = getNormalizedOrganizerInfo(
+      organizerInfo,
+      bookingInfo.invoice
+    );
 
     const result = await bookGroupRequest({
-      organizerInfo: {
-        ...restOrganizerInfo,
-        ...(includeBillingInfo && { billingInfo })
-      },
+      organizerInfo: normalizedOrganizerInfo,
       offers: bookingInfo.offers,
       guestCount: bookingInfo.adultCount,
       invoice: bookingInfo.invoice ?? false

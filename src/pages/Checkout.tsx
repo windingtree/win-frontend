@@ -4,7 +4,7 @@ import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { CheckoutSummary } from 'src/containers/checkout/CheckoutSummary';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import MainLayout from 'src/layouts/main';
 import { WinPay } from 'src/containers/checkout/WinPay';
 import { expirationGap } from 'src/config';
@@ -73,7 +73,7 @@ export const Checkout = () => {
   }, []);
 
   return (
-    <MainLayout maxWidth="lg">
+    <MainLayout maxWidth="sm">
       <Breadcrumbs
         sx={{ mb: 5 }}
         links={[
@@ -103,7 +103,15 @@ export const Checkout = () => {
       {payment && (
         <>
           <CheckoutSummary />
-          {!account && <SignInButton size="large" sx={{ padding: 5 }} />}
+          {!account && (
+            <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+              <Typography fontWeight="bold" mb={1}>
+                Please connect your wallet to proceed
+              </Typography>
+
+              <SignInButton size="large" sx={{ width: { xs: '100%', md: 'auto' } }} />
+            </Box>
+          )}
           <WinPay payment={payment} onSuccess={onPaymentSuccess} />
         </>
       )}
