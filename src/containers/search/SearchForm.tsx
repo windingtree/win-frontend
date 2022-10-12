@@ -35,7 +35,7 @@ import {
 import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
-import RHFTAutocomplete from 'src/components/hook-form/RHFAutocomplete';
+import { RHFAutocomplete } from 'src/components/hook-form/RHFAutocomplete';
 import { SearchPopovers } from './SearchPopovers';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
@@ -328,7 +328,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
             spacing={1}
             divider={!isMobileView ? <Divider orientation={'vertical'} flexItem /> : null}
           >
-            <RHFTAutocomplete
+            <RHFAutocomplete
               variant={isMobileView ? 'outlined' : 'standard'}
               placeholder="Where are you going?"
               name="location"
