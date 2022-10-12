@@ -16,7 +16,7 @@ import Iconify from '../components/Iconify';
 import { regexp } from '@windingtree/org.id-utils';
 import { countries, CountryType } from '../config';
 import { isVatValid } from '../utils/vat';
-import { useCheckout } from 'src/hooks/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
 import Logger from '../utils/logger';
 import { debouncedFn } from '../utils/common';
@@ -61,14 +61,14 @@ const getFormattedOrganizerInfo = (
     cityName,
     street
   } = values;
-  const billingAddress = { countryCode, postalCode, cityName, street };
-  const corporateInfo = { companyName, vatNumber, billingAddress };
+  const address = { countryCode, postalCode, cityName, street };
+  const billingInfo = { companyName, vatNumber, address };
   const organizerInfo = {
     firstName,
     lastName,
     phoneNumber,
     emailAddress,
-    corporateInfo
+    billingInfo
   };
 
   return organizerInfo;
@@ -94,13 +94,13 @@ export const OrgDetails = () => {
   const [vatValid, setVatValid] = useState<boolean>(false);
   const { setOrganizerInfo, organizerInfo, setBookingInfo, bookGroup } = useCheckout();
 
-  const { corporateInfo, ...restOrganizerInfo } = organizerInfo || {};
-  const { billingAddress, ...restCorporateInfo } = corporateInfo || {};
+  const { billingInfo, ...restOrganizerInfo } = organizerInfo || {};
+  const { address, ...restCorporateInfo } = billingInfo || {};
   const defaultValuesSessionStorage = {
     ...defaultValues,
     ...restOrganizerInfo,
     ...restCorporateInfo,
-    ...billingAddress
+    ...address
   };
 
   // temp var to enable VAT validation
@@ -211,12 +211,8 @@ export const OrgDetails = () => {
   }, [watch]);
 
   const onSubmit = async () => {
-    try {
-      const { serviceId } = await bookGroup.mutateAsync();
-      navigate(`/checkout/${serviceId}`);
-    } catch (_) {
-      return;
-    }
+    const { serviceId } = await bookGroup.mutateAsync();
+    navigate(`/checkout/${serviceId}`);
   };
 
   const localCountries: CountryType[] = useMemo(() => [...countries], [countries]);
@@ -311,7 +307,7 @@ export const OrgDetails = () => {
           />
         </Stack>
 
-        <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+        <Stack sx={{ mt: 3 }}>
           {bookGroup.error && (
             <Alert sx={{ mb: 2 }} severity="error">
               {bookGroup.error.message}

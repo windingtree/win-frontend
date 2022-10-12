@@ -1,6 +1,6 @@
 import type { RoomTypes, WinPricedOffer } from '@windingtree/glider-types/dist/win';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import axios from 'axios';
 import type { OfferRecord } from 'src/store/types';
 import { Alert, Box, Divider, Grid, Typography, useTheme } from '@mui/material';
@@ -11,6 +11,8 @@ import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
 import Logger from 'src/utils/logger';
 import { RoomInformation } from './RoomInformation';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useSnackbar } from 'notistack';
 
 const logger = Logger('RoomCard');
 
@@ -21,7 +23,8 @@ export const RoomCard: React.FC<{
 }> = ({ offer, facilityId, room }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const { latestQueryParams } = useAccommodationsAndOffers();
+  const { latestQueryParams, getAccommodationById, accommodations } =
+    useAccommodationsAndOffers();
   const arrival = latestQueryParams?.arrival;
   const departure = latestQueryParams?.departure;
   const navigate = useNavigate();
@@ -29,23 +32,58 @@ export const RoomCard: React.FC<{
   const roomsNumber = latestQueryParams?.roomCount;
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
+  const { setBookingInfo, setOrganizerInfo } = useCheckout();
+  const { enqueueSnackbar } = useSnackbar();
+  const accommodation = useMemo(
+    () => getAccommodationById(accommodations, facilityId),
+    [accommodations, facilityId]
+  );
 
-  //TODO: consider including this in a seperate hook
   const handleBook = useCallback(async () => {
     try {
       setError(undefined);
       setLoading(true);
 
+      if (!accommodation) return;
+
+      if (!arrival || !departure) {
+        enqueueSnackbar('Please fill in an arrival and departure date to continue.', {
+          variant: 'error'
+        });
+        return;
+      }
+
+      //TODO: move this to the useCheckout hook
       const res = await axios.request<WinPricedOffer>(new PricedOfferRequest(offer.id));
 
       if (res.data) {
-        dispatch({
-          type: 'SET_CHECKOUT',
-          payload: {
-            facilityId,
-            ...res.data
-          }
-        });
+        setOrganizerInfo(undefined);
+        setBookingInfo(
+          {
+            //TODO: review whether passing the quote is still needed
+            quote: res.data.quote,
+            accommodation,
+            expiration: res.data.offer.expiration,
+            date: {
+              arrival,
+              departure
+            },
+            pricing: {
+              offerCurrency: {
+                amount: res.data.offer.price.public,
+                currency: res.data.offer.price.currency
+              },
+              // Currently the sourceAmount that we are getting back is always USD, therefore `usd` is hardcoded.
+              // BE is likely to update the data structure the same way as for group booking, in the mean time we hardcode the usd value like this.
+              usd: res.data.quote?.sourceAmount
+            },
+            adultCount: latestQueryParams?.adultCount,
+            serviceId: res.data.serviceId,
+            providerId: res.data.provider,
+            offers: [{ offerId: res.data.offerId, quantity: 1 }]
+          },
+          true
+        );
 
         logger.info('Get priced offer successfully');
         navigate('/guest-info');

@@ -4,9 +4,12 @@ import type {
   WinPricedOffer,
   BookingsAuthResponse,
   OrganizerInformation,
-  OfferIdAndQuantity
+  OfferIdAndQuantity,
+  GroupBookingDeposits,
+  Quote
 } from '@windingtree/glider-types/dist/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
+import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
@@ -64,11 +67,11 @@ export interface CheckInOutPolicy {
   checkInTime: `${number}:${number}:${number}`;
 }
 export interface PersonalInfo {
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   birthdate: Date | null;
-  email: string;
-  phone: string;
+  emailAddress: string;
+  phoneNumber: string;
 }
 
 export interface CheckOut extends WinPricedOffer {
@@ -86,14 +89,21 @@ export interface SearchParams {
 }
 
 export interface BookingInfoType {
-  invoice?: boolean;
-  facilityId?: string;
+  adultCount?: number;
+  roomCount?: number;
+  location?: string;
   date?: {
     arrival: Date;
     departure: Date;
   };
+  accommodation?: AccommodationWithId;
   offers?: OfferIdAndQuantity[];
-  guestCount?: number;
+  expiration?: string;
+  pricing?: GroupBookingDeposits;
+  providerId?: string;
+  serviceId?: string;
+  invoice?: boolean;
+  quote?: Quote;
 }
 
 export interface State {

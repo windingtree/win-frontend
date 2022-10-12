@@ -108,7 +108,7 @@ export interface SetWalletAuthAction {
 
 export interface SetOrganizerInfo {
   type: 'SET_ORGANIZER_INFO';
-  payload: OrganizerInformation;
+  payload?: OrganizerInformation;
 }
 
 export interface SetBookingInfo {

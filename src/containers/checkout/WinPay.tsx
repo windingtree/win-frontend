@@ -1,14 +1,13 @@
 import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import { Payment, PaymentSuccess } from './PaymentCard';
 import { useState, useCallback } from 'react';
 import { Box } from '@mui/material';
-import { useAppDispatch, useAppState } from '../store';
-import { CurrencySelector } from './CurrencySelector';
-import { NetworkSelector } from './NetworkSelector';
-import { AssetSelector } from './AssetSelector';
-import { PaymentCard } from './PaymentCard';
-import useResponsive from '../hooks/useResponsive';
-import Logger from '../utils/logger';
+import { useAppDispatch, useAppState } from 'src/store';
+import useResponsive from 'src/hooks/useResponsive';
+import { AssetSelector } from 'src/components/AssetSelector';
+import { NetworkSelector } from 'src/components/NetworkSelector';
+import { Payment, PaymentCard, PaymentSuccess } from 'src/components/PaymentCard';
+import { CurrencySelector } from 'src/components/CurrencySelector';
+import Logger from 'src/utils/logger';
 
 const logger = Logger('WinPay');
 

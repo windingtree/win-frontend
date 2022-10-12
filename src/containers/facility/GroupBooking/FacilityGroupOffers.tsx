@@ -13,8 +13,8 @@ import useResponsive from 'src/hooks/useResponsive';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { daysBetween } from 'src/utils/date';
 import { FacilityOffersTitle } from '../FacilityOffersTitle';
-import { useCheckout } from 'src/hooks/useCheckout';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useNavigate } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
 import { useSnackbar } from 'notistack';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
@@ -54,7 +54,6 @@ export const FacilityGroupOffers = ({
   offers = [],
   accommodation
 }: FacilityGroupOffersProps) => {
-  const { id } = useParams<{ id: string }>();
   const { latestQueryParams } = useAccommodationsAndOffers();
   const defaultRoomCount = latestQueryParams?.roomCount
     ? latestQueryParams.roomCount
@@ -72,7 +71,7 @@ export const FacilityGroupOffers = ({
   const { handleSubmit, watch } = methods;
   const values = watch();
   const roomCount = values.offers.reduce(getTotalRoomCountReducer, 0);
-  const { setBookingInfo } = useCheckout();
+  const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const [showError, setShowError] = useState(false);
   const isDesktop = useResponsive('up', 'md');
   const summaryBoxHeight = 210;
@@ -85,14 +84,19 @@ export const FacilityGroupOffers = ({
   const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = (values: FormValuesProps) => {
+    if (roomCount > guestCount) {
+      return enqueueSnackbar(`Please select more persons than rooms to continue.`, {
+        variant: 'error'
+      });
+    }
+
     if (roomCount < GROUP_MODE_ROOM_COUNT) {
-      enqueueSnackbar(
+      return enqueueSnackbar(
         `Please select ${GROUP_MODE_ROOM_COUNT} or more rooms to continue.`,
         {
           variant: 'error'
         }
       );
-      return;
     }
 
     if (!arrival || !departure) {
@@ -104,15 +108,23 @@ export const FacilityGroupOffers = ({
 
     const selectedOffers = getSelectedOffers(values.offers);
 
-    setBookingInfo({
-      date: {
-        arrival,
-        departure
+    if (!accommodation) return;
+    // Remove the current state of the organizer info
+    setOrganizerInfo(undefined);
+    setBookingInfo(
+      {
+        location: latestQueryParams?.location,
+        accommodation,
+        expiration: values.offers[0].expiration,
+        date: {
+          arrival,
+          departure
+        },
+        adultCount: latestQueryParams?.adultCount,
+        offers: selectedOffers
       },
-      guestCount: guestCount,
-      offers: selectedOffers,
-      facilityId: id
-    });
+      true
+    );
 
     navigate('/org-details');
   };

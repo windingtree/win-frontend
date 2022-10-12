@@ -2,7 +2,6 @@ import { Box, Button, Typography, Stack, Grid, useTheme, Card } from '@mui/mater
 import { useFormContext } from 'react-hook-form';
 import useResponsive from 'src/hooks/useResponsive';
 import { OfferRecord } from 'src/store/types';
-import { Link } from 'react-router-dom';
 import { currencySymbolMap } from '../../../utils/currencies';
 
 const getTotalPrice = (prev: number, current: OfferRecord): number => {
@@ -57,11 +56,14 @@ const Summary = ({
           sx={{ mt: 1, mb: 1, zIndex: 1 }}
           size="large"
         >
-          Request quote
+          Request a quotation
         </Button>
         <Typography variant="caption">
           *A 10% refundable deposit is required to finish the quotation process. Read more{' '}
-          <Link to="/faq">here</Link>.
+          <a target="_blank" href="/faq#group-booking">
+            here
+          </a>
+          .
         </Typography>
       </Grid>
     </Stack>

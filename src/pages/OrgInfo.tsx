@@ -4,7 +4,7 @@ import { OrgDetails } from '../containers/OrgDetails';
 import { useMemo } from 'react';
 import { createSearchParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { useCheckout } from 'src/hooks/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 
 export const OrgInfo = () => {
   const { bookingInfo } = useCheckout();
@@ -38,7 +38,9 @@ export const OrgInfo = () => {
           },
           {
             name: 'Facility',
-            href: bookingInfo ? `/facility/${bookingInfo.facilityId}` : `/search?${query}`
+            href: bookingInfo
+              ? `/facility/${bookingInfo?.accommodation?.id}`
+              : `/search?${query}`
           }
         ]}
       />
