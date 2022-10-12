@@ -24,3 +24,12 @@ export const safeObjectStringify = (
   indent?: number,
   maxCopies?: number
 ): string => JSON.stringify(object, circularReplacer(maxCopies), indent);
+
+export const findObjectWithPropertyAndValue = (
+  arrayOfObjects: Record<string, unknown>[],
+  property: string,
+  value: unknown
+) => {
+  if (!arrayOfObjects.length || !property) return undefined;
+  return arrayOfObjects.find((obj) => obj[property] === value);
+};
