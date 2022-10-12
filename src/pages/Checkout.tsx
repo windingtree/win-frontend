@@ -58,19 +58,22 @@ export const Checkout = () => {
     };
   }, [bookingInfo]);
 
-  const onPaymentSuccess = useCallback<PaymentSuccessCallback>((result) => {
-    if (!bookingInfo) return;
+  const onPaymentSuccess = useCallback<PaymentSuccessCallback>(
+    (result) => {
+      if (!bookingInfo) return;
 
-    logger.debug(`Payment result:`, result);
-    navigate({
-      pathname: '/bookings/confirmation',
-      search: `?${createSearchParams({
-        offerId: offerId || ' ',
-        tx: result.tx.hash
-      })}`,
-      hash: bookingInfo?.location === 'Bogota' ? 'devcon' : ''
-    });
-  }, []);
+      logger.debug(`Payment result:`, result);
+      navigate({
+        pathname: '/bookings/confirmation',
+        search: `?${createSearchParams({
+          offerId: offerId || ' ',
+          tx: result.tx.hash
+        })}`,
+        hash: bookingInfo?.location === 'Bogota' ? 'devcon' : ''
+      });
+    },
+    [bookingInfo, navigate]
+  );
 
   return (
     <MainLayout maxWidth="sm">

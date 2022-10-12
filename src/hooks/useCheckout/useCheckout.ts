@@ -73,6 +73,7 @@ export const useCheckout = () => {
     const { depositOptions, serviceId, providerId } = result;
 
     // TODO: This needs to be revisited for the story to convert to different currencies
+
     const quote: Quote = {
       quoteId: 'dummy',
       sourceCurrency: 'USD',
