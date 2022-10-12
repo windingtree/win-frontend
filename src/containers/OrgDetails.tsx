@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,7 +14,7 @@ import {
 } from '../components/hook-form';
 import Iconify from '../components/Iconify';
 import { regexp } from '@windingtree/org.id-utils';
-import { countries } from '../config';
+import { countries, CountryType } from '../config';
 import { isVatValid } from '../utils/vat';
 import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
@@ -215,6 +215,8 @@ export const OrgDetails = () => {
     navigate(`/checkout/${serviceId}`);
   };
 
+  const localCountries: CountryType[] = useMemo(() => [...countries], [countries]);
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Card sx={{ my: 3, p: 3 }}>
@@ -254,10 +256,11 @@ export const OrgDetails = () => {
                     gap: 1
                   }}
                 >
-                  <RHFAutocomplete
+                  <RHFAutocomplete<CountryType>
                     name="countryCode"
                     label="Country"
-                    options={countriesOptions}
+                    options={localCountries}
+                    optionValueField={'code'}
                   />
                   <RHFTextField name="cityName" label="City" />
                 </Box>
