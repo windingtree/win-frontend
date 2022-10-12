@@ -70,6 +70,18 @@ export interface PaymentCardProps {
   onSuccess: PaymentSuccessCallback;
 }
 
+export interface MetamaskError extends Error {
+  action: string;
+  code: number;
+  reason: string;
+  message: string;
+  stack: string;
+}
+
+const parseMetamaskError = (err: MetamaskError): string | undefined => {
+  return err?.reason && `${err.reason.charAt(0).toUpperCase()}${err.reason.slice(1)}`;
+};
+
 export const PaymentCard = ({
   provider,
   network,
@@ -312,7 +324,7 @@ export const PaymentCard = ({
         if (permitSignature !== undefined) {
           // Make payment with permitted tokens
           logger.debug(
-            'Deal params:',
+            'Deal params (permit):',
             payment.providerId,
             payment.serviceId,
             payment.expiration,
@@ -349,7 +361,7 @@ export const PaymentCard = ({
         } else if (asset.native) {
           // Make payment with native tokens
           logger.debug(
-            'Deal params:',
+            'Deal params (native):',
             payment.providerId,
             payment.serviceId,
             payment.expiration,
@@ -406,7 +418,7 @@ export const PaymentCard = ({
       }
     } catch (err) {
       logger.error(err);
-      setPaymentError(err.message ? err.message.split('[')[0] : 'Unknown payment error');
+      setPaymentError(parseMetamaskError(err) ?? 'Unknown payment error');
       setTxStarted(undefined);
     }
   }, [winPayContract, asset, account, permitSignature, resetState]);
@@ -509,7 +521,7 @@ export const PaymentCard = ({
               gap: 2
             }}
           >
-            {!asset.permit && tokenAllowance.lt(paymentValue) && (
+            {!asset.native && !asset.permit && tokenAllowance.lt(paymentValue) && (
               <Button
                 variant="contained"
                 onClick={approveTokens}
@@ -521,7 +533,7 @@ export const PaymentCard = ({
                 ) : undefined}
               </Button>
             )}
-            {asset.permit && permitSignature === undefined && (
+            {!asset.native && asset.permit && permitSignature === undefined && (
               <Button variant="contained" onClick={createPermit} disabled={permitBlocked}>
                 Permit the tokens
               </Button>
@@ -573,9 +585,8 @@ export const PaymentCard = ({
       </MessageBox>
 
       <MessageBox type="warn" show={!!paymentError}>
+        <Typography variant="body1">{paymentError}</Typography>
         <Typography variant="body1">
-          {paymentError}
-          <br />
           Please check your account transactions history on the block explorer:&nbsp;
           <ExternalLink
             href={`${network?.blockExplorer}/address/${account}`}
@@ -583,28 +594,27 @@ export const PaymentCard = ({
           >
             {centerEllipsis(account || '')}
           </ExternalLink>
-          <br />
-          <List>
-            <ListItem>
-              <ListItemIcon>
-                <Iconify color="inherit" icon="bi:dot" />
-              </ListItemIcon>
-              <ListItemText>
-                If the payment transaction not been sent please try to send it again.
-                <br />
-              </ListItemText>
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <Iconify color="inherit" icon="bi:dot" />
-              </ListItemIcon>
-              <ListItemText>
-                If the payment transaction is sent despite of error please wait for the
-                booking confirmation in your mailbox.
-              </ListItemText>
-            </ListItem>
-          </List>
         </Typography>
+        <List>
+          <ListItem>
+            <ListItemIcon>
+              <Iconify color="inherit" icon="bi:dot" />
+            </ListItemIcon>
+            <ListItemText>
+              If the payment transaction not been sent please try to send it again.
+              <br />
+            </ListItemText>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <Iconify color="inherit" icon="bi:dot" />
+            </ListItemIcon>
+            <ListItemText>
+              If the payment transaction is sent despite of error please wait for the
+              booking confirmation in your mailbox.
+            </ListItemText>
+          </ListItem>
+        </List>
       </MessageBox>
     </>
   );
