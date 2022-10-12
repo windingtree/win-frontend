@@ -40,13 +40,22 @@ export default function RHFTAutocomplete<T extends StringOrObject>({
     getOptionLabel ??
     useCallback(
       (option) => {
+        // if option is an object with a field for label return the label value
         if (option[optionLabelField]) return option[optionLabelField];
-        const foundOption = findObjectWithPropertyAndValue(
-          options as Record<string, unknown>[],
-          optionValueField,
-          option
-        );
-        const label = foundOption ? foundOption['label'] : option[optionLabelField];
+
+        let foundOption;
+        // if 'option' is a string and 'options' is an array of objects
+        // we need to look up the corresponding object with this 'option' value
+        if (typeof option === 'string') {
+          foundOption = findObjectWithPropertyAndValue(
+            options as Record<string, unknown>[],
+            optionValueField,
+            option
+          );
+        }
+
+        // return the found option object's label or the literal string if no object found
+        const label = foundOption ? foundOption[optionLabelField] : option;
         return label;
       },
       [options, optionValueField, optionLabelField]
