@@ -13,7 +13,7 @@ import useResponsive from 'src/hooks/useResponsive';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { daysBetween } from 'src/utils/date';
 import { FacilityOffersTitle } from '../FacilityOffersTitle';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 import { useNavigate } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
 import { useSnackbar } from 'notistack';
@@ -109,7 +109,6 @@ export const FacilityGroupOffers = ({
     const selectedOffers = getSelectedOffers(values.offers);
 
     if (!accommodation) return;
-    // Remove the current state of the organizer info
     setOrganizerInfo(undefined);
     setBookingInfo(
       {

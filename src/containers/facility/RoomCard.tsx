@@ -11,7 +11,7 @@ import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
 import Logger from 'src/utils/logger';
 import { RoomInformation } from './RoomInformation';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 import { useSnackbar } from 'notistack';
 
 const logger = Logger('RoomCard');

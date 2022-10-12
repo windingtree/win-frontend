@@ -15,7 +15,7 @@ import { RHFDatePicker } from '../components/hook-form/RHFDatePicker';
 import { regexp } from '@windingtree/org.id-utils';
 import { convertToLocalTime } from '../utils/date';
 import { DateTime } from 'luxon';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 import { useSnackbar } from 'notistack';
 import { getOfferId } from 'src/hooks/useCheckout/helpers';
 
