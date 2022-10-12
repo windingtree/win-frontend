@@ -7,7 +7,9 @@ import {
   GlobalStyles,
   styled,
   Typography,
-  Stack
+  Stack,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -70,6 +72,13 @@ const MapSettings: React.FC<{
 }> = ({ map, center }) => {
   const [position, setPosition] = useState(() => map.getCenter());
   const [zoom, setZoom] = useState(() => map.getZoom());
+  const dispatch = useAppDispatch();
+
+  const onPopupClose = useCallback(() => {
+    dispatch({
+      type: 'RESET_SELECTED_FACILITY_ID'
+    });
+  }, []);
 
   const onMove = useCallback(() => {
     setPosition(map.getCenter());
@@ -85,6 +94,13 @@ const MapSettings: React.FC<{
       map.off('move', onMove);
     };
   }, [map, onMove]);
+
+  useEffect(() => {
+    map.on('popupclose', onPopupClose);
+    return () => {
+      map.off('popupclose', onPopupClose);
+    };
+  }, [map, onPopupClose]);
 
   useEffect(() => {
     map.on('zoom', onZoom);
@@ -126,6 +142,9 @@ export const MapBox: React.FC = () => {
   const [map, setMap] = useState<Map | null>(null);
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
+
+  const theme = useTheme();
+  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
 
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();
