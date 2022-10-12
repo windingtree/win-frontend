@@ -6,7 +6,6 @@ import FallbackImage from 'src/images/hotel-fallback.webp';
 import { useMemo } from 'react';
 import { sortByLargestImage } from 'src/utils/accommodation';
 import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
-import { Link } from 'react-router-dom';
 
 export const CheckoutSummary = () => {
   const { bookingMode, bookingInfo } = useCheckout();
@@ -57,7 +56,11 @@ export const CheckoutSummary = () => {
               </Typography>
 
               <Typography>
-                Check out the <Link to="faq">group booking guide</Link>.
+                Check out the{' '}
+                <a target="_blank" href="/faq#group-booking">
+                  group booking guide
+                </a>
+                .
               </Typography>
             </>
           )}

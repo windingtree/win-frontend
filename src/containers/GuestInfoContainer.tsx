@@ -25,7 +25,7 @@ const defaultValues = {
   firstName: '',
   lastName: '',
   birthdate: null,
-  email: '',
+  emailAddress: '',
   phoneNumber: ''
 };
 
@@ -38,7 +38,7 @@ const NewUserSchema = Yup.object().shape({
     .trim()
     .matches(/^[a-z ,.'-]+$/i, 'Only a-z, A-Z chars')
     .required('Last name is required'),
-  email: Yup.string()
+  emailAddress: Yup.string()
     .trim()
     .required('Email is required')
     .matches(regexp.email, 'Incorrect email')
@@ -132,7 +132,7 @@ export const GuestInfoContainer = () => {
           <RHFTextField name="firstName" label="First Name" />
           <RHFTextField name="lastName" label="Last Name" />
           <RHFDatePicker name="birthdate" label="Birth date" />
-          <RHFTextField name="email" label="Email Address" />
+          <RHFTextField name="emailAddress" label="Email Address" />
           <RHFPhoneField name="phoneNumber" label="Phone Number" />
         </Stack>
         <Stack direction="row" alignItems="flex-start" sx={{ mt: 3 }}>

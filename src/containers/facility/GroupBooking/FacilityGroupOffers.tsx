@@ -71,7 +71,7 @@ export const FacilityGroupOffers = ({
   const { handleSubmit, watch } = methods;
   const values = watch();
   const roomCount = values.offers.reduce(getTotalRoomCountReducer, 0);
-  const { setBookingInfo } = useCheckout();
+  const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const [showError, setShowError] = useState(false);
   const isDesktop = useResponsive('up', 'md');
   const summaryBoxHeight = 210;
@@ -109,6 +109,8 @@ export const FacilityGroupOffers = ({
     const selectedOffers = getSelectedOffers(values.offers);
 
     if (!accommodation) return;
+    // Remove the current state of the organizer info
+    setOrganizerInfo(undefined);
     setBookingInfo(
       {
         location: latestQueryParams?.location,

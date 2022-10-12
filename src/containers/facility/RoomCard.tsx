@@ -32,7 +32,7 @@ export const RoomCard: React.FC<{
   const roomsNumber = latestQueryParams?.roomCount;
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
-  const { setBookingInfo } = useCheckout();
+  const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const { enqueueSnackbar } = useSnackbar();
   const accommodation = useMemo(
     () => getAccommodationById(accommodations, facilityId),
@@ -57,6 +57,7 @@ export const RoomCard: React.FC<{
       const res = await axios.request<WinPricedOffer>(new PricedOfferRequest(offer.id));
 
       if (res.data) {
+        setOrganizerInfo(undefined);
         setBookingInfo(
           {
             //TODO: review whether passing the quote is still needed

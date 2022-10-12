@@ -10,6 +10,8 @@ import { getTotalRoomCountReducer } from 'src/utils/offers';
 import { bookGroupRequest } from './api';
 import { getBookingMode, getNormalizedOrganizerInfo } from './helpers';
 
+type OptionalQuote = Quote | undefined;
+
 export const useCheckout = () => {
   const dispatch = useAppDispatch();
   const { organizerInfo, bookingInfo } = useAppState();
@@ -18,7 +20,7 @@ export const useCheckout = () => {
    * Save the organizer info in global state
    * @param info : info of the organizer
    */
-  const setOrganizerInfo = (info: OrganizerInformation) => {
+  const setOrganizerInfo = (info: OrganizerInformation | undefined) => {
     dispatch({
       type: 'SET_ORGANIZER_INFO',
       payload: info
@@ -33,14 +35,14 @@ export const useCheckout = () => {
   const setBookingInfo = (info: BookingInfoType, cleanPrevState = false) => {
     const roomCount = info?.offers?.reduce(getTotalRoomCountReducer, 0);
 
-    const newStore = {
+    const newState = {
       ...info,
       ...(roomCount && { roomCount })
     };
 
     dispatch({
       type: 'SET_BOOKING_INFO',
-      payload: cleanPrevState ? newStore : { ...bookingInfo, ...newStore }
+      payload: cleanPrevState ? newState : { ...bookingInfo, ...newState }
     });
   };
 
@@ -67,21 +69,23 @@ export const useCheckout = () => {
       organizerInfo: normalizedOrganizerInfo,
       offers: bookingInfo.offers,
       guestCount: bookingInfo.adultCount,
-      invoice: bookingInfo.invoice ?? false
+      invoice: bookingInfo.invoice
     });
 
     const { depositOptions, serviceId, providerId } = result;
 
-    // TODO: This needs to be revisited for the story to convert to different currencies
-
-    const quote: Quote = {
-      quoteId: 'dummy',
-      sourceCurrency: 'USD',
-      sourceAmount: depositOptions.usd || 'dummy',
-      targetCurrency: 'dummy',
-      targetAmount: 'dummy',
-      rate: 'dummy'
-    };
+    // TODO: We currently only get from the BE the Quote for a normal booking, not a group booking
+    // for now we create a Quote object ourselves for the group booking, but this eventually has to be refactored.
+    const quote: OptionalQuote = depositOptions.usd
+      ? {
+          quoteId: '',
+          sourceCurrency: 'USD',
+          sourceAmount: depositOptions.usd,
+          targetCurrency: depositOptions.offerCurrency.currency,
+          targetAmount: depositOptions.offerCurrency.amount,
+          rate: ''
+        }
+      : undefined;
 
     setBookingInfo({ quote, pricing: depositOptions, serviceId, providerId });
     return result;
