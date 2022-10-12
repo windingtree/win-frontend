@@ -218,7 +218,7 @@ export const MapBox: React.FC = () => {
             boxShadow: `0 0 10px 0 ${theme.palette.grey[500]}`
           },
           '.marker-focused': {
-            backgroundColor: theme.palette.error.main,
+            backgroundColor: theme.palette.common.black,
             color: theme.palette.common.white
           },
           '.marker-rounded': {
@@ -273,11 +273,12 @@ export const MapBox: React.FC = () => {
         {eventMarkers}
         {accommodations && accommodations.length > 0
           ? accommodations.map((f) => {
+              const isSelected = f.id === selectedFacilityId;
               if (f.location && f.location.coordinates) {
                 return (
                   <Marker
                     key={f.id}
-                    icon={getPriceMarkerIcon(f.lowestPrice)}
+                    icon={getPriceMarkerIcon(f.lowestPrice, isSelected)}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
                       click: () => selectFacility(f.id)
@@ -288,7 +289,7 @@ export const MapBox: React.FC = () => {
                         key={f.id}
                         sm={true}
                         facility={f}
-                        isSelected={f.id === selectedFacilityId}
+                        isSelected={isSelected}
                         numberOfDays={numberOfDays}
                         focusedEvent={f.eventInfo}
                       />
