@@ -16,7 +16,7 @@ import Iconify from '../components/Iconify';
 import { regexp } from '@windingtree/org.id-utils';
 import { countries, CountryType } from '../config';
 import { isVatValid } from '../utils/vat';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
 import Logger from '../utils/logger';
 import { debouncedFn } from '../utils/common';

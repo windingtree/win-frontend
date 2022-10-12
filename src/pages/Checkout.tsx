@@ -2,7 +2,7 @@ import { utils } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 import { CheckoutSummary } from 'src/containers/checkout/CheckoutSummary';
 import { Box, Typography } from '@mui/material';
 import MainLayout from 'src/layouts/main';
