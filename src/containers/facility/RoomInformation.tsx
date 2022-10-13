@@ -1,6 +1,12 @@
 import { Box, Typography } from '@mui/material';
 
-export const RoomInformation = ({ room }) => {
+export const RoomInformation = ({ room }): JSX.Element | null => {
+  if (!room) return null;
+
+  const { name, maximumOccupancy } = room;
+
+  console.log(room);
+
   return (
     <Box>
       <Box>

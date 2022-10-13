@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { defaultSearchRadiusInMeters, EventItemProps, upcomingEvents } from '../config';
-import { Coordinates } from '../hooks/useAccommodationsAndOffers.tsx/api';
+import { Coordinates } from '../hooks/useAccommodationsAndOffers/api';
 import { NullableDate } from './date';
 import { crowDistance } from './geo';
 

@@ -3,7 +3,7 @@ import MainLayout from 'src/layouts/main';
 import { GuestInfoContainer } from '../containers/GuestInfoContainer';
 import { useMemo } from 'react';
 import { createSearchParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { useAppState } from '../store';
 
 export const GuestInfo = () => {
