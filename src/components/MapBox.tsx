@@ -103,6 +103,13 @@ const MapSettings: React.FC<{
   }, [map, onPopupClose]);
 
   useEffect(() => {
+    map.on('click', onPopupClose);
+    return () => {
+      map.off('click', onPopupClose);
+    };
+  }, [map, onPopupClose]);
+
+  useEffect(() => {
     map.on('zoom', onZoom);
     return () => {
       map.off('zoom', onZoom);
@@ -271,9 +278,12 @@ export const MapBox: React.FC = () => {
     return result;
   }, [focusedEventItem]);
 
-  const normalizedCoordinates: LatLngTuple =
-    focusedCoordinates ??
-    (coordinates ? [coordinates.lat, coordinates.lon] : [51.505, -0.09]);
+  const normalizedCoordinates: LatLngTuple = useMemo(() => {
+    return (
+      focusedCoordinates ??
+      (coordinates ? [coordinates.lat, coordinates.lon] : [51.505, -0.09])
+    );
+  }, [focusedCoordinates, coordinates]);
 
   const displayMap = useMemo(
     () => (
