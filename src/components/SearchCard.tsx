@@ -18,21 +18,15 @@ export interface SearchCardProps {
   numberOfDays: number;
   sm?: boolean;
   focusedEvent?: EventInfo[];
-  onSelect?: (...args) => void;
 }
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
-  ({ sm, facility, isSelected, focusedEvent }, ref) => {
+  ({ sm, facility, focusedEvent }, ref) => {
     const navigate = useNavigate();
     const theme = useTheme();
     const { winWidth } = useWindowsDimension();
     const { isGroupMode } = useAccommodationsAndOffers();
 
-    const selectedStyle: CSSProperties = isSelected
-      ? {
-          position: 'relative'
-        }
-      : {};
     const responsiveStyle: CSSProperties =
       winWidth < 900 || sm
         ? {
@@ -50,7 +44,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
       ? {
           minWidth: '380px',
           marginBottom: '0px',
-          minHeight: '128px'
+          minHeight: '128px',
+          maxWidth: '100vw'
         }
       : {
           marginBottom: '8px'
@@ -66,7 +61,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     }
 
     return (
-      <Card ref={ref} style={{ ...selectedStyle, ...smallCardStyle }}>
+      <Card ref={ref} style={{ ...smallCardStyle }}>
         <Stack sx={{ ...responsiveStyle }}>
           <Stack
             width={theme.spacing(sm || winWidth < 900 ? 16 : 36)}
