@@ -14,7 +14,8 @@ const logger = Logger('useAllowance');
 export const useAllowance = (
   tokenContract: MockERC20Dec18Permit | MockWrappedERC20Dec18 | undefined,
   owner: string | undefined,
-  asset: CryptoAsset | undefined
+  asset: CryptoAsset | undefined,
+  isBlocked = false
 ): BigNumber => {
   const [allowance, setAllowance] = useState<BigNumber>(BN.from(0));
 
@@ -38,7 +39,7 @@ export const useAllowance = (
 
   usePoller(
     checkAllowance,
-    tokenContract && !!owner && !!asset && !asset.native,
+    !isBlocked && tokenContract && !!owner && !!asset && !asset.native,
     2000,
     'Tokens allowance'
   );

@@ -95,7 +95,12 @@ export const PaymentCard = ({
   const [account, setAccount] = useState<string | undefined>();
   const { winPayContract } = useWinPay(provider, network);
   const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
-  const tokenAllowance = useAllowance(tokenContract, account, asset);
+  const tokenAllowance = useAllowance(
+    tokenContract,
+    account,
+    asset,
+    asset && asset.permit
+  );
   const [balance, setBalance] = useState<BigNumber>(BN.from(0));
   const [permitSignature, setPermitSignature] = useState<Signature | undefined>();
   const [isAccountContract, setIsAccountContract] = useState<boolean>(false);
@@ -106,6 +111,14 @@ export const PaymentCard = ({
   const [paymentError, setPaymentError] = useState<string | undefined>();
   const [txHash, setTxHash] = useState<string | undefined>();
   const [paymentExpired, setPaymentExpired] = useState<boolean>(false);
+
+  const formattedBalance = useMemo(() => {
+    if (!asset || balance.isZero()) {
+      return '0.00';
+    }
+    const value = utils.formatUnits(balance, asset.decimals);
+    return value.length > 21 ? value : Number(value).toFixed(2);
+  }, [balance, asset]);
 
   const paymentValue = useMemo(
     () =>
@@ -507,9 +520,7 @@ export const PaymentCard = ({
 
           {account && balance && (
             <Typography mb={3}>
-              Your balance:{' '}
-              {Number(utils.formatUnits(balance, asset.decimals)).toFixed(2)}{' '}
-              {asset.symbol}
+              Your balance: {formattedBalance} {asset.symbol}
             </Typography>
           )}
 
