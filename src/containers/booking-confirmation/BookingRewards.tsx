@@ -1,25 +1,27 @@
-import { Grid, Box, Typography, Alert } from '@mui/material';
+import { Alert, Box, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRewards } from 'src/hooks/useRewards';
 import { RewardCard } from './RewardCard';
 import { RewardModal } from './RewardModal';
 import { useSearchParams } from 'react-router-dom';
+import { useCheckout } from '../../hooks/useCheckout/useCheckout';
 
 const convertTonsToKilos = (tons: string | undefined): number => {
   if (!tons) return 0;
-
-  const kilos = Number(tons) * 1000;
-  return kilos;
+  return Number(tons) * 1000;
 };
 
 const RewardIntroduction = ({ children }) => {
+  const { bookingMode } = useCheckout();
+  const isGroupMode = bookingMode === 'group';
   return (
     <Box mt={6} mb={6}>
       <Typography variant="h4" component="h3">
         Choose your reward option
       </Typography>
       <Typography variant="body1" mb={3}>
-        Numbers are estimated based on your booking value.
+        Numbers are estimated based on your booking value.{' '}
+        {isGroupMode && 'They might change after your offer confirmation'}
       </Typography>
       {children}
     </Box>
@@ -29,13 +31,17 @@ const RewardIntroduction = ({ children }) => {
 export const BookingRewards = () => {
   const [params] = useSearchParams();
   const offerId = params.get('offerId');
-  const { data, isLoading, claimReward, error } = useRewards(offerId);
+  const { bookingMode } = useCheckout();
+  const isGroupMode = bookingMode === 'group';
+
+  const { data, isLoading, claimReward, error } = useRewards(offerId, isGroupMode);
   const {
     mutate,
     error: mutationError,
     isLoading: isMutationLoading,
     isSuccess: isMutationSuccess
   } = claimReward;
+
   const lif = data?.filter((item) => item.tokenName === 'LIF')[0];
   const nct = data?.filter((item) => item.tokenName === 'NCT')[0];
   const [isModalOpen, setIsModalOpen] = useState(false);
