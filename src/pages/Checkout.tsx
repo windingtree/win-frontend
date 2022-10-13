@@ -3,7 +3,6 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useCheckout } from 'src/hooks/useCheckout';
-import { CheckoutSummary } from 'src/containers/checkout/CheckoutSummary';
 import { Box, Typography } from '@mui/material';
 import MainLayout from 'src/layouts/main';
 import { WinPay } from 'src/containers/checkout/WinPay';
@@ -14,6 +13,7 @@ import { PaymentSuccessCallback } from 'src/components/PaymentCard';
 import { SignInButton } from 'src/components/Web3Modal';
 import { useAppState } from 'src/store';
 import { getOfferId } from 'src/hooks/useCheckout/helpers';
+import { CheckoutOverview } from 'src/containers/checkout/CheckoutIntroduction';
 
 const logger = Logger('Checkout');
 
@@ -105,7 +105,7 @@ export const Checkout = () => {
       )}
       {payment && (
         <>
-          <CheckoutSummary />
+          <CheckoutOverview />
           {!account && (
             <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
               <Typography fontWeight="bold" mb={1}>
