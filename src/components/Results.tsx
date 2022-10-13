@@ -65,7 +65,7 @@ export const Results: React.FC = () => {
     () => searchParams.get('focusedEvent') ?? '',
     [searchParams]
   );
-  const listView = scrollY > innerHeight - 600
+  const listView = scrollY > innerHeight - 600;
   // apply a callback function to transform returned accommodation objects
   const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
     focusedEvent
@@ -110,11 +110,7 @@ export const Results: React.FC = () => {
     return accommodation.id === selectedFacilityId;
   });
 
-  const showSelectedFacility = !!(
-    showResultsNumber &&
-    !listView &&
-    selectedFacility
-  );
+  const showSelectedFacility = !!(showResultsNumber && !listView && selectedFacility);
 
   return (
     <>

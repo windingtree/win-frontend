@@ -14,7 +14,7 @@ const SearchBox = styled(Box)(({ theme }) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    top: 8 + HEADER.MAIN_DESKTOP_HEIGHT
+    top: 16 + HEADER.MAIN_DESKTOP_HEIGHT
   }
 }));
 

@@ -41,7 +41,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
     const smallCardStyle: CSSProperties = mapCard
       ? {
-          minWidth: '380px',
+          minWidth: '360px',
           marginBottom: '0px',
           minHeight: '128px',
           maxWidth: '100vw'

@@ -40,8 +40,8 @@ import { SearchPopovers } from './SearchPopovers';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
-  padding: theme.spacing(2),
-  marginTop: theme.spacing(1),
+  padding: theme.spacing(1),
+  marginTop: theme.spacing(-1),
   display: 'flex',
   justifyContent: 'center',
   border: 'none',
@@ -50,6 +50,7 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   borderRadius: 10,
 
   [theme.breakpoints.up('md')]: {
+    marginTop: theme.spacing(0),
     padding: theme.spacing(2),
     width: 'max-content',
     border: `3px solid ${theme.palette.primary.main}`,
@@ -284,7 +285,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
       <SearchPopovers {...popOversState} />
       <Box
         sx={
-          !open && isMobile && closed
+          isMobile && closed
             ? { background: theme.palette.common.white, width: '100%', p: 2 }
             : { display: 'none' }
         }
@@ -298,7 +299,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
           borderRadius={1}
         >
           <Grid item xs={'auto'}>
-            <IconButton onClick={() => setOpen(true)} color="primary" component="label">
+            <IconButton onClick={() => setOpen(!open)} color="primary" component="label">
               <SearchIcon />
             </IconButton>
           </Grid>
