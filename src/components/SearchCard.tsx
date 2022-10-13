@@ -1,9 +1,8 @@
 import { CSSProperties, forwardRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Stack, Typography, Card, useTheme } from '@mui/material';
+import { Stack, Typography, Card, useTheme, useMediaQuery } from '@mui/material';
 import Iconify from './Iconify';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
-import { useWindowsDimension } from '../hooks/useWindowsDimension';
 import { ImageCarousel } from './ImageCarousel';
 import { buildAccommodationAddress } from '../utils/accommodation';
 import {
@@ -16,25 +15,19 @@ export interface SearchCardProps {
   facility: AccommodationWithId;
   isSelected?: boolean;
   numberOfDays: number;
-  sm?: boolean;
+  mapCard?: boolean;
   focusedEvent?: EventInfo[];
-  onSelect?: (...args) => void;
 }
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
-  ({ sm, facility, isSelected, focusedEvent }, ref) => {
+  ({ mapCard, facility, focusedEvent }, ref) => {
     const navigate = useNavigate();
     const theme = useTheme();
-    const { winWidth } = useWindowsDimension();
     const { isGroupMode } = useAccommodationsAndOffers();
+    const medium = useMediaQuery(theme.breakpoints.down('md'));
 
-    const selectedStyle: CSSProperties = isSelected
-      ? {
-          position: 'relative'
-        }
-      : {};
     const responsiveStyle: CSSProperties =
-      winWidth < 900 || sm
+      medium || mapCard
         ? {
             display: 'flex',
             flexDirection: 'row',
@@ -46,11 +39,12 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             justifyContent: 'flex-start'
           };
 
-    const smallCardStyle: CSSProperties = sm
+    const smallCardStyle: CSSProperties = mapCard
       ? {
           minWidth: '380px',
           marginBottom: '0px',
-          minHeight: '128px'
+          minHeight: '128px',
+          maxWidth: '100vw'
         }
       : {
           marginBottom: '8px'
@@ -66,26 +60,35 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     }
 
     return (
-      <Card ref={ref} style={{ ...selectedStyle, ...smallCardStyle }}>
+      <Card ref={ref} style={{ ...smallCardStyle }}>
         <Stack sx={{ ...responsiveStyle }}>
           <Stack
-            width={theme.spacing(sm || winWidth < 900 ? 16 : 36)}
-            height={theme.spacing(sm || winWidth < 900 ? 16 : 24)}
+            minWidth={theme.spacing(mapCard || medium ? 16 : 36)}
+            minHeight={theme.spacing(mapCard || medium ? 16 : 24)}
+            width={theme.spacing(mapCard || medium ? 16 : 36)}
+            height={theme.spacing(mapCard || medium ? 16 : 24)}
           >
             <ImageCarousel
-              size={sm || winWidth < 900 ? 'small' : 'large'}
+              size={mapCard || medium ? 'small' : 'large'}
               media={facility.media}
             />
           </Stack>
           <Stack
+            // fill={true}
             onClick={() => navigate(`/facility/${facility.id}`)}
             justifyContent="space-between"
-            width={sm ? '252px' : '100%'}
-            spacing={1}
-            sx={{ py: 2, px: 1.5, mt: 0, cursor: 'pointer' }}
+            width="100%"
+            // minWidth={theme.spacing(27)}
+            spacing={0.5}
+            sx={{ p: 1, mt: 0, cursor: 'pointer' }}
           >
             <Stack direction="row" justifyContent="space-between" spacing={1}>
-              <Typography noWrap overflow={'hidden'} variant="subtitle1">
+              <Typography
+                maxWidth={theme.spacing(20)}
+                noWrap
+                overflow={'hidden'}
+                variant="subtitle1"
+              >
                 {facility.name}
               </Typography>
               <Stack sx={{ color: 'text.secondary' }} direction="row" alignItems="center">
@@ -94,9 +97,9 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               </Stack>
             </Stack>
 
-            {!sm && (
+            {!mapCard && (
               <Stack direction="row" alignItems="center" sx={{ color: 'text.secondary' }}>
-                <Typography variant="caption">
+                <Typography variant="caption" maxWidth={theme.spacing(25)}>
                   {buildAccommodationAddress(facility)}
                 </Typography>
               </Stack>
@@ -119,15 +122,15 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             ) : null}
 
             <Stack
-              direction={winWidth < 900 || sm ? 'row-reverse' : 'row'}
+              direction={medium || mapCard ? 'row-reverse' : 'row'}
               alignItems="end"
-              justifyContent={winWidth < 900 || sm ? 'start' : 'space-between'}
+              justifyContent={'space-between'}
             >
               <Stack
-                direction={winWidth < 900 || sm ? 'column' : 'row'}
-                alignItems={winWidth < 900 || sm ? 'end' : 'center'}
+                direction={medium || mapCard ? 'column' : 'row'}
+                alignItems={medium || mapCard ? 'end' : 'center'}
                 justifyContent="space-between"
-                spacing={sm ? 0 : 1}
+                spacing={mapCard ? 0 : 0.5}
               >
                 <Stack direction="row" alignItems="center" spacing={0.5}>
                   <Typography
@@ -144,8 +147,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                   </Typography>
                 </Stack>
 
-                {!(winWidth < 900 || sm) && !isGroupMode && <Typography>|</Typography>}
-                {!sm && !isGroupMode && (
+                {!(medium || mapCard) && !isGroupMode && <Typography>|</Typography>}
+                {!mapCard && !isGroupMode && (
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography
                       alignItems="center"
@@ -159,7 +162,9 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                   </Stack>
                 )}
               </Stack>
-              {!sm && <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />}
+              {!mapCard && (
+                <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />
+              )}
             </Stack>
             {isGroupMode && <Typography variant="subtitle2">Select Rooms</Typography>}
           </Stack>

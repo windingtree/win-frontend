@@ -7,7 +7,9 @@ import {
   GlobalStyles,
   styled,
   Typography,
-  Stack
+  Stack,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -70,6 +72,13 @@ const MapSettings: React.FC<{
 }> = ({ map, center }) => {
   const [position, setPosition] = useState(() => map.getCenter());
   const [zoom, setZoom] = useState(() => map.getZoom());
+  const dispatch = useAppDispatch();
+
+  const onPopupClose = useCallback(() => {
+    dispatch({
+      type: 'RESET_SELECTED_FACILITY_ID'
+    });
+  }, []);
 
   const onMove = useCallback(() => {
     setPosition(map.getCenter());
@@ -85,6 +94,20 @@ const MapSettings: React.FC<{
       map.off('move', onMove);
     };
   }, [map, onMove]);
+
+  useEffect(() => {
+    map.on('popupclose', onPopupClose);
+    return () => {
+      map.off('popupclose', onPopupClose);
+    };
+  }, [map, onPopupClose]);
+
+  useEffect(() => {
+    map.on('click', onPopupClose);
+    return () => {
+      map.off('click', onPopupClose);
+    };
+  }, [map, onPopupClose]);
 
   useEffect(() => {
     map.on('zoom', onZoom);
@@ -127,6 +150,9 @@ export const MapBox: React.FC = () => {
   const { selectedFacilityId } = useAppState();
   const dispatch = useAppDispatch();
 
+  const theme = useTheme();
+  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
+
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();
   const focusedEvent = useMemo(
@@ -153,6 +179,17 @@ export const MapBox: React.FC = () => {
       payload: facilityId
     });
   };
+
+  const unSelectFacility = () => {
+    dispatch({
+      type: 'RESET_SELECTED_FACILITY_ID'
+    });
+  };
+
+  // on mount clear selected facility id
+  useEffect(() => {
+    unSelectFacility();
+  }, []);
 
   const currentEvents = useMemo(
     () =>
@@ -218,7 +255,7 @@ export const MapBox: React.FC = () => {
             boxShadow: `0 0 10px 0 ${theme.palette.grey[500]}`
           },
           '.marker-focused': {
-            backgroundColor: theme.palette.error.main,
+            backgroundColor: theme.palette.common.black,
             color: theme.palette.common.white
           },
           '.marker-rounded': {
@@ -241,9 +278,12 @@ export const MapBox: React.FC = () => {
     return result;
   }, [focusedEventItem]);
 
-  const normalizedCoordinates: LatLngTuple =
-    focusedCoordinates ??
-    (coordinates ? [coordinates.lat, coordinates.lon] : [51.505, -0.09]);
+  const normalizedCoordinates: LatLngTuple = useMemo(() => {
+    return (
+      focusedCoordinates ??
+      (coordinates ? [coordinates.lat, coordinates.lon] : [51.505, -0.09])
+    );
+  }, [focusedCoordinates, coordinates]);
 
   const displayMap = useMemo(
     () => (
@@ -273,26 +313,31 @@ export const MapBox: React.FC = () => {
         {eventMarkers}
         {accommodations && accommodations.length > 0
           ? accommodations.map((f) => {
+              const isSelected = f.id === selectedFacilityId;
               if (f.location && f.location.coordinates) {
                 return (
                   <Marker
                     key={f.id}
-                    icon={getPriceMarkerIcon(f.lowestPrice)}
+                    icon={getPriceMarkerIcon(f.lowestPrice, isSelected)}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
-                      click: () => selectFacility(f.id)
+                      click: () =>
+                        isSelected ? unSelectFacility() : selectFacility(f.id)
                     }}
                   >
-                    <Popup>
-                      <SearchCard
-                        key={f.id}
-                        sm={true}
-                        facility={f}
-                        isSelected={f.id === selectedFacilityId}
-                        numberOfDays={numberOfDays}
-                        focusedEvent={f.eventInfo}
-                      />
-                    </Popup>
+                    {isMobileView ? null : (
+                      // hide popup in mobile view, shown in "Results" component
+                      <Popup>
+                        <SearchCard
+                          key={f.id}
+                          mapCard={true}
+                          facility={f}
+                          isSelected={isSelected}
+                          numberOfDays={numberOfDays}
+                          focusedEvent={f.eventInfo}
+                        />
+                      </Popup>
+                    )}
                   </Marker>
                 );
               } else {

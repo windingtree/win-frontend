@@ -4,6 +4,7 @@ import MainLayout from 'src/layouts/main';
 import { Box, styled } from '@mui/material';
 import { SearchForm } from 'src/containers/search/SearchForm';
 import { HEADER } from 'src/config/componentSizes';
+import { useEffect } from 'react';
 
 const SearchBox = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -13,12 +14,17 @@ const SearchBox = styled(Box)(({ theme }) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    top: 16 + HEADER.MAIN_DESKTOP_HEIGHT
+    top: 8 + HEADER.MAIN_DESKTOP_HEIGHT
   }
 }));
 
 //TODO: remove the footer
 export const Search = () => {
+  useEffect(() => {
+    document.body.classList.add('noScrollBar');
+    return () => document.body.classList.remove('noScrollBar');
+  }, []);
+
   return (
     <MainLayout childrenBelowHeader={false} footer={false}>
       <Box style={{ position: 'relative' }}>

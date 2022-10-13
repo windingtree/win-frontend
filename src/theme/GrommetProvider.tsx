@@ -59,8 +59,4 @@ const theme = {
 
 export const GrommetProvider: React.FC<{
   children?: React.ReactNode;
-}> = ({ children }) => (
-  <Grommet theme={theme} full>
-    {children}
-  </Grommet>
-);
+}> = ({ children }) => <Grommet theme={theme}>{children}</Grommet>;
