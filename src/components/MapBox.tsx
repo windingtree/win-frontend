@@ -173,6 +173,17 @@ export const MapBox: React.FC = () => {
     });
   };
 
+  const unSelectFacility = () => {
+    dispatch({
+      type: 'RESET_SELECTED_FACILITY_ID'
+    });
+  };
+
+  // on mount clear selected facility id
+  useEffect(() => {
+    unSelectFacility();
+  }, []);
+
   const currentEvents = useMemo(
     () =>
       getActiveEventsWithinRadius({
@@ -300,19 +311,23 @@ export const MapBox: React.FC = () => {
                     icon={getPriceMarkerIcon(f.lowestPrice, isSelected)}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
-                      click: () => selectFacility(f.id)
+                      click: () =>
+                        isSelected ? unSelectFacility() : selectFacility(f.id)
                     }}
                   >
-                    <Popup>
-                      <SearchCard
-                        key={f.id}
-                        sm={true}
-                        facility={f}
-                        isSelected={isSelected}
-                        numberOfDays={numberOfDays}
-                        focusedEvent={f.eventInfo}
-                      />
-                    </Popup>
+                    {isMobileView ? null : (
+                      // hide popup in mobile view, shown in "Results" component
+                      <Popup>
+                        <SearchCard
+                          key={f.id}
+                          sm={true}
+                          facility={f}
+                          isSelected={isSelected}
+                          numberOfDays={numberOfDays}
+                          focusedEvent={f.eventInfo}
+                        />
+                      </Popup>
+                    )}
                   </Marker>
                 );
               } else {
