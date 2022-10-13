@@ -330,7 +330,7 @@ export const MapBox: React.FC = () => {
                       <Popup>
                         <SearchCard
                           key={f.id}
-                          sm={true}
+                          mapCard={true}
                           facility={f}
                           isSelected={isSelected}
                           numberOfDays={numberOfDays}
