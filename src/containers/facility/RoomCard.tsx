@@ -6,7 +6,7 @@ import type { OfferRecord } from 'src/store/types';
 import { Alert, Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { daysBetween } from 'src/utils/date';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
 import Logger from 'src/utils/logger';
