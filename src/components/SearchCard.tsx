@@ -2,13 +2,13 @@ import { CSSProperties, forwardRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Stack, Typography, Card, useTheme, useMediaQuery } from '@mui/material';
 import Iconify from './Iconify';
-import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
+import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers/helpers';
 import { ImageCarousel } from './ImageCarousel';
 import { buildAccommodationAddress } from '../utils/accommodation';
 import {
   EventInfo,
   useAccommodationsAndOffers
-} from '../hooks/useAccommodationsAndOffers.tsx';
+} from '../hooks/useAccommodationsAndOffers';
 import { currencySymbolMap } from '../utils/currencies';
 
 export interface SearchCardProps {

@@ -5,7 +5,7 @@ import { CardMediaFallback } from 'src/components/CardMediaFallback';
 import FallbackImage from 'src/images/hotel-fallback.webp';
 import { useMemo } from 'react';
 import { sortByLargestImage } from 'src/utils/accommodation';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 
 export const CheckoutSummary = () => {
   const { bookingMode, bookingInfo } = useCheckout();

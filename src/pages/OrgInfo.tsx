@@ -3,8 +3,8 @@ import MainLayout from 'src/layouts/main';
 import { OrgDetails } from '../containers/OrgDetails';
 import { useMemo } from 'react';
 import { createSearchParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useCheckout } from 'src/hooks/useCheckout';
 
 export const OrgInfo = () => {
   const { bookingInfo } = useCheckout();

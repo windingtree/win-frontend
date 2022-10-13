@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import {
   Box,
   Button,

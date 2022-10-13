@@ -1,13 +1,13 @@
 import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { createRef, useCallback, useEffect, useMemo } from 'react';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { SearchCard } from './SearchCard';
 import { useAppState } from '../store';
 import { styled } from '@mui/system';
 import { daysBetween } from '../utils/date';
 import { HEADER } from 'src/config/componentSizes';
 import { useSearchParams } from 'react-router-dom';
-import { accommodationEventTransform } from '../hooks/useAccommodationsAndOffers.tsx/helpers';
+import { accommodationEventTransform } from '../hooks/useAccommodationsAndOffers/helpers';
 import { useWindowScrollPositions } from 'src/hooks/useWindowScrollPositions';
 
 export enum ResultsMode {

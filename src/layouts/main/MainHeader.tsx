@@ -8,7 +8,7 @@ import { AccountInfo } from 'src/components/AccountInfo';
 import { SocialsButton } from 'src/components/SocialButton';
 import MenuDesktop from './MenuDesktop';
 import navConfig from './MenuConfig';
-import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers';
 
 // this is commented out because the navconfig is currently commented out
 // import MenuMobile from './MenuMobile';
