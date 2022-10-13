@@ -20,7 +20,7 @@ type IProps<T extends StringOrObject> = {
 
 type Props<T extends StringOrObject> = IProps<T> & TextFieldProps;
 
-export default function RHFTAutocomplete<T extends StringOrObject>({
+export const RHFAutocomplete = <T extends StringOrObject>({
   name,
   options,
   freeSolo = true,
@@ -30,7 +30,7 @@ export default function RHFTAutocomplete<T extends StringOrObject>({
   isOptionEqualToValue = (option, value) => option === value,
   getOptionLabel,
   ...other
-}: Props<T>) {
+}: Props<T>) => {
   const { control, setValue } = useFormContext();
   const isOptionEqualToValueFn = optionValueField
     ? (option, value) => option[optionValueField] === value
@@ -100,4 +100,4 @@ export default function RHFTAutocomplete<T extends StringOrObject>({
       }}
     />
   );
-}
+};

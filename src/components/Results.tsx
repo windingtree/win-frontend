@@ -2,7 +2,7 @@ import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/ma
 import { createRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
 import { SearchCard } from './SearchCard';
-import { useAppState, useAppDispatch } from '../store';
+import { useAppState } from '../store';
 import { styled } from '@mui/system';
 import { daysBetween } from '../utils/date';
 import { HEADER } from 'src/config/componentSizes';
@@ -38,6 +38,18 @@ const StyledContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(1, 2),
     paddingTop: 16 + HEADER.MAIN_DESKTOP_HEIGHT,
     height: '100%'
+  }
+}));
+
+const SelectedFacilityContainer = styled(Box)(({ theme }) => ({
+  position: 'fixed',
+  top: 'calc(89.5% - 128px)',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  zIndex: '2',
+  maxWidth: '100vw',
+  [theme.breakpoints.up('md')]: {
+    visibility: 'hidden'
   }
 }));
 
@@ -78,20 +90,9 @@ export const Results: React.FC = () => {
   });
 
   const { selectedFacilityId } = useAppState();
-  const dispatch = useAppDispatch();
   const numberOfDays = useMemo(
     () => daysBetween(latestQueryParams?.arrival, latestQueryParams?.departure),
     [latestQueryParams]
-  );
-
-  const handleFacilitySelection = useCallback(
-    (facilityId: string) => {
-      dispatch({
-        type: 'SET_SELECTED_FACILITY_ID',
-        payload: facilityId
-      });
-    },
-    [dispatch]
   );
 
   const SearchCardsRefs = useMemo(
@@ -107,72 +108,95 @@ export const Results: React.FC = () => {
   useEffect(() => {
     SearchCardsRefs &&
       selectedFacilityId &&
+      mode === ResultsMode.list &&
       SearchCardsRefs[selectedFacilityId]?.current?.scrollIntoView();
-  }, [selectedFacilityId, SearchCardsRefs]);
+  }, [selectedFacilityId, SearchCardsRefs, mode]);
 
   if (!accommodations || accommodations.length === 0) {
     return null;
   }
 
+  // find selected facility
+  const selectedFacility = accommodations.find((accommodation) => {
+    return accommodation.id === selectedFacilityId;
+  });
+
+  const showSelectedFacility = !!(
+    showResultsNumber &&
+    mode === ResultsMode.map &&
+    selectedFacility
+  );
+
   return (
-    <StyledContainer sx={viewSx}>
-      {showResultsNumber && (
-        <Stack
-          direction="column"
-          alignItems="center"
-          paddingTop={2}
-          onClick={() =>
-            setMode(mode === ResultsMode.map ? ResultsMode.list : ResultsMode.map)
-          }
-        >
-          <Box
-            sx={{
-              justifySelf: 'center',
-              alignSelf: 'center',
-              background: 'black',
-              width: '10rem',
-              height: '4px',
-              borderRadius: '2px'
-            }}
+    <>
+      {showSelectedFacility && (
+        <SelectedFacilityContainer>
+          <SearchCard
+            facility={selectedFacility}
+            numberOfDays={numberOfDays}
+            focusedEvent={selectedFacility.eventInfo}
+            sm={true}
           />
-          <Typography textAlign="center">{accommodations.length} stays</Typography>
-        </Stack>
+        </SelectedFacilityContainer>
       )}
-      {mode === ResultsMode.list && (
-        <Box
-          position="fixed"
-          bottom={theme.spacing(4)}
-          left="50%"
-          width={'64px'}
-          marginLeft={'-32px'}
-          zIndex={2}
-        >
-          <Button variant="contained" onClick={() => setMode(ResultsMode.map)}>
-            Map
-          </Button>
-        </Box>
-      )}
-      {(mode === ResultsMode.list || !showResultsNumber) && (
-        <Box
-          sx={{ overflow: 'scroll', height: { sx: '90%', md: '95%' }, mt: 1 }}
-          className="noScrollBar"
-        >
-          <Stack>
-            {!isFetching &&
-              accommodations.map((facility, idx) => (
-                <SearchCard
-                  key={facility.id}
-                  facility={facility}
-                  numberOfDays={numberOfDays}
-                  isSelected={facility.id === selectedFacilityId}
-                  onSelect={handleFacilitySelection}
-                  ref={SearchCardsRefs[idx]}
-                  focusedEvent={facility.eventInfo}
-                />
-              ))}
+      <StyledContainer sx={viewSx}>
+        {showResultsNumber && (
+          <Stack
+            direction="column"
+            alignItems="center"
+            paddingTop={2}
+            onClick={() =>
+              setMode(mode === ResultsMode.map ? ResultsMode.list : ResultsMode.map)
+            }
+          >
+            <Box
+              sx={{
+                justifySelf: 'center',
+                alignSelf: 'center',
+                background: 'black',
+                width: '10rem',
+                height: '4px',
+                borderRadius: '2px'
+              }}
+            />
+            <Typography textAlign="center">{accommodations.length} stays</Typography>
           </Stack>
-        </Box>
-      )}
-    </StyledContainer>
+        )}
+        {mode === ResultsMode.list && (
+          <Box
+            position="fixed"
+            bottom={theme.spacing(4)}
+            left="50%"
+            width={'64px'}
+            marginLeft={'-32px'}
+            zIndex={2}
+          >
+            <Button variant="contained" onClick={() => setMode(ResultsMode.map)}>
+              Map
+            </Button>
+          </Box>
+        )}
+        {(mode === ResultsMode.list || !showResultsNumber) && (
+          <Box
+            sx={{ overflow: 'scroll', height: { sx: '90%', md: '95%' }, mt: 1 }}
+            className="noScrollBar"
+          >
+            <Stack>
+              {!isFetching &&
+                accommodations.map((facility, idx) => (
+                  <SearchCard
+                    key={facility.id}
+                    facility={facility}
+                    numberOfDays={numberOfDays}
+                    isSelected={facility.id === selectedFacilityId}
+                    ref={SearchCardsRefs[idx]}
+                    focusedEvent={facility.eventInfo}
+                  />
+                ))}
+            </Stack>
+          </Box>
+        )}
+      </StyledContainer>
+    </>
   );
 };
