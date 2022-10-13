@@ -27,7 +27,9 @@ export const RHFAutocomplete = <T extends StringOrObject>({
   width = '100%',
   optionValueField = '',
   optionLabelField = 'label',
-  isOptionEqualToValue = (option, value) => option === value,
+  // if freeSolo is true, then arbitrary text is allowed,
+  // and all values are considered valid. In this case, we should always return true
+  isOptionEqualToValue = (option, value) => freeSolo || option === value,
   getOptionLabel,
   ...other
 }: Props<T>) => {
@@ -81,6 +83,7 @@ export const RHFAutocomplete = <T extends StringOrObject>({
             freeSolo={freeSolo}
             isOptionEqualToValue={isOptionEqualToValueFn}
             onChange={changeHandler}
+            onInputChange={changeHandler}
             options={options}
             getOptionLabel={getOptionLabelFn}
             renderInput={({ InputProps, inputProps, ...restParams }) => (
