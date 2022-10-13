@@ -35,7 +35,7 @@ export const RHFAutocomplete = <T extends StringOrObject>({
 }: Props<T>) => {
   const { control, setValue } = useFormContext();
   const isOptionEqualToValueFn = optionValueField
-    ? (option, value) => option[optionValueField] === value
+    ? (option, value) => freeSolo || option[optionValueField] === value
     : isOptionEqualToValue;
 
   const getOptionLabelFn =
