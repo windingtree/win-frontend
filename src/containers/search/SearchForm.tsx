@@ -254,7 +254,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
    */
   const roomText = roomCount === 1 ? 'room' : 'rooms';
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
-  const fontStyling = theme.typography.body2;
+  const fontStyling = theme.typography.body1;
   const buttonSize = 'large';
 
   const popOversState = {
