@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { ExternalLink } from 'src/components/ExternalLink';
 import { useAppState } from 'src/store';
 import { useCheckout } from '../../hooks/useCheckout/useCheckout';
+import { getFormattedDate } from 'src/utils/date';
 
 export const BookingDetails = () => {
   const { bookingMode } = useCheckout();
@@ -37,8 +38,8 @@ const GroupBookingDetails = () => {
   const { selectedNetwork } = useAppState();
   const [params] = useSearchParams();
   const { bookingInfo } = useCheckout();
-  const depositAmount = `${bookingInfo?.quote?.sourceAmount || ''} ${
-    bookingInfo?.quote?.sourceCurrency || ''
+  const depositAmount = `${bookingInfo?.pricing?.offerCurrency.amount || ''} ${
+    bookingInfo?.pricing?.offerCurrency.currency || ''
   }`;
   const guests = bookingInfo?.adultCount || '';
   const rooms = bookingInfo?.roomCount || '';
@@ -66,8 +67,9 @@ const GroupBookingDetails = () => {
       </Typography>
       <Typography variant="body1" pt={2}>
         Your deposit amount is {`${depositAmount}`} for your stay in {`${hotelName}`},
-        from {`${departureDate}`}-{`${arrivalDate}`} for {`${guests}`} adults and{' '}
-        {`${rooms}`} rooms
+        from {`${getFormattedDate(departureDate)}`} untill{' '}
+        {`${getFormattedDate(arrivalDate)}`} for {`${guests}`} adults and {`${rooms}`}{' '}
+        rooms
         <div />
       </Typography>
       <Typography variant="body1" pt={2}>

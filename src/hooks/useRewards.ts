@@ -13,15 +13,13 @@ interface ClaimRewardResponse {
 }
 
 const getRewards = async (id: string, isGroupBooking = false) => {
-  const { data } = await axios
-    .get<RewardOption[]>(
-      isGroupBooking
-        ? `${backend.url}/api/groups/${id}/rewardOptions`
-        : `${backend.url}/api/booking/${id}/rewardOptions`
-    )
-    .catch((_) => {
-      throw new Error('Could not retrieve rewards');
-    });
+  const url = isGroupBooking
+    ? `${backend.url}/api/groups/${id}/rewardOptions`
+    : `${backend.url}/api/booking/${id}/rewardOptions`;
+
+  const { data } = await axios.get<RewardOption[]>(url).catch((_) => {
+    throw new Error('Could not retrieve rewards');
+  });
 
   return data;
 };
@@ -48,12 +46,12 @@ const postClaimReward = async ({ id, rewardType }: MutationProps, isGroupBooking
   return data;
 };
 
-export const useRewards = (id: string | null, isGroupBooking = false) => {
+export const useRewards = (id: string | undefined, isGroupBooking = false) => {
   const { error, data, isLoading } = useQuery<RewardOption[] | undefined>(
     ['rewards', { id }],
     async () => {
       if (!id) return;
-      return await getRewards(id);
+      return await getRewards(id, isGroupBooking);
     }
   );
 

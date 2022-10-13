@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useRewards } from 'src/hooks/useRewards';
 import { RewardCard } from './RewardCard';
 import { RewardModal } from './RewardModal';
-import { useSearchParams } from 'react-router-dom';
-import { useCheckout } from '../../hooks/useCheckout/useCheckout';
+import { getOfferId } from 'src/hooks/useCheckout/helpers';
+import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
 
 const convertTonsToKilos = (tons: string | undefined): number => {
   if (!tons) return 0;
@@ -29,12 +29,12 @@ const RewardIntroduction = ({ children }) => {
 };
 
 export const BookingRewards = () => {
-  const [params] = useSearchParams();
-  const offerId = params.get('offerId');
-  const { bookingMode } = useCheckout();
+  const { bookingMode, bookingInfo } = useCheckout();
   const isGroupMode = bookingMode === 'group';
+  const offerId = !isGroupMode ? getOfferId(bookingInfo?.offers) : undefined;
+  const queryId = isGroupMode ? bookingInfo?.requestId : offerId;
 
-  const { data, isLoading, claimReward, error } = useRewards(offerId, isGroupMode);
+  const { data, isLoading, claimReward, error } = useRewards(queryId, isGroupMode);
   const {
     mutate,
     error: mutationError,
@@ -52,7 +52,7 @@ export const BookingRewards = () => {
     }
   }, [isMutationSuccess, setIsModalOpen]);
 
-  if (error) {
+  if (error || !bookingInfo) {
     return (
       <RewardIntroduction>
         <Alert severity="error">Something went wrong with retrieving your rewards.</Alert>
@@ -74,7 +74,7 @@ export const BookingRewards = () => {
               title={`${convertTonsToKilos(nct?.quantity)} kg of CO₂ reduced`}
               disclaimer="The amount displayed above is based on todays market price, of NCT and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
               onClick={() => {
-                mutate({ id: offerId, rewardType: lif?.rewardType });
+                mutate({ id: queryId, rewardType: lif?.rewardType });
               }}
             >
               <Box sx={{ textAlign: 'left' }}>
@@ -109,7 +109,7 @@ export const BookingRewards = () => {
               title={`${lif?.quantity} LIF`}
               disclaimer="The amount displayed above is based on todays market price, of LIF and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
               onClick={() => {
-                mutate({ id: offerId, rewardType: lif?.rewardType });
+                mutate({ id: queryId, rewardType: lif?.rewardType });
               }}
             >
               <Box sx={{ textAlign: 'left' }}>
