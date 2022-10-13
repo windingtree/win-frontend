@@ -18,6 +18,7 @@ type HiddenProps = {
 
 export const Hidden = ({ width, children }: HiddenProps) => {
   const breakpoint = width.substring(0, 2) as Breakpoint;
+
   const hiddenUp = useMediaQuery<Theme>((theme) => theme.breakpoints.up(breakpoint));
   const hiddenDown = useMediaQuery<Theme>((theme) => theme.breakpoints.down(breakpoint));
 
