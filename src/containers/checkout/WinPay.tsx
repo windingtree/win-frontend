@@ -53,7 +53,6 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
     <>
       {account && (
         <CurrencySelector
-          asset={selectedAsset}
           payment={payment}
           network={selectedNetwork}
           onQuote={onUseQuoteChange}

@@ -46,7 +46,7 @@ const logger = Logger('PaymentCard');
 
 export interface Payment {
   currency: AssetCurrency;
-  value: BigNumber;
+  value: string;
   expiration: number;
   providerId: string;
   serviceId: string;
@@ -120,20 +120,22 @@ export const PaymentCard = ({
     return value.length > 21 ? value : Number(value).toFixed(2);
   }, [balance, asset]);
 
-  const paymentValue = useMemo(
-    () =>
-      withQuote
-        ? BN.from(
-            utils.parseUnits(payment.quote?.sourceAmount ?? '0', asset?.decimals ?? 18)
-          )
-        : payment.value,
-    [asset, payment, withQuote]
-  );
+  const paymentValue = useMemo(() => {
+    if (!asset) {
+      return BN.from(0);
+    }
+    return BN.from(
+      utils.parseUnits(
+        withQuote && payment.quote ? payment.quote.sourceAmount : payment.value,
+        asset.decimals
+      )
+    );
+  }, [asset, payment, withQuote]);
 
   const paymentBlocked = useMemo(
     () =>
-      paymentValue.eq(BN.from(0)) ||
-      balance.eq(BN.from(0)) ||
+      paymentValue.isZero() ||
+      balance.isZero() ||
       paymentExpired ||
       !!costError ||
       isTxStarted !== undefined ||
@@ -147,7 +149,7 @@ export const PaymentCard = ({
   const permitBlocked = useMemo(
     () =>
       (asset && (!asset.permit || asset.native)) ||
-      paymentValue.eq(BN.from(0)) ||
+      paymentValue.isZero() ||
       balance.lt(paymentValue) ||
       paymentExpired ||
       permitSignature !== undefined ||
@@ -159,7 +161,7 @@ export const PaymentCard = ({
   const allowanceBlocked = useMemo(
     () =>
       (asset && (asset.permit || asset.native)) ||
-      paymentValue.eq(BN.from(0)) ||
+      paymentValue.isZero() ||
       balance.lt(paymentValue) ||
       paymentExpired ||
       !permitBlocked ||
