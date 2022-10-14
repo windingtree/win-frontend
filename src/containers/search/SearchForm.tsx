@@ -3,7 +3,6 @@ import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers
 import {
   Box,
   Button,
-  InputAdornment,
   Stack,
   useTheme,
   Toolbar,
@@ -20,12 +19,7 @@ import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
-import {
-  autocompleteData,
-  endDateDisplay,
-  getValidationErrorMessage,
-  startDateDisplay
-} from './helpers';
+import { endDateDisplay, getValidationErrorMessage, startDateDisplay } from './helpers';
 import {
   createSearchParams,
   useNavigate,
@@ -35,8 +29,8 @@ import {
 import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
-import { RHFAutocomplete } from 'src/components/hook-form/RHFAutocomplete';
 import { SearchPopovers } from './SearchPopovers';
+import { SearchLocationInput } from './SearchLocationInput';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -69,7 +63,6 @@ type FormValuesProps = {
   }[];
 };
 
-const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={12} />;
 const SearchIcon = () => <Iconify icon={'akar-icons:search'} width={24} height={24} />;
 const FilterIcon = () => <Iconify icon={'mi:filter'} width={30} height={30} />;
 
@@ -80,7 +73,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
   const { pathname, search } = useLocation();
 
   const [open, setOpen] = useState<boolean>(!closed);
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
 
   // monitor error state locally
   // generic error message
@@ -99,6 +92,8 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
     null
   );
   const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [locationPopoverOpen, setLocationPopoverOpen] = useState(false);
+
   const isDatePopoverOpen = Boolean(dateRangeAnchorEl);
   const isGuestsPopoverOpen = Boolean(guestsAnchorEl);
 
@@ -264,10 +259,10 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
     setGuestsAnchorEl,
     isDatePopoverOpen,
     dateRangeAnchorEl,
-    setDateRangeAnchorEl
+    setDateRangeAnchorEl,
+    locationPopoverOpen,
+    setLocationPopoverOpen
   };
-
-  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
 
   const formButtonStyle: SxProps = isMobileView
     ? {
@@ -280,12 +275,18 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
       }
     : {};
 
+  const handleLocationInputClick = useCallback(() => {
+    if (isMobileView) {
+      setLocationPopoverOpen(true);
+    }
+  }, [isMobileView]);
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <SearchPopovers {...popOversState} />
       <Box
         sx={
-          isMobile && closed
+          !open && isMobileView && closed
             ? { background: theme.palette.common.white, width: '100%', p: 2 }
             : { display: 'none' }
         }
@@ -320,7 +321,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
         </Grid>
       </Box>
       <Stack
-        sx={!open && isMobile && closed ? { display: 'none' } : {}}
+        sx={!open && isMobileView && closed ? { display: 'none' } : {}}
         direction="column"
         alignItems="center"
       >
@@ -331,27 +332,9 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
             spacing={1}
             divider={!isMobileView ? <Divider orientation={'vertical'} flexItem /> : null}
           >
-            <RHFAutocomplete
-              variant={isMobileView ? 'outlined' : 'standard'}
-              placeholder="Where are you going?"
-              name="location"
-              options={autocompleteData}
-              width={isMobileView ? '320px' : '200px'}
-              inputProps={{
-                style: {
-                  ...fontStyling,
-                  textAlign: isMobileView ? 'center' : 'left'
-                },
-                id: 'location-input'
-              }}
-              InputProps={{
-                ...(!isMobileView ? { disableUnderline: true } : {}),
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <LocationIcon />
-                  </InputAdornment>
-                )
-              }}
+            <SearchLocationInput
+              onClick={handleLocationInputClick}
+              allowDropdownOpen={!isMobileView}
             />
             <Box>
               <Button

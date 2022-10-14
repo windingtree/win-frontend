@@ -16,6 +16,7 @@ type IProps<T extends StringOrObject> = {
   isOptionEqualToValue?: (option: T, value: T) => boolean;
   optionValueField?: string;
   optionLabelField?: string;
+  open?: boolean;
 };
 
 type Props<T extends StringOrObject> = IProps<T> & TextFieldProps;
@@ -31,6 +32,7 @@ export const RHFAutocomplete = <T extends StringOrObject>({
   // and all values are considered valid. In this case, we should always return true
   isOptionEqualToValue = (option, value) => freeSolo || option === value,
   getOptionLabel,
+  open,
   ...other
 }: Props<T>) => {
   const { control, setValue } = useFormContext();
@@ -86,6 +88,7 @@ export const RHFAutocomplete = <T extends StringOrObject>({
             onInputChange={changeHandler}
             options={options}
             getOptionLabel={getOptionLabelFn}
+            open={open}
             renderInput={({ InputProps, inputProps, ...restParams }) => (
               <TextField
                 label={other.label}
