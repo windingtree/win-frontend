@@ -260,6 +260,7 @@ export const OrgDetails = () => {
                     label="Country"
                     options={localCountries}
                     optionValueField={'code'}
+                    freeSolo={false}
                   />
                   <RHFTextField name="cityName" label="City" />
                 </Box>
