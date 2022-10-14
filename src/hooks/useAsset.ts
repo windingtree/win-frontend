@@ -1,14 +1,14 @@
 import type {
   Asset,
-  MockERC20,
-  MockWrappedERC20
+  MockERC20Dec18Permit,
+  MockWrappedERC20Dec18
 } from '@windingtree/win-pay/dist/typechain';
 import type { CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect } from 'react';
 import {
   Asset__factory,
-  MockERC20__factory,
-  MockWrappedERC20__factory
+  MockERC20Dec18Permit__factory,
+  MockWrappedERC20Dec18__factory
 } from '@windingtree/win-pay/dist/typechain';
 import { Web3ModalProvider } from './useWeb3Modal';
 import Logger from '../utils/logger';
@@ -17,7 +17,7 @@ const logger = Logger('useAsset');
 
 export interface UseAssetHook {
   assetContract: Asset | undefined;
-  tokenContract: MockERC20 | MockWrappedERC20 | undefined;
+  tokenContract: MockERC20Dec18Permit | MockWrappedERC20Dec18 | undefined;
   tokenAddress: string | undefined;
 }
 
@@ -27,7 +27,7 @@ export const useAsset = (
 ) => {
   const [assetContract, setAssetContract] = useState<Asset | undefined>();
   const [tokenContract, setTokenContract] = useState<
-    MockERC20 | MockWrappedERC20 | undefined
+    MockERC20Dec18Permit | MockWrappedERC20Dec18 | undefined
   >();
   const [tokenAddress, setTokenAddress] = useState<string | undefined>();
 
@@ -44,7 +44,7 @@ export const useAsset = (
           setTokenAddress(assetAddress);
           setAssetContract(contract);
           setTokenContract(
-            (isWrapped ? MockERC20__factory : MockWrappedERC20__factory)
+            (isWrapped ? MockERC20Dec18Permit__factory : MockWrappedERC20Dec18__factory)
               .connect(assetAddress, provider)
               .connect(provider.getSigner())
           );
