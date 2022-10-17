@@ -6,14 +6,14 @@ import * as Yup from 'yup';
 import { useMemo, useState } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
 import type { OfferRecord } from 'src/store/types';
-import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
+import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
 import useResponsive from 'src/hooks/useResponsive';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { daysBetween } from 'src/utils/date';
 import { FacilityOffersTitle } from '../FacilityOffersTitle';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 import { useNavigate } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
 import { useSnackbar } from 'notistack';
@@ -109,7 +109,6 @@ export const FacilityGroupOffers = ({
     const selectedOffers = getSelectedOffers(values.offers);
 
     if (!accommodation) return;
-    // Remove the current state of the organizer info
     setOrganizerInfo(undefined);
     setBookingInfo(
       {

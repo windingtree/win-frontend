@@ -16,12 +16,12 @@ import Iconify from '../components/Iconify';
 import { regexp } from '@windingtree/org.id-utils';
 import { countries, CountryType } from '../config';
 import { isVatValid } from '../utils/vat';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
 import Logger from '../utils/logger';
 import { debouncedFn } from '../utils/common';
 
-const countriesOptions = countries.map((c) => c.label);
+const countriesCodes = countries.map((c) => c.code);
 const euRegExp = /^(?<CODE>[a-zA-Z]{2})(?<NUM>[a-zA-Z0-9]{5,})$/i;
 
 export interface EuRegExp extends Array<string> {
@@ -135,12 +135,11 @@ export const OrgDetails = () => {
       .when('invoice', invoiceSiblingsValidation('Postal code is required')),
     countryCode: Yup.string()
       .trim()
-      .test(
-        'is-allowed-country',
-        'Unknown country name',
-        (value) =>
-          value !== undefined && (value === '' || countriesOptions.includes(value))
-      )
+      .test('is-allowed-country', 'Unknown country name', (value) => {
+        const isValid =
+          value !== undefined && (value === '' || countriesCodes.includes(value));
+        return isValid;
+      })
       .when('invoice', invoiceSiblingsValidation('Country is required')),
     cityName: Yup.string()
       .trim()
@@ -261,6 +260,7 @@ export const OrgDetails = () => {
                     label="Country"
                     options={localCountries}
                     optionValueField={'code'}
+                    freeSolo={false}
                   />
                   <RHFTextField name="cityName" label="City" />
                 </Box>

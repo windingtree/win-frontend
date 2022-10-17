@@ -46,7 +46,7 @@ const logger = Logger('PaymentCard');
 
 export interface Payment {
   currency: AssetCurrency;
-  value: BigNumber;
+  value: string;
   expiration: number;
   providerId: string;
   serviceId: string;
@@ -95,7 +95,12 @@ export const PaymentCard = ({
   const [account, setAccount] = useState<string | undefined>();
   const { winPayContract } = useWinPay(provider, network);
   const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
-  const tokenAllowance = useAllowance(tokenContract, account, asset);
+  const tokenAllowance = useAllowance(
+    tokenContract,
+    account,
+    asset,
+    asset && asset.permit
+  );
   const [balance, setBalance] = useState<BigNumber>(BN.from(0));
   const [permitSignature, setPermitSignature] = useState<Signature | undefined>();
   const [isAccountContract, setIsAccountContract] = useState<boolean>(false);
@@ -107,20 +112,30 @@ export const PaymentCard = ({
   const [txHash, setTxHash] = useState<string | undefined>();
   const [paymentExpired, setPaymentExpired] = useState<boolean>(false);
 
-  const paymentValue = useMemo(
-    () =>
-      withQuote
-        ? BN.from(
-            utils.parseUnits(payment.quote?.sourceAmount ?? '0', asset?.decimals ?? 18)
-          )
-        : payment.value,
-    [asset, payment, withQuote]
-  );
+  const formattedBalance = useMemo(() => {
+    if (!asset || balance.isZero()) {
+      return '0.00';
+    }
+    const value = utils.formatUnits(balance, asset.decimals);
+    return value.length > 21 ? value : Number(value).toFixed(2);
+  }, [balance, asset]);
+
+  const paymentValue = useMemo(() => {
+    if (!asset) {
+      return BN.from(0);
+    }
+    return BN.from(
+      utils.parseUnits(
+        withQuote && payment.quote ? payment.quote.sourceAmount : payment.value,
+        asset.decimals
+      )
+    );
+  }, [asset, payment, withQuote]);
 
   const paymentBlocked = useMemo(
     () =>
-      paymentValue.eq(BN.from(0)) ||
-      balance.eq(BN.from(0)) ||
+      paymentValue.isZero() ||
+      balance.isZero() ||
       paymentExpired ||
       !!costError ||
       isTxStarted !== undefined ||
@@ -134,7 +149,7 @@ export const PaymentCard = ({
   const permitBlocked = useMemo(
     () =>
       (asset && (!asset.permit || asset.native)) ||
-      paymentValue.eq(BN.from(0)) ||
+      paymentValue.isZero() ||
       balance.lt(paymentValue) ||
       paymentExpired ||
       permitSignature !== undefined ||
@@ -146,7 +161,7 @@ export const PaymentCard = ({
   const allowanceBlocked = useMemo(
     () =>
       (asset && (asset.permit || asset.native)) ||
-      paymentValue.eq(BN.from(0)) ||
+      paymentValue.isZero() ||
       balance.lt(paymentValue) ||
       paymentExpired ||
       !permitBlocked ||
@@ -507,9 +522,7 @@ export const PaymentCard = ({
 
           {account && balance && (
             <Typography mb={3}>
-              Your balance:{' '}
-              {Number(utils.formatUnits(balance, asset.decimals)).toFixed(2)}{' '}
-              {asset.symbol}
+              Your balance: {formattedBalance} {asset.symbol}
             </Typography>
           )}
 

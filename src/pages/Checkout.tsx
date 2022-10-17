@@ -1,8 +1,7 @@
-import { utils } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 import { CheckoutSummary } from 'src/containers/checkout/CheckoutSummary';
 import { Box, Typography } from '@mui/material';
 import MainLayout from 'src/layouts/main';
@@ -23,7 +22,7 @@ export const normalizeExpiration = (expirationDate: string): number =>
 export const Checkout = () => {
   const navigate = useNavigate();
   const { bookingInfo, bookingMode } = useCheckout();
-  const { account, selectedAsset } = useAppState();
+  const { account } = useAppState();
   const isGroupMode = bookingMode === 'group';
   const offerId = !isGroupMode && bookingInfo?.offers && getOfferId(bookingInfo.offers);
 
@@ -45,12 +44,8 @@ export const Checkout = () => {
     if (!pricing || !providerId || !serviceId || !expiration) return;
 
     return {
-      currency: pricing?.offerCurrency.currency,
-      value: utils.parseUnits(
-        pricing.offerCurrency.amount.toString(),
-        selectedAsset?.decimals ?? 18
-      ),
-
+      currency: pricing.offerCurrency.currency,
+      value: pricing.offerCurrency.amount,
       expiration: normalizeExpiration(expiration),
       providerId: providerId.toString(),
       serviceId: serviceId.toString(),

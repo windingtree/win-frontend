@@ -9,7 +9,7 @@ import type {
   Quote
 } from '@windingtree/glider-types/dist/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
+import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,

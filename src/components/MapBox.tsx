@@ -26,7 +26,7 @@ import { useAppDispatch, useAppState } from '../store';
 import {
   LowestPriceFormat,
   useAccommodationsAndOffers
-} from 'src/hooks/useAccommodationsAndOffers.tsx';
+} from 'src/hooks/useAccommodationsAndOffers';
 import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
@@ -34,7 +34,7 @@ import { currencySymbolMap } from '../utils/currencies';
 import {
   accommodationEventTransform,
   InvalidLocationError
-} from '../hooks/useAccommodationsAndOffers.tsx/helpers';
+} from '../hooks/useAccommodationsAndOffers/helpers';
 import { getActiveEventsWithinRadius } from '../utils/events';
 
 const logger = Logger('MapBox');
@@ -330,7 +330,7 @@ export const MapBox: React.FC = () => {
                       <Popup>
                         <SearchCard
                           key={f.id}
-                          sm={true}
+                          mapCard={true}
                           facility={f}
                           isSelected={isSelected}
                           numberOfDays={numberOfDays}

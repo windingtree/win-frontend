@@ -197,14 +197,14 @@ template {
 .leaflet-popup-content {
   margin: 0;
   padding: 0;
-  min-width: 380px;
+  min-width: 360px;
 }
 .leaflet-popup-close-button {
   display: none;
 }
 .leaflet-popup-content-wrapper {
   padding: 0;
-  width: 380px;
+  width: 360px;
   border-radius: 32px;
 }
 .leaflet-popup-tip {
