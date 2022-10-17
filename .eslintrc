@@ -29,5 +29,10 @@
     "react/prop-types": "off",
     "react/display-name": "off",
     "no-console": "warn"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

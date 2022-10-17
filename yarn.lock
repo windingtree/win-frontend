@@ -5514,17 +5514,17 @@
     axios "0.24.0"
     ethers "5.5.3"
 
-"@windingtree/win-commons@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.10.0.tgz#f02aa61c78a6b66a00524522c6a19e9afb4c3031"
-  integrity sha512-32fCh1H2JyrpJ6wrv6ZKji8W2wofyRxvo2v4Z948Kf+K4W0y3NqHXYPxCQIHGnoFmiYWzOEPvh2o97aiIHTHeA==
+"@windingtree/win-commons@^1.11.1":
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-commons/-/win-commons-1.11.1.tgz#ac306fd849a4e52893fa8ab7e5d48f63dbee685c"
+  integrity sha512-Ci26ugt48v+xXGKoHhgu8ejIRB1QTIfb4F83uB4kPXJgbsg42VO8qG77lEtJjqaJRzAZGiZ50ULyW+aBvT8W8A==
   dependencies:
     ethers "^5.6.9"
 
-"@windingtree/win-pay@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.7.0.tgz#424c86fb123fafcb485d5a2abe487c0edae25769"
-  integrity sha512-mICLwb6XPvn5mZBfno86lEAg/TKitlPR51O1zNLyGbZMjIQ14ls5gT3fiFiGFlmg2MjTv8XzNgbZknRbIb6m4Q==
+"@windingtree/win-pay@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.8.0.tgz#71bffee39d579c07cdb618e90142d00af82a0993"
+  integrity sha512-IX14W75fWciDk/GUiTaa0uLl7LkpLI1e+kCdw9CN5q4y+KZS59K+7ZU/v/U4XmvKGCOYLXY67zCiN62NssZwhQ==
   dependencies:
     "@openzeppelin/contracts" "^4.7.1"
     "@openzeppelin/contracts-upgradeable" "^4.7.1"

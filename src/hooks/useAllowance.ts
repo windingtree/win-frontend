@@ -1,5 +1,8 @@
 import type { BigNumber } from 'ethers';
-import type { MockERC20, MockWrappedERC20 } from '@windingtree/win-pay/dist/typechain';
+import type {
+  MockERC20Dec18Permit,
+  MockWrappedERC20Dec18
+} from '@windingtree/win-pay/dist/typechain';
 import type { CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { useCallback, useState } from 'react';
 import { BigNumber as BN } from 'ethers';
@@ -9,9 +12,10 @@ import Logger from '../utils/logger';
 const logger = Logger('useAllowance');
 
 export const useAllowance = (
-  tokenContract: MockERC20 | MockWrappedERC20 | undefined,
+  tokenContract: MockERC20Dec18Permit | MockWrappedERC20Dec18 | undefined,
   owner: string | undefined,
-  asset: CryptoAsset | undefined
+  asset: CryptoAsset | undefined,
+  isBlocked = false
 ): BigNumber => {
   const [allowance, setAllowance] = useState<BigNumber>(BN.from(0));
 
@@ -35,7 +39,7 @@ export const useAllowance = (
 
   usePoller(
     checkAllowance,
-    tokenContract && !!owner && !!asset && !asset.native,
+    !isBlocked && tokenContract && !!owner && !!asset && !asset.native,
     2000,
     'Tokens allowance'
   );
