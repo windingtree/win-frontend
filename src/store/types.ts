@@ -102,6 +102,7 @@ export interface BookingInfoType {
   pricing?: GroupBookingDeposits;
   providerId?: string;
   serviceId?: string;
+  requestId?: string;
   invoice?: boolean;
   quote?: Quote;
 }

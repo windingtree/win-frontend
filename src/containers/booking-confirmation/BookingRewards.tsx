@@ -1,25 +1,27 @@
-import { Grid, Box, Typography, Alert } from '@mui/material';
+import { Alert, Box, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRewards } from 'src/hooks/useRewards';
 import { RewardCard } from './RewardCard';
 import { RewardModal } from './RewardModal';
-import { useSearchParams } from 'react-router-dom';
+import { getOfferId } from 'src/hooks/useCheckout/helpers';
+import { useCheckout } from 'src/hooks/useCheckout';
 
 const convertTonsToKilos = (tons: string | undefined): number => {
   if (!tons) return 0;
-
-  const kilos = Number(tons) * 1000;
-  return kilos;
+  return Number(tons) * 1000;
 };
 
 const RewardIntroduction = ({ children }) => {
+  const { bookingMode } = useCheckout();
+  const isGroupMode = bookingMode === 'group';
   return (
     <Box mt={6} mb={6}>
       <Typography variant="h4" component="h3">
         Choose your reward option
       </Typography>
       <Typography variant="body1" mb={3}>
-        Numbers are estimated based on your booking value.
+        Numbers are estimated based on your booking value.{' '}
+        {isGroupMode && 'They might change after your offer confirmation'}
       </Typography>
       {children}
     </Box>
@@ -27,15 +29,19 @@ const RewardIntroduction = ({ children }) => {
 };
 
 export const BookingRewards = () => {
-  const [params] = useSearchParams();
-  const offerId = params.get('offerId');
-  const { data, isLoading, claimReward, error } = useRewards(offerId);
+  const { bookingMode, bookingInfo } = useCheckout();
+  const isGroupMode = bookingMode === 'group';
+  const offerId = !isGroupMode ? getOfferId(bookingInfo?.offers) : undefined;
+  const queryId = isGroupMode ? bookingInfo?.requestId : offerId;
+
+  const { data, isLoading, claimReward, error } = useRewards(queryId, isGroupMode);
   const {
     mutate,
     error: mutationError,
     isLoading: isMutationLoading,
     isSuccess: isMutationSuccess
   } = claimReward;
+
   const lif = data?.filter((item) => item.tokenName === 'LIF')[0];
   const nct = data?.filter((item) => item.tokenName === 'NCT')[0];
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,7 +52,7 @@ export const BookingRewards = () => {
     }
   }, [isMutationSuccess, setIsModalOpen]);
 
-  if (error) {
+  if (error || !bookingInfo) {
     return (
       <RewardIntroduction>
         <Alert severity="error">Something went wrong with retrieving your rewards.</Alert>
@@ -68,7 +74,7 @@ export const BookingRewards = () => {
               title={`${convertTonsToKilos(nct?.quantity)} kg of CO₂ reduced`}
               disclaimer="The amount displayed above is based on todays market price, of NCT and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
               onClick={() => {
-                mutate({ id: offerId, rewardType: lif?.rewardType });
+                mutate({ id: queryId, rewardType: lif?.rewardType });
               }}
             >
               <Box sx={{ textAlign: 'left' }}>
@@ -103,7 +109,7 @@ export const BookingRewards = () => {
               title={`${lif?.quantity} LIF`}
               disclaimer="The amount displayed above is based on todays market price, of LIF and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
               onClick={() => {
-                mutate({ id: offerId, rewardType: lif?.rewardType });
+                mutate({ id: queryId, rewardType: lif?.rewardType });
               }}
             >
               <Box sx={{ textAlign: 'left' }}>
