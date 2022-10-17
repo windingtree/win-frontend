@@ -123,16 +123,28 @@ export const Results: React.FC = () => {
     [latestQueryParams]
   );
 
-  const handleSwitch = (e) => {
-    setDepth(e.screenY);
-    if (depth > e.screenY) {
-      setMode(ResultsMode.list);
-    }
-    if (depth < e.screenY) {
-      setMode(ResultsMode.map);
-    }
-    setDepth(e.screenY);
-  };
+  const handleSwitch = useCallback(
+    (e) => {
+      if (e.type === 'touchmove') {
+        if (depth > e.targetTouches[0]?.screenY) {
+          setMode(ResultsMode.list);
+        }
+        if (depth < e.targetTouches[0]?.screenY) {
+          setMode(ResultsMode.map);
+        }
+        setDepth(e.targetTouches[0]?.screenY);
+      } else {
+        if (depth > e.screenY) {
+          setMode(ResultsMode.list);
+        }
+        if (depth < e.screenY) {
+          setMode(ResultsMode.map);
+        }
+        setDepth(e.screenY);
+      }
+    },
+    [mode, depth]
+  );
 
   const SearchCardsRefs = useMemo(
     () =>
