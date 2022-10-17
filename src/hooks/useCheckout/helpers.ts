@@ -4,7 +4,7 @@ import {
   OrganizerInformation
 } from '@windingtree/glider-types/dist/win';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
-import { getGroupMode } from '../useAccommodationsAndOffers.tsx/helpers';
+import { getGroupMode } from '../useAccommodationsAndOffers/helpers';
 export type BookingModeType = 'group' | 'normal' | undefined;
 
 /**

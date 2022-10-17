@@ -20,20 +20,22 @@ type IProps<T extends StringOrObject> = {
 
 type Props<T extends StringOrObject> = IProps<T> & TextFieldProps;
 
-export default function RHFTAutocomplete<T extends StringOrObject>({
+export const RHFAutocomplete = <T extends StringOrObject>({
   name,
   options,
   freeSolo = true,
   width = '100%',
   optionValueField = '',
   optionLabelField = 'label',
-  isOptionEqualToValue = (option, value) => option === value,
+  // if freeSolo is true, then arbitrary text is allowed,
+  // and all values are considered valid. In this case, we should always return true
+  isOptionEqualToValue = (option, value) => freeSolo || option === value,
   getOptionLabel,
   ...other
-}: Props<T>) {
+}: Props<T>) => {
   const { control, setValue } = useFormContext();
   const isOptionEqualToValueFn = optionValueField
-    ? (option, value) => option[optionValueField] === value
+    ? (option, value) => freeSolo || option[optionValueField] === value
     : isOptionEqualToValue;
 
   const getOptionLabelFn =
@@ -81,6 +83,7 @@ export default function RHFTAutocomplete<T extends StringOrObject>({
             freeSolo={freeSolo}
             isOptionEqualToValue={isOptionEqualToValueFn}
             onChange={changeHandler}
+            onInputChange={changeHandler}
             options={options}
             getOptionLabel={getOptionLabelFn}
             renderInput={({ InputProps, inputProps, ...restParams }) => (
@@ -100,4 +103,4 @@ export default function RHFTAutocomplete<T extends StringOrObject>({
       }}
     />
   );
-}
+};

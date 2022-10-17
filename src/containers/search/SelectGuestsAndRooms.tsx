@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { RHFTextField } from 'src/components/hook-form';
-import { getGroupMode } from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
+import { getGroupMode } from '../../hooks/useAccommodationsAndOffers/helpers';
 
 export const SelectGuestsAndRooms = () => {
   const { watch } = useFormContext();

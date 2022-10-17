@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { styled } from '@mui/material';
 import { Box } from '@mui/material';
 import { forwardRef, useMemo } from 'react';
 import { FacilityGroupOffers } from './GroupBooking/FacilityGroupOffers';
 import { RoomCard } from './RoomCard';
-import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers.tsx/helpers';
+import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { FacilityOffersTitle } from './FacilityOffersTitle';
 import { daysBetween } from 'src/utils/date';
 
