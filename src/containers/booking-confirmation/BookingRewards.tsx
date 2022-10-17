@@ -4,7 +4,7 @@ import { useRewards } from 'src/hooks/useRewards';
 import { RewardCard } from './RewardCard';
 import { RewardModal } from './RewardModal';
 import { getOfferId } from 'src/hooks/useCheckout/helpers';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 
 const convertTonsToKilos = (tons: string | undefined): number => {
   if (!tons) return 0;

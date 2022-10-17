@@ -18,7 +18,7 @@ import { useAppState } from '../../store';
 import { devconCashbackEnabled } from '../../config';
 import Logger from '../../utils/logger';
 import { OffChainTokenConfig } from '@tokenscript/token-negotiator/dist/client/interface';
-import { useCheckout } from 'src/hooks/useCheckout/useCheckout';
+import { useCheckout } from 'src/hooks/useCheckout';
 
 const logger = Logger('DevconCashbackReward');
 
