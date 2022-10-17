@@ -83,17 +83,17 @@ const DragContainer = styled(Stack)(({ theme }) => ({
 export const Results: React.FC = () => {
   const theme = useTheme();
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobileSafari =
+    isMobileView && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
   const [viewSx, setViewSx] = useState({});
   const [mode, setMode] = useState<ResultsMode>(ResultsMode.map);
   const [depth, setDepth] = useState(0);
-
   useEffect(() => {
     if (mode === ResultsMode.map) {
-      setViewSx({
-        height: '10%',
-        top: '90%'
-      });
+      setViewSx(
+        isMobileSafari ? { height: '20%', top: '80%' } : { height: '10%', top: '90%' }
+      );
     } else {
       setViewSx({
         height: '75%',
@@ -123,6 +123,7 @@ export const Results: React.FC = () => {
     [latestQueryParams]
   );
 
+  // handle drag event switching map/list views
   const handleSwitch = useCallback(
     (e) => {
       if (e.type === 'touchmove') {
