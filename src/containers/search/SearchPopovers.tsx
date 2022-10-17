@@ -10,7 +10,9 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
+import { Dispatch, SetStateAction } from 'react';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
+import { emptyFunction } from '../../utils/common';
 import { SearchLocationInput } from './SearchLocationInput';
 import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 
@@ -28,6 +30,20 @@ const dialogPaperProps: SxProps = {
   }
 };
 
+export interface SearchPopoversProps {
+  isGuestsPopoverOpen: boolean;
+  guestsAnchorEl: HTMLButtonElement | null;
+  setGuestsAnchorEl: Dispatch<SetStateAction<HTMLButtonElement | null>>;
+  isDatePopoverOpen: boolean;
+  dateRangeAnchorEl: HTMLButtonElement | null;
+  setDateRangeAnchorEl: Dispatch<SetStateAction<HTMLButtonElement | null>>;
+  locationPopoverOpen: boolean;
+  setLocationPopoverOpen: Dispatch<SetStateAction<boolean>>;
+  onLocationPopoverClose?: (...args: unknown[]) => void;
+  onGuestsPopoverClose?: (...args: unknown[]) => void;
+  onDatePopoverClose?: (...args: unknown[]) => void;
+}
+
 export const SearchPopovers = ({
   isGuestsPopoverOpen,
   guestsAnchorEl,
@@ -36,8 +52,11 @@ export const SearchPopovers = ({
   dateRangeAnchorEl,
   setDateRangeAnchorEl,
   locationPopoverOpen,
-  setLocationPopoverOpen
-}) => {
+  setLocationPopoverOpen,
+  onLocationPopoverClose = emptyFunction,
+  onGuestsPopoverClose = emptyFunction,
+  onDatePopoverClose = emptyFunction
+}: SearchPopoversProps) => {
   const theme = useTheme();
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -47,39 +66,70 @@ export const SearchPopovers = ({
     </Box>
   );
 
-  const handleCloseDatePopup = () => setDateRangeAnchorEl(null);
-  const handleCloseGuestsPopup = () => setGuestsAnchorEl(null);
-  const handleCloseLocationPopup = () => setLocationPopoverOpen(false);
+  const handleCloseDatePopup = (focusNext: boolean | undefined = true) => {
+    setDateRangeAnchorEl(null);
+    focusNext !== undefined && onDatePopoverClose('dateRange', focusNext);
+  };
+  const handleCloseGuestsPopup = (focusNext: boolean | undefined = true) => {
+    setGuestsAnchorEl(null);
+    focusNext !== undefined && onGuestsPopoverClose('roomCount', focusNext);
+  };
+  const handleCloseLocationPopup = (focusNext: boolean | undefined = true) => {
+    setLocationPopoverOpen(false);
+    focusNext !== undefined && onLocationPopoverClose('location', focusNext);
+  };
+
+  const handleEscape = (_, reason) => {
+    reason && locationPopoverOpen
+      ? handleCloseLocationPopup(false)
+      : guestsAnchorEl
+      ? handleCloseGuestsPopup(false)
+      : dateRangeAnchorEl
+      ? handleCloseDatePopup(false)
+      : null;
+  };
 
   if (isMobileView) {
     return (
       <>
-        <Dialog open={locationPopoverOpen} PaperProps={dialogPaperProps}>
+        <Dialog
+          open={locationPopoverOpen}
+          PaperProps={dialogPaperProps}
+          onClose={handleEscape}
+        >
           <DialogContent>
             <Box minHeight={'10vh'}>
               <SearchLocationInput />
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseLocationPopup} variant={'contained'}>
+            <Button onClick={() => handleCloseLocationPopup(true)} variant={'contained'}>
               Done
             </Button>
           </DialogActions>
         </Dialog>
-        <Dialog open={isDatePopoverOpen} PaperProps={dialogPaperProps}>
+        <Dialog
+          open={isDatePopoverOpen}
+          PaperProps={dialogPaperProps}
+          onClose={handleEscape}
+        >
           <DialogContent>{datePicker}</DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseDatePopup} variant={'contained'}>
+            <Button onClick={() => handleCloseDatePopup(true)} variant={'contained'}>
               Done
             </Button>
           </DialogActions>
         </Dialog>
-        <Dialog open={isGuestsPopoverOpen} PaperProps={dialogPaperProps}>
+        <Dialog
+          open={isGuestsPopoverOpen}
+          PaperProps={dialogPaperProps}
+          onClose={handleEscape}
+        >
           <DialogContent>
             <SelectGuestsAndRooms />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseGuestsPopup} variant={'contained'}>
+            <Button onClick={() => handleCloseGuestsPopup(true)} variant={'contained'}>
               Done
             </Button>
           </DialogActions>
@@ -93,7 +143,7 @@ export const SearchPopovers = ({
           id="popover-date-range"
           open={isDatePopoverOpen}
           anchorEl={dateRangeAnchorEl}
-          onClose={handleCloseDatePopup}
+          onClose={() => handleCloseDatePopup()}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'center'
@@ -111,7 +161,7 @@ export const SearchPopovers = ({
           id="popover-guest-and-rooms"
           open={isGuestsPopoverOpen}
           anchorEl={guestsAnchorEl}
-          onClose={handleCloseGuestsPopup}
+          onClose={() => handleCloseGuestsPopup()}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'center'
