@@ -2,8 +2,8 @@ import { useSearchParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import { ExternalLink } from 'src/components/ExternalLink';
 import { useAppState } from 'src/store';
-import { useCheckout } from '../../hooks/useCheckout/useCheckout';
 import { getFormattedDate } from 'src/utils/date';
+import { useCheckout } from 'src/hooks/useCheckout';
 
 export const BookingDetails = () => {
   const { bookingMode } = useCheckout();
