@@ -33,6 +33,7 @@ export const RHFAutocomplete = <T extends StringOrObject>({
   isOptionEqualToValue = (option, value) => freeSolo || option === value,
   getOptionLabel,
   open,
+  sx,
   ...other
 }: Props<T>) => {
   const { control, setValue } = useFormContext();
@@ -80,7 +81,7 @@ export const RHFAutocomplete = <T extends StringOrObject>({
         };
         return (
           <Autocomplete
-            sx={{ width }}
+            sx={{ width, ...(sx ?? {}) }}
             {...field}
             freeSolo={freeSolo}
             isOptionEqualToValue={isOptionEqualToValueFn}
