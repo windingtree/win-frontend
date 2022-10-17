@@ -13,7 +13,8 @@ import { PaymentSuccessCallback } from 'src/components/PaymentCard';
 import { SignInButton } from 'src/components/Web3Modal';
 import { useAppState } from 'src/store';
 import { getOfferId } from 'src/hooks/useCheckout/helpers';
-import { CheckoutOverview } from 'src/containers/checkout/CheckoutIntroduction';
+
+import { CheckoutOverview } from 'src/containers/checkout/CheckoutOverview.tsx';
 
 const logger = Logger('Checkout');
 
@@ -76,7 +77,7 @@ export const Checkout = () => {
   );
 
   return (
-    <MainLayout maxWidth="sm">
+    <MainLayout maxWidth="md">
       <Breadcrumbs
         sx={{ mb: 5 }}
         links={[

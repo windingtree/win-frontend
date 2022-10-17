@@ -1,7 +1,11 @@
 import { utils } from 'ethers';
-import { Box, Typography } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 import { formatPrice } from 'src/utils/strings';
 import { useCheckout } from 'src/hooks/useCheckout';
+import { sortByLargestImage } from 'src/utils/accommodation';
+import { useMemo } from 'react';
+import { CardMediaFallback } from 'src/components/CardMediaFallback';
+import FallbackImage from 'src/images/hotel-fallback.webp';
 
 export const CheckoutIntroduction = () => {
   const { bookingMode, bookingInfo } = useCheckout();
@@ -26,10 +30,17 @@ export const CheckoutIntroduction = () => {
   const showUSDPrice =
     formattedUsdPrice && bookingInfo.pricing?.offerCurrency.currency != 'USD';
 
+  const accommodationName = bookingInfo?.accommodation?.name;
+  const accommodationImage = useMemo(() => {
+    if (bookingInfo?.accommodation) {
+      return sortByLargestImage(bookingInfo.accommodation.media)[0];
+    }
+  }, [bookingInfo]);
+
   return (
     <Box mb={{ xs: 3, lg: 5 }}>
-      <Typography variant="h4">{title}</Typography>
-      {showUSDPrice && <Typography variant="h5">{subTitle}</Typography>}
+      <Typography>{title}</Typography>
+      {showUSDPrice && <Typography>{subTitle}</Typography>}
 
       {isGroupMode && (
         <>
@@ -47,6 +58,19 @@ export const CheckoutIntroduction = () => {
           </Typography>
         </>
       )}
+
+      <Box>
+        <Card>
+          <CardMediaFallback
+            component="img"
+            height="200"
+            src={accommodationImage?.url}
+            fallback={FallbackImage}
+            alt={accommodationName}
+          />
+        </Card>
+      </Box>
+      <Typography>You are paying for stay in {accommodationName}</Typography>
     </Box>
   );
 };

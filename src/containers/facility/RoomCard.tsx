@@ -39,8 +39,6 @@ export const RoomCard: React.FC<{
     [accommodations, facilityId]
   );
 
-  console.log(offer);
-
   const handleBook = useCallback(async () => {
     try {
       setError(undefined);
