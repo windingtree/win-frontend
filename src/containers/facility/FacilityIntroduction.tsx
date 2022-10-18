@@ -37,7 +37,7 @@ const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
-  height: '720px',
+
   gap: theme.spacing(1),
   position: 'relative',
   marginBottom: theme.spacing(8),
@@ -49,30 +49,35 @@ const Container = styled(Box)(({ theme }) => ({
   }
 }));
 
-const HeaderContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  marginBottom: theme.spacing(2.5)
-}));
-
 const HeaderTitleContainer = styled(Box)(() => ({
   display: 'flex',
   flexDirection: 'row',
-  alignItems: 'center'
+  alignItems: 'center',
+  width: '100%'
 }));
 
 const HeaderButtonContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'end',
-  gap: theme.spacing(0.5)
+
+  [theme.breakpoints.up('md')]: {
+    alignItems: 'end',
+    width: '100%'
+  }
 }));
 
 const FacilityMainImage = styled('img')(() => ({
   flex: '50%',
   overflow: 'hidden',
   objectFit: 'cover'
+}));
+
+const AllPhotosButton = styled(Button)(({ theme }) => ({
+  [theme.breakpoints.up('lg')]: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0
+  }
 }));
 
 const HeaderButton = ({ scrollToDetailImages }) => {
@@ -113,30 +118,29 @@ const HeaderButton = ({ scrollToDetailImages }) => {
 
   return (
     <HeaderButtonContainer>
-      <Box display={'flex'} alignItems={'end'}>
+      <Stack direction="row" alignItems="center" mt={1}>
         <Typography>From</Typography>
         <Typography variant="h5" marginLeft={theme.spacing(1)}>
           {currencySymbol} {lowestAveragePrice?.toFixed(2)}
         </Typography>
-      </Box>
-      <div>
-        <Typography textAlign={'right'}>Average price / room / night</Typography>
-      </div>
+      </Stack>
+      <Typography textAlign={{ md: 'right' }}>Average price / room / night</Typography>
+      <Button
+        disableElevation
+        variant="contained"
+        size="large"
+        onClick={scrollToDetailImages}
+        sx={{
+          mt: 1,
+          whiteSpace: 'nowrap'
+        }}
+      >
+        Select Room
+      </Button>
 
-      <div>
-        <Button
-          disableElevation
-          variant="contained"
-          size="large"
-          onClick={scrollToDetailImages}
-          sx={{
-            whiteSpace: 'nowrap'
-          }}
-        >
-          Select Room
-        </Button>
-      </div>
-      <Typography variant="caption">{"You won't be charged yet"}</Typography>
+      <Typography mt={1} variant="caption">
+        {"You won't be charged yet"}
+      </Typography>
     </HeaderButtonContainer>
   );
 };
@@ -312,30 +316,21 @@ export const FacilityIntroduction = ({
 
   return (
     <>
-      <HeaderContainer>
+      <Stack direction={{ md: 'row' }}>
         <HeaderTitle
           name={accommodation?.name}
           address={address}
           accommodation={accommodation}
         />
         <HeaderButton scrollToDetailImages={scrollToDetailImages} />
-      </HeaderContainer>
+      </Stack>
 
       <Container>
         <FacilityMainImage src={mainImage?.url} />
         <FacilityDetailImages images={rest} />
-        <Button
-          variant="contained"
-          size="large"
-          sx={{
-            position: 'absolute',
-            right: 0,
-            bottom: 0
-          }}
-          onClick={handleOpenGallery}
-        >
+        <AllPhotosButton variant="outlined" size="large" onClick={handleOpenGallery}>
           {largestImages.length > 5 ? 'Show all photos' : 'View Photos'}
-        </Button>
+        </AllPhotosButton>
         <FacilityGallery
           open={galleryOpen}
           onClose={handleCloseGallery}
