@@ -51,17 +51,23 @@ const ScrollableContainer = styled(Box)(({ theme }) => ({
   }
 }));
 
-const SelectedFacilityContainer = styled(Box)(({ theme }) => ({
-  position: 'fixed',
-  top: 'calc(89.5% - 132px)',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  zIndex: '1',
-  maxWidth: '100vw',
-  [theme.breakpoints.up('md')]: {
-    visibility: 'hidden'
-  }
-}));
+const SelectedFacilityContainer = styled(Box)(({ theme }) => {
+  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobileSafari =
+    isMobileView && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+  return {
+    position: 'fixed',
+    top: isMobileSafari ? 'calc(79.5% - 132px)' : 'calc(89.5% - 132px)',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    zIndex: '1',
+    maxWidth: '100vw',
+    [theme.breakpoints.up('md')]: {
+      visibility: 'hidden'
+    }
+  };
+});
 
 const DragContainer = styled(Stack)(({ theme }) => ({
   position: 'absolute',
@@ -173,7 +179,11 @@ export const Results: React.FC = () => {
     return accommodation.id === selectedFacilityId;
   });
 
-  const showSelectedFacility = !!(isMobileView && ResultsMode.map && selectedFacility);
+  const showSelectedFacility = !!(
+    isMobileView &&
+    mode === ResultsMode.map &&
+    selectedFacility
+  );
 
   return (
     <>
