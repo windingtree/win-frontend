@@ -31,7 +31,7 @@ export const Checkout = () => {
       roomCount: bookingInfo?.roomCount?.toString() || '',
       adultCount: bookingInfo?.adultCount?.toString() || ' ',
       startDate: bookingInfo?.date?.arrival.toString() ?? '',
-      endDate: bookingInfo?.date?.arrival.toString() ?? '',
+      endDate: bookingInfo?.date?.departure.toString() ?? '',
       location: bookingInfo?.location ?? ''
     };
 

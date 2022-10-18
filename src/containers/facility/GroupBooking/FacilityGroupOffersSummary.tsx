@@ -1,6 +1,6 @@
 import { Box, Button, Typography, Stack, Grid, useTheme, Card } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
-import useResponsive from 'src/hooks/useResponsive';
+import { useResponsive } from 'src/hooks/useResponsive';
 import { OfferRecord } from 'src/store/types';
 import { currencySymbolMap } from '../../../utils/currencies';
 
@@ -60,7 +60,11 @@ const Summary = ({
         </Button>
         <Typography variant="caption">
           *A 10% refundable deposit is required to finish the quotation process. Read more{' '}
-          <a target="_blank" href="/faq#group-booking">
+          <a
+            rel="noreferrer"
+            target="_blank"
+            href="https://blog.windingtree.com/how-to-group-book-with-win-841cf9411427"
+          >
             here
           </a>
           .

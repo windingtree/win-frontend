@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCallback, useMemo, useState } from 'react';
 import axios from 'axios';
 import type { OfferRecord } from 'src/store/types';
-import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Divider, Typography, useTheme } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { daysBetween } from 'src/utils/date';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
