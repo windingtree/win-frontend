@@ -3,7 +3,7 @@ import { FacilityIntroduction } from '../containers/facility/FacilityIntroductio
 import { FacilityOffers } from 'src/containers/facility/FacilityOffers';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { createSearchParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers';
 import { useMemo } from 'react';
 import { createRef, useCallback } from 'react';
 

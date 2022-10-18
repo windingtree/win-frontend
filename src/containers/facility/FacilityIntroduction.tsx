@@ -1,10 +1,10 @@
 import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers';
 import {
   AccommodationWithId,
   getGroupMode
-} from '../../hooks/useAccommodationsAndOffers.tsx/helpers';
+} from '../../hooks/useAccommodationsAndOffers/helpers';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
 import {
   Button,

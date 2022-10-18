@@ -15,11 +15,11 @@ const LINKS = [
         href: '/about'
       },
       {
-        name: 'Frequently Asked Questions',
+        name: 'FAQ',
         href: '/faq'
       },
       {
-        name: 'Give us your Feedback 💚',
+        name: 'Give Feedback 💚',
         href: 'https://winwindao.typeform.com/win-feedback',
         target: '_blank',
         rel: 'noopener',
@@ -31,7 +31,8 @@ const LINKS = [
     headline: 'Legal',
     children: [
       { name: 'Terms and Conditions', href: '/terms' },
-      { name: 'Privacy and Cookie Policy', href: '/privacy' }
+      { name: 'Privacy and Cookie Policy', href: '/privacy' },
+      { name: 'Booking cancellation', href: '/booking-cancellation' }
     ]
   },
   {
@@ -102,7 +103,7 @@ export default function MainFooter() {
           <Grid item xs={12} md={6}>
             <Grid container>
               {LINKS.map((list) => (
-                <Grid item key={list.headline} xs={6} md={4} padding={2}>
+                <Grid item key={list.headline} xs={6} md={4} padding={1}>
                   <Typography component="p" variant="overline">
                     {list.headline}
                   </Typography>

@@ -2,13 +2,13 @@ import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Box, AppBar, Toolbar, Container, Stack, Typography } from '@mui/material';
 import { LogoBeta } from 'src/components/Logo';
 import useOffSetTop from 'src/hooks/useOffsetTop';
-import useResponsive from 'src/hooks/useResponsive';
+import { useResponsive } from 'src/hooks/useResponsive';
 import { HEADER } from 'src/config/componentSizes';
 import { AccountInfo } from 'src/components/AccountInfo';
 import { SocialsButton } from 'src/components/SocialButton';
 import MenuDesktop from './MenuDesktop';
 import navConfig from './MenuConfig';
-import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers.tsx';
+import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers';
 
 // this is commented out because the navconfig is currently commented out
 // import MenuMobile from './MenuMobile';

@@ -8,14 +8,12 @@ import {
   FormControlLabel,
   Radio
 } from '@mui/material';
-import { BigNumber, utils } from 'ethers';
 import { getNetworkInfo } from '../config';
 import Logger from '../utils/logger';
 
 const logger = Logger('CurrencySelector');
 
 export interface CheckoutPrice {
-  value: BigNumber;
   currency: string;
 }
 
@@ -23,15 +21,9 @@ export interface PriceSelectProps {
   payment?: Payment;
   network?: NetworkInfo;
   onQuote(withQuote: boolean): void;
-  asset: CryptoAsset | undefined;
 }
 
-export const CurrencySelector = ({
-  payment,
-  network,
-  onQuote,
-  asset
-}: PriceSelectProps) => {
+export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps) => {
   const [currency, setCurrency] = useState<string | null>(
     payment ? payment.currency : null
   );
@@ -41,18 +33,11 @@ export const CurrencySelector = ({
       payment
         ? [
             {
-              value: payment.value,
               currency: payment.currency
             },
             ...(payment.quote
               ? [
                   {
-                    value: BigNumber.from(
-                      utils.parseUnits(
-                        payment.quote.sourceAmount ?? '0',
-                        asset?.decimals ?? 18
-                      )
-                    ),
                     currency: payment.quote.sourceCurrency ?? 'USD'
                   }
                 ]
