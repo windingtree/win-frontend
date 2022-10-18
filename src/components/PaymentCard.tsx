@@ -37,7 +37,7 @@ import { useAsset } from '../hooks/useAsset';
 import { useWalletRpcApi } from '../hooks/useWalletRpcApi';
 import { useAllowance } from 'src/hooks/useAllowance';
 import { useWinPay } from '../hooks/useWinPay';
-import useResponsive from '../hooks/useResponsive';
+import { useResponsive } from '../hooks/useResponsive';
 import { centerEllipsis, formatPrice } from '../utils/strings';
 import { allowedNetworks } from '../config';
 import Logger from '../utils/logger';

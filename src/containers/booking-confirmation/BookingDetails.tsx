@@ -49,7 +49,7 @@ const GroupBookingDetails = () => {
   return (
     <Box mt={4}>
       <Typography variant="h4" component="h1" mb={1}>
-        Your{' '}
+        The{' '}
         <ExternalLink
           href={`${selectedNetwork?.blockExplorer}/tx/${params.get('tx')}`}
           target="_blank"

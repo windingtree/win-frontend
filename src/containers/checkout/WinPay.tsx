@@ -2,7 +2,7 @@ import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { useState, useCallback } from 'react';
 import { Box } from '@mui/material';
 import { useAppDispatch, useAppState } from 'src/store';
-import useResponsive from 'src/hooks/useResponsive';
+import { useResponsive } from 'src/hooks/useResponsive';
 import { AssetSelector } from 'src/components/AssetSelector';
 import { NetworkSelector } from 'src/components/NetworkSelector';
 import { Payment, PaymentCard, PaymentSuccess } from 'src/components/PaymentCard';

@@ -56,9 +56,13 @@ export const CheckoutSummary = () => {
               </Typography>
 
               <Typography>
-                Check out the{' '}
-                <a target="_blank" href="/faq#group-booking">
-                  group booking guide
+                Check out the group booking
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  href="https://blog.windingtree.com/how-to-group-book-with-win-841cf9411427"
+                >
+                  guide
                 </a>
                 .
               </Typography>
