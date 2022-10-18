@@ -1,12 +1,6 @@
 import { LocalStorageConnectorConfig } from './store/storage';
 import { Settings } from 'luxon';
 import { config } from '@windingtree/win-commons';
-import blockchaineurope2022 from './images/conferences/blockchaineurope2022.png';
-import devcon6 from './images/conferences/devcon6.jpeg';
-import ethdownunder from './images/conferences/ethdownunder.png';
-import devcon6Icon from './images/event-icons/devcon_pin_50x73px.svg';
-import ethdownunderIcon from './images/event-icons/blockchain_expo_europe_2022.svg';
-import blockchaineurope2022Icon from './images/event-icons/eth_down_under_2022.svg';
 import { stringToNumber } from './utils/strings';
 
 export enum AppMode {
@@ -111,7 +105,7 @@ export const upcomingEvents: EventItemProps[] = [
   {
     name: 'Blockchain Expo Europe 2022',
     location: 'Amsterdam',
-    image: blockchaineurope2022,
+    image: '/images/conferences/blockchaineurope2022.png',
     url: '/search?roomCount=1&adultCount=2&startDate=2022-09-20T00%3A00%3A00%2B02%3A00&endDate=2022-09-21T00%3A00%3A00%2B02%3A00&location=Amsterdam',
     conferenceUrl: 'https://blockchain-expo.com/europe/',
     date: '20-21  September',
@@ -121,19 +115,19 @@ export const upcomingEvents: EventItemProps[] = [
       toDate: '21-09-2022'
     },
     mapIcon: {
-      url: blockchaineurope2022Icon
+      url: '/images/event-icons/eth_down_under_2022.svg'
     }
   },
   {
     name: 'Devcon VI',
     location: 'Bogotá',
-    image: devcon6,
+    image: '/images/conferences/devcon6.jpeg',
     conferenceUrl: 'https://devcon.org',
     url: '/search?roomCount=1&adultCount=2&startDate=2022-10-07T00%3A00%3A00%2B02%3A00&endDate=2022-10-16T00%3A00%3A00%2B02%3A00&location=Bogota',
     date: '7-16  October',
     latlon: [4.6296313, -74.0934695],
     mapIcon: {
-      url: devcon6Icon
+      url: '/images/event-icons/devcon_pin_50x73px.svg'
     },
     dateRange: {
       fromDate: '7-10-2022',
@@ -143,7 +137,7 @@ export const upcomingEvents: EventItemProps[] = [
   {
     name: 'ETHDownUnder',
     location: 'Sydney',
-    image: ethdownunder,
+    image: '/images/conferences/ethdownunder.png',
     conferenceUrl: 'https://ethdownunder.com/',
     url: '/search?roomCount=1&adultCount=2&startDate=2022-12-01T00%3A00%3A00%2B01%3A00&endDate=2022-12-04T00%3A00%3A00%2B01%3A00&location=Sydney',
     date: '1-4  December',
@@ -153,7 +147,7 @@ export const upcomingEvents: EventItemProps[] = [
       toDate: '4-12-2022'
     },
     mapIcon: {
-      url: ethdownunderIcon
+      url: '/images/event-icons/blockchain_expo_europe_2022.svg'
     }
   } /*
   {

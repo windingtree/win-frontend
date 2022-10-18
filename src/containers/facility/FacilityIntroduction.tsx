@@ -29,7 +29,6 @@ import { FacilityGallery } from './FacilityGallery';
 import { daysBetween } from '../../utils/date';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from '../../components/LightboxModal';
-import FallbackImage from '../../images/hotel-fallback.webp';
 import Iconify from '../../components/Iconify';
 import { currencySymbolMap } from '../../utils/currencies';
 
@@ -350,7 +349,7 @@ export const FacilityIntroduction = ({
 
         <LightboxModal
           images={largestImagesUrls}
-          mainSrc={largestImagesUrls[slideIndex] ?? FallbackImage}
+          mainSrc={largestImagesUrls[slideIndex] ?? '/images/hotel-fallback.webp'}
           isOpen={slideOpen}
           photoIndex={slideIndex}
           setPhotoIndex={setSlideIndex}

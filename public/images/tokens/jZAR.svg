@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="145" height="145" viewBox="0 0 145 145">
+  <defs>
+    <clipPath id="clip-path">
+      <circle id="Ellipse_267" data-name="Ellipse 267" cx="60.5" cy="60.5" r="60.5" transform="translate(-24380 1999)" fill="#fff"/>
+    </clipPath>
+  </defs>
+  <g id="Group_4588" data-name="Group 4588" transform="translate(24391.998 -1987)">
+    <circle id="Ellipse_73" data-name="Ellipse 73" cx="72.368" cy="72.368" r="72.368" transform="translate(-24391.998 1987)" fill="#fff"/>
+    <path id="Ellipse_73_-_Outline" data-name="Ellipse 73 - Outline" d="M72.5,6.042a66.458,66.458,0,1,0,46.993,19.465A66.458,66.458,0,0,0,72.5,6.042M72.5,0A72.5,72.5,0,1,1,0,72.5,72.5,72.5,0,0,1,72.5,0Z" transform="translate(-24391.998 1987)" fill="#007847"/>
+    <g id="Mask_Group_45" data-name="Mask Group 45" clip-path="url(#clip-path)">
+      <g id="Flag_of_South_Africa" transform="translate(-24405.137 1999)">
+        <rect id="Rectangle_879" data-name="Rectangle 879" width="181.274" height="121" fill="#000c8a"/>
+        <rect id="Rectangle_880" data-name="Rectangle 880" width="181.274" height="60.5" fill="#e1392d"/>
+        <path id="Path_7058" data-name="Path 7058" d="M0,0H36.255L96.528,40.333h84.745V80.667H96.528L36.255,121H0Z" fill="#fff"/>
+        <path id="Path_7059" data-name="Path 7059" d="M0,0H21.979L94.036,48.264h87.238V72.736H94.036L21.979,121H0Z" fill="#007847"/>
+        <path id="Path_7060" data-name="Path 7060" d="M0,9.831,68.884,55.6,0,101.374Z" transform="translate(0 4.897)" fill="#ffb915"/>
+        <path id="Path_7061" data-name="Path 7061" d="M0,16.184,54.382,52.438,0,88.693Z" transform="translate(0 8.062)"/>
+      </g>
+    </g>
+  </g>
+</svg>

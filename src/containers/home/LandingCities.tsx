@@ -10,10 +10,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { Carousel, CarouselSettings } from '../../components/Carousel';
 import Image from '../../components/Image';
-import berlin from '../../images/cities/berlin.jpeg';
-import bogota from '../../images/cities/bogota.jpeg';
-import sydney from '../../images/cities/sydney.jpeg';
-import taipei from '../../images/cities/taipei.jpeg';
 import { CarouselContainer } from './CarouselContainer';
 
 const Gradient = styled('div')(() => ({
@@ -83,28 +79,28 @@ const cities = [
   {
     id: '1',
     city: 'Berlin',
-    image: berlin,
+    image: '/images/cities/berlin.jpeg',
     url: `/search?roomCount=1&adultCount=2&startDate=${cityDates['berlin'].startDate}&endDate=${cityDates['berlin'].endDate}&location=Berlin`,
     latlon: [52.5170365, 13.3888599]
   },
   {
     id: '2',
     city: 'Bogotá',
-    image: bogota,
+    image: '/images/cities/bogota.jpeg',
     url: `/search?roomCount=1&adultCount=2&startDate=${cityDates['bogota'].startDate}&endDate=${cityDates['bogota'].endDate}&location=Bogota`,
     latlon: [4.6534649, -74.0836453]
   },
   {
     id: '3',
     city: 'Sydney',
-    image: sydney,
+    image: '/images/cities/sydney.jpeg',
     url: `/search?roomCount=1&adultCount=2&startDate=${cityDates['sydney'].startDate}&endDate=${cityDates['sydney'].endDate}&location=Sydney`,
     latlon: [-33.8698439, 151.208284]
   },
   {
     id: '4',
     city: 'Taipei',
-    image: taipei,
+    image: '/images/cities/taipei.jpeg',
     url: `/search?roomCount=1&adultCount=2&startDate=${cityDates['taipei'].startDate}&endDate=${cityDates['taipei'].endDate}&location=Taipei`,
     latlon: [25.0375198, 121.5636796]
   }
