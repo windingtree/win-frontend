@@ -1,8 +1,8 @@
 import { InputAdornment, SxProps, useMediaQuery, useTheme } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import { forwardRef, MouseEventHandler } from 'react';
 import { RHFAutocomplete } from '../../components/hook-form';
 import Iconify from '../../components/Iconify';
+import { emptyFunction } from '../../utils/common';
 import { autocompleteData } from './helpers';
 
 export interface SearchLocationInputProps {
@@ -10,6 +10,7 @@ export interface SearchLocationInputProps {
   highlighted?: boolean;
   highlightedColor?: string;
   allowDropdownOpen?: boolean;
+  OnEnterKey?: (...args: unknown[]) => void;
 }
 
 export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationInputProps>(
@@ -17,8 +18,9 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
     {
       onClick,
       allowDropdownOpen = true,
-      highlightedColor = blue[500],
-      highlighted = true
+      highlightedColor = 'primary.main',
+      highlighted = true,
+      OnEnterKey = emptyFunction
     }: SearchLocationInputProps,
     ref?
   ) => {
@@ -53,7 +55,10 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
             textAlign: isMobileView ? 'center' : 'left'
           },
           id: 'location-input',
-          onClickCapture: onClick
+          onClickCapture: onClick,
+          onKeyDown: (e) => {
+            e.code === 'Enter' && OnEnterKey();
+          }
         }}
         InputProps={{
           ...(!isMobileView ? { disableUnderline: true } : {}),
@@ -63,7 +68,8 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
             </InputAdornment>
           ),
           sx: highlightedStyle,
-          ref: ref
+          autoFocus: isMobileView,
+          inputRef: ref
         }}
       />
     );

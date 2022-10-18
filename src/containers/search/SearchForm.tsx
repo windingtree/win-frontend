@@ -169,6 +169,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
       setHighlightedInput('dateRange');
 
       // open input dialog
+      dateRef?.current?.focus();
       dateRef?.current?.click();
     }
     // if previous field is date, focus on guest count
@@ -176,6 +177,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
       setHighlightedInput('adultCount');
 
       // open input dialog
+      guestsRef?.current?.focus();
       guestsRef?.current?.click();
     }
     // if previous field is guest count, focus on submit button
@@ -389,6 +391,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
               allowDropdownOpen={!isMobileView}
               ref={locationRef}
               highlighted={highlightedInput === 'location'}
+              highlightedColor={theme.palette.primary.main}
             />
             <Box>
               <Button

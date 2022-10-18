@@ -10,7 +10,7 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useRef } from 'react';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { emptyFunction } from '../../utils/common';
 import { SearchLocationInput } from './SearchLocationInput';
@@ -59,6 +59,7 @@ export const SearchPopovers = ({
 }: SearchPopoversProps) => {
   const theme = useTheme();
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const datePicker = (
     <Box sx={{ width: { sx: '100%', md: 'auto' } }}>
@@ -96,15 +97,25 @@ export const SearchPopovers = ({
           open={locationPopoverOpen}
           PaperProps={dialogPaperProps}
           onClose={handleEscape}
+          TransitionProps={{
+            onEntered: () => inputRef?.current?.focus()
+          }}
         >
           <DialogContent>
             <Box minHeight={'10vh'}>
-              <SearchLocationInput />
+              <SearchLocationInput
+                ref={inputRef}
+                OnEnterKey={() => handleCloseLocationPopup(true)}
+              />
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => handleCloseLocationPopup(true)} variant={'contained'}>
-              Done
+            <Button
+              type="submit"
+              onClick={() => handleCloseLocationPopup(true)}
+              variant={'contained'}
+            >
+              Next
             </Button>
           </DialogActions>
         </Dialog>
@@ -115,8 +126,12 @@ export const SearchPopovers = ({
         >
           <DialogContent>{datePicker}</DialogContent>
           <DialogActions>
-            <Button onClick={() => handleCloseDatePopup(true)} variant={'contained'}>
-              Done
+            <Button
+              type="submit"
+              onClick={() => handleCloseDatePopup(true)}
+              variant={'contained'}
+            >
+              Next
             </Button>
           </DialogActions>
         </Dialog>
@@ -129,8 +144,12 @@ export const SearchPopovers = ({
             <SelectGuestsAndRooms />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => handleCloseGuestsPopup(true)} variant={'contained'}>
-              Done
+            <Button
+              type="submit"
+              onClick={() => handleCloseGuestsPopup(true)}
+              variant={'contained'}
+            >
+              Next
             </Button>
           </DialogActions>
         </Dialog>
