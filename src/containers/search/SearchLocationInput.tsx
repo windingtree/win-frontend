@@ -52,7 +52,7 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
         inputProps={{
           style: {
             ...fontStyling,
-            textAlign: isMobileView ? 'center' : 'left'
+            textAlign: 'left'
           },
           id: 'location-input',
           onClickCapture: onClick,
