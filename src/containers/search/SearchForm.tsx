@@ -3,7 +3,6 @@ import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers
 import {
   Box,
   Button,
-  InputAdornment,
   Stack,
   useTheme,
   Toolbar,
@@ -20,12 +19,7 @@ import { FormProvider } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Iconify from 'src/components/Iconify';
-import {
-  autocompleteData,
-  endDateDisplay,
-  getValidationErrorMessage,
-  startDateDisplay
-} from './helpers';
+import { endDateDisplay, getValidationErrorMessage, startDateDisplay } from './helpers';
 import {
   createSearchParams,
   useNavigate,
@@ -35,8 +29,8 @@ import {
 import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
-import { RHFAutocomplete } from 'src/components/hook-form/RHFAutocomplete';
-import { SearchPopovers } from './SearchPopovers';
+import { SearchPopovers, SearchPopoversProps } from './SearchPopovers';
+import { SearchLocationInput } from './SearchLocationInput';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -69,7 +63,8 @@ type FormValuesProps = {
   }[];
 };
 
-const LocationIcon = () => <Iconify icon={'eva:pin-outline'} width={12} height={12} />;
+type FormInputFields = 'location' | 'dateRange' | 'adultCount' | 'roomCount';
+
 const SearchIcon = () => <Iconify icon={'akar-icons:search'} width={24} height={24} />;
 const FilterIcon = () => <Iconify icon={'mi:filter'} width={30} height={30} />;
 
@@ -80,7 +75,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
   const { pathname, search } = useLocation();
 
   const [open, setOpen] = useState<boolean>(!closed);
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
 
   // monitor error state locally
   // generic error message
@@ -95,10 +90,17 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
   const formRef = useRef<HTMLDivElement>(null);
   const dateRef = useRef<HTMLButtonElement>(null);
   const guestsRef = useRef<HTMLButtonElement>(null);
+  const locationRef = useRef<HTMLInputElement>(null);
+  const submitRef = useRef<HTMLButtonElement>(null);
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
   );
   const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [locationPopoverOpen, setLocationPopoverOpen] = useState(false);
+
+  // used to highlight inputs in mobile view
+  const [highlightedInput, setHighlightedInput] = useState<FormInputFields>();
+
   const isDatePopoverOpen = Boolean(dateRangeAnchorEl);
   const isGuestsPopoverOpen = Boolean(guestsAnchorEl);
 
@@ -142,6 +144,50 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
   const { roomCount, adultCount, dateRange, location } = values;
   const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
   const endDate = dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate);
+
+  // cycle thru all fields to determine which inputs to highlight
+  const checkFieldToHighlight = (previousField: FormInputFields, focusNext: boolean) => {
+    // prevents highlights in desktop mode
+    if (!isMobileView) return;
+
+    // keeps focus on input if dialog was escaped
+    if (focusNext === false && previousField) {
+      setHighlightedInput(previousField);
+      return;
+    }
+
+    // if no previous field focus on location
+    if (!previousField) {
+      setHighlightedInput('location');
+
+      // open input dialog
+      locationRef?.current?.click();
+    }
+
+    // if previous field is location, focus on date
+    else if (previousField === 'location' && focusNext) {
+      setHighlightedInput('dateRange');
+
+      // open input dialog
+      dateRef?.current?.focus();
+      dateRef?.current?.click();
+    }
+    // if previous field is date, focus on guest count
+    else if (previousField === 'dateRange') {
+      setHighlightedInput('adultCount');
+
+      // open input dialog
+      guestsRef?.current?.focus();
+      guestsRef?.current?.click();
+    }
+    // if previous field is guest count, focus on submit button
+    else if (['roomCount', 'adultCount'].includes(previousField)) {
+      setHighlightedInput(undefined);
+
+      // wait for dialog to fully close and focus submit button
+      setTimeout(() => submitRef?.current?.focus(), 500);
+    }
+  };
 
   const searchProps = {
     arrival: startDate,
@@ -258,34 +304,43 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
   const fontStyling = theme.typography.body1;
   const buttonSize = 'large';
 
-  const popOversState = {
+  const popOversState: SearchPopoversProps = {
     isGuestsPopoverOpen,
     guestsAnchorEl,
     setGuestsAnchorEl,
     isDatePopoverOpen,
     dateRangeAnchorEl,
-    setDateRangeAnchorEl
+    setDateRangeAnchorEl,
+    locationPopoverOpen,
+    setLocationPopoverOpen,
+    onGuestsPopoverClose: checkFieldToHighlight,
+    onDatePopoverClose: checkFieldToHighlight,
+    onLocationPopoverClose: checkFieldToHighlight
   };
-
-  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
 
   const formButtonStyle: SxProps = isMobileView
     ? {
         '&:hover': {
           backgroundColor: 'transparent'
         },
-        '&:focus': {
-          border: `1px solid ${theme.palette.primary.main}`
+        '&.highlighted': {
+          border: `3px solid ${theme.palette.primary.main}`
         }
       }
     : {};
+
+  const handleLocationInputClick = useCallback(() => {
+    if (isMobileView) {
+      setLocationPopoverOpen(true);
+    }
+  }, [isMobileView]);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <SearchPopovers {...popOversState} />
       <Box
         sx={
-          isMobile && closed
+          !open && isMobileView && closed
             ? { background: theme.palette.common.white, width: '100%', p: 2 }
             : { display: 'none' }
         }
@@ -320,7 +375,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
         </Grid>
       </Box>
       <Stack
-        sx={!open && isMobile && closed ? { display: 'none' } : {}}
+        sx={!open && isMobileView && closed ? { display: 'none' } : {}}
         direction="column"
         alignItems="center"
       >
@@ -331,27 +386,12 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
             spacing={1}
             divider={!isMobileView ? <Divider orientation={'vertical'} flexItem /> : null}
           >
-            <RHFAutocomplete
-              variant={isMobileView ? 'outlined' : 'standard'}
-              placeholder="Where are you going?"
-              name="location"
-              options={autocompleteData}
-              width={isMobileView ? '320px' : '200px'}
-              inputProps={{
-                style: {
-                  ...fontStyling,
-                  textAlign: isMobileView ? 'center' : 'left'
-                },
-                id: 'location-input'
-              }}
-              InputProps={{
-                ...(!isMobileView ? { disableUnderline: true } : {}),
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <LocationIcon />
-                  </InputAdornment>
-                )
-              }}
+            <SearchLocationInput
+              onClick={handleLocationInputClick}
+              allowDropdownOpen={!isMobileView}
+              ref={locationRef}
+              highlighted={highlightedInput === 'location'}
+              highlightedColor={theme.palette.primary.main}
             />
             <Box>
               <Button
@@ -364,6 +404,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
                   ...fontStyling,
                   ...formButtonStyle
                 }}
+                className={highlightedInput === 'dateRange' ? 'highlighted' : ''}
                 color="inherit"
                 ref={dateRef}
                 disableRipple={isMobileView}
@@ -386,6 +427,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
                 color="inherit"
                 ref={guestsRef}
                 disableRipple={isMobileView}
+                className={highlightedInput === 'roomCount' ? 'highlighted' : ''}
               >
                 {guestDetailsText}
               </Button>
@@ -402,6 +444,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
                   whiteSpace: 'nowrap',
                   ...fontStyling
                 }}
+                ref={submitRef}
               >
                 Search
               </Button>
