@@ -2,7 +2,6 @@ import { utils } from 'ethers';
 import { Box, Typography, Card } from '@mui/material';
 import { formatPrice } from 'src/utils/strings';
 import { CardMediaFallback } from 'src/components/CardMediaFallback';
-import FallbackImage from 'src/images/hotel-fallback.webp';
 import { useMemo } from 'react';
 import { sortByLargestImage } from 'src/utils/accommodation';
 import { useCheckout } from 'src/hooks/useCheckout';
@@ -56,7 +55,7 @@ export const CheckoutSummary = () => {
               </Typography>
 
               <Typography>
-                Check out the group booking
+                Check out the group booking{' '}
                 <a
                   rel="noreferrer"
                   target="_blank"
@@ -84,7 +83,7 @@ export const CheckoutSummary = () => {
               component="img"
               height="200"
               src={accommodationImage?.url}
-              fallback={FallbackImage}
+              fallback="/images/hotel-fallback.webp"
               alt={accommodationName}
             />
           </Card>

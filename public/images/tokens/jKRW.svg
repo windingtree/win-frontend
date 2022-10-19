@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <circle id="Ellipse_296" data-name="Ellipse 296" cx="10.014" cy="10.014" r="10.014" transform="translate(0)" fill="#ededed"/>
+    </clipPath>
+  </defs>
+  <g id="Group_4710" data-name="Group 4710" transform="translate(24391.998 -1987)">
+    <circle id="Ellipse_73" data-name="Ellipse 73" cx="11.978" cy="11.978" r="11.978" transform="translate(-24391.998 1987)" fill="#fff"/>
+    <path id="Ellipse_73_-_Outline" data-name="Ellipse 73 - Outline" d="M12,1a11,11,0,1,0,7.778,3.222A11,11,0,0,0,12,1m0-1A12,12,0,1,1,0,12,12,12,0,0,1,12,0Z" transform="translate(-24391.998 1987)" fill="#0047a0"/>
+    <g id="Mask_Group_54" data-name="Mask Group 54" transform="translate(-24390.012 1988.986)" clip-path="url(#clip-path)">
+      <g id="Flag_of_South_Korea" transform="translate(-2.751 1.262)">
+        <path id="Path_7421" data-name="Path 7421" d="M-60.5-40.333h25.529v17.019H-60.5Z" transform="translate(60.5 40.478)" fill="#fff"/>
+        <g id="Group_4712" data-name="Group 4712" transform="translate(2.734 7.08) rotate(-56.31)">
+          <g id="b2" transform="translate(2.127)">
+            <path id="b" d="M0,0H4.255V.709H0ZM0,1.064H4.255v.709H0ZM0,2.127H4.255v.709H0Z" transform="translate(0)"/>
+            <path id="Path_7422" data-name="Path 7422" d="M0,0H4.255V.709H0ZM0,1.064H4.255v.709H0ZM0,2.127H4.255v.709H0Z" transform="translate(0 15.601)"/>
+          </g>
+          <path id="Path_7423" data-name="Path 7423" d="M.278,3.546H0V0H.278Z" transform="translate(4.116 15.247)" fill="#fff"/>
+          <path id="Path_7424" data-name="Path 7424" d="M0,0A4.255,4.255,0,0,1,4.255,4.255,4.255,4.255,0,0,1,0,8.51Z" transform="translate(4.255 4.964)" fill="#cd2e3a"/>
+          <path id="Path_7425" data-name="Path 7425" d="M4.255,0a4.255,4.255,0,1,0,0,8.51,2.127,2.127,0,1,0,0-4.255Z" transform="translate(0 4.964)" fill="#0047a0"/>
+          <circle id="Ellipse_297" data-name="Ellipse 297" cx="2.127" cy="2.127" r="2.127" transform="translate(2.127 4.964)" fill="#cd2e3a"/>
+        </g>
+        <g id="Group_4714" data-name="Group 4714" transform="translate(6.274 15.538) rotate(-123.69)">
+          <g id="Group_4713" data-name="Group 4713" transform="translate(0 0)">
+            <path id="b-2" data-name="b" d="M0,0H4.255V.709H0ZM0,1.064H4.255v.709H0ZM0,2.127H4.255v.709H0Z"/>
+            <path id="Path_7426" data-name="Path 7426" d="M0,0H4.255V.709H0ZM0,1.064H4.255v.709H0ZM0,2.127H4.255v.709H0Z" transform="translate(0 15.601)"/>
+          </g>
+          <path id="Path_7427" data-name="Path 7427" d="M.278,1.064H0V0H.278Z" transform="translate(1.988 17.551)" fill="#fff"/>
+          <path id="Path_7427-2" data-name="Path 7427" d="M.278,1.064H0V0H.278Z" transform="translate(2.034 15.394)" fill="#fff"/>
+          <path id="Path_7427-3" data-name="Path 7427" d="M.278,1.064H0V0H.278Z" transform="translate(1.988 0.841)" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

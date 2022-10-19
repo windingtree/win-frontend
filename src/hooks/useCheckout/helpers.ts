@@ -1,8 +1,5 @@
-import {
-  BillingAddress,
-  OfferIdAndQuantity,
-  OrganizerInformation
-} from '@windingtree/glider-types/dist/win';
+import { BillingAddress, OrganizerInformation } from '@windingtree/glider-types/dist/win';
+import { OfferCheckoutType } from 'src/store/types';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
 import { getGroupMode } from '../useAccommodationsAndOffers/helpers';
 export type BookingModeType = 'group' | 'normal' | undefined;
@@ -10,14 +7,14 @@ export type BookingModeType = 'group' | 'normal' | undefined;
 /**
  * Get the id of a offer if only one offer is used for a booking.
  */
-export const getOfferId = (offers: OfferIdAndQuantity[] | undefined) => {
+export const getOfferId = (offers: OfferCheckoutType[] | undefined) => {
   if (!offers) return;
 
-  return offers.map(({ offerId }) => offerId)[0];
+  return offers.map(({ id }) => id)[0];
 };
 
 export const getBookingMode = (
-  offers: OfferIdAndQuantity[] | undefined
+  offers: OfferCheckoutType[] | undefined
 ): BookingModeType => {
   if (!offers) return undefined;
 
@@ -69,3 +66,9 @@ export const getNormalizedOrganizerInfo = (
 
   return normalizedOrganizerInfo;
 };
+
+export const getNormalizedOffers = (offers: OfferCheckoutType[]) =>
+  offers.map(({ id, quantity }) => ({
+    offerId: id,
+    quantity: Number(quantity)
+  }));

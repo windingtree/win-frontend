@@ -1,20 +1,15 @@
 import { OfferRecord } from 'src/store/types';
-import type { OfferFormType } from './GroupBooking/FacilityGroupOffers';
+import { OfferCheckoutType } from './GroupBooking/FacilityGroupOffers';
 
-export const getSelectedOffers = (offers: OfferFormType[]) =>
-  offers
-    .filter((offer) => Number(offer.quantity) > 0)
-    .map(({ id, quantity }) => ({
-      offerId: id,
-      quantity: Number(quantity)
-    }));
+export const getSelectedOffers = (offers: OfferCheckoutType[]) =>
+  offers.filter((offer) => Number(offer.quantity) > 0);
 
 export const getOffersWithQuantity = (
   offers: OfferRecord[] | null,
   roomCount: number
 ) => {
   if (!offers) return [];
-  return offers?.map<OfferFormType>((offer, index) => {
+  return offers?.map<OfferCheckoutType>((offer, index) => {
     if (index === 0) {
       return {
         ...offer,

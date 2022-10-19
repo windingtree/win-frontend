@@ -26,7 +26,7 @@ export const RoomCardGroup: React.FC<{
       <Box py={5}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            <RoomInformation room={room} />
+            <RoomInformation room={room} offer={offer} />
           </Grid>
           <Grid item xs={12} md={4}>
             <Stack alignItems={{ md: 'flex-end' }} sx={{ textAlign: { md: 'end' } }}>
