@@ -51,8 +51,7 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
         open={allowDropdownOpen ? undefined : false}
         inputProps={{
           style: {
-            ...fontStyling,
-            textAlign: 'left'
+            textAlign: 'center'
           },
           id: 'location-input',
           onClickCapture: onClick,
