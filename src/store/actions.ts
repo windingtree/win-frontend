@@ -14,6 +14,7 @@ import type {
   GenericStateRecord,
   SearchParams
 } from './types';
+import { CurrencyCode } from '../utils/currencies';
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';
@@ -116,6 +117,13 @@ export interface SetBookingInfo {
   payload?: BookingInfoType;
 }
 
+export interface SetPreferredCurrency {
+  type: 'SET_PREFERRED_CURRENCY';
+  payload?: CurrencyCode;
+}
+
+export type UserSettingsAction = SetPreferredCurrency;
+
 export type Action =
   | SetSearchParams
   | SetCheckOutAction
@@ -134,4 +142,5 @@ export type Action =
   | SetSelectedFacilityId
   | ResetSelectedFacilityId
   | SetOrganizerInfo
-  | SetBookingInfo;
+  | SetBookingInfo
+  | UserSettingsAction;

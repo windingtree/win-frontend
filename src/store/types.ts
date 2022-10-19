@@ -15,6 +15,7 @@ import type {
   Web3ModalSignInFunction,
   Web3ModalSignOutFunction
 } from '../hooks/useWeb3Modal';
+import { CurrencyCode } from '../utils/currencies';
 
 export interface GenericStateRecord {
   id: string;
@@ -106,6 +107,9 @@ export interface BookingInfoType {
   invoice?: boolean;
   quote?: Quote;
 }
+export interface UserSettings {
+  preferredCurrencyCode: CurrencyCode;
+}
 
 export interface State {
   isConnecting: boolean;
@@ -127,5 +131,6 @@ export interface State {
   searchParams?: SearchParams;
   selectedFacilityId?: string;
   walletAuth?: BookingsAuthResponse;
+  userSettings: UserSettings;
   [key: string]: unknown | GenericStateRecord[];
 }
