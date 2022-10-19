@@ -43,9 +43,9 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   }
 }));
 
-const ScrollableContainer = styled(Box)(({ theme }) => ({
-  height: '90%',
-  overflow: 'scroll',
+const ScrollableContainer = styled(Box)<{ mode: boolean }>(({ theme, mode }) => ({
+  height: 'calc(100% - 24px)',
+  overflow: mode ? 'hidden' : 'scroll',
   [theme.breakpoints.up('md')]: {
     height: '100%'
   }
@@ -207,52 +207,57 @@ export const Results: React.FC = () => {
           scale={1}
           onDrag={(e) => handleSwitch(e)}
         >
-          <Box paddingTop={isMobileView ? 6 : 0}>
-            <DragContainer className="handle">
+          <Box height="calc(100% - 24px)">
+            <Box paddingTop={isMobileView ? 6 : 0} className="handle">
+              <DragContainer>
+                <Box
+                  sx={{
+                    justifySelf: 'center',
+                    alignSelf: 'center',
+                    width: '10rem',
+                    background: 'black',
+                    height: '4px',
+                    borderRadius: '2px'
+                  }}
+                />
+                <Typography textAlign="center">{accommodations.length} stays</Typography>
+              </DragContainer>
+            </Box>
+
+            {isMobileView && mode === ResultsMode.list && (
               <Box
-                sx={{
-                  justifySelf: 'center',
-                  alignSelf: 'center',
-                  width: '10rem',
-                  background: 'black',
-                  height: '4px',
-                  borderRadius: '2px'
-                }}
-              />
-              <Typography textAlign="center">{accommodations.length} stays</Typography>
-            </DragContainer>
+                position="fixed"
+                bottom={theme.spacing(4)}
+                left="50%"
+                width={'64px'}
+                marginLeft={'-32px'}
+                zIndex={2}
+              >
+                <Button variant="contained" onClick={() => setMode(ResultsMode.map)}>
+                  Map
+                </Button>
+              </Box>
+            )}
+            <ScrollableContainer
+              className="noScrollBar"
+              mode={isMobileView && mode === ResultsMode.map}
+            >
+              <Stack>
+                {!isFetching &&
+                  accommodations.map((facility, idx) => (
+                    <SearchCard
+                      key={facility.id}
+                      facility={facility}
+                      numberOfDays={numberOfDays}
+                      isSelected={facility.id === selectedFacilityId}
+                      ref={SearchCardsRefs[idx]}
+                      focusedEvent={facility.eventInfo}
+                    />
+                  ))}
+              </Stack>
+            </ScrollableContainer>
           </Box>
         </Draggable>
-
-        {isMobileView && mode === ResultsMode.list && (
-          <Box
-            position="fixed"
-            bottom={theme.spacing(4)}
-            left="50%"
-            width={'64px'}
-            marginLeft={'-32px'}
-            zIndex={2}
-          >
-            <Button variant="contained" onClick={() => setMode(ResultsMode.map)}>
-              Map
-            </Button>
-          </Box>
-        )}
-        <ScrollableContainer className="noScrollBar">
-          <Stack>
-            {!isFetching &&
-              accommodations.map((facility, idx) => (
-                <SearchCard
-                  key={facility.id}
-                  facility={facility}
-                  numberOfDays={numberOfDays}
-                  isSelected={facility.id === selectedFacilityId}
-                  ref={SearchCardsRefs[idx]}
-                  focusedEvent={facility.eventInfo}
-                />
-              ))}
-          </Stack>
-        </ScrollableContainer>
       </StyledContainer>
     </>
   );
