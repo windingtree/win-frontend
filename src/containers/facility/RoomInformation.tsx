@@ -30,9 +30,10 @@ export const RoomInformation = ({
 
   const { name, maximumOccupancy, description } = room;
   const { adults, children } = maximumOccupancy;
-  const isRefundable = getIsRefundable(offer.refundability?.type);
-  const deadline =
-    offer.refundability?.deadline && getFormattedDate(offer.refundability?.deadline);
+  const { refundability } = offer;
+
+  const isRefundable = getIsRefundable(refundability?.type);
+  const deadline = refundability?.deadline && getFormattedDate(refundability?.deadline);
   const cancelationPolicy = isRefundable
     ? `Free cancellation until ${deadline}.`
     : 'Non-refundable';
@@ -50,17 +51,16 @@ export const RoomInformation = ({
         </Typography>
       </Box>
       <Typography variant="body1">{description}</Typography>
-
-      {/* {offer.refundability && ( */}
-      <Stack direction="row" alignItems="center" mt={1}>
-        <Typography variant="body2">{cancelationPolicy}</Typography>
-        <Tooltip title={disclaimer}>
-          <IconButtonAnimate color="info" size="small">
-            <Iconify icon="eva:info-outline" />
-          </IconButtonAnimate>
-        </Tooltip>
-      </Stack>
-      {/* )} */}
+      {refundability && (
+        <Stack direction="row" alignItems="center" mt={1}>
+          <Typography variant="body2">{cancelationPolicy}</Typography>
+          <Tooltip title={disclaimer}>
+            <IconButtonAnimate color="info" size="small">
+              <Iconify icon="eva:info-outline" />
+            </IconButtonAnimate>
+          </Tooltip>
+        </Stack>
+      )}
     </Box>
   );
 };
