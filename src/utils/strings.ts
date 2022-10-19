@@ -31,9 +31,17 @@ export const copyToClipboard = async (text: string): Promise<void> => {
 
 export const formatPrice = (
   value: BigNumber,
-  currency: string,
+  currency?: string | undefined,
   decimal?: number | undefined
-): string => `${Number(utils.formatUnits(value, decimal ?? 18)).toFixed(2)} ${currency}`;
+): string => {
+  let fmtdPrice = `${Number(utils.formatUnits(value, decimal ?? 18)).toFixed(2)}`;
+
+  if (currency && currency.length) {
+    fmtdPrice += ` ${currency}`;
+  }
+
+  return fmtdPrice;
+};
 
 export const stringToNumber = (value: string): number => {
   const numberValue = parseFloat(value);
