@@ -6,7 +6,7 @@ import { SearchForm } from 'src/containers/search/SearchForm';
 import { HEADER } from 'src/config/componentSizes';
 
 const SearchBox = styled(Box)(({ theme }) => ({
-  position: 'absolute',
+  position: 'fixed',
   top: HEADER.MOBILE_HEIGHT,
   width: '100%',
   [theme.breakpoints.up('md')]: {
