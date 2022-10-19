@@ -55,7 +55,7 @@ export const CheckoutSummary = () => {
               </Typography>
 
               <Typography>
-                Check out the group booking
+                Check out the group booking{' '}
                 <a
                   rel="noreferrer"
                   target="_blank"

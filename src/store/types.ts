@@ -4,7 +4,6 @@ import type {
   WinPricedOffer,
   BookingsAuthResponse,
   OrganizerInformation,
-  OfferIdAndQuantity,
   GroupBookingDeposits,
   Quote
 } from '@windingtree/glider-types/dist/win';
@@ -74,6 +73,10 @@ export interface PersonalInfo {
   phoneNumber: string;
 }
 
+export interface OfferCheckoutType extends OfferRecord {
+  quantity: string;
+}
+
 export interface CheckOut extends WinPricedOffer {
   personalInfo?: PersonalInfo;
   facilityId: string;
@@ -97,8 +100,8 @@ export interface BookingInfoType {
     departure: Date;
   };
   accommodation?: AccommodationWithId;
-  offers?: OfferIdAndQuantity[];
-  expiration?: string;
+  offers?: OfferCheckoutType[];
+
   pricing?: GroupBookingDeposits;
   providerId?: string;
   serviceId?: string;

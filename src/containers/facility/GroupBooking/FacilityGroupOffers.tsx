@@ -5,7 +5,6 @@ import { useForm, FieldValues } from 'react-hook-form';
 import * as Yup from 'yup';
 import { useMemo, useState } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
-import type { OfferRecord } from 'src/store/types';
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
@@ -19,6 +18,11 @@ import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
 import { useSnackbar } from 'notistack';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
 import { GROUP_MODE_ROOM_COUNT } from '../../../config';
+import type { OfferRecord } from 'src/store/types';
+
+export interface OfferCheckoutType extends OfferRecord {
+  quantity: string;
+}
 
 /**
  * Only the quantity can be changed in the form by the User,
@@ -42,12 +46,8 @@ interface FacilityGroupOffersProps {
   accommodation: AccommodationWithId | null;
 }
 
-export interface OfferFormType extends OfferRecord {
-  quantity: string;
-}
-
 type FormValuesProps = {
-  offers: OfferFormType[];
+  offers: OfferCheckoutType[];
 };
 
 export const FacilityGroupOffers = ({
@@ -114,7 +114,7 @@ export const FacilityGroupOffers = ({
       {
         location: latestQueryParams?.location,
         accommodation,
-        expiration: values.offers[0].expiration,
+
         date: {
           arrival,
           departure
