@@ -19,8 +19,9 @@ export const CheckoutIntroduction = () => {
 
   const isGroupMode = bookingMode === 'group' ? true : false;
   const accommodationName = bookingInfo.accommodation.name;
+  const hotelCity = bookingInfo.location;
   const googleMapsLink = `https://www.google.com/maps?hl=en&q=${encodeURIComponent(
-    accommodationName
+    `${accommodationName}, ${hotelCity}`
   )}`;
 
   const formattedOfferPrice = formatPrice(
