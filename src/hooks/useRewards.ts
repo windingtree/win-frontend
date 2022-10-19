@@ -12,20 +12,24 @@ interface ClaimRewardResponse {
   success: boolean;
 }
 
-const getRewards = async (id: string) => {
-  const { data } = await axios
-    .get<RewardOption[]>(`${backend.url}/api/booking/${id}/rewardOptions`)
-    .catch((_) => {
-      throw new Error('Could not retrieve rewards');
-    });
+const getRewards = async (id: string, isGroupBooking = false) => {
+  const url = isGroupBooking
+    ? `${backend.url}/api/groups/${id}/rewardOptions`
+    : `${backend.url}/api/booking/${id}/rewardOptions`;
+
+  const { data } = await axios.get<RewardOption[]>(url).catch((_) => {
+    throw new Error('Could not retrieve rewards');
+  });
 
   return data;
 };
 
-const postClaimReward = async ({ id, rewardType }: MutationProps) => {
+const postClaimReward = async ({ id, rewardType }: MutationProps, isGroupBooking) => {
   const { data } = await axios
     .post<ClaimRewardResponse>(
-      `${backend.url}/api/booking/${id}/reward`,
+      isGroupBooking
+        ? `${backend.url}/api/groups/${id}/reward`
+        : `${backend.url}/api/booking/${id}/reward`,
       {
         rewardType
       },
@@ -42,17 +46,17 @@ const postClaimReward = async ({ id, rewardType }: MutationProps) => {
   return data;
 };
 
-export const useRewards = (id: string | null) => {
+export const useRewards = (id: string | undefined, isGroupBooking = false) => {
   const { error, data, isLoading } = useQuery<RewardOption[] | undefined>(
     ['rewards', { id }],
     async () => {
       if (!id) return;
-      return await getRewards(id);
+      return await getRewards(id, isGroupBooking);
     }
   );
 
   const claimReward = useMutation<ClaimRewardResponse, Error, MutationProps>(
-    ({ id, rewardType }) => postClaimReward({ id, rewardType })
+    ({ id, rewardType }) => postClaimReward({ id, rewardType }, isGroupBooking)
   );
 
   return {

@@ -1,4 +1,3 @@
-import { utils } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
@@ -24,7 +23,7 @@ export const normalizeExpiration = (expirationDate: string): number =>
 export const Checkout = () => {
   const navigate = useNavigate();
   const { bookingInfo, bookingMode } = useCheckout();
-  const { account, selectedAsset } = useAppState();
+  const { account } = useAppState();
   const isGroupMode = bookingMode === 'group';
   const offerId = !isGroupMode && bookingInfo?.offers && getOfferId(bookingInfo.offers);
 
@@ -33,7 +32,7 @@ export const Checkout = () => {
       roomCount: bookingInfo?.roomCount?.toString() || '',
       adultCount: bookingInfo?.adultCount?.toString() || ' ',
       startDate: bookingInfo?.date?.arrival.toString() ?? '',
-      endDate: bookingInfo?.date?.arrival.toString() ?? '',
+      endDate: bookingInfo?.date?.departure.toString() ?? '',
       location: bookingInfo?.location ?? ''
     };
 
@@ -48,12 +47,8 @@ export const Checkout = () => {
     const expiration = offers[0].expiration;
 
     return {
-      currency: pricing?.offerCurrency.currency,
-      value: utils.parseUnits(
-        pricing.offerCurrency.amount.toString(),
-        selectedAsset?.decimals ?? 18
-      ),
-
+      currency: pricing.offerCurrency.currency,
+      value: pricing.offerCurrency.amount,
       expiration: normalizeExpiration(expiration),
       providerId: providerId.toString(),
       serviceId: serviceId.toString(),

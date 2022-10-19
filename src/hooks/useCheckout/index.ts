@@ -78,7 +78,7 @@ export const useCheckout = () => {
       invoice: bookingInfo.invoice
     });
 
-    const { depositOptions, serviceId, providerId } = result;
+    const { depositOptions, serviceId, providerId, requestId } = result;
 
     // TODO: We currently only get from the BE the Quote for a normal booking, not a group booking
     // for now we create a Quote object ourselves for the group booking, but this eventually has to be refactored.
@@ -93,7 +93,7 @@ export const useCheckout = () => {
         }
       : undefined;
 
-    setBookingInfo({ quote, pricing: depositOptions, serviceId, providerId });
+    setBookingInfo({ quote, pricing: depositOptions, serviceId, providerId, requestId });
     return result;
   });
 

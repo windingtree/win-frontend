@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCallback, useMemo, useState } from 'react';
 import axios from 'axios';
 import type { OfferRecord } from 'src/store/types';
-import { Alert, Box, Divider, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Divider, Typography, useTheme } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { daysBetween } from 'src/utils/date';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
@@ -31,7 +31,6 @@ export const RoomCard: React.FC<{
   const numberOfDays = daysBetween(arrival, departure);
   const roomsNumber = latestQueryParams?.roomCount;
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<undefined | string>();
   const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const { enqueueSnackbar } = useSnackbar();
   const accommodation = useMemo(
@@ -41,7 +40,6 @@ export const RoomCard: React.FC<{
 
   const handleBook = useCallback(async () => {
     try {
-      setError(undefined);
       setLoading(true);
 
       if (!accommodation) return;
@@ -90,9 +88,10 @@ export const RoomCard: React.FC<{
         throw new Error('Somethin went wrong!');
       }
     } catch (error) {
-      const message = (error as Error).message || 'Unknown useAuthRequest error';
+      enqueueSnackbar('Oops, something has gone wrong. Please try again.', {
+        variant: 'error'
+      });
       setLoading(false);
-      setError(message);
     }
   }, [dispatch]);
 
@@ -130,15 +129,6 @@ export const RoomCard: React.FC<{
               >
                 Book Now
               </LoadingButton>
-
-              {error && (
-                <Alert
-                  sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-                  severity="warning"
-                >
-                  {error}
-                </Alert>
-              )}
             </Box>
           </Grid>
         </Grid>

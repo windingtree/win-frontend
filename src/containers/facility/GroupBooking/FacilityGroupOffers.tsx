@@ -8,7 +8,7 @@ import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
-import useResponsive from 'src/hooks/useResponsive';
+import { useResponsive } from 'src/hooks/useResponsive';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { daysBetween } from 'src/utils/date';
 import { FacilityOffersTitle } from '../FacilityOffersTitle';

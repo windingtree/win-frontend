@@ -18,6 +18,7 @@ import { useAppState } from '../../store';
 import { devconCashbackEnabled } from '../../config';
 import Logger from '../../utils/logger';
 import { OffChainTokenConfig } from '@tokenscript/token-negotiator/dist/client/interface';
+import { useCheckout } from 'src/hooks/useCheckout';
 
 const logger = Logger('DevconCashbackReward');
 
@@ -53,12 +54,16 @@ export const DevconCashbackReward = () => {
   const { provider } = useAppState();
   const location = useLocation();
   const [params] = useSearchParams();
+  const { bookingMode } = useCheckout();
   const [modalMode, setModalMode] = useState<ModalMode>(ModalMode.NONE);
   const [ticket, setTicket] = useState<null | Record<string, unknown>>(null);
   const [error, setError] = useState<{ message: string; detail: string }>({
     message: '',
     detail: ''
   });
+  const isGroupMode = bookingMode === 'group';
+
+  if (isGroupMode) return <></>;
 
   const showError = (message: string, detail: string) => {
     const err = { message: message, detail: detail };
@@ -275,7 +280,7 @@ export const DevconCashbackReward = () => {
               <Stack direction="row" mt={1}>
                 <Button
                   sx={{ mt: 2 }}
-                  style={{marginBottom: '20px'}}
+                  style={{ marginBottom: '20px' }}
                   size="large"
                   fullWidth
                   variant="contained"
@@ -315,7 +320,7 @@ export const DevconCashbackReward = () => {
               <Stack direction="row" mt={1}>
                 <Button
                   sx={{ mt: 2 }}
-                  style={{marginBottom: '20px'}}
+                  style={{ marginBottom: '20px' }}
                   size="large"
                   fullWidth
                   variant="contained"
@@ -349,7 +354,7 @@ export const DevconCashbackReward = () => {
               <Stack direction="row" mt={1}>
                 <Button
                   sx={{ mt: 2 }}
-                  style={{marginBottom: '20px'}}
+                  style={{ marginBottom: '20px' }}
                   size="large"
                   fullWidth
                   variant="contained"

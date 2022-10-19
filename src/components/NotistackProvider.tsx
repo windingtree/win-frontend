@@ -66,7 +66,7 @@ export default function NotistackProvider({ children }: NotistackProviderProps) 
         dense
         maxSnack={5}
         preventDuplicate
-        autoHideDuration={3000}
+        autoHideDuration={4000}
         TransitionComponent={Collapse}
         variant="success" // Set default variant
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
