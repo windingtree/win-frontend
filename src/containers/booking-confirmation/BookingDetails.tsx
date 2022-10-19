@@ -62,8 +62,8 @@ const GroupBookingDetails = () => {
       <Typography variant="body1">
         Please check your email with all the details.
         <div />
-        Within the next 24 hours we will get back to you with the best offer for your stay
-        in {`${hotelName}`}
+        Within the next 2 business days we will get back to you with the best offer for
+        your stay in {`${hotelName}`}
       </Typography>
       <Typography variant="body1" pt={2}>
         Your deposit amount is {`${depositAmount}`} for your stay in {`${hotelName}`},

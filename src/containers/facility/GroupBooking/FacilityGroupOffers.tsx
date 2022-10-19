@@ -1,9 +1,9 @@
-import { Alert, Grid, Snackbar, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { RoomCardGroup } from './RoomCardGroup';
 import { FormProvider } from 'src/components/hook-form';
 import { useForm, FieldValues } from 'react-hook-form';
 import * as Yup from 'yup';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,6 +19,7 @@ import { useSnackbar } from 'notistack';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
 import { GROUP_MODE_ROOM_COUNT } from '../../../config';
 import type { OfferRecord } from 'src/store/types';
+import { MHidden } from 'src/components/MHidden';
 
 export interface OfferCheckoutType extends OfferRecord {
   quantity: string;
@@ -55,33 +56,33 @@ export const FacilityGroupOffers = ({
   accommodation
 }: FacilityGroupOffersProps) => {
   const { latestQueryParams } = useAccommodationsAndOffers();
-  const defaultRoomCount = latestQueryParams?.roomCount
+  const { setBookingInfo, setOrganizerInfo } = useCheckout();
+  const isDesktop = useResponsive('up', 'md');
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  if (!latestQueryParams) return null;
+  const defaultRoomCount = latestQueryParams.roomCount
     ? latestQueryParams.roomCount
     : GROUP_MODE_ROOM_COUNT;
+
+  // ----------------------------------------------------------------------
   const defaultOffers = useMemo(
     () => getOffersWithQuantity(offers, defaultRoomCount),
     [offers]
   );
-
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(GroupOffersSchema),
     defaultValues: { offers: defaultOffers } as FieldValues
   });
-
   const { handleSubmit, watch } = methods;
   const values = watch();
-  const roomCount = values.offers.reduce(getTotalRoomCountReducer, 0);
-  const { setBookingInfo, setOrganizerInfo } = useCheckout();
-  const [showError, setShowError] = useState(false);
-  const isDesktop = useResponsive('up', 'md');
-  const summaryBoxHeight = 210;
-  const arrival = latestQueryParams?.arrival;
-  const departure = latestQueryParams?.departure;
+
+  // ----------------------------------------------------------------------
+  const { arrival, departure, adultCount, childrenCount, location } = latestQueryParams;
   const nightCount = daysBetween(arrival, departure);
-  const guestCount =
-    (latestQueryParams?.adultCount ?? 0) + (latestQueryParams?.childrenCount ?? 0);
-  const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
+  const guestCount = (adultCount ?? 0) + (childrenCount ?? 0);
+  const roomCount = values.offers.reduce(getTotalRoomCountReducer, 0);
+  const summaryBoxHeight = 210;
 
   const onSubmit = (values: FormValuesProps) => {
     if (roomCount > guestCount) {
@@ -112,14 +113,13 @@ export const FacilityGroupOffers = ({
     setOrganizerInfo(undefined);
     setBookingInfo(
       {
-        location: latestQueryParams?.location,
+        location: location,
         accommodation,
-
         date: {
           arrival,
           departure
         },
-        adultCount: latestQueryParams?.adultCount,
+        adultCount: adultCount,
         offers: selectedOffers
       },
       true
@@ -128,30 +128,16 @@ export const FacilityGroupOffers = ({
     navigate('/org-details');
   };
 
-  const handleClose = () => {
-    setShowError(false);
-  };
-
   if (!offers) {
     return <Typography>No rooms available during the selected dates.</Typography>;
   }
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Snackbar
-        open={showError}
-        autoHideDuration={6000}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        onClose={handleClose}
-      >
-        <Alert severity="error" sx={{ width: '100%' }} onClose={handleClose}>
-          Please select more than 9 rooms to conduct a group booking.
-        </Alert>
-      </Snackbar>
       <FacilityOffersTitle
         rooms={roomCount}
         guests={guestCount}
-        startDate={latestQueryParams?.arrival?.toUTCString()}
+        startDate={arrival?.toUTCString()}
         nights={nightCount}
         roomsAvailable={accommodation?.offers?.length ?? 0}
       />
@@ -179,22 +165,33 @@ export const FacilityGroupOffers = ({
           />
         </Grid>
         <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }}>
-          {offers?.map((offer, index) => {
-            const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
-            const roomId: string = accommodationOfOffer?.roomType || '';
-            const rooms = accommodation?.roomTypes || {};
-            const matchedRoomWithOffer = rooms[roomId];
+          <>
+            {offers?.map((offer, index) => {
+              const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
+              const roomId: string = accommodationOfOffer?.roomType || '';
+              const rooms = accommodation?.roomTypes || {};
+              const matchedRoomWithOffer = rooms[roomId];
 
-            return (
-              <RoomCardGroup
-                index={index}
-                key={index}
-                offer={offer}
-                room={matchedRoomWithOffer}
-                nightCount={nightCount}
+              return (
+                <RoomCardGroup
+                  index={index}
+                  key={index}
+                  offer={offer}
+                  room={matchedRoomWithOffer}
+                  nightCount={nightCount}
+                />
+              );
+            })}
+
+            <MHidden width="mdUp">
+              <Box
+                sx={{
+                  width: '100%',
+                  height: `${summaryBoxHeight}px`
+                }}
               />
-            );
-          })}
+            </MHidden>
+          </>
         </Grid>
       </Grid>
     </FormProvider>
