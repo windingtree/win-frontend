@@ -61,6 +61,7 @@ export const RoomCard: React.FC<{
             //TODO: review whether passing the quote is still needed
             quote: res.data.quote,
             accommodation,
+            location: latestQueryParams?.location,
             date: {
               arrival,
               departure
