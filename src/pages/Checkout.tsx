@@ -42,8 +42,10 @@ export const Checkout = () => {
 
   const payment = useMemo(() => {
     if (!bookingInfo) return;
-    const { pricing, providerId, serviceId, quote, expiration } = bookingInfo;
-    if (!pricing || !providerId || !serviceId || !expiration) return;
+    const { pricing, providerId, serviceId, quote, offers } = bookingInfo;
+    if (!pricing || !providerId || !serviceId || !offers) return;
+
+    const expiration = offers[0].expiration;
 
     return {
       currency: pricing?.offerCurrency.currency,

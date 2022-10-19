@@ -8,7 +8,11 @@ import { useAppDispatch, useAppState } from 'src/store';
 import { BookingInfoType } from 'src/store/types';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
 import { bookGroupRequest } from './api';
-import { getBookingMode, getNormalizedOrganizerInfo } from './helpers';
+import {
+  getBookingMode,
+  getNormalizedOffers,
+  getNormalizedOrganizerInfo
+} from './helpers';
 
 type OptionalQuote = Quote | undefined;
 
@@ -65,9 +69,11 @@ export const useCheckout = () => {
       bookingInfo.invoice
     );
 
+    const normalizedOffers = getNormalizedOffers(bookingInfo.offers);
+
     const result = await bookGroupRequest({
       organizerInfo: normalizedOrganizerInfo,
-      offers: bookingInfo.offers,
+      offers: normalizedOffers,
       guestCount: bookingInfo.adultCount,
       invoice: bookingInfo.invoice
     });

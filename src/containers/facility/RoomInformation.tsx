@@ -3,6 +3,8 @@ import { Stack } from '@mui/system';
 import { RoomTypes } from '@windingtree/glider-types/dist/win';
 import { IconButtonAnimate } from 'src/components/animate';
 import Iconify from 'src/components/Iconify';
+import { OfferRecord } from 'src/store/types';
+import { getFormattedDate } from 'src/utils/date';
 import { getIsRefundable } from 'src/utils/offers';
 
 const getAdultText = (adultCount: number) => {
@@ -17,16 +19,20 @@ const getChildrenText = (adultCount: number | undefined) => {
 
 interface RoomInformationType {
   room: RoomTypes;
+  offer: OfferRecord;
 }
 
-export const RoomInformation = ({ room }: RoomInformationType): JSX.Element | null => {
-  if (!room) return null;
+export const RoomInformation = ({
+  room,
+  offer
+}: RoomInformationType): JSX.Element | null => {
+  if (!room || !offer) return null;
 
   const { name, maximumOccupancy, description } = room;
   const { adults, children } = maximumOccupancy;
-  const dummy = 'refundable_with_deadline';
-  const isRefundable = getIsRefundable(dummy);
-  const deadline = '3 oktober';
+  const isRefundable = getIsRefundable(offer.refundability?.type);
+  const deadline =
+    offer.refundability?.deadline && getFormattedDate(offer.refundability?.deadline);
   const cancelationPolicy = isRefundable
     ? `Free cancellation until ${deadline}.`
     : 'Non-refundable';
@@ -44,7 +50,9 @@ export const RoomInformation = ({ room }: RoomInformationType): JSX.Element | nu
         </Typography>
       </Box>
       <Typography variant="body1">{description}</Typography>
-      <Stack direction="row" alignItems="center">
+
+      {/* {offer.refundability && ( */}
+      <Stack direction="row" alignItems="center" mt={1}>
         <Typography variant="body2">{cancelationPolicy}</Typography>
         <Tooltip title={disclaimer}>
           <IconButtonAnimate color="info" size="small">
@@ -52,6 +60,7 @@ export const RoomInformation = ({ room }: RoomInformationType): JSX.Element | nu
           </IconButtonAnimate>
         </Tooltip>
       </Stack>
+      {/* )} */}
     </Box>
   );
 };

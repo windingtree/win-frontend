@@ -63,7 +63,6 @@ export const RoomCard: React.FC<{
             //TODO: review whether passing the quote is still needed
             quote: res.data.quote,
             accommodation,
-            expiration: res.data.offer.expiration,
             date: {
               arrival,
               departure
@@ -80,7 +79,7 @@ export const RoomCard: React.FC<{
             adultCount: latestQueryParams?.adultCount,
             serviceId: res.data.serviceId,
             providerId: res.data.provider,
-            offers: [{ offerId: res.data.offerId, quantity: 1 }]
+            offers: [{ ...offer, ...res.data.offer, quantity: '1' }]
           },
           true
         );
@@ -103,7 +102,7 @@ export const RoomCard: React.FC<{
       <Box py={5}>
         <Grid container spacing={5}>
           <Grid item xs={8}>
-            <RoomInformation room={room} />
+            <RoomInformation room={room} offer={offer} />
           </Grid>
           <Grid item xs={4} alignSelf={'end'}>
             <Box
