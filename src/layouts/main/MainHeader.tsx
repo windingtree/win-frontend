@@ -9,6 +9,7 @@ import { SocialsButton } from 'src/components/SocialButton';
 import MenuDesktop from './MenuDesktop';
 import navConfig from './MenuConfig';
 import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers';
+import { PreferredCurrencySelector } from '../../components/PreferredCurrencySelector';
 
 // this is commented out because the navconfig is currently commented out
 // import MenuMobile from './MenuMobile';
@@ -114,6 +115,7 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
             </Stack>
 
             <Box sx={{ flexGrow: 1 }} />
+            <PreferredCurrencySelector />
             <AccountInfo />
 
             {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />}
