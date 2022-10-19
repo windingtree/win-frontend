@@ -72,7 +72,9 @@ const FacilityMainImage = styled('img')(() => ({
 }));
 
 const AllPhotosButton = styled(Button)(({ theme }) => ({
+  width: '50%',
   [theme.breakpoints.up('lg')]: {
+    width: 'auto',
     position: 'absolute',
     right: 0,
     bottom: 0
@@ -125,13 +127,12 @@ const HeaderButton = ({ scrollToDetailImages }) => {
       </Stack>
       <Typography textAlign={{ md: 'right' }}>Average price / room / night</Typography>
       <Button
-        disableElevation
-        variant="contained"
         size="large"
+        disableElevation
+        variant="outlined"
         onClick={scrollToDetailImages}
         sx={{
-          mt: 1,
-          whiteSpace: 'nowrap'
+          mt: 1
         }}
       >
         Select Room
@@ -327,7 +328,7 @@ export const FacilityIntroduction = ({
       <Container>
         <FacilityMainImage src={mainImage?.url} />
         <FacilityDetailImages images={rest} />
-        <AllPhotosButton variant="outlined" size="large" onClick={handleOpenGallery}>
+        <AllPhotosButton variant="outlined" size="medium" onClick={handleOpenGallery}>
           {largestImages.length > 5 ? 'Show all photos' : 'View Photos'}
         </AllPhotosButton>
         <FacilityGallery

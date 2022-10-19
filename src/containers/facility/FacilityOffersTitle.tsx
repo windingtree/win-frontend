@@ -1,4 +1,4 @@
-import { Box, styled, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { getFormattedDate } from 'src/utils/date';
 
 interface FacilityOffersTitleProps {
@@ -15,19 +15,18 @@ export const FacilityOffersTitle = ({
   startDate,
   nights
 }: FacilityOffersTitleProps) => {
-  const SubHeader = styled(Box)(() => ({}));
   const formattedDate = startDate && getFormattedDate(startDate);
   const roomText = rooms ? (rooms > 1 ? `${rooms} rooms, ` : '1 room, ') : '';
 
   return (
-    <Box mb={5}>
+    <Box>
       <Typography mb={1.5} variant="h3">
         Available Rooms
       </Typography>
-      <SubHeader>
+      <Typography>
         Results for {roomText} {guests} guests, staying from {formattedDate} for {nights}{' '}
         nights.
-      </SubHeader>
+      </Typography>
     </Box>
   );
 };

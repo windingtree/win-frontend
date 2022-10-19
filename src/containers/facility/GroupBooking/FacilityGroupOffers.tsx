@@ -164,8 +164,8 @@ export const FacilityGroupOffers = ({
             guestCount={guestCount}
           />
         </Grid>
-        <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }}>
-          <>
+        <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }} sx={{ mt: 4 }}>
+          <Box mt={{ xs: `-${summaryBoxHeight}px`, md: 0 }}>
             {offers?.map((offer, index) => {
               const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
               const roomId: string = accommodationOfOffer?.roomType || '';
@@ -191,7 +191,7 @@ export const FacilityGroupOffers = ({
                 }}
               />
             </MHidden>
-          </>
+          </Box>
         </Grid>
       </Grid>
     </FormProvider>
