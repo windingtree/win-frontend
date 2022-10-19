@@ -2,7 +2,6 @@
 import { Theme } from '@mui/material/styles';
 import { Box, BoxProps, SxProps } from '@mui/material';
 import { LazyLoadImage, LazyLoadImageProps } from './LazyLoadImage';
-import LoadingImage from '../images/no-image.png';
 
 // ----------------------------------------------------------------------
 
@@ -52,7 +51,7 @@ export default function Image({ ratio, sx, ...other }: ImageProps) {
         <Box
           component={LazyLoadImage}
           wrapperClassName="wrapper"
-          placeholderImgSrc={LoadingImage}
+          placeholderImgSrc="/images/no-image.png"
           showLoadingEffect={true}
           sx={{ width: 1, height: 1, objectFit: 'cover' }}
           {...other}
@@ -75,7 +74,7 @@ export default function Image({ ratio, sx, ...other }: ImageProps) {
       <Box
         component={LazyLoadImage}
         wrapperClassName="wrapper"
-        placeholderImgSrc={LoadingImage}
+        placeholderImgSrc="/images/no-image.png"
         showLoadingEffect={true}
         sx={{ width: 1, height: 1, objectFit: 'cover' }}
         {...other}

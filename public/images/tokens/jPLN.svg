@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <circle id="Ellipse_296" data-name="Ellipse 296" cx="10.014" cy="10.014" r="10.014" transform="translate(0)" fill="#ededed"/>
+    </clipPath>
+  </defs>
+  <g id="Group_4711" data-name="Group 4711" transform="translate(24391.998 -1987)">
+    <circle id="Ellipse_73" data-name="Ellipse 73" cx="11.978" cy="11.978" r="11.978" transform="translate(-24391.998 1987)" fill="#fff"/>
+    <path id="Ellipse_73_-_Outline" data-name="Ellipse 73 - Outline" d="M12,1a11,11,0,1,0,7.778,3.222A11,11,0,0,0,12,1m0-1A12,12,0,1,1,0,12,12,12,0,0,1,12,0Z" transform="translate(-24391.998 1987)" fill="#dc143c"/>
+    <g id="Mask_Group_55" data-name="Mask Group 55" transform="translate(-24390.012 1988.986)" clip-path="url(#clip-path)">
+      <g id="Flag_of_Poland" transform="translate(-6.008)">
+        <rect id="Rectangle_902" data-name="Rectangle 902" width="32.044" height="20.028" fill="#fff"/>
+        <rect id="Rectangle_903" data-name="Rectangle 903" width="32.044" height="10.014" transform="translate(0 10.014)" fill="#dc143c"/>
+      </g>
+    </g>
+  </g>
+</svg>
