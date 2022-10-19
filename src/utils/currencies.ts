@@ -186,7 +186,7 @@ const currencySymbols = {
   ZMW: 'ZK',
   ZWD: 'Z$',
   ZWL: '$'
-};
+} as const;
 
 const dups = Object.entries(currencySymbols).reduce((result, [_, symbol]) => {
   if (result[symbol]) {
@@ -212,3 +212,261 @@ export const currencySymbolMap: Record<string, string> = Object.entries(
 
   return result;
 }, {});
+
+export type CurrencyCode = keyof typeof currencySymbols;
+
+type Currency = {
+  code: CurrencyCode;
+  name: string;
+};
+
+export type CurrencySymbol = typeof currencySymbolMap[CurrencyCode];
+
+export type CurrencyMeta = {
+  [code in CurrencyCode]: {
+    name: string;
+    symbol: CurrencySymbol;
+    rateToBaseCurrency: number;
+  };
+};
+
+export const baseCurrencyCode: CurrencyCode = 'USD';
+
+export const preferredCurrencies: Currency[] = [
+  {
+    code: 'AED',
+    name: 'Emirati Dirham'
+  },
+  {
+    code: 'AUD',
+    name: 'Australian dollar'
+  },
+  {
+    code: 'BGN',
+    name: 'Bulgarian lev'
+  },
+  {
+    code: 'BRL',
+    name: 'Brazilian real'
+  },
+  {
+    code: 'CAD',
+    name: 'Canadian dollar'
+  },
+  {
+    code: 'CHF',
+    name: 'Swiss franc'
+  },
+  {
+    code: 'CZK',
+    name: 'Czech koruna'
+  },
+  {
+    code: 'DKK',
+    name: 'Danish krone'
+  },
+  {
+    code: 'EUR',
+    name: 'Euro'
+  },
+  {
+    code: 'GBP',
+    name: 'British pound'
+  },
+  {
+    code: 'HKD',
+    name: 'Hong Kong dollar'
+  },
+  {
+    code: 'HRK',
+    name: 'Croatian kuna'
+  },
+  {
+    code: 'HUF',
+    name: 'Hungarian forint'
+  },
+  {
+    code: 'IDR',
+    name: 'Indonesian rupiah'
+  },
+  {
+    code: 'INR',
+    name: 'Indian rupee'
+  },
+  {
+    code: 'JPY',
+    name: 'Japanese yen'
+  },
+  {
+    code: 'MYR',
+    name: 'Malaysian ringgit'
+  },
+  {
+    code: 'NOK',
+    name: 'Norwegian krone'
+  },
+  {
+    code: 'NZD',
+    name: 'New Zealand dollar'
+  },
+  {
+    code: 'PLN',
+    name: 'Polish złoty'
+  },
+  {
+    code: 'RON',
+    name: 'Romanian leu'
+  },
+  {
+    code: 'TRY',
+    name: 'Turkish lira'
+  },
+  {
+    code: 'SEK',
+    name: 'Swedish krona'
+  },
+  {
+    code: 'SGD',
+    name: 'Singapore dollar'
+  },
+  {
+    code: 'USD',
+    name: 'US dollar'
+  },
+  {
+    code: 'ARS',
+    name: 'Argentine peso'
+  },
+  {
+    code: 'BDT',
+    name: 'Bangladeshi taka'
+  },
+  {
+    code: 'BWP',
+    name: 'Botswana pula'
+  },
+  {
+    code: 'CLP',
+    name: 'Chilean peso'
+  },
+  {
+    code: 'CNY',
+    name: 'Chinese yuan'
+  },
+  {
+    code: 'COP',
+    name: 'Colombian peso'
+  },
+  {
+    code: 'CRC',
+    name: 'Costa Rica Colón'
+  },
+  {
+    code: 'EGP',
+    name: 'Egyptian pound'
+  },
+  {
+    code: 'FJD',
+    name: 'Fijian dollar'
+  },
+  {
+    code: 'GEL',
+    name: 'Georgian lari'
+  },
+  {
+    code: 'GHS',
+    name: 'Ghana Cedi'
+  },
+  {
+    code: 'ILS',
+    name: 'Israeli shekels'
+  },
+  {
+    code: 'KES',
+    name: 'Kenyan shillings'
+  },
+  {
+    code: 'KRW',
+    name: 'South Korean won'
+  },
+  {
+    code: 'LKR',
+    name: 'Sri Lankan rupee'
+  },
+  {
+    code: 'MAD',
+    name: 'Moroccan dirham'
+  },
+  {
+    code: 'MXN',
+    name: 'Mexican peso'
+  },
+  {
+    code: 'NPR',
+    name: 'Nepalese Rupee'
+  },
+  {
+    code: 'PHP',
+    name: 'Philippine peso'
+  },
+  {
+    code: 'PKR',
+    name: 'Pakistani rupee'
+  },
+  {
+    code: 'THB',
+    name: 'Thai baht'
+  },
+  {
+    code: 'UAH',
+    name: 'Ukranian hryvna'
+  },
+  {
+    code: 'UGX',
+    name: 'Ugandan shilling'
+  },
+  {
+    code: 'UYU',
+    name: 'Uruguayan pesos'
+  },
+  {
+    code: 'VND',
+    name: 'Vietnamese dong'
+  },
+  {
+    code: 'ZAR',
+    name: 'South African Rand'
+  },
+  {
+    code: 'ZMW',
+    name: 'Zambian kwacha'
+  }
+];
+
+const mockPreferredCurrencies: CurrencyMeta | Record<string, never> =
+  preferredCurrencies.reduce(
+    (
+      allCurrencies: CurrencyMeta | Record<string, never>,
+      currency
+    ): CurrencyMeta | Record<string, never> => {
+      const significantDigits = 8;
+
+      allCurrencies[currency.code] = {
+        name: currency.name,
+        symbol: currencySymbolMap[currency.code],
+        rateToBaseCurrency:
+          currency.code === baseCurrencyCode
+            ? 1
+            : Math.round(Math.random() * Math.pow(10, significantDigits)) /
+              Math.pow(10, significantDigits)
+      };
+
+      return allCurrencies;
+    },
+    {}
+  );
+
+export const getPreferredCurrencies = () => {
+  // build currencies meta
+  return mockPreferredCurrencies;
+};
