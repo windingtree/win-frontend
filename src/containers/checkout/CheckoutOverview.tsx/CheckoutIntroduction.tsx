@@ -1,5 +1,6 @@
 import { utils } from 'ethers';
 import { Box, Card, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { formatPrice } from 'src/utils/strings';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { sortByLargestImage } from 'src/utils/accommodation';
@@ -8,40 +9,53 @@ import { CardMediaFallback } from 'src/components/CardMediaFallback';
 import FallbackImage from 'src/images/hotel-fallback.webp';
 
 export const CheckoutIntroduction = () => {
+  const theme = useTheme();
   const { bookingMode, bookingInfo } = useCheckout();
-  const isGroupMode = bookingMode === 'group' ? true : false;
 
-  if (!bookingInfo?.pricing) return null;
+  if (!bookingInfo || !bookingInfo.pricing || !bookingInfo.accommodation) {
+    // don't render anything without pricing info, or accommodation info
+    return null;
+  }
+
+  const isGroupMode = bookingMode === 'group' ? true : false;
+  const accommodationName = bookingInfo.accommodation.name;
+  const googleMapsLink = `https://www.google.com/maps?hl=en&q=${encodeURIComponent(
+    accommodationName
+  )}`;
 
   const formattedOfferPrice = formatPrice(
-    utils.parseEther(bookingInfo.pricing?.offerCurrency.amount.toString()),
-    bookingInfo.pricing?.offerCurrency.currency
+    utils.parseEther(bookingInfo.pricing.offerCurrency.amount.toString()),
+    bookingInfo.pricing.offerCurrency.currency
   );
 
-  const title = isGroupMode
+  const paymentValue = isGroupMode
     ? `The refundable deposit is ${formattedOfferPrice}`
     : `Your payment value is ${formattedOfferPrice}`;
 
   const formattedUsdPrice =
-    bookingInfo.pricing?.usd &&
-    formatPrice(utils.parseEther(bookingInfo.pricing.usd.toString()), 'USD');
-  const subTitle = `Equivalent to ${formattedUsdPrice}`;
+    bookingInfo.pricing.usd &&
+    formatPrice(utils.parseEther(bookingInfo.pricing.usd.toString()));
 
   const showUSDPrice =
-    formattedUsdPrice && bookingInfo.pricing?.offerCurrency.currency != 'USD';
+    formattedUsdPrice && bookingInfo.pricing.offerCurrency.currency != 'USD';
 
-  const accommodationName = bookingInfo?.accommodation?.name;
   const accommodationImage = useMemo(() => {
-    if (bookingInfo?.accommodation) {
+    if (bookingInfo.accommodation) {
       return sortByLargestImage(bookingInfo.accommodation.media)[0];
     }
   }, [bookingInfo]);
 
   return (
-    <Box mb={{ xs: 3, lg: 5 }}>
-      <Typography>{title}</Typography>
-      {showUSDPrice && <Typography>{subTitle}</Typography>}
-
+    <Box
+      mb={{ xs: 3, lg: 5 }}
+      style={{
+        borderWidth: '0.1em',
+        borderStyle: 'solid',
+        borderColor: theme.palette.text.secondary,
+        borderRadius: theme.shape.borderRadius,
+        minWidth: '25em'
+      }}
+    >
       {isGroupMode && (
         <>
           <Typography mt={2}>
@@ -59,7 +73,13 @@ export const CheckoutIntroduction = () => {
         </>
       )}
 
-      <Box>
+      <Typography mb={{ xs: 3, lg: 2 }}>{accommodationName}</Typography>
+      {googleMapsLink && (
+        <Typography mb={{ xs: 3, lg: 2 }}>
+          <a href={googleMapsLink}>see on Google map</a>
+        </Typography>
+      )}
+      <Box mb={{ xs: 3, lg: 2 }}>
         <Card>
           <CardMediaFallback
             component="img"
@@ -70,7 +90,10 @@ export const CheckoutIntroduction = () => {
           />
         </Card>
       </Box>
-      <Typography>You are paying for stay in {accommodationName}</Typography>
+      <Typography mb={{ xs: 3, lg: 2 }}>{paymentValue}</Typography>
+      {showUSDPrice && (
+        <Typography>Equivalent amount in USD ${formattedUsdPrice}</Typography>
+      )}
     </Box>
   );
 };
