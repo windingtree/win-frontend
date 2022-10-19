@@ -68,7 +68,6 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
             </InputAdornment>
           ),
           sx: highlightedStyle,
-          autoFocus: isMobileView,
           inputRef: ref
         }}
       />

@@ -1,6 +1,14 @@
 import { CSSProperties, forwardRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Stack, Typography, Card, useTheme, useMediaQuery } from '@mui/material';
+import {
+  Box,
+  Stack,
+  Typography,
+  Card,
+  useTheme,
+  useMediaQuery,
+  IconButton
+} from '@mui/material';
 import Iconify from './Iconify';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers/helpers';
 import { ImageCarousel } from './ImageCarousel';
@@ -10,6 +18,7 @@ import {
   useAccommodationsAndOffers
 } from '../hooks/useAccommodationsAndOffers';
 import { currencySymbolMap } from '../utils/currencies';
+import { useAppDispatch } from 'src/store';
 
 export interface SearchCardProps {
   facility: AccommodationWithId;
@@ -25,6 +34,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const theme = useTheme();
     const { isGroupMode } = useAccommodationsAndOffers();
     const medium = useMediaQuery(theme.breakpoints.down('md'));
+    const dispatch = useAppDispatch();
 
     const responsiveStyle: CSSProperties =
       medium || mapCard
@@ -61,6 +71,32 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
     return (
       <Card ref={ref} style={{ ...smallCardStyle }}>
+        {mapCard && (
+          <Box
+            sx={{
+              background: 'transparent',
+              backdropFilter: 'blur(8px)',
+              borderRadius: '50%',
+              position: 'absolute',
+              top: 8,
+              left: 8,
+              zIndex: 2
+            }}
+          >
+            <IconButton
+              onClick={() =>
+                dispatch({
+                  type: 'RESET_SELECTED_FACILITY_ID'
+                })
+              }
+              aria-label="close"
+              size="small"
+            >
+              <Iconify color="white" icon="vaadin:close-small" width={16} height={16} />
+            </IconButton>
+          </Box>
+        )}
+
         <Stack sx={{ ...responsiveStyle }}>
           <Stack
             minWidth={theme.spacing(mapCard || medium ? 16 : 36)}
