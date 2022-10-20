@@ -12,7 +12,8 @@ import {
 } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useCurrencies } from '../hooks/useCurrencies';
-import { useAppDispatch, useAppState } from '../store';
+import { useUserSettings } from '../hooks/useUserSettings';
+import { useAppState } from '../store';
 import { emptyFunction } from '../utils/common';
 import { CurrencyCode } from '../utils/currencies';
 import Iconify from './Iconify';
@@ -42,8 +43,14 @@ const CurrencyItem = ({ code, name, selected = false, onClick = emptyFunction })
 };
 
 export const PreferredCurrencySelector = () => {
-  const { account, userSettings } = useAppState();
-  const dispatch = useAppDispatch();
+  const { account } = useAppState();
+
+  // get user settings
+  const { value: preferredCurrencyCode, updateSetting } = useUserSettings(
+    'preferredCurrencyCode'
+  );
+
+  // get display currencies list
   const { displayCurrencies } = useCurrencies();
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -52,16 +59,11 @@ export const PreferredCurrencySelector = () => {
 
   const handleCurrencyChange = useCallback(
     (code: string) => {
-      dispatch({
-        type: 'SET_PREFERRED_CURRENCY',
-        payload: code as CurrencyCode
-      });
+      updateSetting('preferredCurrencyCode', code);
       closeDialog();
     },
-    [closeDialog, dispatch]
+    [closeDialog]
   );
-
-  const { preferredCurrencyCode } = userSettings;
 
   // hide currency selector when wallet is connected
   if (account) {
@@ -72,7 +74,7 @@ export const PreferredCurrencySelector = () => {
     <>
       <Box>
         <Button onClick={openDialog} sx={{ fontWeight: 'regular' }}>
-          {preferredCurrencyCode}
+          {preferredCurrencyCode as CurrencyCode}
         </Button>
       </Box>
       <Dialog
