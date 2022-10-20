@@ -31,9 +31,7 @@ export const CheckoutCancellation = () => {
       )}
 
       {!isRefundable && (
-        <Typography variant="body2">
-          Please notice: once you pay for this booking, you cannot get any refund
-        </Typography>
+        <Typography variant="body2">This a non-refundable reservation.</Typography>
       )}
     </>
   );
