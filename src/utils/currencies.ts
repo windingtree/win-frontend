@@ -443,28 +443,24 @@ export const preferredCurrencies: Currency[] = [
   }
 ];
 
-const mockPreferredCurrencies: CurrencyMeta | Record<string, never> =
-  preferredCurrencies.reduce(
-    (
-      allCurrencies: CurrencyMeta | Record<string, never>,
-      currency
-    ): CurrencyMeta | Record<string, never> => {
-      const significantDigits = 8;
+const mockPreferredCurrencies: CurrencyMeta = preferredCurrencies.reduce(
+  (allCurrencies, currency): CurrencyMeta | Record<string, never> => {
+    const significantDigits = 8;
 
-      allCurrencies[currency.code] = {
-        name: currency.name,
-        symbol: currencySymbolMap[currency.code],
-        rateToBaseCurrency:
-          currency.code === baseCurrencyCode
-            ? 1
-            : Math.round(Math.random() * Math.pow(10, significantDigits)) /
-              Math.pow(10, significantDigits)
-      };
+    allCurrencies[currency.code] = {
+      name: currency.name,
+      symbol: currencySymbolMap[currency.code],
+      rateToBaseCurrency:
+        currency.code === baseCurrencyCode
+          ? 1
+          : Math.round(Math.random() * Math.pow(10, significantDigits)) /
+            Math.pow(10, significantDigits)
+    };
 
-      return allCurrencies;
-    },
-    {}
-  );
+    return allCurrencies;
+  },
+  {}
+) as CurrencyMeta;
 
 export const getPreferredCurrencies = () => {
   // build currencies meta

@@ -645,7 +645,7 @@ export const localStorageConfig: LocalStorageConnectorConfig = {
     'selectedAsset',
     'searchParams',
     'walletAuth',
-    'preferredCurrencyCode'
+    'userSettings'
   ]
 };
 
