@@ -1,3 +1,7 @@
+import { Price } from '@windingtree/glider-types/dist/win';
+import { baseCurrencyCode } from '../config';
+import { stringToNumber } from './strings';
+
 const currencySymbols = {
   AED: 'د.إ',
   AFN: '؋',
@@ -226,11 +230,10 @@ export type CurrencyMeta = {
   [code in CurrencyCode]: {
     name: string;
     symbol: CurrencySymbol;
-    rateToBaseCurrency: number;
+    rateFromBaseCurrency: number;
+    decimals: number;
   };
 };
-
-export const baseCurrencyCode: CurrencyCode = 'USD';
 
 export const preferredCurrencies: Currency[] = [
   {
@@ -443,6 +446,14 @@ export const preferredCurrencies: Currency[] = [
   }
 ];
 
+const mockRatesFromUSD = {
+  GBP: 0.89178,
+  CAD: 1.3771,
+  EUR: 1.02395,
+  AUD: 1.59706,
+  INR: 83.0205
+};
+
 const mockPreferredCurrencies: CurrencyMeta = preferredCurrencies.reduce(
   (allCurrencies, currency): CurrencyMeta | Record<string, never> => {
     const significantDigits = 8;
@@ -450,9 +461,12 @@ const mockPreferredCurrencies: CurrencyMeta = preferredCurrencies.reduce(
     allCurrencies[currency.code] = {
       name: currency.name,
       symbol: currencySymbolMap[currency.code],
-      rateToBaseCurrency:
+      decimals: 2,
+      rateFromBaseCurrency:
         currency.code === baseCurrencyCode
           ? 1
+          : mockRatesFromUSD[currency.code]
+          ? mockRatesFromUSD[currency.code]
           : Math.round(Math.random() * Math.pow(10, significantDigits)) /
             Math.pow(10, significantDigits)
     };
@@ -465,4 +479,72 @@ const mockPreferredCurrencies: CurrencyMeta = preferredCurrencies.reduce(
 export const getDisplayCurrencies = () => {
   // build currencies meta
   return mockPreferredCurrencies;
+};
+
+export const convertCurrency = (
+  fromCurrency: CurrencyCode,
+  toCurrency: CurrencyCode,
+  amount = 1 // passing a value of 1 (default) will return a reusable multiplier for conversions
+) => {
+  if (fromCurrency === toCurrency) return { amount };
+
+  // get currency rates
+  const currencyRates = getPreferredCurrencies();
+
+  // currencies must be supported
+  if (!currencyRates[fromCurrency] || !currencyRates[toCurrency]) {
+    throw new Error(
+      `Conversion from "${fromCurrency}" to "${toCurrency}" is not supported`
+    );
+  }
+
+  // convert between both currencies
+  return {
+    amount:
+      (currencyRates[toCurrency].rateFromBaseCurrency /
+        currencyRates[fromCurrency].rateFromBaseCurrency) *
+      amount,
+    decimals: currencyRates[toCurrency].decimals
+  };
+};
+
+/**
+ *
+ * @param price: Price object to convert
+ * @param targetCurrency: The currency you wish to convert to
+ * @returns Price object with converted amounts
+ */
+export const convertPriceToCurrency = ({
+  price,
+  targetCurrency
+}: {
+  price: Price;
+  targetCurrency: CurrencyCode;
+}): Price => {
+  // if conversion rate is not provided get it
+  if (!targetCurrency)
+    throw new Error('ConvertPriceToCurrency: You must provide a targetCurrency');
+
+  // return price if currencies are the same
+  if (targetCurrency === price.currency) return { ...price };
+  const { amount: conversionRate, decimals } = convertCurrency(
+    price.currency as CurrencyCode,
+    targetCurrency
+  );
+
+  const convertAmount = (amount: string) =>
+    conversionRate ? (conversionRate * stringToNumber(amount)).toString() : '';
+
+  // convert sub-amounts
+  const convertedPrice: Price = {
+    currency: targetCurrency,
+    public: price.public && convertAmount(price.public),
+    commission: price.commission && convertAmount(price.commission),
+    decimalPlaces: decimals,
+    private: price.private && convertAmount(price.private),
+    taxes: price.taxes && convertAmount(price.taxes),
+    isAmountBeforeTax: price.isAmountBeforeTax
+  };
+
+  return convertedPrice;
 };

@@ -2,6 +2,7 @@ import { LocalStorageConnectorConfig } from './store/storage';
 import { Settings } from 'luxon';
 import { config } from '@windingtree/win-commons';
 import { stringToNumber } from './utils/strings';
+import { CurrencyCode } from './utils/currencies';
 
 export enum AppMode {
   dev = 'dev',
@@ -632,6 +633,8 @@ export const countries: readonly CountryType[] = [
   { code: 'ZM', label: 'Zambia', phone: '260' },
   { code: 'ZW', label: 'Zimbabwe', phone: '263' }
 ];
+
+export const baseCurrencyCode: CurrencyCode = 'USD';
 
 export const localStorageConfig: LocalStorageConnectorConfig = {
   properties: [

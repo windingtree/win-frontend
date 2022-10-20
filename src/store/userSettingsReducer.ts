@@ -1,7 +1,7 @@
 import type { UserSettingsAction } from './actions';
 import type { State } from './types';
 import Logger from '../utils/logger';
-import { baseCurrencyCode } from '../utils/currencies';
+import { baseCurrencyCode } from '../config';
 
 const logger = Logger('userSettingsReducer');
 
