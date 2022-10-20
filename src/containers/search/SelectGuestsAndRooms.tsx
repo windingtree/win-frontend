@@ -1,20 +1,16 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { RHFTextField } from 'src/components/hook-form';
+import { DISABLE_FEATURES } from '../../config';
 import { getGroupMode } from '../../hooks/useAccommodationsAndOffers/helpers';
 
 export const SelectGuestsAndRooms = () => {
   const { watch } = useFormContext();
-  const [groupMode, setGroupMode] = useState<boolean>(false);
   const FIELD_WIDTH = '80px';
 
   const roomCount = watch('roomCount');
-
-  useEffect(() => {
-    const isGroupMode = getGroupMode(roomCount);
-    setGroupMode(isGroupMode);
-  }, [roomCount, getGroupMode, setGroupMode]);
+  const groupMode = getGroupMode(roomCount);
+  const groupModeDisabled = DISABLE_FEATURES;
 
   return (
     <Stack spacing={2} p={4}>
@@ -60,8 +56,7 @@ export const SelectGuestsAndRooms = () => {
               inputProps: {
                 min: 1,
                 step: 1,
-                // TODO: remove the following line when group booking is enabled
-                max: 9
+                ...(groupModeDisabled ? { max: 9 } : {})
               }
             }}
           />
