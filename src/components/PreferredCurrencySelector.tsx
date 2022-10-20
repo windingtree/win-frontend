@@ -11,7 +11,7 @@ import {
   Typography
 } from '@mui/material';
 import { useCallback, useState } from 'react';
-import { usePreferredCurrencies } from '../hooks/usePreferredCurrencies';
+import { useCurrencies } from '../hooks/useCurrencies';
 import { useAppDispatch, useAppState } from '../store';
 import { emptyFunction } from '../utils/common';
 import { CurrencyCode } from '../utils/currencies';
@@ -44,7 +44,7 @@ const CurrencyItem = ({ code, name, selected = false, onClick = emptyFunction })
 export const PreferredCurrencySelector = () => {
   const { account, userSettings } = useAppState();
   const dispatch = useAppDispatch();
-  const { preferredCurrencies } = usePreferredCurrencies();
+  const { displayCurrencies } = useCurrencies();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const openDialog = () => setDialogOpen(true);
@@ -91,7 +91,7 @@ export const PreferredCurrencySelector = () => {
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={{ xs: 1, md: 2 }}>
-            {Object.entries(preferredCurrencies).map(([code, { name }]) => {
+            {Object.entries(displayCurrencies).map(([code, { name }]) => {
               return (
                 <Grid item xs={6} sm={4} md={3} key={code}>
                   <CurrencyItem

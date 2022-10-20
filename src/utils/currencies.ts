@@ -462,7 +462,7 @@ const mockPreferredCurrencies: CurrencyMeta = preferredCurrencies.reduce(
   {}
 ) as CurrencyMeta;
 
-export const getPreferredCurrencies = () => {
+export const getDisplayCurrencies = () => {
   // build currencies meta
   return mockPreferredCurrencies;
 };
