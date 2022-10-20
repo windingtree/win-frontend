@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Breakpoint, Theme, useMediaQuery } from '@mui/material';
 
-type HiddenProps = {
+type MHiddenProps = {
   children: ReactNode;
   width:
     | 'xsDown'
@@ -16,7 +16,7 @@ type HiddenProps = {
     | 'xlUp';
 };
 
-export const Hidden = ({ width, children }: HiddenProps) => {
+export const MHidden = ({ width, children }: MHiddenProps) => {
   const breakpoint = width.substring(0, 2) as Breakpoint;
 
   const hiddenUp = useMediaQuery<Theme>((theme) => theme.breakpoints.up(breakpoint));
