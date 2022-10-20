@@ -1,5 +1,5 @@
 import { OfferRecord } from 'src/store/types';
-import { OfferCheckoutType } from './GroupBooking/FacilityGroupOffers';
+import { OfferCheckoutType } from './FacilityOffers/FacilityOffersSelectMultiple';
 
 export const getSelectedOffers = (offers: OfferCheckoutType[]) =>
   offers.filter((offer) => Number(offer.quantity) > 0);

@@ -16,15 +16,15 @@ const getChildrenText = (adultCount: number | undefined) => {
   return 'children';
 };
 
-interface RoomInformationType {
+interface OfferInformationType {
   room: RoomTypes;
   offer: OfferRecord;
 }
 
-export const RoomInformation = ({
+export const OfferInformation = ({
   room,
   offer
-}: RoomInformationType): JSX.Element | null => {
+}: OfferInformationType): JSX.Element | null => {
   if (!room || !offer) return null;
 
   const { name, maximumOccupancy, description } = room;

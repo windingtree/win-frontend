@@ -1,10 +1,10 @@
 import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import {
   AccommodationWithId,
   getGroupMode
-} from '../../hooks/useAccommodationsAndOffers/helpers';
+} from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
 import {
   Button,
@@ -19,18 +19,18 @@ import {
 import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { stringToNumber } from '../../utils/strings';
+import { stringToNumber } from 'src/utils/strings';
 import {
   buildAccommodationAddress,
   getLargestImages,
   sortByLargestImage
-} from '../../utils/accommodation';
+} from 'src/utils/accommodation';
 import { FacilityGallery } from './FacilityGallery';
-import { daysBetween } from '../../utils/date';
+import { daysBetween } from 'src/utils/date';
 import 'react-image-lightbox/style.css';
-import { LightboxModal } from '../../components/LightboxModal';
-import Iconify from '../../components/Iconify';
-import { currencySymbolMap } from '../../utils/currencies';
+import { LightboxModal } from 'src/components/LightboxModal';
+import Iconify from 'src/components/Iconify';
+import { currencySymbolMap } from 'src/utils/currencies';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',

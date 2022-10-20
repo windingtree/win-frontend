@@ -11,8 +11,8 @@ import {
   Typography
 } from '@mui/material';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
-import Image from '../../components/Image';
-import { emptyFunction } from '../../utils/common';
+import Image from 'src/components/Image';
+import { emptyFunction } from 'src/utils/common';
 
 export type FacilityGalleryModalProps = Omit<ModalProps, 'children'>;
 export type GalleryImageClickHandler = (index: number) => void;

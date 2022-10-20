@@ -1,25 +1,25 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { RoomCardGroup } from './RoomCardGroup';
 import { FormProvider } from 'src/components/hook-form';
 import { useForm, FieldValues } from 'react-hook-form';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
-import { FacilityGroupOffersSummary } from './FacilityGroupOffersSummary';
-import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
+import { FacilityOffersSelectMultipleSummary } from './FacilityOffersMultipleSummary';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
 import { useResponsive } from 'src/hooks/useResponsive';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { daysBetween } from 'src/utils/date';
-import { FacilityOffersTitle } from '../FacilityOffersTitle';
 import { useCheckout } from 'src/hooks/useCheckout';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
 import { useSnackbar } from 'notistack';
-import { getTotalRoomCountReducer } from 'src/utils/offers';
-import { GROUP_MODE_ROOM_COUNT } from '../../../config';
+import { getRoomOfOffer, getTotalRoomCountReducer } from 'src/utils/offers';
 import type { OfferRecord } from 'src/store/types';
 import { MHidden } from 'src/components/MHidden';
+import { FacilityOffersTitle } from './FacilityOffersTitle';
+import { OfferItemSelectMultiple } from './offer-item/OfferItemSelectMultiple';
+import { GROUP_MODE_ROOM_COUNT } from 'src/config';
+import { sortAccommodationOffersByPrice } from 'src/utils/accommodation';
 
 export interface OfferCheckoutType extends OfferRecord {
   quantity: string;
@@ -42,25 +42,29 @@ export const GroupOffersSchema = Yup.object().shape({
   )
 });
 
-interface FacilityGroupOffersProps {
-  offers: OfferRecord[] | null;
-  accommodation: AccommodationWithId | null;
-}
-
 type FormValuesProps = {
   offers: OfferCheckoutType[];
 };
 
-export const FacilityGroupOffers = ({
-  offers = [],
-  accommodation
-}: FacilityGroupOffersProps) => {
-  const { latestQueryParams } = useAccommodationsAndOffers();
+export const FacilityOffersSelectMultiple = () => {
+  const { getAccommodationById, accommodations, latestQueryParams } =
+    useAccommodationsAndOffers();
+  const params = useParams();
   const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const isDesktop = useResponsive('up', 'md');
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  if (!latestQueryParams) return null;
+
+  const id: string = params.id as string;
+  const accommodation = useMemo(
+    () => getAccommodationById(accommodations, id),
+    [accommodations, id]
+  );
+
+  if (!latestQueryParams || !accommodation) return null;
+
+  const offers = sortAccommodationOffersByPrice(accommodation);
+
   const defaultRoomCount = latestQueryParams.roomCount
     ? latestQueryParams.roomCount
     : GROUP_MODE_ROOM_COUNT;
@@ -128,7 +132,7 @@ export const FacilityGroupOffers = ({
     navigate('/org-details');
   };
 
-  if (!offers) {
+  if (!offers || !accommodation) {
     return <Typography>No rooms available during the selected dates.</Typography>;
   }
 
@@ -157,7 +161,7 @@ export const FacilityGroupOffers = ({
             alignSelf: 'flex-start'
           }}
         >
-          <FacilityGroupOffersSummary
+          <FacilityOffersSelectMultipleSummary
             height={summaryBoxHeight}
             roomCount={roomCount}
             nightCount={nightCount}
@@ -167,17 +171,13 @@ export const FacilityGroupOffers = ({
         <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }} sx={{ mt: 4 }}>
           <Box mt={{ xs: `-${summaryBoxHeight}px`, md: 0 }}>
             {offers?.map((offer, index) => {
-              const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
-              const roomId: string = accommodationOfOffer?.roomType || '';
-              const rooms = accommodation?.roomTypes || {};
-              const matchedRoomWithOffer = rooms[roomId];
-
+              const room = getRoomOfOffer(accommodation, offer);
               return (
-                <RoomCardGroup
+                <OfferItemSelectMultiple
                   index={index}
                   key={index}
                   offer={offer}
-                  room={matchedRoomWithOffer}
+                  room={room}
                   nightCount={nightCount}
                 />
               );
