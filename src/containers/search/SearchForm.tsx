@@ -299,6 +299,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
       ]);
     }
   }, [latestQueryParams, pathname]);
+
   /**
    * Logic in relation to styling and textual UI
    */
@@ -341,8 +342,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   }, [isMobileView]);
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <SearchPopovers {...popOversState} />
+    <Stack spacing={0.5}>
       <Box
         sx={
           isCloseable
@@ -385,80 +385,85 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
         isCloseable={isCloseable}
         handleClose={() => setOpen(false)}
       >
-        <ToolbarStyle ref={formRef}>
-          <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            alignItems="center"
-            spacing={1}
-            divider={!isMobileView ? <Divider orientation={'vertical'} flexItem /> : null}
-          >
-            <SearchLocationInput
-              onClick={handleLocationInputClick}
-              allowDropdownOpen={!isMobileView}
-              ref={locationRef}
-              highlighted={highlightedInput === 'location'}
-              highlightedColor={theme.palette.primary.main}
-            />
-            <Box>
-              <Button
-                startIcon={isMobileView && <CalendarIcon />}
-                onClick={() => setDateRangeAnchorEl(dateRef.current)}
-                size={buttonSize}
-                variant={isMobileView ? 'outlined' : 'text'}
-                sx={{
-                  minWidth: isMobileView ? '320px' : '200px',
-                  whiteSpace: 'nowrap',
-                  ...fontStyling,
-                  ...formButtonStyle
-                }}
-                className={highlightedInput === 'dateRange' ? 'highlighted' : ''}
-                color="inherit"
-                ref={dateRef}
-                disableRipple={isMobileView}
-              >
-                {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
-              </Button>
-            </Box>
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <SearchPopovers {...popOversState} />
+          <ToolbarStyle ref={formRef}>
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              alignItems="center"
+              spacing={1}
+              divider={
+                !isMobileView ? <Divider orientation={'vertical'} flexItem /> : null
+              }
+            >
+              <SearchLocationInput
+                onClick={handleLocationInputClick}
+                allowDropdownOpen={!isMobileView}
+                ref={locationRef}
+                highlighted={highlightedInput === 'location'}
+                highlightedColor={theme.palette.primary.main}
+              />
+              <Box>
+                <Button
+                  startIcon={isMobileView && <CalendarIcon />}
+                  onClick={() => setDateRangeAnchorEl(dateRef.current)}
+                  size={buttonSize}
+                  variant={isMobileView ? 'outlined' : 'text'}
+                  sx={{
+                    minWidth: isMobileView ? '320px' : '200px',
+                    whiteSpace: 'nowrap',
+                    ...fontStyling,
+                    ...formButtonStyle
+                  }}
+                  className={highlightedInput === 'dateRange' ? 'highlighted' : ''}
+                  color="inherit"
+                  ref={dateRef}
+                  disableRipple={isMobileView}
+                >
+                  {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
+                </Button>
+              </Box>
 
-            <Box>
-              <Button
-                startIcon={isMobileView && <PersonIcon />}
-                sx={{
-                  minWidth: isMobileView ? '320px' : '144px',
-                  whiteSpace: 'nowrap',
-                  ...fontStyling,
-                  ...formButtonStyle
-                }}
-                onClick={() => setGuestsAnchorEl(guestsRef.current)}
-                size={buttonSize}
-                variant={isMobileView ? 'outlined' : 'text'}
-                color="inherit"
-                ref={guestsRef}
-                disableRipple={isMobileView}
-                className={highlightedInput === 'roomCount' ? 'highlighted' : ''}
-              >
-                {guestDetailsText}
-              </Button>
-            </Box>
-            <Box>
-              <Button
-                disableElevation
-                type="submit"
-                disabled={isFetching}
-                variant="contained"
-                size={buttonSize}
-                sx={{
-                  minWidth: isMobileView ? '320px' : '160px',
-                  whiteSpace: 'nowrap',
-                  ...fontStyling
-                }}
-                ref={submitRef}
-              >
-                Search
-              </Button>
-            </Box>
-          </Stack>
-        </ToolbarStyle>
+              <Box>
+                <Button
+                  startIcon={isMobileView && <PersonIcon />}
+                  sx={{
+                    minWidth: isMobileView ? '320px' : '144px',
+                    whiteSpace: 'nowrap',
+                    ...fontStyling,
+                    ...formButtonStyle
+                  }}
+                  onClick={() => setGuestsAnchorEl(guestsRef.current)}
+                  size={buttonSize}
+                  variant={isMobileView ? 'outlined' : 'text'}
+                  color="inherit"
+                  ref={guestsRef}
+                  disableRipple={isMobileView}
+                  className={highlightedInput === 'roomCount' ? 'highlighted' : ''}
+                >
+                  {guestDetailsText}
+                </Button>
+              </Box>
+              <Box>
+                <Button
+                  disableElevation
+                  type="submit"
+                  disabled={isFetching}
+                  variant="contained"
+                  size={buttonSize}
+                  sx={{
+                    minWidth: isMobileView ? '320px' : '160px',
+                    whiteSpace: 'nowrap',
+                    ...fontStyling
+                  }}
+                  ref={submitRef}
+                >
+                  Search
+                </Button>
+              </Box>
+            </Stack>
+          </ToolbarStyle>
+        </FormProvider>
       </ResponsiveContainer>
 
       <Stack>
@@ -516,6 +521,6 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
           </Alert>
         )}
       </Stack>
-    </FormProvider>
+    </Stack>
   );
 };
