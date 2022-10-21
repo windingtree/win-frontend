@@ -65,8 +65,10 @@ type FormValuesProps = {
 
 type FormInputFields = 'location' | 'dateRange' | 'adultCount' | 'roomCount';
 
-const SearchIcon = () => <Iconify icon={'akar-icons:search'} width={24} height={24} />;
-const FilterIcon = () => <Iconify icon={'mi:filter'} width={30} height={30} />;
+const SearchIcon = () => <Iconify icon="akar-icons:search" width={24} height={24} />;
+const FilterIcon = () => <Iconify icon="mi:filter" width={30} height={30} />;
+const CalendarIcon = () => <Iconify icon="akar-icons:calendar" width={18} height={18} />;
+const PersonIcon = () => <Iconify icon="akar-icons:person" width={18} height={18} />;
 
 export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => {
   const [searchParams] = useSearchParams();
@@ -321,6 +323,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
 
   const formButtonStyle: SxProps = isMobileView
     ? {
+        justifyContent: 'start',
+        paddingLeft: theme.spacing(2),
         '&:hover': {
           backgroundColor: 'transparent'
         },
@@ -397,6 +401,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
             />
             <Box>
               <Button
+                startIcon={isMobileView && <CalendarIcon />}
                 onClick={() => setDateRangeAnchorEl(dateRef.current)}
                 size={buttonSize}
                 variant={isMobileView ? 'outlined' : 'text'}
@@ -417,6 +422,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
 
             <Box>
               <Button
+                startIcon={isMobileView && <PersonIcon />}
                 sx={{
                   minWidth: isMobileView ? '320px' : '144px',
                   whiteSpace: 'nowrap',
