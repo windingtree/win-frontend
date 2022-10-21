@@ -31,11 +31,11 @@ import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
 import { SearchPopovers, SearchPopoversProps } from './SearchPopovers';
 import { SearchLocationInput } from './SearchLocationInput';
+import { ResponsiveContainer } from '../ResponsiveContainer';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
   padding: theme.spacing(1),
-  marginTop: theme.spacing(-1),
   display: 'flex',
   justifyContent: 'center',
   border: 'none',
@@ -68,14 +68,15 @@ type FormInputFields = 'location' | 'dateRange' | 'adultCount' | 'roomCount';
 const SearchIcon = () => <Iconify icon={'akar-icons:search'} width={24} height={24} />;
 const FilterIcon = () => <Iconify icon={'mi:filter'} width={30} height={30} />;
 
-export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
+export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const theme = useTheme();
   const { pathname, search } = useLocation();
 
-  const [open, setOpen] = useState<boolean>(!closed);
+  const [open, setOpen] = useState<boolean>(false);
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
+  const isCloseable: boolean = useMemo(() => isMobileView && !!closeable, [isMobileView]);
 
   // monitor error state locally
   // generic error message
@@ -340,7 +341,7 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
       <SearchPopovers {...popOversState} />
       <Box
         sx={
-          !open && isMobileView && closed
+          isCloseable
             ? { background: theme.palette.common.white, width: '100%', p: 2 }
             : { display: 'none' }
         }
@@ -374,10 +375,11 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
           </Grid>
         </Grid>
       </Box>
-      <Stack
-        sx={!open && isMobileView && closed ? { display: 'none' } : {}}
-        direction="column"
-        alignItems="center"
+
+      <ResponsiveContainer
+        open={open}
+        isCloseable={isCloseable}
+        handleClose={() => setOpen(false)}
       >
         <ToolbarStyle ref={formRef}>
           <Stack
@@ -451,7 +453,8 @@ export const SearchForm: React.FC<{ closed?: boolean }> = ({ closed }) => {
             </Box>
           </Stack>
         </ToolbarStyle>
-      </Stack>
+      </ResponsiveContainer>
+
       <Stack>
         {isGroupMode && accommodations.length && (
           // show this message when in group mode and there are accommodations with offers
