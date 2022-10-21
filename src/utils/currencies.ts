@@ -235,7 +235,7 @@ export type CurrencyMeta = {
   };
 };
 
-export const preferredCurrencies: Currency[] = [
+export const displayCurrencies: Currency[] = [
   {
     code: 'AED',
     name: 'Emirati Dirham'
@@ -454,7 +454,7 @@ const mockRatesFromUSD = {
   INR: 83.0205
 };
 
-const mockPreferredCurrencies: CurrencyMeta = preferredCurrencies.reduce(
+const mockDisplayCurrencies: CurrencyMeta = displayCurrencies.reduce(
   (allCurrencies, currency): CurrencyMeta | Record<string, never> => {
     const significantDigits = 8;
 
@@ -478,7 +478,7 @@ const mockPreferredCurrencies: CurrencyMeta = preferredCurrencies.reduce(
 
 export const getDisplayCurrencies = () => {
   // build currencies meta
-  return mockPreferredCurrencies;
+  return mockDisplayCurrencies;
 };
 
 export const convertCurrency = (
@@ -489,7 +489,7 @@ export const convertCurrency = (
   if (fromCurrency === toCurrency) return { amount };
 
   // get currency rates
-  const currencyRates = getPreferredCurrencies();
+  const currencyRates = getDisplayCurrencies();
 
   // currencies must be supported
   if (!currencyRates[fromCurrency] || !currencyRates[toCurrency]) {
