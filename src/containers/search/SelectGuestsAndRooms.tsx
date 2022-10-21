@@ -31,6 +31,14 @@ export const SelectGuestsAndRooms = () => {
                 min: 1
               }
             }}
+            FormHelperTextProps={{
+              sx: {
+                width: 'auto',
+                textAlign: 'start',
+                marginLeft: '-147px',
+                marginRight: '0'
+              }
+            }}
           />
         </Box>
       </Stack>
@@ -57,6 +65,14 @@ export const SelectGuestsAndRooms = () => {
                 min: 1,
                 step: 1,
                 ...(groupModeDisabled ? { max: 9 } : {})
+              }
+            }}
+            FormHelperTextProps={{
+              sx: {
+                width: 'auto',
+                textAlign: 'start',
+                marginLeft: '-147px',
+                marginRight: '0'
               }
             }}
           />
