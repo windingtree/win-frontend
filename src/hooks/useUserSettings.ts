@@ -8,12 +8,12 @@ const settingsUpdateActions: Record<AvailableSettings, UserSettingsAction['type'
   preferredCurrencyCode: 'SET_PREFERRED_CURRENCY'
 };
 
-export const useUserSettings = (settingName?: AvailableSettings) => {
+export const useUserSettings = () => {
   const { userSettings } = useAppState();
   const dispatch = useAppDispatch();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateSetting = (setting: AvailableSettings, value: any) => {
+  const setUserSetting = (setting: AvailableSettings, value: any) => {
     const type = settingsUpdateActions[setting];
     const action = {
       type,
@@ -24,7 +24,7 @@ export const useUserSettings = (settingName?: AvailableSettings) => {
   };
 
   return {
-    value: settingName ? userSettings[settingName] : userSettings,
-    updateSetting
+    ...userSettings,
+    setUserSetting
   };
 };

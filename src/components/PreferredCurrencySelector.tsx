@@ -46,9 +46,7 @@ export const PreferredCurrencySelector = () => {
   const { account } = useAppState();
 
   // get user settings
-  const { value: preferredCurrencyCode, updateSetting } = useUserSettings(
-    'preferredCurrencyCode'
-  );
+  const { preferredCurrencyCode, setUserSetting } = useUserSettings();
 
   // get display currencies list
   const { displayCurrencies } = useCurrencies();
@@ -59,7 +57,7 @@ export const PreferredCurrencySelector = () => {
 
   const handleCurrencyChange = useCallback(
     (code: string) => {
-      updateSetting('preferredCurrencyCode', code);
+      setUserSetting('preferredCurrencyCode', code);
       closeDialog();
     },
     [closeDialog]
