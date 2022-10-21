@@ -2,6 +2,7 @@ import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { OfferRecord } from 'src/store/types';
 import { AccommodationTransformFn, EventInfo, LowestPriceFormat } from '.';
+import { convertPriceCurrency, CurrencyCode } from '../../utils/currencies';
 import { getActiveEventsWithinRadius } from '../../utils/events';
 import { crowDistance } from '../../utils/geo';
 
@@ -198,4 +199,17 @@ export const getGroupMode = (roomCount: number | string | undefined): boolean =>
   if (roomCount === undefined) false;
   const numRoomCount = Number.isNaN(roomCount) ? 0 : Number(roomCount);
   return numRoomCount >= GROUP_MODE_ROOM_COUNT;
+};
+
+export const getOffersWithPreferredCurrency = (
+  offers: OfferRecord[],
+  preferredCurrencyCode: CurrencyCode
+): OfferRecord[] => {
+  return offers.map((offer) => {
+    const preferredCurrencyPrice = convertPriceCurrency({
+      price: offer.price,
+      targetCurrency: preferredCurrencyCode
+    });
+    return { ...offer, preferredCurrencyPrice };
+  });
 };

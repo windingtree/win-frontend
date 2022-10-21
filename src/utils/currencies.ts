@@ -514,7 +514,7 @@ export const convertCurrency = (
  * @param targetCurrency: The currency you wish to convert to
  * @returns Price object with converted amounts
  */
-export const convertPriceToCurrency = ({
+export const convertPriceCurrency = ({
   price,
   targetCurrency
 }: {

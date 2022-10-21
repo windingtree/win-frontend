@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import { getLargestImages, sortByLargestImage } from '../../utils/accommodation';
 import { daysBetween } from '../../utils/date';
+import { useUserSettings } from '../useUserSettings';
 import {
   AccommodationsAndOffersResponse,
   Coordinates,
@@ -13,7 +14,8 @@ import {
   normalizeAccommodations,
   normalizeOffers,
   getOffersById,
-  AccommodationWithId
+  AccommodationWithId,
+  getOffersWithPreferredCurrency
 } from './helpers';
 
 export interface SearchTypeProps {
@@ -55,6 +57,7 @@ export const useAccommodationsAndOffers = ({
   searchProps?: SearchTypeProps | void;
   accommodationTransformFn?: AccommodationTransformFn;
 } = {}) => {
+  const { preferredCurrencyCode } = useUserSettings();
   const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery<
     AccommodationsAndOffersResponse | undefined,
     Error
@@ -135,7 +138,13 @@ export const useAccommodationsAndOffers = ({
   }, [allAccommodations, latestQueryParams]);
 
   const offers = useMemo(
-    () => (data?.offers && normalizeOffers(data.offers)) || [],
+    () =>
+      (data?.offers &&
+        getOffersWithPreferredCurrency(
+          normalizeOffers(data.offers),
+          preferredCurrencyCode
+        )) ||
+      [],
     [data]
   );
 
