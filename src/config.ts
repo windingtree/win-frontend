@@ -634,7 +634,13 @@ export const countries: readonly CountryType[] = [
 ];
 
 export const localStorageConfig: LocalStorageConnectorConfig = {
-  properties: ['selectedNetwork', 'selectedAsset', 'searchParams', 'walletAuth']
+  properties: [
+    'selectedNetwork',
+    'selectedAsset',
+    'searchParams',
+    'walletAuth',
+    'userSettings'
+  ]
 };
 
 export const sessionStorageConfig: LocalStorageConnectorConfig = {
