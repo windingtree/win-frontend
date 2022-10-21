@@ -10,13 +10,13 @@ import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers
 import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
 import Logger from 'src/utils/logger';
-import { RoomInformation } from './RoomInformation';
+import { OfferInformation } from './shared/OfferInformation';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { useSnackbar } from 'notistack';
 
-const logger = Logger('RoomCard');
+const logger = Logger('OfferItemSelectOne');
 
-export const RoomCard: React.FC<{
+export const OfferItemSelectOne: React.FC<{
   room: RoomTypes;
   offer: OfferRecord;
   facilityId: string;
@@ -102,7 +102,7 @@ export const RoomCard: React.FC<{
       <Box py={5}>
         <Grid container spacing={5}>
           <Grid item xs={8}>
-            <RoomInformation room={room} offer={offer} />
+            <OfferInformation room={room} offer={offer} />
           </Grid>
           <Grid item xs={4} alignSelf={'end'}>
             <Box

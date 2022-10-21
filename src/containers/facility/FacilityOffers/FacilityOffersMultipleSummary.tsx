@@ -73,7 +73,9 @@ const Summary = ({
     </Stack>
   );
 };
-export const FacilityGroupOffersSummary = (props: FacilityGroupOffersSummaryProps) => {
+export const FacilityOffersSelectMultipleSummary = (
+  props: FacilityGroupOffersSummaryProps
+) => {
   const isDesktop = useResponsive('up', 'md');
 
   if (isDesktop) {

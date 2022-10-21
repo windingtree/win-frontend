@@ -2,15 +2,15 @@ import type { RoomTypes } from '@windingtree/glider-types/dist/win';
 import type { OfferRecord } from 'src/store/types';
 import { Box, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
-import { RoomInformation } from '../RoomInformation';
-import { currencySymbolMap } from '../../../utils/currencies';
+import { OfferInformation } from './shared/OfferInformation';
+import { currencySymbolMap } from 'src/utils/currencies';
 
 export interface FacilityGalleryProps {
   offer: OfferRecord;
   room: RoomTypes;
 }
 
-export const RoomCardGroup: React.FC<{
+export const OfferItemSelectMultiple: React.FC<{
   room: RoomTypes;
   offer: OfferRecord;
   index: number;
@@ -26,7 +26,7 @@ export const RoomCardGroup: React.FC<{
       <Box py={5}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            <RoomInformation room={room} offer={offer} />
+            <OfferInformation room={room} offer={offer} />
           </Grid>
           <Grid item xs={12} md={4}>
             <Stack alignItems={{ md: 'flex-end' }} sx={{ textAlign: { md: 'end' } }}>

@@ -1,11 +1,11 @@
 import MainLayout from 'src/layouts/main';
-import { FacilityIntroduction } from '../containers/facility/FacilityIntroduction';
 import { FacilityOffers } from 'src/containers/facility/FacilityOffers';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { createSearchParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from '../hooks/useAccommodationsAndOffers';
 import { useMemo } from 'react';
 import { createRef, useCallback } from 'react';
+import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { FacilityIntroduction } from 'src/containers/facility/FacilityIntroduction';
 
 export const Facility = () => {
   const detailImagesRef = createRef<HTMLDivElement>();

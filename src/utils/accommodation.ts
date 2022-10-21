@@ -1,5 +1,6 @@
 import { MediaItem } from '@windingtree/glider-types/dist/win';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers/helpers';
+import { OfferRecord } from 'src/store/types';
 
 export const sortByLargestImage = (images: MediaItem[]) =>
   images.sort((itemOne: MediaItem, itemTwo: MediaItem) => {
@@ -39,4 +40,12 @@ export const buildAccommodationAddress = (accommodation: AccommodationWithId | n
   ]
     .filter(Boolean)
     .join(', ');
+};
+
+export const sortAccommodationOffersByPrice = (
+  accommodation: AccommodationWithId
+): OfferRecord[] => {
+  return [...accommodation.offers].sort((prevOffer, nextOffer) => {
+    return Number(prevOffer.price.public) - Number(nextOffer.price.public);
+  });
 };
