@@ -28,7 +28,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   overflow: 'scroll',
 
   [theme.breakpoints.up('md')]: {
-    top: 110 + HEADER.MAIN_DESKTOP_HEIGHT,
+    top: 180 + HEADER.MAIN_DESKTOP_HEIGHT,
     width: '20rem',
     padding: theme.spacing(0, 2),
     height: '70%',
