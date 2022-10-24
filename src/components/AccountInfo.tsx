@@ -9,7 +9,8 @@ import {
   Popover,
   Typography,
   Button,
-  IconButton
+  IconButton,
+  useMediaQuery
 } from '@mui/material';
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { centerEllipsis, copyToClipboard } from '../utils/strings';
@@ -30,6 +31,7 @@ const AccountIcon = styled(Blockies)`
 export const Account = ({ account, open }: AccountProps) => {
   const theme = useTheme();
   const shortAccount = useMemo(() => centerEllipsis(account || ''), [account]);
+  const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <Paper
@@ -37,7 +39,7 @@ export const Account = ({ account, open }: AccountProps) => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        marginRight: theme.spacing(5),
+        marginRight: { md: theme.spacing(5) },
         padding: '3px 4px 2px 4px'
       }}
     >
