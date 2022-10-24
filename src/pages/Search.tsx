@@ -10,7 +10,7 @@ const SearchBox = styled(Box)(({ theme }) => ({
   top: HEADER.MOBILE_HEIGHT,
   width: '100%',
 
-  [theme.breakpoints.up('lg')]: {
+  [theme.breakpoints.up('md')]: {
     left: 0,
     width: '100%',
     display: 'flex',
