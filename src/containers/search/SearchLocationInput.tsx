@@ -27,9 +27,8 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
     const theme = useTheme();
     const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
     const LocationIcon = () => (
-      <Iconify icon={'eva:pin-outline'} width={12} height={12} />
+      <Iconify icon={'eva:pin-outline'} width={18} height={18} marginLeft={0.5} />
     );
-    const fontStyling = theme.typography.body2;
 
     const highlightedStyle: SxProps =
       isMobileView && highlighted
@@ -47,12 +46,12 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
         placeholder="Where are you going?"
         name="location"
         options={autocompleteData}
-        width={isMobileView ? '320px' : '230px'}
+        width={isMobileView ? '320px' : '200px'}
         open={allowDropdownOpen ? undefined : false}
         inputProps={{
           style: {
-            ...fontStyling,
-            textAlign: 'left'
+            textAlign: 'start',
+            paddingLeft: theme.spacing(0)
           },
           id: 'location-input',
           onClickCapture: onClick,

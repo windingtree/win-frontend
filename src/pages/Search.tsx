@@ -25,7 +25,7 @@ export const Search = () => {
         <Results />
         <MapBox />
         <SearchBox>
-          <SearchForm closed={true} />
+          <SearchForm closeable={true} />
         </SearchBox>
       </Box>
     </MainLayout>
