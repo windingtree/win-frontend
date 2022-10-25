@@ -33,11 +33,11 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const navigate = useNavigate();
     const theme = useTheme();
     const { isGroupMode } = useAccommodationsAndOffers();
-    const medium = useMediaQuery(theme.breakpoints.down('md'));
+    const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useAppDispatch();
 
     const responsiveStyle: CSSProperties =
-      medium || mapCard
+      isMobileView || mapCard
         ? {
             display: 'flex',
             flexDirection: 'row',
@@ -71,7 +71,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
     return (
       <Card ref={ref} style={{ ...smallCardStyle }}>
-        {mapCard && (
+        {mapCard && isMobileView && (
           <Box
             sx={{
               background: 'transparent',
@@ -99,13 +99,13 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
         <Stack sx={{ ...responsiveStyle }}>
           <Stack
-            minWidth={theme.spacing(mapCard || medium ? 16 : 36)}
-            minHeight={theme.spacing(mapCard || medium ? 16 : 24)}
-            width={theme.spacing(mapCard || medium ? 16 : 36)}
-            height={theme.spacing(mapCard || medium ? 16 : 24)}
+            minWidth={theme.spacing(mapCard || isMobileView ? 16 : 36)}
+            minHeight={theme.spacing(mapCard || isMobileView ? 16 : 24)}
+            width={theme.spacing(mapCard || isMobileView ? 16 : 36)}
+            height={theme.spacing(mapCard || isMobileView ? 16 : 24)}
           >
             <ImageCarousel
-              size={mapCard || medium ? 'small' : 'large'}
+              size={mapCard || isMobileView ? 'small' : 'large'}
               media={facility.media}
             />
           </Stack>
@@ -158,13 +158,13 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             ) : null}
 
             <Stack
-              direction={medium || mapCard ? 'row-reverse' : 'row'}
+              direction={isMobileView || mapCard ? 'row-reverse' : 'row'}
               alignItems="end"
               justifyContent={'space-between'}
             >
               <Stack
-                direction={medium || mapCard ? 'column' : 'row'}
-                alignItems={medium || mapCard ? 'end' : 'center'}
+                direction={isMobileView || mapCard ? 'column' : 'row'}
+                alignItems={isMobileView || mapCard ? 'end' : 'center'}
                 justifyContent="space-between"
                 spacing={mapCard ? 0 : 0.5}
               >
@@ -183,7 +183,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                   </Typography>
                 </Stack>
 
-                {!(medium || mapCard) && !isGroupMode && <Typography>|</Typography>}
+                {!(isMobileView || mapCard) && !isGroupMode && <Typography>|</Typography>}
                 {!mapCard && !isGroupMode && (
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography

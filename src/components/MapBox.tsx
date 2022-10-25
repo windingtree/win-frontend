@@ -349,7 +349,7 @@ export const MapBox: React.FC = () => {
           : null}
       </MapContainer>
     ),
-    [normalizedCoordinates, accommodations, selectedFacilityId]
+    [normalizedCoordinates, accommodations, selectedFacilityId, isMobileView]
   );
 
   useEffect(() => {
