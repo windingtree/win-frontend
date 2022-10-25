@@ -61,13 +61,33 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
         };
 
     const prices = useMemo(
-      () => facility.offers.map((o) => Number(o.price.public)),
+      () =>
+        facility.offers.map((o) =>
+          Number(o.preferredCurrencyPrice?.public ?? o.price.public)
+        ),
       [facility]
     );
 
     if (facility.offers.length < 1) {
       return null;
     }
+
+    const currencySymbol =
+      (facility.preferredCurrencyPriceRange &&
+        currencySymbolMap[facility.preferredCurrencyPriceRange.lowestPrice.currency]) ??
+      (facility.priceRange &&
+        currencySymbolMap[facility.priceRange.lowestPrice.currency]);
+
+    const pricePerNight =
+      (facility.preferredCurrencyPriceRange?.lowestPrice &&
+        facility.preferredCurrencyPriceRange.lowestPrice.price.toFixed(2)) ??
+      (facility.priceRange?.lowestPrice &&
+        facility.priceRange.lowestPrice.price.toFixed(2));
+
+    const totalPrice = Math.min(...prices).toFixed(2);
+
+    // limit no. of images based on card position and device size
+    const imagesToShow = mapCard ? (medium ? 1 : 5) : 10;
 
     return (
       <Card ref={ref} style={{ ...smallCardStyle }}>
@@ -106,7 +126,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
           >
             <ImageCarousel
               size={mapCard || isMobileView ? 'small' : 'large'}
-              media={facility.media}
+              media={facility.media.slice(0, imagesToShow)}
             />
           </Stack>
           <Stack
@@ -177,10 +197,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                     From
                   </Typography>
                   <Typography variant="subtitle2">
-                    {facility.priceRange &&
-                      currencySymbolMap[facility.priceRange.lowestPrice.currency]}
-                    {facility.priceRange?.lowestPrice &&
-                      facility.priceRange.lowestPrice.price.toFixed(2)}
+                    {currencySymbol}
+                    {pricePerNight}
                     /night
                   </Typography>
                 </Stack>
@@ -193,9 +211,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                       variant="caption"
                       sx={{ color: 'text.secondary' }}
                     >
-                      {facility.priceRange &&
-                        currencySymbolMap[facility.priceRange.lowestPrice.currency]}
-                      {Math.min(...prices).toFixed(2)} total
+                      {currencySymbol}
+                      {totalPrice} total
                     </Typography>
                   </Stack>
                 )}
