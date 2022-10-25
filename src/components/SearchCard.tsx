@@ -33,7 +33,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const navigate = useNavigate();
     const theme = useTheme();
     const { isGroupMode } = useAccommodationsAndOffers();
-    const medium = useMediaQuery(theme.breakpoints.down('md'));
+    const { isMobile, isDesktop } = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useAppDispatch();
 
     const responsiveStyle: CSSProperties =
