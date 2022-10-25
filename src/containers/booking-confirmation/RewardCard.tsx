@@ -63,16 +63,16 @@ export const RewardCard = ({
                 <Iconify icon="eva:info-outline" width={24} height={24} />
               </IconButtonAnimate>
             </Tooltip>
-            <Stack direction="column" mb={2} alignItems="center">
+            <Stack direction="column" mb={{ xs: 1, md: 2 }} alignItems="center">
               <Image src={iconUrl} sx={{ width: '100px', height: '100px' }} />
-              <Typography variant="h4" component="h3" mt={2}>
+              <Typography variant="h4" component="h3" mt={{ xs: 1, md: 2 }}>
                 {title}
               </Typography>
             </Stack>
             {children}
           </Box>
 
-          <Box mt={2}>
+          <Box mt={{ xs: 1, md: 2 }}>
             <LoadingButton
               disabled={isMutationSuccess}
               loading={isMutationLoading}
