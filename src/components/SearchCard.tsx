@@ -177,9 +177,11 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                     From
                   </Typography>
                   <Typography variant="subtitle2">
-                    {facility.lowestPrice &&
-                      currencySymbolMap[facility.lowestPrice.currency]}
-                    {facility.lowestPrice && facility.lowestPrice.price.toFixed(2)}/night
+                    {facility.priceRange &&
+                      currencySymbolMap[facility.priceRange.lowestPrice.currency]}
+                    {facility.priceRange?.lowestPrice &&
+                      facility.priceRange.lowestPrice.price.toFixed(2)}
+                    /night
                   </Typography>
                 </Stack>
 
@@ -191,8 +193,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                       variant="caption"
                       sx={{ color: 'text.secondary' }}
                     >
-                      {facility.lowestPrice &&
-                        currencySymbolMap[facility.lowestPrice.currency]}
+                      {facility.priceRange &&
+                        currencySymbolMap[facility.priceRange.lowestPrice.currency]}
                       {Math.min(...prices).toFixed(2)} total
                     </Typography>
                   </Stack>

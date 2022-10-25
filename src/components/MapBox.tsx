@@ -24,7 +24,7 @@ import defaultIconUrl from 'leaflet/dist/images/marker-icon.png';
 import Logger from '../utils/logger';
 import { useAppDispatch, useAppState } from '../store';
 import {
-  LowestPriceFormat,
+  PriceFormat,
   useAccommodationsAndOffers
 } from 'src/hooks/useAccommodationsAndOffers';
 import { SearchCard } from './SearchCard';
@@ -55,7 +55,7 @@ const mapTileUrl =
     ? `https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${process.env.REACT_APP_MAPTILER_API_KEY}`
     : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-const getPriceMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = false) => {
+const getPriceMarkerIcon = ({ price, currency }: PriceFormat, focused = false) => {
   const currencySymbol = currencySymbolMap[currency];
 
   return new DivIcon({
@@ -334,7 +334,7 @@ export const MapBox: React.FC = () => {
                 return (
                   <Marker
                     key={f.id}
-                    icon={getPriceMarkerIcon(f.lowestPrice, isSelected)}
+                    icon={getPriceMarkerIcon(f.priceRange.lowestPrice, isSelected)}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
                       click: () =>

@@ -15,7 +15,7 @@ import {
   normalizeOffers,
   getOffersById,
   AccommodationWithId,
-  getOffersWithPreferredCurrency
+  getOffersPriceRange
 } from './helpers';
 
 export interface SearchTypeProps {
@@ -28,10 +28,15 @@ export interface SearchTypeProps {
   focusedEvent?: string;
 }
 
-export interface LowestPriceFormat {
+export interface PriceFormat {
   price: number;
   currency: string;
   decimals?: number;
+}
+
+export interface PriceRange {
+  lowestPrice: PriceFormat;
+  highestPrice: PriceFormat;
 }
 
 export interface EventInfo {
@@ -88,7 +93,8 @@ export const useAccommodationsAndOffers = ({
   const isGroupMode = data?.isGroupMode ?? false;
 
   const allAccommodations = useMemo(
-    () => normalizeAccommodations(data?.accommodations, data?.offers),
+    () =>
+      normalizeAccommodations(data?.accommodations, data?.offers, preferredCurrencyCode),
     [data]
   );
 
@@ -104,23 +110,27 @@ export const useAccommodationsAndOffers = ({
       latestQueryParams?.departure
     );
 
-    // get offer with lowest price
+    // attach extra properties to or transform accommodations
     const nbRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
     return filteredAccommodations?.map((accommodation) => {
-      const lowestPrice: LowestPriceFormat = accommodation.offers
-        .map((offer) => ({
-          price: Number(offer.price.public) / (numberOfDays * nbRooms),
-          currency: offer.price.currency
-        }))
-        .reduce((prevLowest, currentVal) =>
-          prevLowest.price < currentVal.price ? prevLowest : currentVal
-        );
+      // get price ranges in local and preferred currencies
+      const priceRange = getOffersPriceRange(
+        accommodation.offers,
+        numberOfDays,
+        nbRooms,
+        false
+      );
+      const preferredCurrencyPriceRange = getOffersPriceRange(
+        accommodation.offers,
+        numberOfDays,
+        nbRooms,
+        true
+      );
 
       // return only high res images
-      const sortedImages = sortByLargestImage(accommodation.media ?? []);
-      const largestImages = getLargestImages(sortedImages);
-
-      accommodation.media = largestImages;
+      accommodation.media = getLargestImages(
+        sortByLargestImage(accommodation.media ?? [])
+      );
 
       // optional accommodation transformation callback function
       // that can be used to modify or add properties to accommodation object
@@ -133,18 +143,12 @@ export const useAccommodationsAndOffers = ({
         });
       }
 
-      return { ...transformedAccommodation, lowestPrice };
+      return { ...transformedAccommodation, priceRange, preferredCurrencyPriceRange };
     });
   }, [allAccommodations, latestQueryParams]);
 
   const offers = useMemo(
-    () =>
-      (data?.offers &&
-        getOffersWithPreferredCurrency(
-          normalizeOffers(data.offers),
-          preferredCurrencyCode
-        )) ||
-      [],
+    () => (data?.offers && normalizeOffers(data.offers, preferredCurrencyCode)) || [],
     [data]
   );
 

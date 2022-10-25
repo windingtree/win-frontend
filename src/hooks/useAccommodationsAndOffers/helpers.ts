@@ -1,7 +1,7 @@
 import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { OfferRecord } from 'src/store/types';
-import { AccommodationTransformFn, EventInfo, LowestPriceFormat } from '.';
+import { AccommodationTransformFn, EventInfo, PriceRange } from '.';
 import { convertPriceCurrency, CurrencyCode } from '../../utils/currencies';
 import { getActiveEventsWithinRadius } from '../../utils/events';
 import { crowDistance } from '../../utils/geo';
@@ -14,7 +14,8 @@ enum PassengerType {
 export interface AccommodationWithId extends WinAccommodation {
   id: string;
   offers: OfferRecord[];
-  lowestPrice?: LowestPriceFormat;
+  priceRange?: PriceRange;
+  preferredCurrencyPriceRange?: PriceRange;
   eventInfo?: EventInfo[];
 }
 
@@ -40,12 +41,53 @@ export const getActiveAccommodations = (
   return activeAccommodations;
 };
 
+export const getOffersPriceRange = (
+  offers: OfferRecord[],
+  numberOfDays: number,
+  numberOfRooms: number,
+  getPreferredCurrency = false
+) => {
+  const priceRange = offers
+    .map((offer) => {
+      const price = getPreferredCurrency
+        ? offer.preferredCurrencyPrice?.public
+        : offer.price.public;
+      const currency = getPreferredCurrency
+        ? offer.preferredCurrencyPrice?.currency
+        : offer.price.currency;
+
+      if (!price || !currency) return null;
+
+      return {
+        price: Number(price) / (numberOfDays * numberOfRooms),
+        currency
+      };
+    })
+    .reduce(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (previousVal: any, currentVal) => {
+        if (!currentVal) return previousVal;
+
+        const { lowestPrice = null, highestPrice = null } = previousVal;
+        const lowest =
+          lowestPrice?.price ?? 0 < currentVal.price ? lowestPrice : currentVal;
+        const highest =
+          highestPrice?.price ?? Infinity < currentVal.price ? highestPrice : currentVal;
+        return { lowestPrice: lowest, highestPrice: highest };
+      },
+      { lowestPrice: null, highestPrice: null }
+    );
+
+  return priceRange as PriceRange;
+};
+
 export const normalizeAccommodations = (
   accommodations: Record<string, WinAccommodation> | undefined,
-  offers: Record<string, Offer> | undefined
+  offers: Record<string, Offer> | undefined,
+  preferredCurrencyCode?: CurrencyCode
 ): AccommodationWithId[] => {
   if (!accommodations) return [];
-  const normalizedOffers = offers ? normalizeOffers(offers) : [];
+  const normalizedOffers = offers ? normalizeOffers(offers, preferredCurrencyCode) : [];
 
   const normalizedAccommodations = Object.entries(
     accommodations
@@ -66,7 +108,10 @@ export const normalizeAccommodations = (
   return normalizedAccommodations;
 };
 
-export const normalizeOffers = (offers: Record<string, Offer>): OfferRecord[] => {
+export const normalizeOffers = (
+  offers: Record<string, Offer>,
+  preferredCurrencyCode?: CurrencyCode
+): OfferRecord[] => {
   if (!offers) return [];
 
   const normalizedData = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
@@ -74,7 +119,9 @@ export const normalizeOffers = (offers: Record<string, Offer>): OfferRecord[] =>
     ...value
   }));
 
-  return normalizedData;
+  return preferredCurrencyCode
+    ? getOffersWithPreferredCurrency(normalizedData, preferredCurrencyCode)
+    : normalizedData;
 };
 
 export const getPassengersBody = (
