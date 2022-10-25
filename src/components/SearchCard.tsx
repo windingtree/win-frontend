@@ -87,7 +87,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const totalPrice = Math.min(...prices).toFixed(2);
 
     // limit no. of images based on card position and device size
-    const imagesToShow = mapCard ? (medium ? 1 : 5) : 10;
+    const imagesToShow = mapCard ? (isMobileView ? 1 : 5) : 10;
 
     return (
       <Card ref={ref} style={{ ...smallCardStyle }}>
