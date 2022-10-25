@@ -37,7 +37,7 @@ export const Account = ({ account, open }: AccountProps) => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        marginRight: theme.spacing(5),
+        marginRight: { md: theme.spacing(5) },
         padding: '3px 4px 2px 4px'
       }}
     >

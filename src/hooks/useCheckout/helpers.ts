@@ -30,11 +30,12 @@ export const getBookingMode = (
 export const getNormalizedAddress = (address: BillingAddress) => {
   if (!address || !address.cityName || !address.countryCode) return;
   const { cityName, countryCode, street, postalCode, ...restAddress } = address;
+  const normalizedStreet = street.replace(/[^a-zA-Z0-9 ]/g, '');
 
   const normalizedAddress = {
     cityName: cityName.toUpperCase(),
     countryCode: countryCode.toUpperCase(),
-    street: street?.toUpperCase(),
+    street: normalizedStreet.toUpperCase(),
     postalCode: postalCode?.toUpperCase(),
     ...restAddress
   };
