@@ -36,10 +36,23 @@ import {
   InvalidLocationError
 } from '../hooks/useAccommodationsAndOffers/helpers';
 import { getActiveEventsWithinRadius } from '../utils/events';
+import { AppMode } from 'src/config';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
 const defaultFocusedZoomRadius = 3000; // in meters
+const mapAttribution =
+  (process.env.REACT_APP_MODE === AppMode.prod ||
+    process.env.REACT_APP_MODE === AppMode.stage) &&
+  process.env.REACT_APP_MAPTILER_API_KEY !== undefined
+    ? '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e'
+    : '&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+const mapTileUrl =
+  (process.env.REACT_APP_MODE === AppMode.prod ||
+    process.env.REACT_APP_MODE === AppMode.stage) &&
+  process.env.REACT_APP_MAPTILER_API_KEY !== undefined
+    ? `https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${process.env.REACT_APP_MAPTILER_API_KEY}`
+    : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
 const getPriceMarkerIcon = ({ price, currency }: LowestPriceFormat, focused = false) => {
   const currencySymbol = currencySymbolMap[currency];
@@ -307,8 +320,8 @@ export const MapBox: React.FC = () => {
         <TileLayer
           crossOrigin={true}
           zIndex={10}
-          attribution='\u003ca href=\"https://www.maptiler.com/copyright/\" target=\"_blank\"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e'
-          url={`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${process.env.REACT_APP_MAPTILER_API_KEY}`}
+          attribution={mapAttribution}
+          url={mapTileUrl}
         />
         <ZoomControl position="topright" />
         {mapMarkerStyles}
