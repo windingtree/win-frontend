@@ -91,17 +91,19 @@ export const PreferredCurrencySelector = () => {
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={{ xs: 1, md: 2 }}>
-            {Object.entries(displayCurrencies).map(([code, { name }]) => {
-              return (
-                <Grid item xs={6} sm={4} md={3} key={code}>
-                  <CurrencyItem
-                    name={name}
-                    code={code}
-                    onClick={() => handleCurrencyChange(code)}
-                  />
-                </Grid>
-              );
-            })}
+            {[...Object.entries(displayCurrencies)]
+              .sort(([code1], [code2]) => code1.localeCompare(code2))
+              .map(([code, { name }]) => {
+                return (
+                  <Grid item xs={6} sm={4} md={3} key={code}>
+                    <CurrencyItem
+                      name={name}
+                      code={code}
+                      onClick={() => handleCurrencyChange(code)}
+                    />
+                  </Grid>
+                );
+              })}
           </Grid>
         </DialogContent>
       </Dialog>
