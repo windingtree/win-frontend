@@ -229,11 +229,16 @@ export const Results: React.FC = () => {
                 position="fixed"
                 bottom={theme.spacing(4)}
                 left="50%"
-                width={'64px'}
-                marginLeft={'-32px'}
+                width={theme.spacing(32)}
+                marginLeft={'-128px'}
                 zIndex={2}
               >
-                <Button variant="contained" onClick={() => setMode(ResultsMode.map)}>
+                <Button
+                  size="large"
+                  fullWidth
+                  variant="contained"
+                  onClick={() => setMode(ResultsMode.map)}
+                >
                   Map
                 </Button>
               </Box>
