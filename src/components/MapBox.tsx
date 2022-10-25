@@ -288,6 +288,7 @@ export const MapBox: React.FC = () => {
   const displayMap = useMemo(
     () => (
       <MapContainer
+        attributionControl={false}
         zoomControl={false}
         maxZoom={16}
         minZoom={10}
