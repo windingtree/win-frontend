@@ -95,7 +95,7 @@ export const useAccommodationsAndOffers = ({
   const allAccommodations = useMemo(
     () =>
       normalizeAccommodations(data?.accommodations, data?.offers, preferredCurrencyCode),
-    [data]
+    [data, preferredCurrencyCode]
   );
 
   // Get accommodations with active offer along with the offer with lowest price/room/night
@@ -149,7 +149,7 @@ export const useAccommodationsAndOffers = ({
 
   const offers = useMemo(
     () => (data?.offers && normalizeOffers(data.offers, preferredCurrencyCode)) || [],
-    [data]
+    [data, preferredCurrencyCode]
   );
 
   const getAccommodationByHotelId = useCallback(

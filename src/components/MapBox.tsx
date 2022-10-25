@@ -334,7 +334,11 @@ export const MapBox: React.FC = () => {
                 return (
                   <Marker
                     key={f.id}
-                    icon={getPriceMarkerIcon(f.priceRange.lowestPrice, isSelected)}
+                    icon={getPriceMarkerIcon(
+                      f.preferredCurrencyPriceRange.lowestPrice ??
+                        f.priceRange.lowestPrice,
+                      isSelected
+                    )}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
                     eventHandlers={{
                       click: () =>

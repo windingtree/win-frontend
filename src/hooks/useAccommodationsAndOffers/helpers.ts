@@ -70,9 +70,13 @@ export const getOffersPriceRange = (
 
         const { lowestPrice = null, highestPrice = null } = previousVal;
         const lowest =
-          lowestPrice?.price ?? 0 < currentVal.price ? lowestPrice : currentVal;
+          lowestPrice?.price ?? currentVal.price < currentVal.price
+            ? lowestPrice
+            : currentVal;
         const highest =
-          highestPrice?.price ?? Infinity < currentVal.price ? highestPrice : currentVal;
+          highestPrice?.price ?? currentVal.price > currentVal.price
+            ? highestPrice
+            : currentVal;
         return { lowestPrice: lowest, highestPrice: highest };
       },
       { lowestPrice: null, highestPrice: null }
