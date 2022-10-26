@@ -43,7 +43,9 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   }
 }));
 
-const ScrollableContainer = styled(Box)<{ mode: boolean }>(({ theme, mode }) => ({
+const ScrollableContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'mode'
+})<{ mode: boolean }>(({ theme, mode }) => ({
   height: 'calc(100% - 24px)',
   overflow: mode ? 'hidden' : 'scroll',
   [theme.breakpoints.up('md')]: {

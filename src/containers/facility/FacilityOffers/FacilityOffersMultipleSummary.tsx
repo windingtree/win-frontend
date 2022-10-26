@@ -1,8 +1,8 @@
 import { Box, Button, Typography, Stack, Grid, useTheme, Card } from '@mui/material';
+import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 import { useFormContext } from 'react-hook-form';
 import { useResponsive } from 'src/hooks/useResponsive';
 import { OfferRecord } from 'src/store/types';
-import { currencySymbolMap } from '../../../utils/currencies';
 
 const getTotalPrice = (prev: number, current: OfferRecord): number => {
   const quantity = Number(current.quantity);

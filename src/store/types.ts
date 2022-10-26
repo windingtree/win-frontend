@@ -10,12 +10,12 @@ import type {
 } from '@windingtree/glider-types/dist/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
+import { CurrencyCode } from '../hooks/useCurrencies';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
   Web3ModalSignOutFunction
 } from '../hooks/useWeb3Modal';
-import { CurrencyCode } from '../utils/currencies';
 
 export interface GenericStateRecord {
   id: string;

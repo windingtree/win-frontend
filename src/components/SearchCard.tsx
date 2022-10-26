@@ -17,8 +17,8 @@ import {
   EventInfo,
   useAccommodationsAndOffers
 } from '../hooks/useAccommodationsAndOffers';
-import { currencySymbolMap } from '../utils/currencies';
 import { useAppDispatch } from 'src/store';
+import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 
 export interface SearchCardProps {
   facility: AccommodationWithId;

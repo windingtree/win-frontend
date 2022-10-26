@@ -14,7 +14,7 @@ import type {
   GenericStateRecord,
   SearchParams
 } from './types';
-import { CurrencyCode } from '../utils/currencies';
+import { CurrencyCode } from '../hooks/useCurrencies';
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';

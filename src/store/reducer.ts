@@ -11,7 +11,7 @@ import Logger from '../utils/logger';
 import { checkOutReducer } from './checkOutReducer';
 import { selectedFacilityReducer } from './selectedFacilityReducer';
 import { bookingsReducer } from './bookingsReducer';
-import { baseCurrencyCode, localStorageConfig, sessionStorageConfig } from '../config';
+import { defaultCurrencyCode, localStorageConfig, sessionStorageConfig } from '../config';
 import { userSettingsReducer } from './userSettingsReducer';
 
 const logger = Logger('mainReducer');
@@ -49,7 +49,7 @@ const initialState: State = {
     timestamp: 0
   },
   userSettings: {
-    preferredCurrencyCode: baseCurrencyCode
+    preferredCurrencyCode: defaultCurrencyCode
   }
 };
 

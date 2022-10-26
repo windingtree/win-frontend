@@ -30,7 +30,7 @@ import { daysBetween } from 'src/utils/date';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from 'src/components/LightboxModal';
 import Iconify from 'src/components/Iconify';
-import { currencySymbolMap } from 'src/utils/currencies';
+import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
