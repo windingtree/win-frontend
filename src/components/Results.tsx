@@ -63,6 +63,7 @@ const SelectedFacilityContainer = styled(Box)(({ theme }) => {
     transform: 'translateX(-50%)',
     zIndex: '1',
     maxWidth: '100vw',
+
     [theme.breakpoints.up('md')]: {
       visibility: 'hidden'
     }
@@ -81,6 +82,7 @@ const DragContainer = styled(Stack)(({ theme }) => ({
   justifyContent: 'center',
   padding: theme.spacing(1, 0),
   background: theme.palette.background.default,
+
   [theme.breakpoints.up('md')]: {
     visibility: 'hidden'
   }
@@ -95,6 +97,7 @@ export const Results: React.FC = () => {
   const [viewSx, setViewSx] = useState({});
   const [mode, setMode] = useState<ResultsMode>(ResultsMode.map);
   const [depth, setDepth] = useState(0);
+
   useEffect(() => {
     if (mode === ResultsMode.map) {
       setViewSx(

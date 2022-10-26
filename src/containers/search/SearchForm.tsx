@@ -8,7 +8,6 @@ import {
   Toolbar,
   Divider,
   useMediaQuery,
-  Alert,
   styled,
   SxProps,
   IconButton,
@@ -32,6 +31,7 @@ import { convertToLocalTime } from 'src/utils/date';
 import { SearchPopovers, SearchPopoversProps } from './SearchPopovers';
 import { SearchLocationInput } from './SearchLocationInput';
 import { ResponsiveContainer } from '../ResponsiveContainer';
+import { SearchAlert } from './SearchAlert';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -39,7 +39,6 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   border: 'none',
-  // width: '100%',
   backgroundColor: theme.palette.background.default,
   borderRadius: 10,
 
@@ -75,7 +74,6 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const navigate = useNavigate();
   const theme = useTheme();
   const { pathname, search } = useLocation();
-
   const [open, setOpen] = useState<boolean>(false);
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
   const isCloseable: boolean = useMemo(() => isMobileView && !!closeable, [isMobileView]);
@@ -342,7 +340,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   }, [isMobileView]);
 
   return (
-    <Stack spacing={0.5}>
+    <Stack spacing={0.5} sx={{ zIndex: 1 }}>
       <Box
         sx={
           isCloseable
@@ -466,59 +464,28 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
         </FormProvider>
       </ResponsiveContainer>
 
-      <Stack>
+      <Stack alignItems="center">
         {isGroupMode && accommodations.length && (
           // show this message when in group mode and there are accommodations with offers
-          <Alert
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              textAlign: 'center',
-              zIndex: 1
-            }}
-            severity="info"
-          >
-            You have entered the group booking mode. Please select your favorite hotel and
-            number of rooms to get a quotation.
-          </Alert>
+          <SearchAlert severity="info">
+            You have entered the group booking mode. <br />
+            Please select your favorite hotel and number of rooms to get a quotation.
+          </SearchAlert>
         )}
-        {validationErrorMessage && (
-          <Alert
-            sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-            severity="error"
-          >
-            {validationErrorMessage}
-          </Alert>
-        )}
+        {validationErrorMessage && <SearchAlert>{validationErrorMessage}</SearchAlert>}
 
         {showError && (
-          <Alert
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              textAlign: 'center',
-              mt: 1
-            }}
-            severity="error"
-          >
+          <SearchAlert severity="error">
             {(showError as Error) && (showError as Error).message
               ? (showError as Error).message
               : 'Something went wrong '}
-          </Alert>
+          </SearchAlert>
         )}
         {!showError && isFetched && showAccommodationsError && (
-          <Alert
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              textAlign: 'center',
-              mt: 1
-            }}
-            severity="error"
-          >
+          <SearchAlert>
             {/* use query params value instead of form value, to show only actually searched value */}
             No accommodations found for {latestQueryParams?.location}.
-          </Alert>
+          </SearchAlert>
         )}
       </Stack>
     </Stack>
