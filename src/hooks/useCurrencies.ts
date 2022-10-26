@@ -60,14 +60,17 @@ export const useCurrencies = () => {
         null,
         true
       );
+
       const fromCurrencyRate = stringToNumber(
         currencyRates[fromCurrency].rateFromBaseCurrency,
         null,
         true
       );
 
+      // convert source to base then convert from base to target
+
       return {
-        amount: (toCurrencyRate / fromCurrencyRate) * amount,
+        amount: (fromCurrencyRate / toCurrencyRate) * amount,
         decimals: currencyRates[toCurrency].decimals
       };
     },
