@@ -9,15 +9,15 @@ import {
   useMediaQuery,
   IconButton
 } from '@mui/material';
-import Iconify from './Iconify';
-import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers/helpers';
-import { ImageCarousel } from './ImageCarousel';
-import { buildAccommodationAddress } from '../utils/accommodation';
+import Iconify from '../../components/Iconify';
+import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers/helpers';
+import { ImageCarousel } from '../../components/ImageCarousel';
+import { buildAccommodationAddress } from '../../utils/accommodation';
 import {
   EventInfo,
   useAccommodationsAndOffers
-} from '../hooks/useAccommodationsAndOffers';
-import { currencySymbolMap } from '../utils/currencies';
+} from '../../hooks/useAccommodationsAndOffers';
+import { currencySymbolMap } from '../../utils/currencies';
 import { useAppDispatch } from 'src/store';
 
 export interface SearchCardProps {
@@ -105,7 +105,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             height={theme.spacing(mapCard || isMobileView ? 16 : 24)}
           >
             <ImageCarousel
-              size={mapCard || isMobileView ? 'small' : 'large'}
+              ratio={mapCard || isMobileView ? '1/1' : '6/4'}
               media={facility.media}
             />
           </Stack>
