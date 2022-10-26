@@ -9,14 +9,14 @@ import {
   useMediaQuery,
   IconButton
 } from '@mui/material';
-import Iconify from './Iconify';
-import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers/helpers';
-import { ImageCarousel } from './ImageCarousel';
-import { buildAccommodationAddress } from '../utils/accommodation';
+import Iconify from '../../components/Iconify';
+import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers/helpers';
+import { ImageCarousel } from '../../components/ImageCarousel';
+import { buildAccommodationAddress } from '../../utils/accommodation';
 import {
   EventInfo,
   useAccommodationsAndOffers
-} from '../hooks/useAccommodationsAndOffers';
+} from '../../hooks/useAccommodationsAndOffers';
 import { useAppDispatch } from 'src/store';
 import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 
@@ -86,9 +86,6 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
     const totalPrice = Math.min(...prices).toFixed(2);
 
-    // limit no. of images based on card position and device size
-    const imagesToShow = mapCard ? (isMobileView ? 1 : 5) : 10;
-
     return (
       <Card ref={ref} style={{ ...smallCardStyle }}>
         {mapCard && isMobileView && (
@@ -125,8 +122,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             height={theme.spacing(mapCard || isMobileView ? 16 : 24)}
           >
             <ImageCarousel
-              size={mapCard || isMobileView ? 'small' : 'large'}
-              media={facility.media.slice(0, imagesToShow)}
+              ratio={mapCard || isMobileView ? '1/1' : '6/4'}
+              media={facility.media}
             />
           </Stack>
           <Stack

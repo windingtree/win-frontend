@@ -27,7 +27,7 @@ import {
   PriceFormat,
   useAccommodationsAndOffers
 } from 'src/hooks/useAccommodationsAndOffers';
-import { SearchCard } from './SearchCard';
+import { SearchCard } from '../containers/search/SearchCard';
 import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
 import {

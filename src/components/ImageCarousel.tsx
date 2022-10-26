@@ -1,8 +1,8 @@
 import Slider from 'react-slick';
 import { useRef } from 'react';
-import { useTheme, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import Image from './Image';
+import Image, { ImageRato } from './Image';
 import { CarouselDots, CarouselArrows } from './carousel/';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
 
@@ -14,20 +14,18 @@ const RootStyle = styled(Box)(({ theme }) => ({
   }
 }));
 
-export const ImageCarousel: React.FC<{ media: MediaItem[]; size: string }> = ({
+export const ImageCarousel: React.FC<{ media: MediaItem[]; ratio: ImageRato }> = ({
   media,
-  size
+  ratio
 }) => {
-  const theme = useTheme();
   const carouselRef = useRef<Slider | null>(null);
 
   const settings = {
-    dots: true,
+    dots: false,
+
     arrows: false,
-    autoplay: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-    rtl: Boolean(theme.direction === 'rtl'),
     ...CarouselDots({
       rounded: true,
       sx: { mt: 3 }
@@ -58,11 +56,9 @@ export const ImageCarousel: React.FC<{ media: MediaItem[]; size: string }> = ({
       >
         <Slider ref={carouselRef} {...settings}>
           {media && media.length > 0 ? (
-            media.map((item, i) => (
-              <Image key={i} src={item.url} ratio={size === 'small' ? '1/1' : '6/4'} />
-            ))
+            media.map((item, i) => <Image key={i} src={item.url} ratio={ratio} />)
           ) : (
-            <Image ratio={size === 'small' ? '1/1' : '6/4'} />
+            <Image ratio={ratio} />
           )}
         </Slider>
       </CarouselArrows>
