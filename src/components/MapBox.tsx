@@ -30,13 +30,13 @@ import {
 import { SearchCard } from './SearchCard';
 import { daysBetween } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
-import { currencySymbolMap } from '../utils/currencies';
 import {
   accommodationEventTransform,
   InvalidLocationError
 } from '../hooks/useAccommodationsAndOffers/helpers';
 import { getActiveEventsWithinRadius } from '../utils/events';
 import { AppMode } from '../config';
+import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -55,7 +55,9 @@ const mapTileUrl =
     ? `https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${process.env.REACT_APP_MAPTILER_API_KEY}`
     : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-const getPriceMarkerIcon = ({ price, currency }: PriceFormat, focused = false) => {
+const getPriceMarkerIcon = (priceFormat?: PriceFormat, focused = false) => {
+  if (!priceFormat) return;
+  const { price, currency } = priceFormat;
   const currencySymbol = currencySymbolMap[currency];
 
   return new DivIcon({
@@ -335,8 +337,8 @@ export const MapBox: React.FC = () => {
                   <Marker
                     key={f.id}
                     icon={getPriceMarkerIcon(
-                      f.preferredCurrencyPriceRange.lowestPrice ??
-                        f.priceRange.lowestPrice,
+                      f.preferredCurrencyPriceRange?.lowestPrice ??
+                        f.priceRange?.lowestPrice,
                       isSelected
                     )}
                     position={[f.location.coordinates[1], f.location.coordinates[0]]}
