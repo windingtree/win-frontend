@@ -11,12 +11,11 @@ import {
 import {
   getAccommodationById,
   getActiveAccommodations,
-  normalizeAccommodations,
-  normalizeOffers,
   getOffersById,
   AccommodationWithId,
   getOffersPriceRange
 } from './helpers';
+import { useAccommodationsAndOffersHelpers } from './useAccommodationsAndOffersHelpers';
 
 export interface SearchTypeProps {
   location: string;
@@ -83,6 +82,9 @@ export const useAccommodationsAndOffers = ({
     }
   );
 
+  const { normalizeAccommodations, normalizeOffers } =
+    useAccommodationsAndOffersHelpers();
+
   const latestQueryParams = data?.latestQueryParams;
 
   // append focusedEvent query params if it exists
@@ -93,8 +95,7 @@ export const useAccommodationsAndOffers = ({
   const isGroupMode = data?.isGroupMode ?? false;
 
   const allAccommodations = useMemo(
-    () =>
-      normalizeAccommodations(data?.accommodations, data?.offers, preferredCurrencyCode),
+    () => normalizeAccommodations(data?.accommodations, data?.offers),
     [data, preferredCurrencyCode]
   );
 
@@ -148,7 +149,7 @@ export const useAccommodationsAndOffers = ({
   }, [allAccommodations, latestQueryParams]);
 
   const offers = useMemo(
-    () => (data?.offers && normalizeOffers(data.offers, preferredCurrencyCode)) || [],
+    () => (data?.offers && normalizeOffers(data.offers)) || [],
     [data, preferredCurrencyCode]
   );
 

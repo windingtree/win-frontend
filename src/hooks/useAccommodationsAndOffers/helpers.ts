@@ -2,7 +2,6 @@ import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { OfferRecord } from 'src/store/types';
 import { AccommodationTransformFn, EventInfo, PriceRange } from '.';
-import { convertPriceCurrency, CurrencyCode } from '../../utils/currencies';
 import { getActiveEventsWithinRadius } from '../../utils/events';
 import { crowDistance } from '../../utils/geo';
 
@@ -46,8 +45,10 @@ export const getOffersPriceRange = (
   numberOfDays: number,
   numberOfRooms: number,
   getPreferredCurrency = false
-) => {
-  const priceRange = offers
+): PriceRange | undefined => {
+  let priceRange: PriceRange | undefined = undefined;
+
+  offers
     .map((offer) => {
       const price = getPreferredCurrency
         ? offer.preferredCurrencyPrice?.public
@@ -56,76 +57,35 @@ export const getOffersPriceRange = (
         ? offer.preferredCurrencyPrice?.currency
         : offer.price.currency;
 
-      if (!price || !currency) return null;
+      if (!price || !currency) return;
 
       return {
         price: Number(price) / (numberOfDays * numberOfRooms),
         currency
       };
     })
-    .reduce(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (previousVal: any, currentVal) => {
-        if (!currentVal) return previousVal;
+    .forEach((currentVal) => {
+      if (!currentVal) return;
 
-        const { lowestPrice = null, highestPrice = null } = previousVal;
+      if (currentVal && !priceRange) {
+        priceRange = { lowestPrice: currentVal, highestPrice: currentVal };
+      }
+
+      if (priceRange) {
         const lowest =
-          lowestPrice?.price ?? currentVal.price < currentVal.price
-            ? lowestPrice
-            : currentVal;
+          currentVal.price < priceRange.lowestPrice.price
+            ? currentVal
+            : priceRange.lowestPrice;
         const highest =
-          highestPrice?.price ?? currentVal.price > currentVal.price
-            ? highestPrice
-            : currentVal;
-        return { lowestPrice: lowest, highestPrice: highest };
-      },
-      { lowestPrice: null, highestPrice: null }
-    );
+          currentVal.price > priceRange.highestPrice.price
+            ? currentVal
+            : priceRange.highestPrice;
 
-  return priceRange as PriceRange;
-};
+        priceRange = { lowestPrice: lowest, highestPrice: highest };
+      }
+    });
 
-export const normalizeAccommodations = (
-  accommodations: Record<string, WinAccommodation> | undefined,
-  offers: Record<string, Offer> | undefined,
-  preferredCurrencyCode?: CurrencyCode
-): AccommodationWithId[] => {
-  if (!accommodations) return [];
-  const normalizedOffers = offers ? normalizeOffers(offers, preferredCurrencyCode) : [];
-
-  const normalizedAccommodations = Object.entries(
-    accommodations
-  ).map<AccommodationWithId>(([keyA, valueA]) => {
-    const filteredOffers = normalizedOffers.filter((offer) =>
-      Object.entries(offer.pricePlansReferences)
-        .map(([, valueP]) => valueP.accommodation === keyA)
-        .includes(true)
-    );
-
-    return {
-      ...valueA,
-      id: keyA,
-      offers: filteredOffers
-    };
-  });
-
-  return normalizedAccommodations;
-};
-
-export const normalizeOffers = (
-  offers: Record<string, Offer>,
-  preferredCurrencyCode?: CurrencyCode
-): OfferRecord[] => {
-  if (!offers) return [];
-
-  const normalizedData = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
-    id: key,
-    ...value
-  }));
-
-  return preferredCurrencyCode
-    ? getOffersWithPreferredCurrency(normalizedData, preferredCurrencyCode)
-    : normalizedData;
+  return priceRange;
 };
 
 export const getPassengersBody = (
@@ -250,17 +210,4 @@ export const getGroupMode = (roomCount: number | string | undefined): boolean =>
   if (roomCount === undefined) false;
   const numRoomCount = Number.isNaN(roomCount) ? 0 : Number(roomCount);
   return numRoomCount >= GROUP_MODE_ROOM_COUNT;
-};
-
-export const getOffersWithPreferredCurrency = (
-  offers: OfferRecord[],
-  preferredCurrencyCode: CurrencyCode
-): OfferRecord[] => {
-  return offers.map((offer) => {
-    const preferredCurrencyPrice = convertPriceCurrency({
-      price: offer.price,
-      targetCurrency: preferredCurrencyCode
-    });
-    return { ...offer, preferredCurrencyPrice };
-  });
 };
