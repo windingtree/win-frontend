@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import { getLargestImages, sortByLargestImage } from '../../utils/accommodation';
 import { daysBetween } from '../../utils/date';
+import { useUserSettings } from '../useUserSettings';
 import {
   AccommodationsAndOffersResponse,
   Coordinates,
@@ -10,11 +11,11 @@ import {
 import {
   getAccommodationById,
   getActiveAccommodations,
-  normalizeAccommodations,
-  normalizeOffers,
   getOffersById,
-  AccommodationWithId
+  AccommodationWithId,
+  getOffersPriceRange
 } from './helpers';
+import { useAccommodationsAndOffersHelpers } from './useAccommodationsAndOffersHelpers';
 
 export interface SearchTypeProps {
   location: string;
@@ -26,10 +27,15 @@ export interface SearchTypeProps {
   focusedEvent?: string;
 }
 
-export interface LowestPriceFormat {
+export interface PriceFormat {
   price: number;
   currency: string;
   decimals?: number;
+}
+
+export interface PriceRange {
+  lowestPrice: PriceFormat;
+  highestPrice: PriceFormat;
 }
 
 export interface EventInfo {
@@ -55,6 +61,7 @@ export const useAccommodationsAndOffers = ({
   searchProps?: SearchTypeProps | void;
   accommodationTransformFn?: AccommodationTransformFn;
 } = {}) => {
+  const { preferredCurrencyCode } = useUserSettings();
   const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery<
     AccommodationsAndOffersResponse | undefined,
     Error
@@ -75,6 +82,9 @@ export const useAccommodationsAndOffers = ({
     }
   );
 
+  const { normalizeAccommodations, normalizeOffers } =
+    useAccommodationsAndOffersHelpers();
+
   const latestQueryParams = data?.latestQueryParams;
 
   // append focusedEvent query params if it exists
@@ -86,7 +96,7 @@ export const useAccommodationsAndOffers = ({
 
   const allAccommodations = useMemo(
     () => normalizeAccommodations(data?.accommodations, data?.offers),
-    [data]
+    [data, preferredCurrencyCode]
   );
 
   // Get accommodations with active offer along with the offer with lowest price/room/night
@@ -101,23 +111,27 @@ export const useAccommodationsAndOffers = ({
       latestQueryParams?.departure
     );
 
-    // get offer with lowest price
+    // attach extra properties to or transform accommodations
     const nbRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
     return filteredAccommodations?.map((accommodation) => {
-      const lowestPrice: LowestPriceFormat = accommodation.offers
-        .map((offer) => ({
-          price: Number(offer.price.public) / (numberOfDays * nbRooms),
-          currency: offer.price.currency
-        }))
-        .reduce((prevLowest, currentVal) =>
-          prevLowest.price < currentVal.price ? prevLowest : currentVal
-        );
+      // get price ranges in local and preferred currencies
+      const priceRange = getOffersPriceRange(
+        accommodation.offers,
+        numberOfDays,
+        nbRooms,
+        false
+      );
+      const preferredCurrencyPriceRange = getOffersPriceRange(
+        accommodation.offers,
+        numberOfDays,
+        nbRooms,
+        true
+      );
 
       // return only high res images
-      const sortedImages = sortByLargestImage(accommodation.media ?? []);
-      const largestImages = getLargestImages(sortedImages);
-
-      accommodation.media = largestImages;
+      accommodation.media = getLargestImages(
+        sortByLargestImage(accommodation.media ?? [])
+      );
 
       // optional accommodation transformation callback function
       // that can be used to modify or add properties to accommodation object
@@ -130,13 +144,13 @@ export const useAccommodationsAndOffers = ({
         });
       }
 
-      return { ...transformedAccommodation, lowestPrice };
+      return { ...transformedAccommodation, priceRange, preferredCurrencyPriceRange };
     });
   }, [allAccommodations, latestQueryParams]);
 
   const offers = useMemo(
     () => (data?.offers && normalizeOffers(data.offers)) || [],
-    [data]
+    [data, preferredCurrencyCode]
   );
 
   const getAccommodationByHotelId = useCallback(

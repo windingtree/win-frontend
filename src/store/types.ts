@@ -5,23 +5,28 @@ import type {
   BookingsAuthResponse,
   OrganizerInformation,
   GroupBookingDeposits,
-  Quote
+  Quote,
+  Price
 } from '@windingtree/glider-types/dist/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
+import { CurrencyCode } from '../hooks/useCurrencies';
 import type {
   Web3ModalProvider,
   Web3ModalSignInFunction,
   Web3ModalSignOutFunction
 } from '../hooks/useWeb3Modal';
-import { CurrencyCode } from '../utils/currencies';
 
 export interface GenericStateRecord {
   id: string;
   [key: string]: unknown;
 }
 
-export type OfferRecord = Offer & GenericStateRecord;
+interface OfferPreferredCurrencyPrice {
+  preferredCurrencyPrice?: Price;
+}
+
+export type OfferRecord = Offer & GenericStateRecord & OfferPreferredCurrencyPrice;
 export type FacilityRecord = WinAccommodation & GenericStateRecord;
 
 export interface Address {

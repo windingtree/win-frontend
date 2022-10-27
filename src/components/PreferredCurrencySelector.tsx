@@ -11,11 +11,10 @@ import {
   Typography
 } from '@mui/material';
 import { useCallback, useState } from 'react';
-import { useCurrencies } from '../hooks/useCurrencies';
+import { CurrencyCode, useCurrencies } from '../hooks/useCurrencies';
 import { useUserSettings } from '../hooks/useUserSettings';
 import { useAppState } from '../store';
 import { emptyFunction } from '../utils/common';
-import { CurrencyCode } from '../utils/currencies';
 import Iconify from './Iconify';
 
 interface StyledStackProps {
@@ -49,7 +48,7 @@ export const PreferredCurrencySelector = () => {
   const { preferredCurrencyCode, setUserSetting } = useUserSettings();
 
   // get display currencies list
-  const { displayCurrencies } = useCurrencies();
+  const { currenciesAndRates = {} } = useCurrencies();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const openDialog = () => setDialogOpen(true);
@@ -65,6 +64,10 @@ export const PreferredCurrencySelector = () => {
 
   // hide currency selector when wallet is connected
   if (account) {
+    return null;
+  }
+
+  if (!currenciesAndRates || !Object.keys(currenciesAndRates).length) {
     return null;
   }
 
@@ -91,17 +94,19 @@ export const PreferredCurrencySelector = () => {
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={{ xs: 1, md: 2 }}>
-            {Object.entries(displayCurrencies).map(([code, { name }]) => {
-              return (
-                <Grid item xs={6} sm={4} md={3} key={code}>
-                  <CurrencyItem
-                    name={name}
-                    code={code}
-                    onClick={() => handleCurrencyChange(code)}
-                  />
-                </Grid>
-              );
-            })}
+            {[...Object.entries(currenciesAndRates)]
+              .sort(([code1], [code2]) => code1.localeCompare(code2))
+              .map(([code, { name }]) => {
+                return (
+                  <Grid item xs={6} sm={4} md={3} key={code}>
+                    <CurrencyItem
+                      name={name}
+                      code={code}
+                      onClick={() => handleCurrencyChange(code)}
+                    />
+                  </Grid>
+                );
+              })}
           </Grid>
         </DialogContent>
       </Dialog>

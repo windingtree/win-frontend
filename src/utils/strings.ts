@@ -43,10 +43,18 @@ export const formatPrice = (
   return fmtdPrice;
 };
 
-export const stringToNumber = (value: string): number => {
-  const numberValue = parseFloat(value);
+export const stringToNumber = (
+  value: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  defaultValue?: any,
+  throwError = true
+) => {
+  const numberValue = Number(value);
   if (Number.isNaN(numberValue)) {
-    throw new Error(`Error: string to number conversion - invalid string "${value}"`);
+    if (defaultValue) return defaultValue;
+    if (throwError)
+      throw new Error(`Error: string to number conversion - invalid string "${value}"`);
+    return undefined;
   }
 
   return numberValue;
