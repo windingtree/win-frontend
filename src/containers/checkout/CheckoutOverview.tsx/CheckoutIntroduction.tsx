@@ -2,13 +2,13 @@ import { utils } from 'ethers';
 import { Box, Card, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { formatPrice } from 'src/utils/strings';
-import { currencySymbolMap } from 'src/utils/currencies';
 import { daysBetween } from 'src/utils/date';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { sortByLargestImage } from 'src/utils/accommodation';
 import { useMemo } from 'react';
 import { CardMediaFallback } from 'src/components/CardMediaFallback';
 import FallbackImage from 'src/images/hotel-fallback.webp';
+import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 
 export const CheckoutIntroduction = () => {
   const theme = useTheme();
