@@ -92,10 +92,12 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const dateRef = useRef<HTMLButtonElement>(null);
   const guestsRef = useRef<HTMLButtonElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
+  const filterRef = useRef<HTMLButtonElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
   );
+  const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [locationPopoverOpen, setLocationPopoverOpen] = useState(false);
 
@@ -104,6 +106,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
 
   const isDatePopoverOpen = Boolean(dateRangeAnchorEl);
   const isGuestsPopoverOpen = Boolean(guestsAnchorEl);
+  const isFilterPopoverOpen = Boolean(filterAnchorEl);
 
   /**
    * Logic in relation to handling the form
@@ -315,9 +318,13 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     setDateRangeAnchorEl,
     locationPopoverOpen,
     setLocationPopoverOpen,
+    isFilterPopoverOpen,
+    filterAnchorEl,
+    setFilterAnchorEl,
     onGuestsPopoverClose: checkFieldToHighlight,
     onDatePopoverClose: checkFieldToHighlight,
-    onLocationPopoverClose: checkFieldToHighlight
+    onLocationPopoverClose: checkFieldToHighlight,
+    onFilterPopoverClose: checkFieldToHighlight
   };
 
   const formButtonStyle: SxProps = isMobileView
@@ -459,12 +466,28 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                   Search
                 </Button>
               </Box>
+              <Box>
+                <Button
+                  disableElevation
+                  disabled={isFetching}
+                  variant="outlined"
+                  size={'medium'}
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    ...fontStyling
+                  }}
+                  endIcon={<FilterIcon />}
+                  ref={filterRef}
+                  onClick={() => setFilterAnchorEl(filterRef.current)}
+                >
+                  Filter
+                </Button>
+              </Box>
             </Stack>
           </ToolbarStyle>
         </FormProvider>
       </ResponsiveContainer>
-
-      <Stack alignItems="center">
+      <Stack>
         {isGroupMode && accommodations.length && (
           // show this message when in group mode and there are accommodations with offers
           <SearchAlert severity="info">
