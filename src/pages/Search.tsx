@@ -1,5 +1,5 @@
 import { MapBox } from '../components/MapBox';
-import { Results } from '../components/Results';
+import { Results } from '../containers/search/Results';
 import MainLayout from 'src/layouts/main';
 import { Box, styled } from '@mui/material';
 import { SearchForm } from 'src/containers/search/SearchForm';
