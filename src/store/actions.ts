@@ -15,6 +15,7 @@ import type {
   SearchParams
 } from './types';
 import { CurrencyCode } from '../hooks/useCurrencies';
+import { PriceRange } from '../hooks/useAccommodationsAndOffers';
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';
@@ -122,7 +123,13 @@ export interface SetPreferredCurrency {
   payload?: CurrencyCode;
 }
 
+export interface SetPriceFilterAction {
+  type: 'SET_PRICE_FILTER';
+  payload: PriceRange[];
+}
+
 export type UserSettingsAction = SetPreferredCurrency;
+export type PriceFilterAction = SetPriceFilterAction;
 
 export type Action =
   | SetSearchParams
@@ -143,4 +150,5 @@ export type Action =
   | ResetSelectedFacilityId
   | SetOrganizerInfo
   | SetBookingInfo
-  | UserSettingsAction;
+  | UserSettingsAction
+  | PriceFilterAction;

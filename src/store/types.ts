@@ -10,6 +10,7 @@ import type {
 } from '@windingtree/glider-types/dist/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
+import { PriceRange } from '../hooks/useAccommodationsAndOffers';
 import { CurrencyCode } from '../hooks/useCurrencies';
 import type {
   Web3ModalProvider,
@@ -140,5 +141,6 @@ export interface State {
   selectedFacilityId?: string;
   walletAuth?: BookingsAuthResponse;
   userSettings: UserSettings;
+  priceFilter: PriceRange[];
   [key: string]: unknown | GenericStateRecord[];
 }

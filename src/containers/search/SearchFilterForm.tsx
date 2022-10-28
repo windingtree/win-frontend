@@ -20,9 +20,11 @@ import {
   PriceRange,
   useAccommodationsAndOffers
 } from '../../hooks/useAccommodationsAndOffers';
+import { usePriceFilter } from '../../hooks/useAppFilter';
 import { useUserSettings } from '../../hooks/useUserSettings';
 import { filterAccommodationsByPriceRanges } from '../../utils/accommodation';
 import { emptyFunction } from '../../utils/common';
+import { compareObjects } from '../../utils/objects';
 import { stringToNumber } from '../../utils/strings';
 
 export interface SearchFilterFormProps {
@@ -41,16 +43,9 @@ export const SearchFilterForm = ({
   const fieldName = 'priceRanges';
   const theme = useTheme();
   const [totalAccommodationsSelected, setTotalAccommodationsSelected] = useState(0);
-
   const { accommodations } = useAccommodationsAndOffers();
   const { preferredCurrencyCode } = useUserSettings();
-
-  const methods = useForm<SearchFilterFormData>({
-    defaultValues: { priceRanges: [] }
-  });
-
-  const { handleSubmit, watch, reset } = methods;
-  const priceRanges = watch(fieldName);
+  const { priceFilter, setPriceFilter } = usePriceFilter();
 
   // TO-DO: convert ranges from USD to preferredCurrency
   const defaultPriceRanges: PriceRange[] = useMemo(
@@ -109,6 +104,30 @@ export const SearchFilterForm = ({
     [preferredCurrencyCode]
   );
 
+  const buildFormDefaultValues = useCallback(() => {
+    return priceFilter.reduce((selectedIndexes: string[], filter) => {
+      // find index of filter in defaultPriceRanges
+      const foundIndex = defaultPriceRanges.findIndex((priceRange) => {
+        return compareObjects(filter, priceRange);
+      });
+
+      if (foundIndex) {
+        selectedIndexes.push(foundIndex.toString());
+      }
+
+      return selectedIndexes;
+    }, []);
+  }, [priceFilter, defaultPriceRanges]);
+
+  const methods = useForm<SearchFilterFormData>({
+    defaultValues: {
+      priceRanges: useMemo(() => buildFormDefaultValues(), [buildFormDefaultValues])
+    }
+  });
+
+  const { handleSubmit, watch, reset } = methods;
+  const priceRanges = watch(fieldName);
+
   // categorize accommodations into price ranges
   const accommodationsWithinPriceRanges = useMemo(() => {
     return defaultPriceRanges.map((priceRange) => {
@@ -128,6 +147,7 @@ export const SearchFilterForm = ({
     setTotalAccommodationsSelected(selectedCount);
   }, [priceRanges]);
 
+  // dispatch selected filters
   const onSubmit = useCallback(
     (formData) => {
       // process check boxes
@@ -136,10 +156,13 @@ export const SearchFilterForm = ({
         (stringIndex) => defaultPriceRanges[Number(stringIndex)]
       );
 
+      // dispatch price filter
+      setPriceFilter(selectedPriceRanges);
+
       // call onSubmit callback with values
       onSubmitClick(selectedPriceRanges);
     },
-    [defaultPriceRanges, onSubmitClick]
+    [defaultPriceRanges, onSubmitClick, setPriceFilter]
   );
 
   // construct label for a given price range
