@@ -14,6 +14,11 @@ export const priceFilterReducer = (state: State, action: PriceFilterAction): Sta
           ...state,
           priceFilter: [...action.payload]
         };
+      case 'CLEAR_PRICE_FILTER':
+        return {
+          ...state,
+          priceFilter: []
+        };
       default:
         return state;
     }

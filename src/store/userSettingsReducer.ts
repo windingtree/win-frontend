@@ -14,9 +14,11 @@ export const userSettingsReducer = (state: State, action: UserSettingsAction): S
         return {
           ...state,
           userSettings: {
-            ...{ ...state.userSettings },
-            // currency must always be set
-            preferredCurrencyCode: action.payload ?? defaultCurrencyCode
+            ...{
+              ...state.userSettings,
+              // currency must always be set
+              preferredCurrencyCode: action.payload ?? defaultCurrencyCode
+            }
           }
         };
       default:

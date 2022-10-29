@@ -5,7 +5,6 @@ export const usePriceFilter = () => {
   const { priceFilter } = useAppState();
   const dispatch = useAppDispatch();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setPriceFilter = (filter: PriceRange[]) => {
     dispatch({
       type: 'SET_PRICE_FILTER',
@@ -13,5 +12,11 @@ export const usePriceFilter = () => {
     });
   };
 
-  return { priceFilter, setPriceFilter };
+  const clearPriceFilter = () => {
+    dispatch({
+      type: 'CLEAR_PRICE_FILTER'
+    });
+  };
+
+  return { priceFilter, setPriceFilter, clearPriceFilter };
 };

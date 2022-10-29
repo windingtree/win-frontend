@@ -128,8 +128,13 @@ export interface SetPriceFilterAction {
   payload: PriceRange[];
 }
 
+export interface clearPriceFilterAction {
+  type: 'CLEAR_PRICE_FILTER';
+  payload?: null;
+}
+
 export type UserSettingsAction = SetPreferredCurrency;
-export type PriceFilterAction = SetPriceFilterAction;
+export type PriceFilterAction = SetPriceFilterAction | clearPriceFilterAction;
 
 export type Action =
   | SetSearchParams

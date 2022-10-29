@@ -20,7 +20,7 @@ import {
   PriceRange,
   useAccommodationsAndOffers
 } from '../../hooks/useAccommodationsAndOffers';
-import { usePriceFilter } from '../../hooks/useAppFilter';
+import { usePriceFilter } from '../../hooks/usePriceFilter';
 import { useUserSettings } from '../../hooks/useUserSettings';
 import { filterAccommodationsByPriceRanges } from '../../utils/accommodation';
 import { emptyFunction } from '../../utils/common';
@@ -111,7 +111,7 @@ export const SearchFilterForm = ({
         return compareObjects(filter, priceRange);
       });
 
-      if (foundIndex) {
+      if (foundIndex >= 0) {
         selectedIndexes.push(foundIndex.toString());
       }
 
@@ -211,6 +211,7 @@ export const SearchFilterForm = ({
                     label={getLabel(priceRange)}
                     name={fieldName}
                     value={index.toString()}
+                    disabled={!accommodationsWithinPriceRanges[index].length}
                   />
                   <Typography color={theme.palette.grey[500]}>
                     {accommodationsWithinPriceRanges[index].length}
