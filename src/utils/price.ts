@@ -6,6 +6,7 @@ export const checkPriceFormatsCompatible = (...prices: PriceFormat[]) => {
   let currency: string;
 
   return prices.every((price) => {
+    if (!price) return false;
     if (!currency) currency = price.currency;
     if (!decimals) decimals = price.decimals;
 

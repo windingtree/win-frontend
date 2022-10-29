@@ -70,6 +70,7 @@ export const filterAccommodationsByPriceRanges = (
   accommodations: AccommodationWithId[],
   ...priceRange: PriceRange[]
 ) => {
+  if (!priceRange.length) return accommodations;
   return accommodations.filter((accommodation) => {
     return isAccommodationWithinPriceRanges(accommodation, ...priceRange);
   });

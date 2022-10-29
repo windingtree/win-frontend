@@ -32,6 +32,7 @@ import { SearchPopovers, SearchPopoversProps } from './SearchPopovers';
 import { SearchLocationInput } from './SearchLocationInput';
 import { ResponsiveContainer } from '../ResponsiveContainer';
 import { SearchAlert } from './SearchAlert';
+import { usePriceFilter } from '../../hooks/usePriceFilter';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -77,6 +78,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const [open, setOpen] = useState<boolean>(false);
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
   const isCloseable: boolean = useMemo(() => isMobileView && !!closeable, [isMobileView]);
+  const { priceFilter } = usePriceFilter();
 
   // monitor error state locally
   // generic error message
@@ -308,6 +310,9 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
   const fontStyling = theme.typography.body1;
   const buttonSize = 'large';
+  const filterButtonStying: SxProps = {
+    backgroundColor: priceFilter.length ? theme.palette.grey[400] : undefined
+  };
 
   const popOversState: SearchPopoversProps = {
     isGuestsPopoverOpen,
@@ -474,7 +479,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                   size={'medium'}
                   sx={{
                     whiteSpace: 'nowrap',
-                    ...fontStyling
+                    ...fontStyling,
+                    ...filterButtonStying
                   }}
                   endIcon={<FilterIcon />}
                   ref={filterRef}

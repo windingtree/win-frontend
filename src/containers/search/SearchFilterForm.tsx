@@ -43,7 +43,7 @@ export const SearchFilterForm = ({
   const fieldName = 'priceRanges';
   const theme = useTheme();
   const [totalAccommodationsSelected, setTotalAccommodationsSelected] = useState(0);
-  const { accommodations } = useAccommodationsAndOffers();
+  const { allAccommodations } = useAccommodationsAndOffers();
   const { preferredCurrencyCode } = useUserSettings();
   const { priceFilter, setPriceFilter } = usePriceFilter();
 
@@ -53,7 +53,7 @@ export const SearchFilterForm = ({
       {
         lowestPrice: {
           currency: preferredCurrencyCode,
-          price: 20
+          price: 0
         },
         highestPrice: {
           currency: preferredCurrencyCode,
@@ -125,22 +125,22 @@ export const SearchFilterForm = ({
     }
   });
 
-  const { handleSubmit, watch, reset } = methods;
+  const { handleSubmit, watch, setValue } = methods;
   const priceRanges = watch(fieldName);
 
   // categorize accommodations into price ranges
   const accommodationsWithinPriceRanges = useMemo(() => {
     return defaultPriceRanges.map((priceRange) => {
-      return filterAccommodationsByPriceRanges(accommodations, priceRange);
+      return filterAccommodationsByPriceRanges(allAccommodations, priceRange);
     });
-  }, [accommodations]);
+  }, [allAccommodations]);
 
   // update the 'stays' count to the total number of accommodation
   // categories selected
   useEffect(() => {
     const selectedCount = priceRanges.reduce((sum, filteredIndex) => {
       const idx = stringToNumber(filteredIndex, undefined, false);
-      if (!idx) return sum;
+      if (idx < 0 || idx === undefined) return sum;
       return sum + accommodationsWithinPriceRanges[idx].length;
     }, 0);
 
@@ -171,7 +171,7 @@ export const SearchFilterForm = ({
     return `${currencySymbolMap[lowestPrice.currency]}${lowestPrice.price}${
       highestPrice.price === Infinity
         ? '+'
-        : `- ${currencySymbolMap[highestPrice.currency]}${highestPrice.price}`
+        : ` - ${currencySymbolMap[highestPrice.currency]}${highestPrice.price}`
     }`;
   };
 
@@ -233,7 +233,7 @@ export const SearchFilterForm = ({
               textDecoration: 'underline',
               cursor: 'pointer'
             }}
-            onClick={() => reset()}
+            onClick={() => setValue('priceRanges', [])}
           >
             Clear all
           </Link>
@@ -245,9 +245,9 @@ export const SearchFilterForm = ({
               mb: 1
             }}
             type="submit"
-            disabled={!accommodations.length}
+            disabled={!allAccommodations.length}
           >
-            Show {totalAccommodationsSelected || accommodations.length} stay(s)
+            Show {totalAccommodationsSelected || allAccommodations.length} stay(s)
           </Button>
         </CardActions>
       </Card>
