@@ -1,6 +1,7 @@
 import { PriceFormat, PriceRange } from '../hooks/useAccommodationsAndOffers';
 import { isBetween } from './common';
 
+// used to check 2 price formats if they are the same and can be used for comparison
 export const checkPriceFormatsCompatible = (...prices: PriceFormat[]) => {
   let decimals: number | undefined;
   let currency: string;
@@ -17,6 +18,7 @@ export const checkPriceFormatsCompatible = (...prices: PriceFormat[]) => {
   });
 };
 
+// check if a price range is included in another given price range
 export const isPriceRangeWithinPriceRange = (
   priceRange: PriceRange,
   checkWithinPriceRange: PriceRange,

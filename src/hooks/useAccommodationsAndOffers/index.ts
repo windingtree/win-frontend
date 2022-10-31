@@ -157,16 +157,18 @@ export const useAccommodationsAndOffers = ({
     });
   }, [normalizedAccommodations, latestQueryParams]);
 
-  // apply price filter to accommodations
+  // apply price filter to accommodations if any before returning accommodations
   const accommodations = useMemo(() => {
     return filterAccommodationsByPriceRanges(allAccommodations, ...priceFilter);
   }, [priceFilter, allAccommodations]);
 
+  // all normalized offers prior to filtering
   const allOffers = useMemo(
     () => data?.offers && normalizeOffers(data.offers),
     [data, preferredCurrencyCode]
   );
 
+  // filter offers array by price from price filter
   const offers = useMemo(
     () => (allOffers && filterOffersByPriceRanges(allOffers, ...priceFilter)) || [],
     [allOffers, priceFilter]
