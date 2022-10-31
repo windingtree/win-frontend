@@ -113,7 +113,7 @@ export const SearchPopovers = ({
           PaperProps={dialogPaperProps}
           onClose={handleEscape}
           TransitionProps={{
-            onEntered: () => inputRef?.current?.click()
+            onEntered: () => inputRef?.current?.openDropdown()
           }}
         >
           <DialogContent>
