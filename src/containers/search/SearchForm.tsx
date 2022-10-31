@@ -29,7 +29,7 @@ import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
 import { SearchPopovers, SearchPopoversProps } from './SearchPopovers';
-import { SearchLocationInput } from './SearchLocationInput';
+import { SearchLocationInput, SearchLocationInputElement } from './SearchLocationInput';
 import { ResponsiveContainer } from '../ResponsiveContainer';
 import { SearchAlert } from './SearchAlert';
 import { usePriceFilter } from '../../hooks/usePriceFilter';
@@ -76,6 +76,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const theme = useTheme();
   const { pathname, search } = useLocation();
   const [open, setOpen] = useState<boolean>(false);
+  const [isSearchPage, setIsSearchPage] = useState(false);
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
   const isCloseable: boolean = useMemo(() => isMobileView && !!closeable, [isMobileView]);
   const { priceFilter } = usePriceFilter();
@@ -93,13 +94,16 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const formRef = useRef<HTMLDivElement>(null);
   const dateRef = useRef<HTMLButtonElement>(null);
   const guestsRef = useRef<HTMLButtonElement>(null);
-  const locationRef = useRef<HTMLInputElement>(null);
+  const locationRef = useRef<SearchLocationInputElement>(null);
   const filterRef = useRef<HTMLButtonElement>(null);
+  const filterIconButtonRef = useRef<HTMLLabelElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
   );
-  const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<
+    HTMLButtonElement | HTMLLabelElement | null
+  >(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [locationPopoverOpen, setLocationPopoverOpen] = useState(false);
 
@@ -213,9 +217,9 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     isFetching,
     error,
     isFetched,
-    accommodations,
     latestQueryParams,
-    isGroupMode
+    isGroupMode,
+    allAccommodations
   } = useAccommodationsAndOffers({ searchProps });
 
   const onSubmit = useCallback(() => {
@@ -251,8 +255,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   }, [error]);
 
   useEffect(() => {
-    setShowAccommodationsError(!(accommodations?.length > 0) ?? false);
-  }, [accommodations]);
+    setShowAccommodationsError(!(allAccommodations?.length > 0) ?? false);
+  }, [allAccommodations]);
 
   // clear error messages on path change
   useEffect(() => {
@@ -280,6 +284,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
 
   useEffect(() => {
     if (pathname !== '/search' && pathname !== '/') return;
+
+    setIsSearchPage(pathname === '/search');
 
     const includesAllSearchParams =
       !!searchParams.get('location') &&
@@ -311,7 +317,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const fontStyling = theme.typography.body1;
   const buttonSize = 'large';
   const filterButtonStying: SxProps = {
-    backgroundColor: priceFilter.length ? theme.palette.grey[400] : undefined
+    backgroundColor: priceFilter.length ? theme.palette.grey[400] : undefined,
+    minWidth: isMobileView ? '320px' : '160px'
   };
 
   const popOversState: SearchPopoversProps = {
@@ -328,8 +335,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     setFilterAnchorEl,
     onGuestsPopoverClose: checkFieldToHighlight,
     onDatePopoverClose: checkFieldToHighlight,
-    onLocationPopoverClose: checkFieldToHighlight,
-    onFilterPopoverClose: checkFieldToHighlight
+    onLocationPopoverClose: checkFieldToHighlight
   };
 
   const formButtonStyle: SxProps = isMobileView
@@ -383,20 +389,28 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
             </Box>
           </Grid>
           <Grid item xs={'auto'} mx={1}>
-            <IconButton disabled color="primary" component="label">
+            <IconButton
+              onClick={() => {
+                setFilterAnchorEl(filterIconButtonRef.current);
+              }}
+              color="primary"
+              component="label"
+              ref={filterIconButtonRef}
+              disabled={isFetching || !allAccommodations.length}
+            >
               <FilterIcon />
             </IconButton>
           </Grid>
         </Grid>
       </Box>
 
-      <ResponsiveContainer
-        open={open}
-        isCloseable={isCloseable}
-        handleClose={() => setOpen(false)}
-      >
-        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <SearchPopovers {...popOversState} />
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <SearchPopovers {...popOversState} />
+        <ResponsiveContainer
+          open={open}
+          isCloseable={isCloseable}
+          handleClose={() => setOpen(false)}
+        >
           <ToolbarStyle ref={formRef}>
             <Stack
               direction={{ xs: 'column', md: 'row' }}
@@ -471,30 +485,33 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                   Search
                 </Button>
               </Box>
-              <Box>
-                <Button
-                  disableElevation
-                  disabled={isFetching}
-                  variant="outlined"
-                  size={'medium'}
-                  sx={{
-                    whiteSpace: 'nowrap',
-                    ...fontStyling,
-                    ...filterButtonStying
-                  }}
-                  endIcon={<FilterIcon />}
-                  ref={filterRef}
-                  onClick={() => setFilterAnchorEl(filterRef.current)}
-                >
-                  Filter
-                </Button>
-              </Box>
+              {!isMobileView && isSearchPage ? ( // show filter button only on search page and when accommodations are available
+                <Box>
+                  <Button
+                    disableElevation
+                    disabled={isFetching || !allAccommodations.length}
+                    variant="outlined"
+                    size={'medium'}
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      ...fontStyling,
+                      ...filterButtonStying
+                    }}
+                    endIcon={<FilterIcon />}
+                    ref={filterRef}
+                    onClick={() => setFilterAnchorEl(filterRef.current)}
+                  >
+                    Filter
+                  </Button>
+                </Box>
+              ) : null}
             </Stack>
           </ToolbarStyle>
-        </FormProvider>
-      </ResponsiveContainer>
-      <Stack alignItems="center">
-        {isGroupMode && accommodations.length && (
+        </ResponsiveContainer>
+      </FormProvider>
+
+      <Stack>
+        {isGroupMode && allAccommodations.length && (
           // show this message when in group mode and there are accommodations with offers
           <SearchAlert severity="info">
             You have entered the group booking mode. <br />
