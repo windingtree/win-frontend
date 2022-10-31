@@ -80,6 +80,7 @@ type ConferenceItemProps = {
 function ConferenceItem({ item }: ConferenceItemProps) {
   const navigate = useNavigate();
   const { name, startDate, endDate, conferenceUrl, image, location, latlon } = item;
+
   const jsStartDate = new Date(startDate);
   // if an event starts in the past, use today as the current date
   const queryStartDate = getIsInPast(jsStartDate) ? new Date() : jsStartDate;
