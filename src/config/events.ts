@@ -3418,7 +3418,7 @@ const allEvents = [
 const normalizedEvents = allEvents.map(
   ({ latitude, longitude, name, location, image, startDate, endDate, conferenceUrl }) => {
     const latlon: [number, number] | undefined =
-      latitude === '' && longitude === ''
+      latitude === '' || longitude === ''
         ? undefined
         : [Number(latitude), Number(longitude)];
 
