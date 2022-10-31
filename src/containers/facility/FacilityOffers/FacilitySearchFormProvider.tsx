@@ -70,7 +70,8 @@ export type Props = {
 };
 export const FacilitySearchFormProvider = ({ children }: Props) => {
   const { id } = useParams();
-  if (!id) return;
+  if (!id) return null;
+
   const [searchParams] = useSearchParams();
   const defaultValues: FormValuesProps = useMemo(() => {
     const startDateParams = searchParams.get('startDate');
@@ -93,7 +94,7 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
     resolver: yupResolver(SearchSchema),
     defaultValues
   });
-  const { handleSubmit, watch } = methods;
+  const { watch } = methods;
   const values = watch();
 
   const { roomCount, adultCount, dateRange } = values;
@@ -110,7 +111,7 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
   const { refetch } = offersQuery;
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(refetch)}>
+    <FormProvider methods={methods} onSubmit={() => refetch()}>
       {children}
     </FormProvider>
   );

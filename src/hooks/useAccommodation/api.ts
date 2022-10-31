@@ -3,9 +3,9 @@ import {
   SearchResults,
   WinAccommodation
 } from '@windingtree/glider-types/dist/win';
-import { getPassengersBody } from './helpers';
 import { winClient } from 'src/api/winClient';
 import { SearchPropsType } from '.';
+import { getPassengersBody } from '../useAccommodationsAndOffers/helpers';
 
 export interface AccommodationResponseType {
   accommodation: WinAccommodation;
