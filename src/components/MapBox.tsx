@@ -27,7 +27,6 @@ import {
   PriceFormat,
   useAccommodationsAndOffers
 } from 'src/hooks/useAccommodationsAndOffers';
-import { SearchCard } from './SearchCard';
 import { daysBetween, getFormattedBetweenDate } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -37,6 +36,7 @@ import {
 import { getActiveEventsWithinRadius } from '../utils/events';
 import { AppMode } from '../config';
 import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
+import { SearchCard } from 'src/containers/search/SearchCard';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;

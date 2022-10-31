@@ -9,6 +9,7 @@ export const useAccommodationsAndOffersHelpers = () => {
   const { convertPriceCurrency } = useCurrencies();
   const { preferredCurrencyCode } = useUserSettings();
 
+  // attach price in preferred currency to array of offers
   const getOffersWithPreferredCurrency = (
     offers: OfferRecord[],
     preferredCurrencyCode: CurrencyCode
@@ -23,6 +24,7 @@ export const useAccommodationsAndOffersHelpers = () => {
     });
   };
 
+  // normalize offers hook
   const normalizeOffers = useCallback(
     (offers: Record<string, Offer>): OfferRecord[] => {
       if (!offers) return [];
@@ -48,6 +50,7 @@ export const useAccommodationsAndOffersHelpers = () => {
     [preferredCurrencyCode, getOffersWithPreferredCurrency]
   );
 
+  // normalize accommodations hook
   const normalizeAccommodations = useCallback(
     (
       accommodations: Record<string, WinAccommodation> | undefined,

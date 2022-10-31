@@ -13,6 +13,7 @@ import {
 import { Dispatch, SetStateAction, useRef } from 'react';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { emptyFunction } from '../../utils/common';
+import { SearchFilterForm } from './SearchFilterForm';
 import { SearchLocationInput } from './SearchLocationInput';
 import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 
@@ -39,9 +40,13 @@ export interface SearchPopoversProps {
   setDateRangeAnchorEl: Dispatch<SetStateAction<HTMLButtonElement | null>>;
   locationPopoverOpen: boolean;
   setLocationPopoverOpen: Dispatch<SetStateAction<boolean>>;
+  isFilterPopoverOpen: boolean;
+  filterAnchorEl: HTMLButtonElement | null;
+  setFilterAnchorEl: Dispatch<SetStateAction<HTMLButtonElement | null>>;
   onLocationPopoverClose?: (...args: unknown[]) => void;
   onGuestsPopoverClose?: (...args: unknown[]) => void;
   onDatePopoverClose?: (...args: unknown[]) => void;
+  onFilterPopoverClose?: (...args: unknown[]) => void;
 }
 
 export const SearchPopovers = ({
@@ -53,9 +58,13 @@ export const SearchPopovers = ({
   setDateRangeAnchorEl,
   locationPopoverOpen,
   setLocationPopoverOpen,
+  isFilterPopoverOpen,
+  filterAnchorEl,
+  setFilterAnchorEl,
   onLocationPopoverClose = emptyFunction,
   onGuestsPopoverClose = emptyFunction,
-  onDatePopoverClose = emptyFunction
+  onDatePopoverClose = emptyFunction,
+  onFilterPopoverClose = emptyFunction
 }: SearchPopoversProps) => {
   const theme = useTheme();
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
@@ -79,6 +88,10 @@ export const SearchPopovers = ({
     setLocationPopoverOpen(false);
     focusNext !== undefined && onLocationPopoverClose('location', focusNext);
   };
+  const handleCloseFilterPopup = (focusNext: boolean | undefined = true) => {
+    setFilterAnchorEl(null);
+    focusNext !== undefined && onFilterPopoverClose('roomCount', focusNext);
+  };
 
   const handleEscape = (_, reason) => {
     reason && locationPopoverOpen
@@ -87,6 +100,8 @@ export const SearchPopovers = ({
       ? handleCloseGuestsPopup(false)
       : dateRangeAnchorEl
       ? handleCloseDatePopup(false)
+      : filterAnchorEl
+      ? handleCloseFilterPopup(false)
       : null;
   };
 
@@ -192,6 +207,27 @@ export const SearchPopovers = ({
           marginThreshold={0}
         >
           <SelectGuestsAndRooms />
+        </Popover>
+
+        <Popover
+          id="popover-price-filter"
+          open={isFilterPopoverOpen}
+          anchorEl={filterAnchorEl}
+          onClose={() => handleCloseFilterPopup()}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left'
+          }}
+          marginThreshold={0}
+        >
+          <SearchFilterForm
+            onCloseClick={() => handleCloseFilterPopup()}
+            onSubmitClick={() => handleCloseFilterPopup()}
+          />
         </Popover>
       </>
     );

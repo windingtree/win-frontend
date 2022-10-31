@@ -2,6 +2,10 @@ import { RefundabilityPolicy, RoomTypes } from '@windingtree/glider-types/dist/w
 import { OfferCheckoutType } from 'src/containers/facility/FacilityOffers/FacilityOffersSelectMultiple';
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { OfferRecord } from 'src/store/types';
+import { PriceFormat, PriceRange } from '../hooks/useAccommodationsAndOffers';
+import { isBetween } from './common';
+import { checkPriceFormatsCompatible } from './price';
+import { stringToNumber } from './strings';
 
 export const getTotalRoomCountReducer = (
   prev: number,
@@ -24,4 +28,31 @@ export const getRoomOfOffer = (
   const rooms = accommodation?.roomTypes || {};
   const matchedRoomWithOffer = rooms[roomId];
   return matchedRoomWithOffer;
+};
+
+export const filterOffersByPriceRanges = (
+  offers: OfferRecord[],
+  ...priceRange: PriceRange[]
+) => {
+  if (!priceRange.length) return offers;
+  return offers.filter((offer) => {
+    const offerPrice = offer.preferredCurrencyPrice ?? offer.price;
+
+    // format price
+    const price: PriceFormat = {
+      currency: offerPrice.currency,
+      price: stringToNumber(offerPrice.public, undefined, false)
+    };
+
+    // return only offers that have similar currency and within price range
+    return priceRange.some((prices) => {
+      const pricesCompatible = checkPriceFormatsCompatible(
+        price,
+        prices.lowestPrice,
+        prices.highestPrice
+      );
+      if (!pricesCompatible) return false;
+      return isBetween(price.price, prices.lowestPrice.price, prices.highestPrice.price);
+    });
+  });
 };
