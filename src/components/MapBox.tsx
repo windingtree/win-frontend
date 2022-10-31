@@ -28,7 +28,7 @@ import {
   useAccommodationsAndOffers
 } from 'src/hooks/useAccommodationsAndOffers';
 import { SearchCard } from './SearchCard';
-import { daysBetween } from '../utils/date';
+import { daysBetween, getFormattedBetweenDate } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
 import {
   accommodationEventTransform,
@@ -240,7 +240,9 @@ export const MapBox: React.FC = () => {
                 <Tooltip direction="top" offset={[0, -37]}>
                   <Stack>
                     <Typography variant="subtitle2">{evt.name}</Typography>
-                    <Typography variant="subtitle2">{evt.date}</Typography>
+                    <Typography variant="subtitle2">
+                      {getFormattedBetweenDate(evt.startDate, evt.endDate)}
+                    </Typography>
                   </Stack>
                 </Tooltip>
               </Marker>

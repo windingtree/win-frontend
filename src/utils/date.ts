@@ -34,8 +34,7 @@ export const getIsInPast = (date: Date): boolean => {
   const today = new Date();
 
   // This line sets the hour of the current date to midnight
-  // so the comparison only returns `true` if the passed in date
-  // is at least yesterday
+  // so the comparison only returns `true` if the passed in date is at least yesterday
   today.setHours(0, 0, 0, 0);
 
   return date < today;
@@ -43,4 +42,15 @@ export const getIsInPast = (date: Date): boolean => {
 
 export const getFormattedDate = (date: Date | string) => {
   return DateTime.fromJSDate(new Date(date)).toFormat('ccc, LLL d, yyyy');
+};
+
+export const getFormattedBetweenDate = (
+  startDate: Date | string,
+  endDate: Date | string
+) => {
+  const startDay = DateTime.fromJSDate(new Date(startDate)).toFormat('d');
+  const endDay = DateTime.fromJSDate(new Date(endDate)).toFormat('d');
+  const month = DateTime.fromJSDate(new Date(endDate)).toFormat('LLL');
+
+  return `${startDay}-${endDay} ${month}`;
 };

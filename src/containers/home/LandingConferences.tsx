@@ -9,9 +9,9 @@ import {
   useTheme
 } from '@mui/material';
 import { formatISO } from 'date-fns';
-import { createSearchParams, Link as RouterLink } from 'react-router-dom';
+import { createSearchParams, Link as RouterLink, useNavigate } from 'react-router-dom';
 import { EventItemType, filteredEvents } from 'src/config/events';
-import { getIsInPast } from 'src/utils/date';
+import { getFormattedBetweenDate, getIsInPast } from 'src/utils/date';
 import { Carousel, CarouselSettings } from '../../components/Carousel';
 import Iconify from '../../components/Iconify';
 import Image from '../../components/Image';
@@ -78,8 +78,8 @@ type ConferenceItemProps = {
 };
 
 function ConferenceItem({ item }: ConferenceItemProps) {
+  const navigate = useNavigate();
   const { name, startDate, endDate, conferenceUrl, image, location, latlon } = item;
-  const displayedDate = `${startDate} - ${endDate}`;
   const jsStartDate = new Date(startDate);
   // if an event starts in the past, use today as the current date
   const queryStartDate = getIsInPast(jsStartDate) ? new Date() : jsStartDate;
@@ -97,12 +97,16 @@ function ConferenceItem({ item }: ConferenceItemProps) {
 
   return (
     <Card sx={{ pb: 1, mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
-      <Box sx={{ px: 2, pt: 2, pb: 1, position: 'relative' }}>
+      <Box sx={{ px: 2, pt: 2, pb: 1, position: 'relative', textOverflow: 'ellipsis' }}>
         <RouterLink to={searchObject}>
           <Image src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />
         </RouterLink>
       </Box>
-      <Typography textAlign="center" variant="subtitle2">
+      <Typography
+        textAlign="center"
+        variant="subtitle2"
+        sx={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+      >
         <Link href={conferenceUrl} target="_blank" rel="nopener">
           {name}
         </Link>
@@ -110,7 +114,7 @@ function ConferenceItem({ item }: ConferenceItemProps) {
       <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
         <Iconify icon="uiw:date" sx={{ width: 20, height: 20 }} />
         <Typography variant="body2" textAlign="center" py={1}>
-          {displayedDate}
+          {getFormattedBetweenDate(startDate, endDate)}
         </Typography>
       </Stack>
       <Stack
@@ -126,9 +130,9 @@ function ConferenceItem({ item }: ConferenceItemProps) {
         </Typography>
       </Stack>
       <Stack direction="row" justifyContent="center">
-        <RouterLink to={searchObject}>
-          <Button variant="outlined">View accommodations</Button>
-        </RouterLink>
+        <Button variant="outlined" onClick={() => navigate(searchObject)}>
+          View accommodations
+        </Button>
       </Stack>
     </Card>
   );
