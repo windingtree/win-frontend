@@ -13,6 +13,7 @@ import { selectedFacilityReducer } from './selectedFacilityReducer';
 import { bookingsReducer } from './bookingsReducer';
 import { defaultCurrencyCode, localStorageConfig, sessionStorageConfig } from '../config';
 import { userSettingsReducer } from './userSettingsReducer';
+import { priceFilterReducer } from './priceFilterReducer';
 
 const logger = Logger('mainReducer');
 
@@ -50,7 +51,8 @@ const initialState: State = {
   },
   userSettings: {
     preferredCurrencyCode: defaultCurrencyCode
-  }
+  },
+  priceFilter: []
 };
 
 export const combineReducers =
@@ -79,6 +81,7 @@ export const useAppReducer = () => {
       selectedFacilityReducer,
       bookingsReducer,
       userSettingsReducer,
+      priceFilterReducer,
       // Always must be the last
       storageReducer(localStorageConfig, sessionStorageConfig)
     ]),

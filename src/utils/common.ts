@@ -10,3 +10,14 @@ export const debouncedFn = (func: (...args: unknown[]) => unknown, delay = 500) 
     return () => clearTimeout(timeoutId); // call to cancel debounce
   };
 };
+
+export const isBetween = (
+  value: number,
+  lowerBoundary: number,
+  higherBoundary: number,
+  inclusive = true
+) => {
+  return inclusive
+    ? value >= lowerBoundary && value <= higherBoundary
+    : value > lowerBoundary && value < higherBoundary;
+};

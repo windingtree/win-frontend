@@ -10,8 +10,9 @@ import {
   styled,
   Typography
 } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CurrencyCode, useCurrencies } from '../hooks/useCurrencies';
+import { usePriceFilter } from '../hooks/usePriceFilter';
 import { useUserSettings } from '../hooks/useUserSettings';
 import { useAppState } from '../store';
 import { emptyFunction } from '../utils/common';
@@ -46,6 +47,16 @@ export const PreferredCurrencySelector = () => {
 
   // get user settings
   const { preferredCurrencyCode, setUserSetting } = useUserSettings();
+  const { clearPriceFilter } = usePriceFilter();
+
+  //const preferredCurrencyCodeRef = useRef(preferredCurrencyCode);
+
+  useEffect(() => {
+    // TO-DO: convert currency of price filter when preferred currency changes
+    // for now just clear the priceFilter
+
+    clearPriceFilter();
+  }, [preferredCurrencyCode]);
 
   // get display currencies list
   const { currenciesAndRates = {} } = useCurrencies();

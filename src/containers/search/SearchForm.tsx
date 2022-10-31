@@ -32,6 +32,7 @@ import { SearchPopovers, SearchPopoversProps } from './SearchPopovers';
 import { SearchLocationInput } from './SearchLocationInput';
 import { ResponsiveContainer } from '../ResponsiveContainer';
 import { SearchAlert } from './SearchAlert';
+import { usePriceFilter } from '../../hooks/usePriceFilter';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -77,6 +78,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const [open, setOpen] = useState<boolean>(false);
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
   const isCloseable: boolean = useMemo(() => isMobileView && !!closeable, [isMobileView]);
+  const { priceFilter } = usePriceFilter();
 
   // monitor error state locally
   // generic error message
@@ -92,10 +94,12 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const dateRef = useRef<HTMLButtonElement>(null);
   const guestsRef = useRef<HTMLButtonElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
+  const filterRef = useRef<HTMLButtonElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
   );
+  const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [locationPopoverOpen, setLocationPopoverOpen] = useState(false);
 
@@ -104,6 +108,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
 
   const isDatePopoverOpen = Boolean(dateRangeAnchorEl);
   const isGuestsPopoverOpen = Boolean(guestsAnchorEl);
+  const isFilterPopoverOpen = Boolean(filterAnchorEl);
 
   /**
    * Logic in relation to handling the form
@@ -305,6 +310,9 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const guestDetailsText = `${adultCount} guests, ${roomCount} ${roomText}`;
   const fontStyling = theme.typography.body1;
   const buttonSize = 'large';
+  const filterButtonStying: SxProps = {
+    backgroundColor: priceFilter.length ? theme.palette.grey[400] : undefined
+  };
 
   const popOversState: SearchPopoversProps = {
     isGuestsPopoverOpen,
@@ -315,9 +323,13 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     setDateRangeAnchorEl,
     locationPopoverOpen,
     setLocationPopoverOpen,
+    isFilterPopoverOpen,
+    filterAnchorEl,
+    setFilterAnchorEl,
     onGuestsPopoverClose: checkFieldToHighlight,
     onDatePopoverClose: checkFieldToHighlight,
-    onLocationPopoverClose: checkFieldToHighlight
+    onLocationPopoverClose: checkFieldToHighlight,
+    onFilterPopoverClose: checkFieldToHighlight
   };
 
   const formButtonStyle: SxProps = isMobileView
@@ -459,12 +471,29 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                   Search
                 </Button>
               </Box>
+              <Box>
+                <Button
+                  disableElevation
+                  disabled={isFetching}
+                  variant="outlined"
+                  size={'medium'}
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    ...fontStyling,
+                    ...filterButtonStying
+                  }}
+                  endIcon={<FilterIcon />}
+                  ref={filterRef}
+                  onClick={() => setFilterAnchorEl(filterRef.current)}
+                >
+                  Filter
+                </Button>
+              </Box>
             </Stack>
           </ToolbarStyle>
         </FormProvider>
       </ResponsiveContainer>
-
-      <Stack alignItems="center">
+      <Stack>
         {isGroupMode && accommodations.length && (
           // show this message when in group mode and there are accommodations with offers
           <SearchAlert severity="info">

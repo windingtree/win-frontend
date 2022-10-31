@@ -1,7 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
-import { getLargestImages, sortByLargestImage } from '../../utils/accommodation';
+import {
+  filterAccommodationsByPriceRanges,
+  getLargestImages,
+  sortByLargestImage
+} from '../../utils/accommodation';
 import { daysBetween } from '../../utils/date';
+import { filterOffersByPriceRanges } from '../../utils/offers';
+import { usePriceFilter } from '../usePriceFilter';
 import { useUserSettings } from '../useUserSettings';
 import {
   AccommodationsAndOffersResponse,
@@ -62,6 +68,7 @@ export const useAccommodationsAndOffers = ({
   accommodationTransformFn?: AccommodationTransformFn;
 } = {}) => {
   const { preferredCurrencyCode } = useUserSettings();
+  const { priceFilter } = usePriceFilter();
   const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery<
     AccommodationsAndOffersResponse | undefined,
     Error
@@ -94,7 +101,7 @@ export const useAccommodationsAndOffers = ({
 
   const isGroupMode = data?.isGroupMode ?? false;
 
-  const allAccommodations = useMemo(
+  const normalizedAccommodations = useMemo(
     () => normalizeAccommodations(data?.accommodations, data?.offers),
     [data, preferredCurrencyCode]
   );
@@ -102,9 +109,11 @@ export const useAccommodationsAndOffers = ({
   // Get accommodations with active offer along with the offer with lowest price/room/night
   // and an optional "accommodation" object transformation via
   // a transformation callback function
-  const accommodations = useMemo(() => {
+  const allAccommodations = useMemo(() => {
     // This includes accommodations with active offers.
-    const filteredAccommodations = allAccommodations.filter((a) => a.offers.length > 0);
+    const filteredAccommodations = normalizedAccommodations.filter(
+      (a) => a.offers.length > 0
+    );
 
     const numberOfDays = daysBetween(
       latestQueryParams?.arrival,
@@ -146,11 +155,23 @@ export const useAccommodationsAndOffers = ({
 
       return { ...transformedAccommodation, priceRange, preferredCurrencyPriceRange };
     });
-  }, [allAccommodations, latestQueryParams]);
+  }, [normalizedAccommodations, latestQueryParams]);
 
-  const offers = useMemo(
-    () => (data?.offers && normalizeOffers(data.offers)) || [],
+  // apply price filter to accommodations if any before returning accommodations
+  const accommodations = useMemo(() => {
+    return filterAccommodationsByPriceRanges(allAccommodations, ...priceFilter);
+  }, [priceFilter, allAccommodations]);
+
+  // all normalized offers prior to filtering
+  const allOffers = useMemo(
+    () => data?.offers && normalizeOffers(data.offers),
     [data, preferredCurrencyCode]
+  );
+
+  // filter offers array by price from price filter
+  const offers = useMemo(
+    () => (allOffers && filterOffersByPriceRanges(allOffers, ...priceFilter)) || [],
+    [allOffers, priceFilter]
   );
 
   const getAccommodationByHotelId = useCallback(
@@ -161,9 +182,11 @@ export const useAccommodationsAndOffers = ({
   return {
     getOffersById,
     getAccommodationById,
+    allAccommodations,
     accommodations,
     activeAccommodations: getActiveAccommodations(accommodations, offers),
     coordinates: data?.coordinates,
+    allOffers,
     offers,
     refetch,
     error,

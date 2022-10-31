@@ -40,6 +40,8 @@ export const getActiveAccommodations = (
   return activeAccommodations;
 };
 
+// get the lowest and highest price for a given set of offers
+// optionally get the prices in preferred currency
 export const getOffersPriceRange = (
   offers: OfferRecord[],
   numberOfDays: number,
