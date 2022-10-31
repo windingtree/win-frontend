@@ -11,8 +11,9 @@ import Logger from '../utils/logger';
 import { checkOutReducer } from './checkOutReducer';
 import { selectedFacilityReducer } from './selectedFacilityReducer';
 import { bookingsReducer } from './bookingsReducer';
-import { defaultCurrencyCode, localStorageConfig, sessionStorageConfig } from '../config';
+import { defaultCurrencyCode } from '../config';
 import { userSettingsReducer } from './userSettingsReducer';
+import { localStorageConfig, sessionStorageConfig } from 'src/config/storageConfig';
 
 const logger = Logger('mainReducer');
 

@@ -8,17 +8,23 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
+import { formatISO } from 'date-fns';
+import { createSearchParams, Link as RouterLink } from 'react-router-dom';
+import { EventItemType, filteredEvents } from 'src/config/events';
+import { getIsInPast } from 'src/utils/date';
 import { Carousel, CarouselSettings } from '../../components/Carousel';
 import Iconify from '../../components/Iconify';
 import Image from '../../components/Image';
-import { EventItemProps, upcomingEvents } from '../../config';
 import { CarouselContainer } from './CarouselContainer';
 
 export default function LandingConferences() {
   const theme = useTheme();
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
 
-  const eventsComponents = upcomingEvents.map((item, index) => (
+  // If less then 3 events are included don't show anything to prevent weird layout shifts
+  if (filteredEvents.length < 3) return null;
+
+  const eventsComponents = filteredEvents.map((item, index) => (
     <ConferenceItem key={index} item={item} />
   ));
 
@@ -68,22 +74,33 @@ export default function LandingConferences() {
 }
 
 type ConferenceItemProps = {
-  item: EventItemProps;
+  item: EventItemType;
 };
 
 function ConferenceItem({ item }: ConferenceItemProps) {
-  const { name, date, url: initialUrl, conferenceUrl, image, location } = item;
-  const urlObj = initialUrl ? new URL(initialUrl, window.location.origin) : undefined;
-  urlObj?.searchParams.set('focusedEvent', name);
+  const { name, startDate, endDate, conferenceUrl, image, location, latlon } = item;
+  const displayedDate = `${startDate} - ${endDate}`;
+  const jsStartDate = new Date(startDate);
+  // if an event starts in the past, use today as the current date
+  const queryStartDate = getIsInPast(jsStartDate) ? new Date() : jsStartDate;
 
-  const url = urlObj?.toString();
+  const params = {
+    roomCount: '1',
+    adultCount: '2',
+    location,
+    endDate: formatISO(Number(new Date(endDate))),
+    startDate: formatISO(Number(queryStartDate)),
+    ...(latlon && { focusedEvent: name })
+  };
+
+  const searchObject = { pathname: '/search', search: `?${createSearchParams(params)}` };
 
   return (
     <Card sx={{ pb: 1, mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
       <Box sx={{ px: 2, pt: 2, pb: 1, position: 'relative' }}>
-        <Link href={url}>
+        <RouterLink to={searchObject}>
           <Image src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />
-        </Link>
+        </RouterLink>
       </Box>
       <Typography textAlign="center" variant="subtitle2">
         <Link href={conferenceUrl} target="_blank" rel="nopener">
@@ -93,7 +110,7 @@ function ConferenceItem({ item }: ConferenceItemProps) {
       <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
         <Iconify icon="uiw:date" sx={{ width: 20, height: 20 }} />
         <Typography variant="body2" textAlign="center" py={1}>
-          {date}
+          {displayedDate}
         </Typography>
       </Stack>
       <Stack
@@ -109,9 +126,9 @@ function ConferenceItem({ item }: ConferenceItemProps) {
         </Typography>
       </Stack>
       <Stack direction="row" justifyContent="center">
-        <Button href={url} variant="outlined">
-          View accommodations
-        </Button>
+        <RouterLink to={searchObject}>
+          <Button variant="outlined">View accommodations</Button>
+        </RouterLink>
       </Stack>
     </Card>
   );
