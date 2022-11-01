@@ -132,6 +132,7 @@ export const SearchPopovers = ({
             >
               Next
             </Button>
+            <Button onClick={() => handleEscape(null, 'done')}>Done</Button>
           </DialogActions>
         </Dialog>
         <Dialog
@@ -148,6 +149,7 @@ export const SearchPopovers = ({
             >
               Next
             </Button>
+            <Button onClick={() => handleEscape(null, 'done')}>Done</Button>
           </DialogActions>
         </Dialog>
         <Dialog
