@@ -493,7 +493,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
           </ToolbarStyle>
         </FormProvider>
       </ResponsiveContainer>
-      <Stack>
+      <Stack alignItems="center">
         {isGroupMode && accommodations.length && (
           // show this message when in group mode and there are accommodations with offers
           <SearchAlert severity="info">
