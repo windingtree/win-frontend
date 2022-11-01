@@ -2,7 +2,7 @@ import { Box, Container, ContainerProps, Stack, SxProps } from '@mui/material';
 import MainFooter from './MainFooter';
 import MainHeader from './MainHeader';
 import { ReactNode, useRef, useEffect } from 'react';
-import { ErrorBoundary } from '../../components/ErrorBoundary';
+import { RoutedErrorBoundary } from '../../components/ErrorBoundary';
 import { useAppHistory } from '../../hooks/useAppHistory';
 
 type Props = {
@@ -32,7 +32,7 @@ export default function MainLayout({
   };
 
   return (
-    <ErrorBoundary>
+    <RoutedErrorBoundary>
       <Stack ref={ref} sx={{ minHeight: 1 }}>
         <MainHeader childrenBelowHeader={childrenBelowHeader} />
         <Container
@@ -45,6 +45,6 @@ export default function MainLayout({
         <Box sx={{ flexGrow: 1 }} />
         {footer && <MainFooter />}
       </Stack>
-    </ErrorBoundary>
+    </RoutedErrorBoundary>
   );
 }

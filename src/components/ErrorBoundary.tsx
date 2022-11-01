@@ -23,11 +23,26 @@ interface RouterProps {
   location: Location;
 }
 
-type WithRouterProps<T> = T & RouterProps;
+type ErrorBoundaryState = {
+  error: Error | null;
+};
+
+type RoutedErrorBoundaryProps = RouterProps & {
+  message?: string;
+  children?: ReactNode;
+  appHistory?: AppHistory;
+};
+
+type GlobalErrorBoundaryProps = {
+  children?: ReactNode;
+};
+
 type OmitRouter<T> = Omit<T, keyof RouterProps>;
 
-function withRouter<T>(Component: ComponentType<OmitRouter<T> & RouterProps>) {
-  return (props: OmitRouter<T>) => {
+function withRouter(
+  Component: ComponentType<OmitRouter<RoutedErrorBoundaryProps> & RouterProps>
+) {
+  return (props: OmitRouter<RoutedErrorBoundaryProps>) => {
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
@@ -44,20 +59,9 @@ function withRouter<T>(Component: ComponentType<OmitRouter<T> & RouterProps>) {
   };
 }
 
-type ErrorBoundaryState = {
-  error: Error | null;
-};
-
-type ErrorBoundaryProps = {
-  message?: string;
-  children?: ReactNode;
-  appHistory?: AppHistory;
-};
-
-class ErrorBoundaryComponent extends Component<
-  WithRouterProps<PropsWithRef<PropsWithChildren<ErrorBoundaryProps>>>,
-  ErrorBoundaryState
-> {
+abstract class ErrorBoundaryComponent<
+  T extends PropsWithRef<PropsWithChildren>
+> extends Component<T, ErrorBoundaryState> {
   constructor(props) {
     super(props);
     this.state = { error: null };
@@ -70,7 +74,9 @@ class ErrorBoundaryComponent extends Component<
     });
     // You can also log error messages to an error reporting service here
   }
+}
 
+class RoutedErrorBoundaryComponent extends ErrorBoundaryComponent<RoutedErrorBoundaryProps> {
   handleBackClick = () => {
     this.props.appHistory?.goBack();
   };
@@ -93,4 +99,24 @@ class ErrorBoundaryComponent extends Component<
   }
 }
 
-export const ErrorBoundary = withRouter<ErrorBoundaryProps>(ErrorBoundaryComponent);
+export class GlobalErrorBoundary extends ErrorBoundaryComponent<GlobalErrorBoundaryProps> {
+  refresh() {
+    window.location.replace('/');
+  }
+
+  render() {
+    if (this.state.error) {
+      <Stack justifyContent={'center'} alignItems={'center'} height={'60vh'}>
+        <Typography variant={'h4'} mb={3}>
+          A fatal error has occurred.
+        </Typography>
+        <Typography variant={'body1'}>{this.state.error.toString()}</Typography>
+        <Button onClick={() => this.refresh()}>Reload</Button>
+      </Stack>;
+    }
+
+    return this.props.children;
+  }
+}
+
+export const RoutedErrorBoundary = withRouter(RoutedErrorBoundaryComponent);
