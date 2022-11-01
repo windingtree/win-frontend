@@ -7,13 +7,14 @@ import MainLayout from 'src/layouts/main';
 import { WinPay } from 'src/containers/checkout/WinPay';
 import { expirationGap } from 'src/config';
 import Logger from 'src/utils/logger';
-import { Breadcrumbs } from 'src/components/Breadcrumbs';
 import { PaymentSuccessCallback } from 'src/components/PaymentCard';
 import { SignInButton } from 'src/components/Web3Modal';
 import { useAppState } from 'src/store';
 import { getOfferId } from 'src/hooks/useCheckout/helpers';
 
 import { CheckoutOverview } from 'src/containers/checkout/CheckoutOverview.tsx';
+import { IconButtonAnimate } from 'src/components/animate';
+import Iconify from 'src/components/Iconify';
 
 const logger = Logger('Checkout');
 
@@ -26,18 +27,6 @@ export const Checkout = () => {
   const { account } = useAppState();
   const isGroupMode = bookingMode === 'group';
   const offerId = !isGroupMode && bookingInfo?.offers && getOfferId(bookingInfo.offers);
-
-  const query = useMemo(() => {
-    const params = {
-      roomCount: bookingInfo?.roomCount?.toString() || '',
-      adultCount: bookingInfo?.adultCount?.toString() || ' ',
-      startDate: bookingInfo?.date?.arrival.toString() ?? '',
-      endDate: bookingInfo?.date?.departure.toString() ?? '',
-      location: bookingInfo?.location ?? ''
-    };
-
-    return createSearchParams(params);
-  }, [bookingInfo, createSearchParams]);
 
   const payment = useMemo(() => {
     if (!bookingInfo) return;
@@ -75,29 +64,14 @@ export const Checkout = () => {
 
   return (
     <MainLayout maxWidth="md">
-      <Breadcrumbs
-        sx={{ mb: 5 }}
-        links={[
-          {
-            name: 'Home',
-            href: '/'
-          },
-          {
-            name: 'Search',
-            href: `/search?${query}`
-          },
-          {
-            name: 'Facility',
-            href: bookingInfo?.accommodation
-              ? `/facility/${bookingInfo?.accommodation.id}`
-              : `/search?${query}`
-          },
-          {
-            name: 'Guest Info',
-            href: isGroupMode ? '/org-details' : '/guest-info'
-          }
-        ]}
-      />
+      <IconButtonAnimate
+        size="small"
+        sx={{ p: 0.5 }}
+        color="default"
+        onClick={() => navigate(-1)}
+      >
+        <Iconify icon="eva:arrow-ios-back-fill" />
+      </IconButtonAnimate>
       {!payment && (
         <Typography>Missing data to do the payment. Please try again.</Typography>
       )}
