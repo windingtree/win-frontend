@@ -45,7 +45,8 @@ export const OfferInformation = ({
           {name}
         </Typography>
         <Typography variant="body1" mb={1}>
-          {adults > 0 && `Book your ${name} for ${adults} ${getAdultText(adults)} `}
+          {adults > 0 &&
+            `Book your ${name.toLowerCase} for ${adults} ${getAdultText(adults)} `}
           {children > 0 && `and ${children} ${getChildrenText(children)}`}
         </Typography>
       </Box>

@@ -100,6 +100,7 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
   const { roomCount, adultCount, dateRange } = values;
   const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
   const endDate = dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate);
+
   const searchProps = {
     arrival: startDate,
     departure: endDate,
@@ -107,8 +108,10 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
     roomCount: Number(roomCount)
   };
 
-  const { offersQuery } = useAccommodation({ id, searchProps });
+  const { accommodationQuery, offersQuery } = useAccommodation({ id, searchProps });
   const { refetch } = offersQuery;
+
+  console.log(accommodationQuery.data);
 
   return (
     <FormProvider methods={methods} onSubmit={() => refetch()}>

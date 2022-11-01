@@ -18,7 +18,7 @@ export interface OfferResponseType {
 
 export async function fetchAccommodation(id: string): Promise<AccommodationResponseType> {
   const { data } = await winClient
-    .get<WinAccommodation>(`/accommodations/${id}`)
+    .get<WinAccommodation>(`/api/accommodations/${id}`)
     .catch((_) => {
       throw new Error('Something went wrong. Please try again.');
     });
@@ -55,7 +55,7 @@ export const fetchOffers = async ({
   };
 
   const { data } = await winClient
-    .post<SearchResults>(`/accommodations/${id}`, requestBody)
+    .post<SearchResults>(`/api/accommodations/${id}`, requestBody)
     .catch((_) => {
       throw new Error('Something went wrong. Please try again.');
     });
