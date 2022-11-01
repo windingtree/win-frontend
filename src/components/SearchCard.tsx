@@ -1,5 +1,5 @@
 import { CSSProperties, forwardRef, useMemo } from 'react';
-import { createSearchParams, Link, useNavigate } from 'react-router-dom';
+import { createSearchParams, Link } from 'react-router-dom';
 import {
   Box,
   Stack,
@@ -31,11 +31,14 @@ export interface SearchCardProps {
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
   ({ mapCard, facility, focusedEvent }, ref) => {
-    const navigate = useNavigate();
     const theme = useTheme();
     const { isGroupMode, latestQueryParams } = useAccommodationsAndOffers();
     const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useAppDispatch();
+    const prices = useMemo(
+      () => facility.offers.map((o) => Number(o.price.public)),
+      [facility]
+    );
 
     if (!latestQueryParams) return null;
     const { roomCount, adultCount, departure, arrival } = latestQueryParams;
@@ -63,11 +66,6 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
       : {
           marginBottom: '8px'
         };
-
-    const prices = useMemo(
-      () => facility.offers.map((o) => Number(o.price.public)),
-      [facility]
-    );
 
     const searchParams = {
       roomCount: roomCount.toString(),
@@ -125,8 +123,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               pathname: `/facility/${facility.providerHotelId}`,
               search: `?${createSearchParams(searchParams)}`
             }}
-            target="_blank"
-            rel="noopener noreferrer"
+            // target="_blank"
+            // rel="noopener noreferrer"
             style={{ textDecoration: 'none', color: 'inherit' }}
           >
             <Stack

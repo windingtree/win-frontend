@@ -27,11 +27,7 @@ export async function fetchAccommodation(id: string): Promise<AccommodationRespo
     throw new Error('Something went wrong. Please try again.');
   }
 
-  const accommodation = data;
-
-  return {
-    accommodation
-  };
+  return { accommodation: data };
 }
 
 export const fetchOffers = async ({
@@ -41,11 +37,16 @@ export const fetchOffers = async ({
   id: string;
   searchProps: SearchPropsType;
 }): Promise<OfferResponseType> => {
-  const { arrival, departure, roomCount, adultCount, childrenCount } = searchProps;
+  const { arrival, departure, roomCount, adultCount, childrenCount, location } =
+    searchProps;
   const passengersBody = getPassengersBody(adultCount, childrenCount);
 
   const requestBody = {
     accommodation: {
+      location: {
+        ...location,
+        radius: 1000
+      },
       arrival,
       departure,
       roomCount
@@ -69,7 +70,8 @@ export const fetchOffers = async ({
     arrival,
     roomCount,
     adultCount,
-    childrenCount
+    childrenCount,
+    location
   };
 
   return {

@@ -90,6 +90,7 @@
     "crypto-browserify": "^3.12.0",
     "date-fns": "^2.29.1",
     "dayjs": "^1.11.5",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "ethers": "^5.7.1",
     "framer-motion": "^7.2.0",
@@ -109,6 +110,7 @@
     "react-blockies": "^1.4.1",
     "react-date-range": "^1.4.0",
     "react-dom": "^18.2.0",
+    "react-draggable": "^4.4.5",
     "react-grid-system": "^8.1.6",
     "react-hook-form": "^7.34.2",
     "react-image-gallery": "1.2.8",
@@ -125,8 +127,7 @@
     "uuid": "8.3.2",
     "web-vitals": "^3.0.0-rc.0",
     "web3modal": "^1.9.9",
-    "yup": "^0.32.11",
-    "react-draggable": "^4.4.5"
+    "yup": "^0.32.11"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"

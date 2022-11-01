@@ -230,7 +230,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
       setOpen(false);
       return;
     }
-  }, [roomCount, adultCount, dateRange, location, refetch]);
+  }, [dateRange, roomCount, adultCount, location, navigate]);
 
   // Prevent error messages from persisting on path change
   // clear errors when path changes
@@ -271,7 +271,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     if (includesAllSearchParams) {
       refetch();
     }
-  }, [search]);
+  }, [pathname, refetch, search, searchParams]);
 
   useEffect(() => {
     if (pathname !== '/search' && pathname !== '/') return;
@@ -296,7 +296,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
         }
       ]);
     }
-  }, [latestQueryParams, pathname]);
+  }, [latestQueryParams, pathname, searchParams, setValue]);
 
   /**
    * Logic in relation to styling and textual UI

@@ -61,18 +61,16 @@ export const FacilityOffersSelectMultiple = () => {
     [accommodations, id]
   );
 
-  if (!latestQueryParams || !accommodation) return null;
+  const offers = accommodation && sortAccommodationOffersByPrice(accommodation);
 
-  const offers = sortAccommodationOffersByPrice(accommodation);
-
-  const defaultRoomCount = latestQueryParams.roomCount
+  const defaultRoomCount = latestQueryParams?.roomCount
     ? latestQueryParams.roomCount
     : GROUP_MODE_ROOM_COUNT;
 
   // ----------------------------------------------------------------------
   const defaultOffers = useMemo(
     () => getOffersWithQuantity(offers, defaultRoomCount),
-    [offers]
+    [offers, getOffersWithQuantity]
   );
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(GroupOffersSchema),
@@ -82,6 +80,9 @@ export const FacilityOffersSelectMultiple = () => {
   const values = watch();
 
   // ----------------------------------------------------------------------
+
+  if (!latestQueryParams || !accommodation) return null;
+
   const { arrival, departure, adultCount, childrenCount, location } = latestQueryParams;
   const nightCount = daysBetween(arrival, departure);
   const guestCount = (adultCount ?? 0) + (childrenCount ?? 0);

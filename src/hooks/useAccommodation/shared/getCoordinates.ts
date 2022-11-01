@@ -1,11 +1,7 @@
 import axios from 'axios';
+import { CoordinatesType } from 'src/utils/accommodation';
 
 export class InvalidLocationError extends Error {}
-
-export interface Coordinates {
-  lat: number;
-  lon: number;
-}
 
 export const getCoordinates = async (location) => {
   const { data: coordinatesData } = await axios
@@ -25,7 +21,7 @@ export const getCoordinates = async (location) => {
     );
   }
 
-  const normalizedCoordinates: Coordinates = {
+  const normalizedCoordinates: CoordinatesType = {
     lat: Number(coordinates.lat),
     lon: Number(coordinates.lon)
   };

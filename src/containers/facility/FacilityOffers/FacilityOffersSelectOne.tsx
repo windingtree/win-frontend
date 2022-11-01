@@ -12,9 +12,10 @@ export const FacilityOffersSelectOne = () => {
     useAccommodationsAndOffers();
   const params = useParams();
   const id: string = params.id as string;
+
   const accommodation = useMemo(
     () => getAccommodationById(accommodations, id),
-    [accommodations, id]
+    [accommodations, id, getAccommodationById]
   );
 
   if (!latestQueryParams || !accommodation) return null;

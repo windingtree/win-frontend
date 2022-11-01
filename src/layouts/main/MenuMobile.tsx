@@ -44,6 +44,7 @@ export default function MenuMobile({ isOffset, navConfig }: MenuProps) {
     if (drawerOpen) {
       handleDrawerClose();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const handleOpen = () => {

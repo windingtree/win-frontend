@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { parseISO } from 'date-fns';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { FormProvider } from 'src/components/hook-form';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
-import { useAccommodation } from 'src/hooks/useAccommodation';
+import { SearchPropsType, useAccommodation } from 'src/hooks/useAccommodation';
 import { convertToLocalTime, daysBetween } from 'src/utils/date';
 import * as Yup from 'yup';
 
@@ -70,12 +70,11 @@ export type Props = {
 };
 export const FacilitySearchFormProvider = ({ children }: Props) => {
   const { id } = useParams();
-  if (!id) return null;
-
   const [searchParams] = useSearchParams();
+
   const defaultValues: FormValuesProps = useMemo(() => {
-    const startDateParams = searchParams.get('startDate');
-    const endDateParams = searchParams.get('endDate');
+    const startDateParams = searchParams.get('arrival');
+    const endDateParams = searchParams.get('departure');
 
     return {
       adultCount: Number(searchParams.get('adultCount')) || 2,
@@ -96,22 +95,44 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
   });
   const { watch } = methods;
   const values = watch();
-
   const { roomCount, adultCount, dateRange } = values;
-  const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
-  const endDate = dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate);
+  const [searchProps, setSearchProps] = useState<SearchPropsType | undefined>();
 
-  const searchProps = {
-    arrival: startDate,
-    departure: endDate,
-    adultCount: Number(adultCount),
-    roomCount: Number(roomCount)
-  };
-
+  const arrival = useMemo(
+    () => dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate),
+    [dateRange]
+  );
+  const departure = useMemo(
+    () => dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate),
+    [dateRange]
+  );
   const { accommodationQuery, offersQuery } = useAccommodation({ id, searchProps });
+  const { data } = accommodationQuery;
+
   const { refetch } = offersQuery;
 
-  console.log(accommodationQuery.data);
+  useEffect(() => {
+    const location = data?.accommodation?.location.coordinates;
+
+    // TODO: location can eventually be removed as the BE will support is searching without the location
+    if (!location) return;
+    setSearchProps({
+      location: { lat: location[0], lon: location[1] },
+      arrival,
+      departure,
+      roomCount: Number(roomCount),
+      adultCount: Number(adultCount)
+    });
+  }, [
+    arrival,
+    setSearchProps,
+    data?.accommodation?.location.coordinates,
+    departure,
+    roomCount,
+    adultCount
+  ]);
+
+  if (!id) return null;
 
   return (
     <FormProvider methods={methods} onSubmit={() => refetch()}>

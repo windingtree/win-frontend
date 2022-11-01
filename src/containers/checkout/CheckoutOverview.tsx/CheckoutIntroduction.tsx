@@ -11,6 +11,11 @@ import FallbackImage from 'src/images/hotel-fallback.webp';
 export const CheckoutIntroduction = () => {
   const theme = useTheme();
   const { bookingMode, bookingInfo } = useCheckout();
+  const accommodationImage = useMemo(() => {
+    if (bookingInfo?.accommodation) {
+      return sortByLargestImage(bookingInfo.accommodation.media)[0];
+    }
+  }, [bookingInfo]);
 
   if (!bookingInfo || !bookingInfo.pricing || !bookingInfo.accommodation) {
     // don't render anything without pricing info, or accommodation info
@@ -39,12 +44,6 @@ export const CheckoutIntroduction = () => {
 
   const showUSDPrice =
     formattedUsdPrice && bookingInfo.pricing.offerCurrency.currency != 'USD';
-
-  const accommodationImage = useMemo(() => {
-    if (bookingInfo.accommodation) {
-      return sortByLargestImage(bookingInfo.accommodation.media)[0];
-    }
-  }, [bookingInfo]);
 
   return (
     <Box

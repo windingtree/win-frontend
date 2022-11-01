@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
-import { getLargestImages, sortByLargestImage } from '../../utils/accommodation';
-import { daysBetween } from '../../utils/date';
 import {
-  AccommodationsAndOffersResponse,
-  Coordinates,
-  fetchAccommodationsAndOffers
-} from './api';
+  CoordinatesType,
+  getLargestImages,
+  sortByLargestImage
+} from '../../utils/accommodation';
+import { daysBetween } from '../../utils/date';
+import { AccommodationsAndOffersResponse, fetchAccommodationsAndOffers } from './api';
 import {
   getAccommodationById,
   getActiveAccommodations,
@@ -41,7 +41,7 @@ export interface EventInfo {
 export type AccommodationTransformFnParams = {
   accommodation: AccommodationWithId;
   searchProps?: SearchTypeProps | void;
-  searchResultsCenter?: Coordinates;
+  searchResultsCenter?: CoordinatesType;
 };
 
 export type AccommodationTransformFn = (
@@ -59,7 +59,7 @@ export const useAccommodationsAndOffers = ({
     AccommodationsAndOffersResponse | undefined,
     Error
   >(
-    ['search-accommodations'],
+    ['accommodations-and-offers'],
     async () => {
       if (!searchProps) {
         return;

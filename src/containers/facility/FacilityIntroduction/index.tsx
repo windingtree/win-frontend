@@ -1,11 +1,8 @@
 import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
-import {
-  AccommodationWithId,
-  getGroupMode
-} from 'src/hooks/useAccommodationsAndOffers/helpers';
-import { MediaItem } from '@windingtree/glider-types/dist/win';
+import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers/helpers';
+import { MediaItem, WinAccommodation } from '@windingtree/glider-types/dist/win';
 import {
   Button,
   Dialog,
@@ -31,6 +28,7 @@ import 'react-image-lightbox/style.css';
 import { LightboxModal } from 'src/components/LightboxModal';
 import Iconify from 'src/components/Iconify';
 import { currencySymbolMap } from 'src/utils/currencies';
+import { useAccommodation } from 'src/hooks/useAccommodation';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -235,7 +233,7 @@ const HeaderTitle = ({
 }: {
   name?: string;
   address?: string;
-  accommodation: AccommodationWithId | null;
+  accommodation: WinAccommodation | null;
 }) => {
   const theme = useTheme();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -267,27 +265,23 @@ export const FacilityIntroduction = ({
 }: {
   scrollToDetailImages: () => void;
 }) => {
-  const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
   const { id } = useParams();
-
   const [galleryOpen, setGalleryOpen] = useState<boolean>(false);
   const [slideOpen, setSlideOpen] = useState<boolean>(false);
   const [slideIndex, setSlideIndex] = useState<number>(0);
-
-  const accommodation: AccommodationWithId | null = getAccommodationById(
-    accommodations,
-    String(id)
-  );
+  const { accommodationQuery } = useAccommodation({ id });
+  const { data } = accommodationQuery;
+  const accommodation = data?.accommodation;
 
   const sortedImages: MediaItem[] = useMemo(
     () => sortByLargestImage(accommodation?.media ?? []),
-    [accommodation?.media]
+    [accommodation]
   );
 
   // get largest images and their urls
   const largestImages = useMemo(() => getLargestImages(sortedImages), [sortedImages]);
   const largestImagesUrls = useMemo(
-    () => largestImages.map(({ url }) => url as string),
+    () => largestImages && largestImages.map(({ url }) => url as string),
     [largestImages]
   );
 
@@ -301,7 +295,7 @@ export const FacilityIntroduction = ({
 
   // gallery handlers
   const handleOpenGallery = () => {
-    if (largestImages.length > 5) {
+    if (largestImages?.length > 5) {
       setGalleryOpen(true);
     } else {
       handleCloseGallery();
@@ -314,6 +308,8 @@ export const FacilityIntroduction = ({
   const [mainImage, ...rest] = sortedImages;
   const address = buildAccommodationAddress(accommodation);
 
+  if (!accommodation) return null;
+
   return (
     <>
       <Stack direction={{ md: 'row' }}>
@@ -324,7 +320,6 @@ export const FacilityIntroduction = ({
         />
         <HeaderButton scrollToDetailImages={scrollToDetailImages} />
       </Stack>
-
       <Container>
         <FacilityMainImage src={mainImage?.url} />
         <FacilityDetailImages images={rest} />
