@@ -119,7 +119,10 @@ export const displayPriceFromPrice = (price: Price): string => {
   return displayPriceFromValues(value, currency, decimalPlaces);
 };
 
-export const displayPriceFromPriceFormat = (priceFormat: PriceFormat): string => {
+export const displayPriceFromPriceFormat = (
+  priceFormat: PriceFormat | undefined
+): string => {
+  if (!priceFormat) return '';
   const { currency, price, decimals } = priceFormat;
   return displayPriceFromValues(price, currency, decimals);
 };
@@ -140,6 +143,6 @@ export const displayPriceFromValues = (
   if (numValue === undefined) return '';
 
   return `${currencySymbol} ${
-    decimals ? `${numValue.toFixed(decimals)}` : `${numValue}`
+    decimals !== undefined ? `${numValue.toFixed(decimals)}` : `${numValue}`
   }`;
 };

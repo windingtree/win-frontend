@@ -18,7 +18,7 @@ import {
   useAccommodationsAndOffers
 } from '../../hooks/useAccommodationsAndOffers';
 import { useAppDispatch } from 'src/store';
-import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
+import { displayPriceFromPriceFormat, displayPriceFromValues } from '../../utils/price';
 
 export interface SearchCardProps {
   facility: AccommodationWithId;
@@ -72,19 +72,10 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
       return null;
     }
 
-    const currencySymbol =
-      (facility.preferredCurrencyPriceRange &&
-        currencySymbolMap[facility.preferredCurrencyPriceRange.lowestPrice.currency]) ??
-      (facility.priceRange &&
-        currencySymbolMap[facility.priceRange.lowestPrice.currency]);
+    const priceRange = facility.preferredCurrencyPriceRange ?? facility.priceRange;
+    const currency = priceRange?.lowestPrice.currency;
 
-    const pricePerNight =
-      (facility.preferredCurrencyPriceRange?.lowestPrice &&
-        facility.preferredCurrencyPriceRange.lowestPrice.price.toFixed(2)) ??
-      (facility.priceRange?.lowestPrice &&
-        facility.priceRange.lowestPrice.price.toFixed(2));
-
-    const totalPrice = Math.min(...prices).toFixed(2);
+    const totalPrice = Math.min(...prices);
 
     return (
       <Card ref={ref} style={{ ...smallCardStyle }}>
@@ -194,8 +185,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                     From
                   </Typography>
                   <Typography variant="subtitle2">
-                    {currencySymbol}
-                    {pricePerNight}
+                    {displayPriceFromPriceFormat(priceRange?.lowestPrice)}
                     /night
                   </Typography>
                 </Stack>
@@ -208,8 +198,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                       variant="caption"
                       sx={{ color: 'text.secondary' }}
                     >
-                      {currencySymbol}
-                      {totalPrice} total
+                      {displayPriceFromValues(totalPrice, currency)} total
                     </Typography>
                   </Stack>
                 )}
