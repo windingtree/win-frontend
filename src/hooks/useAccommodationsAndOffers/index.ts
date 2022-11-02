@@ -126,15 +126,17 @@ export const useAccommodationsAndOffers = ({
       // get price ranges in local and preferred currencies
       const priceRange = getOffersPriceRange(
         accommodation.offers,
+        true,
+        false,
         numberOfDays,
-        nbRooms,
-        false
+        nbRooms
       );
       const preferredCurrencyPriceRange = getOffersPriceRange(
         accommodation.offers,
+        true,
+        true,
         numberOfDays,
-        nbRooms,
-        true
+        nbRooms
       );
 
       // return only high res images

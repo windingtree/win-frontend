@@ -126,10 +126,11 @@ export const displayPriceFromPriceFormat = (priceFormat: PriceFormat): string =>
 
 export const displayPriceFromValues = (
   price: number | string | undefined,
-  currency: string,
+  currency: string | undefined,
   decimalPlaces?: number | undefined
 ): string => {
   // ideally this should have already been provided
+  if (!currency) return '';
   const decimals = decimalPlaces ?? currencyCodes.code(currency)?.digits;
   const currencySymbol = currencySymbolMap[currency];
   if (price === undefined) return '';

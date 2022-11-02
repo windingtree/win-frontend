@@ -42,11 +42,22 @@ export const getActiveAccommodations = (
 
 // get the lowest and highest price for a given set of offers
 // optionally get the prices in preferred currency
+/**
+ * Get the lowest and highest price, total or per night/room from an array of offers
+ *
+ * @param offers offers array
+ * @param perNightPerRoom if "true" get price per night/room, "false" to get total price
+ * @param getPreferredCurrency return price ranges of the preferred currency where available
+ * @param numberOfDays optional - required when perNightPerRoom is true
+ * @param numberOfRooms optional - required when perNightPerRoom is true
+ * @returns a PriceRange or undefined
+ */
 export const getOffersPriceRange = (
   offers: OfferRecord[],
-  numberOfDays: number,
-  numberOfRooms: number,
-  getPreferredCurrency = false
+  perNightPerRoom = true,
+  getPreferredCurrency = false,
+  numberOfDays?: number,
+  numberOfRooms?: number
 ): PriceRange | undefined => {
   let priceRange: PriceRange | undefined = undefined;
 
@@ -61,10 +72,22 @@ export const getOffersPriceRange = (
 
       if (!price || !currency) return;
 
-      return {
-        price: Number(price) / (numberOfDays * numberOfRooms),
-        currency
-      };
+      if (perNightPerRoom) {
+        if (!numberOfDays || !numberOfRooms) {
+          throw new Error(
+            'Error: To get a nightly price range "numberOfDays" and "numberOfRooms" must be provided'
+          );
+        }
+        return {
+          price: Number(price) / (numberOfDays * numberOfRooms),
+          currency
+        };
+      } else {
+        return {
+          price: Number(price),
+          currency
+        };
+      }
     })
     .forEach((currentVal) => {
       if (!currentVal) return;
