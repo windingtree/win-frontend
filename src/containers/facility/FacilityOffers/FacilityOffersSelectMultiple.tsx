@@ -42,7 +42,7 @@ export const GroupOffersSchema = Yup.object().shape({
   )
 });
 
-type FormValuesProps = {
+export type FacilityOffersSelectMultipleFormProps = {
   offers: OfferCheckoutType[];
 };
 
@@ -74,7 +74,7 @@ export const FacilityOffersSelectMultiple = () => {
     () => getOffersWithQuantity(offers, defaultRoomCount),
     [offers]
   );
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm<FacilityOffersSelectMultipleFormProps>({
     resolver: yupResolver(GroupOffersSchema),
     defaultValues: { offers: defaultOffers } as FieldValues
   });
@@ -88,7 +88,7 @@ export const FacilityOffersSelectMultiple = () => {
   const roomCount = values.offers.reduce(getTotalRoomCountReducer, 0);
   const summaryBoxHeight = 210;
 
-  const onSubmit = (values: FormValuesProps) => {
+  const onSubmit = (values: FacilityOffersSelectMultipleFormProps) => {
     if (roomCount > guestCount) {
       return enqueueSnackbar(`Please select more persons than rooms to continue.`, {
         variant: 'error'

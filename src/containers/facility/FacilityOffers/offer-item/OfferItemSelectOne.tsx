@@ -13,6 +13,9 @@ import Logger from 'src/utils/logger';
 import { OfferInformation } from './shared/OfferInformation';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { useSnackbar } from 'notistack';
+import { useCurrencies } from '../../../../hooks/useCurrencies';
+import { useUserSettings } from '../../../../hooks/useUserSettings';
+import { displayPriceFromPrice } from '../../../../utils/price';
 
 const logger = Logger('OfferItemSelectOne');
 
@@ -37,6 +40,8 @@ export const OfferItemSelectOne: React.FC<{
     () => getAccommodationById(accommodations, facilityId),
     [accommodations, facilityId]
   );
+  const { convertPriceCurrency } = useCurrencies();
+  const { preferredCurrencyCode } = useUserSettings();
 
   const handleBook = useCallback(async () => {
     try {
@@ -86,7 +91,7 @@ export const OfferItemSelectOne: React.FC<{
         logger.info('Get priced offer successfully');
         navigate('/guest-info');
       } else {
-        throw new Error('Somethin went wrong!');
+        throw new Error('Something went wrong!');
       }
     } catch (error) {
       enqueueSnackbar('Oops, something has gone wrong. Please try again.', {
@@ -95,6 +100,14 @@ export const OfferItemSelectOne: React.FC<{
       setLoading(false);
     }
   }, [dispatch]);
+
+  // convert price to user preferred currency or keep local when not available
+  const localPrice = offer.price;
+  const preferredCurrencyPrice = convertPriceCurrency({
+    price: localPrice,
+    targetCurrency: preferredCurrencyCode
+  });
+  const price = preferredCurrencyPrice ?? localPrice;
 
   return (
     <Box mb={5}>
@@ -112,7 +125,8 @@ export const OfferItemSelectOne: React.FC<{
               rowGap={theme.spacing(2)}
             >
               <Typography variant="body1" textAlign={'right'}>
-                {`${offer.price.currency} ${offer.price.public} `}
+                {/* {`${offer.price.currency} ${offer.price.public} `} */}
+                {displayPriceFromPrice(price)}
               </Typography>
               <Typography textAlign={'right'}>
                 {`Price for ${numberOfDays} nights, ${roomsNumber} room(s)`}
