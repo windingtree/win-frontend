@@ -27,7 +27,7 @@ export const Facility = () => {
       focusedEvent: latestQueryParams.focusedEvent ?? ''
     };
     return createSearchParams(params);
-  }, [latestQueryParams, createSearchParams]);
+  }, [latestQueryParams]);
 
   return (
     <MainLayout maxWidth="lg">

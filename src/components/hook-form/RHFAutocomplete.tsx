@@ -41,29 +41,30 @@ export const RHFAutocomplete = <T extends StringOrObject>({
     ? (option, value) => freeSolo || option[optionValueField] === value
     : isOptionEqualToValue;
 
-  const getOptionLabelFn = useCallback(
-    (option) => {
-      if (!getOptionLabel) return;
-      // if option is an object with a field for label return the label value
-      if (option[optionLabelField]) return option[optionLabelField];
+  const getOptionLabelFn =
+    getOptionLabel ??
+    useCallback(
+      (option) => {
+        // if option is an object with a field for label return the label value
+        if (option[optionLabelField]) return option[optionLabelField];
 
-      let foundOption;
-      // if 'option' is a string and 'options' is an array of objects
-      // we need to look up the corresponding object with this 'option' value
-      if (typeof option === 'string') {
-        foundOption = findObjectWithPropertyAndValue(
-          options as Record<string, unknown>[],
-          optionValueField,
-          option
-        );
-      }
+        let foundOption;
+        // if 'option' is a string and 'options' is an array of objects
+        // we need to look up the corresponding object with this 'option' value
+        if (typeof option === 'string') {
+          foundOption = findObjectWithPropertyAndValue(
+            options as Record<string, unknown>[],
+            optionValueField,
+            option
+          );
+        }
 
-      // return the found option object's label or the literal string if no object found
-      const label = foundOption ? foundOption[optionLabelField] : option;
-      return label;
-    },
-    [getOptionLabel, optionLabelField, options, optionValueField]
-  );
+        // return the found option object's label or the literal string if no object found
+        const label = foundOption ? foundOption[optionLabelField] : option;
+        return label;
+      },
+      [options, optionValueField, optionLabelField]
+    );
 
   return (
     <Controller

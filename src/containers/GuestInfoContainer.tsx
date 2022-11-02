@@ -117,7 +117,7 @@ export const GuestInfoContainer = () => {
         setError(message);
       }
     },
-    [accommodationId]
+    [accommodationId, enqueueSnackbar, navigate, offerId, setOrganizerInfo]
   );
 
   return (

@@ -162,7 +162,8 @@ export const useAccommodationsAndOffers = ({
   // all normalized offers prior to filtering
   const allOffers = useMemo(
     () => data?.offers && normalizeOffers(data.offers),
-    [data, preferredCurrencyCode]
+
+    [data, preferredCurrencyCode, normalizeOffers]
   );
 
   // filter offers array by price from price filter

@@ -33,6 +33,7 @@ import { SearchLocationInput } from './SearchLocationInput';
 import { ResponsiveContainer } from '../ResponsiveContainer';
 import { SearchAlert } from './SearchAlert';
 import { usePriceFilter } from '../../hooks/usePriceFilter';
+import { DateRangeType } from 'src/components/hook-form/RHFDateRangePicker';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -56,11 +57,7 @@ type FormValuesProps = {
   location: string;
   roomCount: number | string;
   adultCount: number | string;
-  dateRange: {
-    startDate: Date | null;
-    endDate: Date | null;
-    key: string;
-  }[];
+  dateRange: DateRangeType[];
 };
 
 type FormInputFields = 'location' | 'dateRange' | 'adultCount' | 'roomCount';
@@ -77,7 +74,10 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const { pathname, search } = useLocation();
   const [open, setOpen] = useState<boolean>(false);
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
-  const isCloseable: boolean = useMemo(() => isMobileView && !!closeable, [isMobileView]);
+  const isCloseable: boolean = useMemo(
+    () => isMobileView && !!closeable,
+    [closeable, isMobileView]
+  );
   const { priceFilter } = usePriceFilter();
 
   // monitor error state locally
@@ -460,6 +460,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                   type="submit"
                   disabled={isFetching}
                   variant="contained"
+                  disableRipple={isMobileView}
                   size={buttonSize}
                   sx={{
                     minWidth: isMobileView ? '320px' : '160px',

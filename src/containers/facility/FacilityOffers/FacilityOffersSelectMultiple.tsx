@@ -58,7 +58,7 @@ export const FacilityOffersSelectMultiple = () => {
   const id: string = params.id as string;
   const accommodation = useMemo(
     () => getAccommodationById(accommodations, id),
-    [accommodations, id]
+    [accommodations, getAccommodationById, id]
   );
 
   const offers = accommodation && sortAccommodationOffersByPrice(accommodation);
@@ -70,7 +70,7 @@ export const FacilityOffersSelectMultiple = () => {
   // ----------------------------------------------------------------------
   const defaultOffers = useMemo(
     () => getOffersWithQuantity(offers, defaultRoomCount),
-    [offers, getOffersWithQuantity]
+    [offers, defaultRoomCount]
   );
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(GroupOffersSchema),

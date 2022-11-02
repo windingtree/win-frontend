@@ -94,8 +94,7 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
     defaultValues
   });
   const { watch } = methods;
-  const values = watch();
-  const { roomCount, adultCount, dateRange } = values;
+  const { roomCount, adultCount, dateRange } = watch();
   const [searchProps, setSearchProps] = useState<SearchPropsType | undefined>();
 
   const arrival = useMemo(
@@ -108,9 +107,11 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
   );
   const { accommodationQuery, offersQuery } = useAccommodation({ id, searchProps });
   const { data } = accommodationQuery;
-
   const { refetch } = offersQuery;
 
+  /**
+   * Set the state which is eventually being send to the BE to retrieve offers of an accommodation.
+   */
   useEffect(() => {
     const location = data?.accommodation?.location.coordinates;
 

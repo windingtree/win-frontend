@@ -111,7 +111,7 @@ export const Results: React.FC = () => {
         top: '25%'
       });
     }
-  }, [mode]);
+  }, [isMobileSafari, mode]);
 
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();

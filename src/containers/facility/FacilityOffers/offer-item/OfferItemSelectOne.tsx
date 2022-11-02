@@ -35,7 +35,7 @@ export const OfferItemSelectOne: React.FC<{
   const { enqueueSnackbar } = useSnackbar();
   const accommodation = useMemo(
     () => getAccommodationById(accommodations, facilityId),
-    [accommodations, facilityId]
+    [accommodations, facilityId, getAccommodationById]
   );
 
   const handleBook = useCallback(async () => {
