@@ -27,7 +27,7 @@ export const useAppHistory = (): AppHistory => {
     if (appHistory.length > 1) {
       window.location.replace(appHistory[appHistory.length - 2]);
     } else {
-      window.location.replace(window.location.hostname);
+      window.location.replace('/');
     }
     popHistory();
   }, [appHistory, popHistory]);

@@ -33,6 +33,7 @@ import { SearchLocationInput, SearchLocationInputElement } from './SearchLocatio
 import { ResponsiveContainer } from '../ResponsiveContainer';
 import { SearchAlert } from './SearchAlert';
 import { usePriceFilter } from '../../hooks/usePriceFilter';
+import { SearchFilterDialog } from './SearchFilterDialog';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -97,7 +98,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const locationRef = useRef<SearchLocationInputElement>(null);
   const filterRef = useRef<HTMLButtonElement>(null);
   const filterIconButtonRef = useRef<HTMLLabelElement>(null);
-  const submitRef = useRef<HTMLButtonElement>(null);
+  const submitRef = useRef<HTMLButtonElement | null>(null);
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
   );
@@ -106,6 +107,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   >(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [locationPopoverOpen, setLocationPopoverOpen] = useState(false);
+  const [filterDialogOpen, setFilterDialogOpen] = useState(false);
 
   // used to highlight inputs in mobile view
   const [highlightedInput, setHighlightedInput] = useState<FormInputFields>();
@@ -239,7 +241,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
       setOpen(false);
       return;
     }
-  }, [roomCount, adultCount, dateRange, location, refetch]);
+  }, [roomCount, adultCount, dateRange, location, refetch, open]);
 
   // Prevent error messages from persisting on path change
   // clear errors when path changes
@@ -391,7 +393,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
           <Grid item xs={'auto'} mx={1}>
             <IconButton
               onClick={() => {
-                setFilterAnchorEl(filterIconButtonRef.current);
+                setFilterDialogOpen(true);
               }}
               color="primary"
               component="label"
@@ -403,14 +405,19 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
           </Grid>
         </Grid>
       </Box>
-
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <SearchPopovers {...popOversState} />
-        <ResponsiveContainer
-          open={open}
-          isCloseable={isCloseable}
-          handleClose={() => setOpen(false)}
-        >
+      {/* only show in mobile  */}
+      {isMobileView && (
+        <Box>
+          <SearchFilterDialog open={filterDialogOpen} setOpen={setFilterDialogOpen} />
+        </Box>
+      )}
+      <ResponsiveContainer
+        open={open}
+        isCloseable={isCloseable}
+        handleClose={() => setOpen(false)}
+      >
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <SearchPopovers {...popOversState} />
           <ToolbarStyle ref={formRef}>
             <Stack
               direction={{ xs: 'column', md: 'row' }}
@@ -480,7 +487,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                     whiteSpace: 'nowrap',
                     ...fontStyling
                   }}
-                  ref={submitRef}
+                  ref={(ref) => (submitRef.current = ref)}
                 >
                   Search
                 </Button>
@@ -507,8 +514,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
               ) : null}
             </Stack>
           </ToolbarStyle>
-        </ResponsiveContainer>
-      </FormProvider>
+        </FormProvider>
+      </ResponsiveContainer>
 
       <Stack>
         {isGroupMode && allAccommodations.length && (
