@@ -48,3 +48,64 @@ export const isPriceRangeWithinPriceRange = (
 
   return isWithin;
 };
+
+export const getPriceRangeFromPriceRanges = (
+  priceRanges: PriceRange[],
+  currency: string,
+  fromLowestOrHighest: 'lowestPrices' | 'highestPrices'
+): PriceRange | undefined => {
+  let lowest: PriceRange | null = null,
+    highest: PriceRange | null = null;
+  priceRanges.forEach((priceRange) => {
+    if (
+      priceRange.lowestPrice.currency !== currency ||
+      priceRange.highestPrice.currency !== currency
+    )
+      return;
+
+    if (fromLowestOrHighest === 'lowestPrices') {
+      if (lowest) {
+        lowest =
+          priceRange.lowestPrice.price > lowest.lowestPrice.price ? lowest : priceRange;
+      } else {
+        lowest = priceRange;
+      }
+      if (highest) {
+        highest =
+          priceRange.lowestPrice.price < highest.lowestPrice.price ? highest : priceRange;
+      } else {
+        highest = priceRange;
+      }
+    } else if (fromLowestOrHighest === 'highestPrices') {
+      if (lowest) {
+        lowest =
+          priceRange.highestPrice.price > lowest.highestPrice.price ? lowest : priceRange;
+      } else {
+        lowest = priceRange;
+      }
+      if (highest) {
+        highest =
+          priceRange.highestPrice.price < highest.highestPrice.price
+            ? highest
+            : priceRange;
+      } else {
+        highest = priceRange;
+      }
+    }
+  });
+
+  if (!lowest || !highest) {
+    return undefined;
+  }
+
+  return {
+    highestPrice:
+      fromLowestOrHighest === 'lowestPrices'
+        ? (highest as PriceRange).lowestPrice
+        : (highest as PriceRange).highestPrice,
+    lowestPrice:
+      fromLowestOrHighest === 'lowestPrices'
+        ? (lowest as PriceRange).lowestPrice
+        : (lowest as PriceRange).highestPrice
+  };
+};

@@ -43,15 +43,17 @@ export const useCurrencies = () => {
 
       // get currency rates
       const currencies = data;
-      if (!currencies) return;
+      if (!currencies) return undefined;
 
       const { currencies: currencyRates } = currencies;
 
-      // currencies must be supported
+      // if currencies not supported return undefined
+      // this means the local currency will be used
       if (!currencyRates[fromCurrency] || !currencyRates[toCurrency]) {
-        throw new Error(
+        return undefined;
+        /* throw new Error(
           `Conversion from "${fromCurrency}" to "${toCurrency}" is not supported`
-        );
+        ); */
       }
 
       // convert between both currencies
