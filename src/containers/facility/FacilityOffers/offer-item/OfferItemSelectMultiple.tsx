@@ -3,7 +3,7 @@ import type { OfferRecord } from 'src/store/types';
 import { Box, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { OfferInformation } from './shared/OfferInformation';
-import { currencySymbolMap } from 'src/utils/currencies';
+import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 
 export interface FacilityGalleryProps {
   offer: OfferRecord;

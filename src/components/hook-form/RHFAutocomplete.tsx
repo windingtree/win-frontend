@@ -62,7 +62,7 @@ export const RHFAutocomplete = <T extends StringOrObject>({
       const label = foundOption ? foundOption[optionLabelField] : option;
       return label;
     },
-    [options, optionValueField, optionLabelField]
+    [getOptionLabel, optionLabelField, options, optionValueField]
   );
 
   return (

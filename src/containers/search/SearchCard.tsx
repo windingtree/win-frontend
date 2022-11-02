@@ -9,16 +9,16 @@ import {
   useMediaQuery,
   IconButton
 } from '@mui/material';
-import Iconify from './Iconify';
-import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers/helpers';
-import { ImageCarousel } from './ImageCarousel';
-import { buildAccommodationAddress } from '../utils/accommodation';
+import Iconify from '../../components/Iconify';
+import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers/helpers';
+import { ImageCarousel } from '../../components/ImageCarousel';
+import { buildAccommodationAddress } from '../../utils/accommodation';
 import {
   EventInfo,
   useAccommodationsAndOffers
-} from '../hooks/useAccommodationsAndOffers';
-import { currencySymbolMap } from '../utils/currencies';
+} from '../../hooks/useAccommodationsAndOffers';
 import { useAppDispatch } from 'src/store';
+import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 import { formatISO } from 'date-fns';
 
 export interface SearchCardProps {
@@ -78,6 +78,20 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
       return null;
     }
 
+    const currencySymbol =
+      (facility.preferredCurrencyPriceRange &&
+        currencySymbolMap[facility.preferredCurrencyPriceRange.lowestPrice.currency]) ??
+      (facility.priceRange &&
+        currencySymbolMap[facility.priceRange.lowestPrice.currency]);
+
+    const pricePerNight =
+      (facility.preferredCurrencyPriceRange?.lowestPrice &&
+        facility.preferredCurrencyPriceRange.lowestPrice.price.toFixed(2)) ??
+      (facility.priceRange?.lowestPrice &&
+        facility.priceRange.lowestPrice.price.toFixed(2));
+
+    const totalPrice = Math.min(...prices).toFixed(2);
+
     return (
       <Card ref={ref} style={{ ...smallCardStyle }}>
         {mapCard && isMobileView && (
@@ -114,7 +128,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
             height={theme.spacing(mapCard || isMobileView ? 16 : 24)}
           >
             <ImageCarousel
-              size={mapCard || isMobileView ? 'smalql' : 'large'}
+              ratio={mapCard || isMobileView ? '1/1' : '6/4'}
               media={facility.media}
             />
           </Stack>
@@ -202,9 +216,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                       From
                     </Typography>
                     <Typography variant="subtitle2">
-                      {facility.lowestPrice &&
-                        currencySymbolMap[facility.lowestPrice.currency]}
-                      {facility.lowestPrice && facility.lowestPrice.price.toFixed(2)}
+                      {currencySymbol}
+                      {pricePerNight}
                       /night
                     </Typography>
                   </Stack>
@@ -219,9 +232,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                         variant="caption"
                         sx={{ color: 'text.secondary' }}
                       >
-                        {facility.lowestPrice &&
-                          currencySymbolMap[facility.lowestPrice.currency]}
-                        {Math.min(...prices).toFixed(2)} total
+                        {currencySymbol}
+                        {totalPrice} total
                       </Typography>
                     </Stack>
                   )}

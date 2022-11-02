@@ -33,3 +33,9 @@ export const findObjectWithPropertyAndValue = (
   if (!arrayOfObjects.length || !property) return undefined;
   return arrayOfObjects.find((obj) => obj[property] === value);
 };
+
+// NOTE: order of properties is important
+export const compareObjects = <T>(obj1: T, obj2: T) => {
+  // quick and dirty - lodash may be reasonably faster for large objects
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+};

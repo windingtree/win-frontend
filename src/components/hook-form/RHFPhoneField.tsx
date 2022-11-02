@@ -7,7 +7,7 @@ import {
   InputAdornment
 } from '@mui/material';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { countries, CountryType } from '../../config';
+import { countries, CountryType } from 'src/config/countryCodes';
 
 export type PhoneFieldProps = {
   name: string;

@@ -14,12 +14,12 @@ import {
 } from '../components/hook-form';
 import Iconify from '../components/Iconify';
 import { regexp } from '@windingtree/org.id-utils';
-import { countries, CountryType } from '../config';
 import { isVatValid } from '../utils/vat';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { OrganizerInformation } from '@windingtree/glider-types/dist/win';
 import Logger from '../utils/logger';
 import { debouncedFn } from '../utils/common';
+import { countries, CountryType } from 'src/config/countryCodes';
 
 const countriesCodes = countries.map((c) => c.code);
 const euRegExp = /^(?<CODE>[a-zA-Z]{2})(?<NUM>[a-zA-Z0-9]{5,})$/i;

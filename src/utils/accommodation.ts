@@ -1,6 +1,8 @@
 import { MediaItem, WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers/helpers';
 import { OfferRecord } from 'src/store/types';
+import { PriceRange } from '../hooks/useAccommodationsAndOffers';
+import { isPriceRangeWithinPriceRange } from './price';
 
 export interface CoordinatesType {
   lat: number;
@@ -55,5 +57,29 @@ export const sortAccommodationOffersByPrice = (
 ): OfferRecord[] => {
   return [...accommodation.offers].sort((prevOffer, nextOffer) => {
     return Number(prevOffer.price.public) - Number(nextOffer.price.public);
+  });
+};
+
+export const isAccommodationWithinPriceRanges = (
+  accommodation: AccommodationWithId,
+  ...priceRanges: PriceRange[]
+): boolean => {
+  if (!accommodation.priceRange) return false;
+  return priceRanges.some((priceRange) => {
+    return isPriceRangeWithinPriceRange(
+      accommodation.preferredCurrencyPriceRange ??
+        (accommodation.priceRange as PriceRange),
+      priceRange
+    );
+  });
+};
+
+export const filterAccommodationsByPriceRanges = (
+  accommodations: AccommodationWithId[],
+  ...priceRange: PriceRange[]
+) => {
+  if (!priceRange.length) return accommodations;
+  return accommodations.filter((accommodation) => {
+    return isAccommodationWithinPriceRanges(accommodation, ...priceRange);
   });
 };

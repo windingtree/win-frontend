@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
-import { defaultSearchRadiusInMeters, EventItemProps, upcomingEvents } from '../config';
 import { CoordinatesType } from './accommodation';
+import { EventItemType, filteredEventsWithCoordinates } from 'src/config/events';
+import { defaultSearchRadiusInMeters } from '../config';
 import { NullableDate } from './date';
 import { crowDistance } from './geo';
 
@@ -21,16 +22,10 @@ export const datesOverlap = (
 };
 
 export const getActiveEvents = (dateRange: EventSearchParams) => {
-  return upcomingEvents.filter((evt) => {
+  return filteredEventsWithCoordinates.filter((evt) => {
     try {
-      const eventFromDate = DateTime.fromFormat(
-        evt.dateRange.fromDate,
-        'd-MM-yyyy'
-      ).toJSDate();
-      const eventToDate = DateTime.fromFormat(
-        evt.dateRange.toDate,
-        'd-MM-yyyy'
-      ).toJSDate();
+      const eventFromDate = DateTime.fromFormat(evt.startDate, 'd-MM-yyyy').toJSDate();
+      const eventToDate = DateTime.fromFormat(evt.endDate, 'd-MM-yyyy').toJSDate();
 
       // exclude past events
       if (eventToDate < new Date()) return false;
@@ -45,7 +40,7 @@ export const getActiveEvents = (dateRange: EventSearchParams) => {
 };
 
 export const getEventsWithinRadius = (
-  events: EventItemProps[],
+  events: EventItemType[],
   centerLatLon: [number, number],
   maxRadius = defaultSearchRadiusInMeters / 1000,
   useKm = true

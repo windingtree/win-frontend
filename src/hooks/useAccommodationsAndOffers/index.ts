@@ -1,20 +1,24 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import {
-  CoordinatesType,
+  filterAccommodationsByPriceRanges,
   getLargestImages,
-  sortByLargestImage
+  sortByLargestImage,
+  CoordinatesType
 } from '../../utils/accommodation';
 import { daysBetween } from '../../utils/date';
+import { filterOffersByPriceRanges } from '../../utils/offers';
+import { usePriceFilter } from '../usePriceFilter';
+import { useUserSettings } from '../useUserSettings';
 import { AccommodationsAndOffersResponse, fetchAccommodationsAndOffers } from './api';
 import {
   getAccommodationById,
   getActiveAccommodations,
-  normalizeAccommodations,
-  normalizeOffers,
   getOffersById,
-  AccommodationWithId
+  AccommodationWithId,
+  getOffersPriceRange
 } from './helpers';
+import { useAccommodationsAndOffersHelpers } from './useAccommodationsAndOffersHelpers';
 
 export interface SearchTypeProps {
   location: string;
@@ -26,10 +30,15 @@ export interface SearchTypeProps {
   focusedEvent?: string;
 }
 
-export interface LowestPriceFormat {
+export interface PriceFormat {
   price: number;
   currency: string;
   decimals?: number;
+}
+
+export interface PriceRange {
+  lowestPrice: PriceFormat;
+  highestPrice: PriceFormat;
 }
 
 export interface EventInfo {
@@ -55,6 +64,8 @@ export const useAccommodationsAndOffers = ({
   searchProps?: SearchTypeProps | void;
   accommodationTransformFn?: AccommodationTransformFn;
 } = {}) => {
+  const { preferredCurrencyCode } = useUserSettings();
+  const { priceFilter } = usePriceFilter();
   const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery<
     AccommodationsAndOffersResponse | undefined,
     Error
@@ -75,6 +86,9 @@ export const useAccommodationsAndOffers = ({
     }
   );
 
+  const { normalizeAccommodations, normalizeOffers } =
+    useAccommodationsAndOffersHelpers();
+
   const latestQueryParams = data?.latestQueryParams;
 
   // append focusedEvent query params if it exists
@@ -84,40 +98,46 @@ export const useAccommodationsAndOffers = ({
 
   const isGroupMode = data?.isGroupMode ?? false;
 
-  const allAccommodations = useMemo(
+  const normalizedAccommodations = useMemo(
     () => normalizeAccommodations(data?.accommodations, data?.offers),
-    [data]
+    [data, preferredCurrencyCode]
   );
 
   // Get accommodations with active offer along with the offer with lowest price/room/night
   // and an optional "accommodation" object transformation via
   // a transformation callback function
-  const accommodations = useMemo(() => {
+  const allAccommodations = useMemo(() => {
     // This includes accommodations with active offers.
-    const filteredAccommodations = allAccommodations.filter((a) => a.offers.length > 0);
+    const filteredAccommodations = normalizedAccommodations.filter(
+      (a) => a.offers.length > 0
+    );
 
     const numberOfDays = daysBetween(
       latestQueryParams?.arrival,
       latestQueryParams?.departure
     );
 
-    // get offer with lowest price
+    // attach extra properties to or transform accommodations
     const nbRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
     return filteredAccommodations?.map((accommodation) => {
-      const lowestPrice: LowestPriceFormat = accommodation.offers
-        .map((offer) => ({
-          price: Number(offer.price.public) / (numberOfDays * nbRooms),
-          currency: offer.price.currency
-        }))
-        .reduce((prevLowest, currentVal) =>
-          prevLowest.price < currentVal.price ? prevLowest : currentVal
-        );
+      // get price ranges in local and preferred currencies
+      const priceRange = getOffersPriceRange(
+        accommodation.offers,
+        numberOfDays,
+        nbRooms,
+        false
+      );
+      const preferredCurrencyPriceRange = getOffersPriceRange(
+        accommodation.offers,
+        numberOfDays,
+        nbRooms,
+        true
+      );
 
       // return only high res images
-      const sortedImages = sortByLargestImage(accommodation.media ?? []);
-      const largestImages = getLargestImages(sortedImages);
-
-      accommodation.media = largestImages;
+      accommodation.media = getLargestImages(
+        sortByLargestImage(accommodation.media ?? [])
+      );
 
       // optional accommodation transformation callback function
       // that can be used to modify or add properties to accommodation object
@@ -130,13 +150,25 @@ export const useAccommodationsAndOffers = ({
         });
       }
 
-      return { ...transformedAccommodation, lowestPrice };
+      return { ...transformedAccommodation, priceRange, preferredCurrencyPriceRange };
     });
-  }, [allAccommodations, latestQueryParams]);
+  }, [normalizedAccommodations, latestQueryParams]);
 
+  // apply price filter to accommodations if any before returning accommodations
+  const accommodations = useMemo(() => {
+    return filterAccommodationsByPriceRanges(allAccommodations, ...priceFilter);
+  }, [priceFilter, allAccommodations]);
+
+  // all normalized offers prior to filtering
+  const allOffers = useMemo(
+    () => data?.offers && normalizeOffers(data.offers),
+    [data, preferredCurrencyCode]
+  );
+
+  // filter offers array by price from price filter
   const offers = useMemo(
-    () => (data?.offers && normalizeOffers(data.offers)) || [],
-    [data]
+    () => (allOffers && filterOffersByPriceRanges(allOffers, ...priceFilter)) || [],
+    [allOffers, priceFilter]
   );
 
   const getAccommodationByHotelId = useCallback(
@@ -147,9 +179,11 @@ export const useAccommodationsAndOffers = ({
   return {
     getOffersById,
     getAccommodationById,
+    allAccommodations,
     accommodations,
     activeAccommodations: getActiveAccommodations(accommodations, offers),
     coordinates: data?.coordinates,
+    allOffers,
     offers,
     refetch,
     error,

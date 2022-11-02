@@ -14,7 +14,8 @@ import type {
   GenericStateRecord,
   SearchParams
 } from './types';
-import { CurrencyCode } from '../utils/currencies';
+import { CurrencyCode } from '../hooks/useCurrencies';
+import { PriceRange } from '../hooks/useAccommodationsAndOffers';
 
 export interface SetConnectingAction {
   type: 'SET_CONNECTING';
@@ -122,7 +123,18 @@ export interface SetPreferredCurrency {
   payload?: CurrencyCode;
 }
 
+export interface SetPriceFilterAction {
+  type: 'SET_PRICE_FILTER';
+  payload: PriceRange[];
+}
+
+export interface clearPriceFilterAction {
+  type: 'CLEAR_PRICE_FILTER';
+  payload?: null;
+}
+
 export type UserSettingsAction = SetPreferredCurrency;
+export type PriceFilterAction = SetPriceFilterAction | clearPriceFilterAction;
 
 export type Action =
   | SetSearchParams
@@ -143,4 +155,5 @@ export type Action =
   | ResetSelectedFacilityId
   | SetOrganizerInfo
   | SetBookingInfo
-  | UserSettingsAction;
+  | UserSettingsAction
+  | PriceFilterAction;

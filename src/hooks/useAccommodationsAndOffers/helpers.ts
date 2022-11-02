@@ -1,7 +1,7 @@
 import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { OfferRecord } from 'src/store/types';
-import { AccommodationTransformFn, EventInfo, LowestPriceFormat } from '.';
+import { AccommodationTransformFn, EventInfo, PriceRange } from '.';
 import { getActiveEventsWithinRadius } from '../../utils/events';
 import { crowDistance } from '../../utils/geo';
 
@@ -13,7 +13,8 @@ enum PassengerType {
 export interface AccommodationWithId extends WinAccommodation {
   id: string;
   offers: OfferRecord[];
-  lowestPrice?: LowestPriceFormat;
+  priceRange?: PriceRange;
+  preferredCurrencyPriceRange?: PriceRange;
   eventInfo?: EventInfo[];
 }
 
@@ -39,41 +40,54 @@ export const getActiveAccommodations = (
   return activeAccommodations;
 };
 
-export const normalizeAccommodations = (
-  accommodations: Record<string, WinAccommodation> | undefined,
-  offers: Record<string, Offer> | undefined
-): AccommodationWithId[] => {
-  if (!accommodations) return [];
-  const normalizedOffers = offers ? normalizeOffers(offers) : [];
+// get the lowest and highest price for a given set of offers
+// optionally get the prices in preferred currency
+export const getOffersPriceRange = (
+  offers: OfferRecord[],
+  numberOfDays: number,
+  numberOfRooms: number,
+  getPreferredCurrency = false
+): PriceRange | undefined => {
+  let priceRange: PriceRange | undefined = undefined;
 
-  const normalizedAccommodations = Object.entries(
-    accommodations
-  ).map<AccommodationWithId>(([keyA, valueA]) => {
-    const filteredOffers = normalizedOffers.filter((offer) =>
-      Object.entries(offer.pricePlansReferences)
-        .map(([, valueP]) => valueP.accommodation === keyA)
-        .includes(true)
-    );
+  offers
+    .map((offer) => {
+      const price = getPreferredCurrency
+        ? offer.preferredCurrencyPrice?.public
+        : offer.price.public;
+      const currency = getPreferredCurrency
+        ? offer.preferredCurrencyPrice?.currency
+        : offer.price.currency;
 
-    return {
-      ...valueA,
-      id: keyA,
-      offers: filteredOffers
-    };
-  });
+      if (!price || !currency) return;
 
-  return normalizedAccommodations;
-};
+      return {
+        price: Number(price) / (numberOfDays * numberOfRooms),
+        currency
+      };
+    })
+    .forEach((currentVal) => {
+      if (!currentVal) return;
 
-export const normalizeOffers = (offers: Record<string, Offer>): OfferRecord[] => {
-  if (!offers) return [];
+      if (currentVal && !priceRange) {
+        priceRange = { lowestPrice: currentVal, highestPrice: currentVal };
+      }
 
-  const normalizedData = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
-    id: key,
-    ...value
-  }));
+      if (priceRange) {
+        const lowest =
+          currentVal.price < priceRange.lowestPrice.price
+            ? currentVal
+            : priceRange.lowestPrice;
+        const highest =
+          currentVal.price > priceRange.highestPrice.price
+            ? currentVal
+            : priceRange.highestPrice;
 
-  return normalizedData;
+        priceRange = { lowestPrice: lowest, highestPrice: highest };
+      }
+    });
+
+  return priceRange;
 };
 
 export const getPassengersBody = (

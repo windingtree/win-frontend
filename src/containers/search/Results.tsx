@@ -2,12 +2,12 @@ import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/ma
 import { createRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { SearchCard } from './SearchCard';
-import { useAppState } from '../store';
+import { useAppState } from '../../store';
 import { styled } from '@mui/system';
-import { daysBetween } from '../utils/date';
+import { daysBetween } from '../../utils/date';
 import { HEADER } from 'src/config/componentSizes';
 import { useSearchParams } from 'react-router-dom';
-import { accommodationEventTransform } from '../hooks/useAccommodationsAndOffers/helpers';
+import { accommodationEventTransform } from '../../hooks/useAccommodationsAndOffers/helpers';
 import Draggable from 'react-draggable';
 
 export enum ResultsMode {
@@ -43,7 +43,9 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   }
 }));
 
-const ScrollableContainer = styled(Box)<{ mode: boolean }>(({ theme, mode }) => ({
+const ScrollableContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'mode'
+})<{ mode: boolean }>(({ theme, mode }) => ({
   height: 'calc(100% - 24px)',
   overflow: mode ? 'hidden' : 'scroll',
   [theme.breakpoints.up('md')]: {
@@ -122,9 +124,10 @@ export const Results: React.FC = () => {
   const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
     focusedEvent
   ]);
-  const { accommodations, isFetching, latestQueryParams } = useAccommodationsAndOffers({
-    accommodationTransformFn: transformFn
-  });
+  const { accommodations, isFetching, latestQueryParams, error } =
+    useAccommodationsAndOffers({
+      accommodationTransformFn: transformFn
+    });
 
   const { selectedFacilityId } = useAppState();
   const numberOfDays = useMemo(
@@ -187,6 +190,8 @@ export const Results: React.FC = () => {
     mode === ResultsMode.map &&
     selectedFacility
   );
+
+  if (error) return null;
 
   return (
     <>
