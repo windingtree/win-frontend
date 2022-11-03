@@ -170,18 +170,6 @@ export const SearchPopovers = ({
             </Button>
           </DialogActions>
         </Dialog>
-        <Dialog
-          open={isFilterPopoverOpen}
-          PaperProps={dialogPaperProps}
-          onClose={handleEscape}
-        >
-          <DialogContent>
-            <SearchFilterForm
-              onCloseClick={() => handleCloseFilterPopup()}
-              onSubmitClick={() => handleCloseFilterPopup()}
-            />
-          </DialogContent>
-        </Dialog>
       </>
     );
   } else {
