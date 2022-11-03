@@ -35,8 +35,8 @@ import {
 } from '../hooks/useAccommodationsAndOffers/helpers';
 import { getActiveEventsWithinRadius } from '../utils/events';
 import { AppMode } from '../config';
-import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 import { SearchCard } from 'src/containers/search/SearchCard';
+import { displayPriceFromValues } from '../utils/price';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -58,10 +58,10 @@ const mapTileUrl =
 const getPriceMarkerIcon = (priceFormat?: PriceFormat, focused = false) => {
   if (!priceFormat) return;
   const { price, currency } = priceFormat;
-  const currencySymbol = currencySymbolMap[currency];
 
   return new DivIcon({
-    html: `<div>${currencySymbol} ${Math.ceil(price)}</div>`,
+    // show no decimal places hence we pass 0 as decimals
+    html: `<div>${displayPriceFromValues(Math.ceil(price), currency, 0)}</div>`,
     className: `map-marker-icon ${focused ? 'marker-focused' : ''}`
   });
 };

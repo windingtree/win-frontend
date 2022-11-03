@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import {
   AccommodationWithId,
-  getGroupMode
+  getGroupMode,
+  getOffersPriceRange
 } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
 import {
@@ -19,7 +20,6 @@ import {
 import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { stringToNumber } from 'src/utils/strings';
 import {
   buildAccommodationAddress,
   getLargestImages,
@@ -30,7 +30,7 @@ import { daysBetween } from 'src/utils/date';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from 'src/components/LightboxModal';
 import Iconify from 'src/components/Iconify';
-import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
+import { displayPriceFromValues } from '../../../utils/price';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -92,40 +92,44 @@ const HeaderButton = ({ scrollToDetailImages }) => {
   const offers = accommodation?.offers;
 
   // get lowest offer price
-  const lowestTotalPrice = useMemo(() => {
-    return offers?.reduce(
-      (lowestPrice, offer): { price: string; currency: string } => {
-        return !lowestPrice.price ||
-          stringToNumber(offer.price?.public) < stringToNumber(lowestPrice.price)
-          ? { price: offer.price?.public, currency: offer.price?.currency }
-          : lowestPrice;
-      },
-      { price: '', currency: '' }
-    );
-  }, [offers]);
-
-  const numberOfDays = daysBetween(
-    latestQueryParams?.arrival,
-    latestQueryParams?.departure
+  const localPriceRange = useMemo(
+    () => offers && getOffersPriceRange(offers, false),
+    [offers]
   );
-  const isGroupMode = getGroupMode(latestQueryParams?.roomCount);
-  const numberOfRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
-  const lowestAveragePrice =
-    lowestTotalPrice && Number(lowestTotalPrice.price) / (numberOfDays * numberOfRooms);
-  const currencySymbol =
-    lowestTotalPrice?.currency && currencySymbolMap[lowestTotalPrice?.currency]
-      ? currencySymbolMap[lowestTotalPrice?.currency]
-      : lowestTotalPrice?.currency;
+
+  const preferredCurrencyPriceRange = useMemo(
+    () => offers && getOffersPriceRange(offers, false, true),
+    [offers]
+  );
+
+  const priceRange = preferredCurrencyPriceRange ?? localPriceRange;
+  let lowestAveragePrice: number | undefined, currency: string | undefined;
+
+  if (priceRange) {
+    const { lowestPrice: lowestTotalPrice } = priceRange;
+
+    const numberOfDays = daysBetween(
+      latestQueryParams?.arrival,
+      latestQueryParams?.departure
+    );
+
+    const isGroupMode = getGroupMode(latestQueryParams?.roomCount);
+    const numberOfRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
+
+    lowestAveragePrice = Number(lowestTotalPrice.price) / (numberOfDays * numberOfRooms);
+    currency = lowestTotalPrice.currency;
+  }
 
   return (
     <HeaderButtonContainer>
       <Stack direction="row" alignItems="center" mt={1}>
         <Typography>From</Typography>
         <Typography variant="h5" marginLeft={theme.spacing(1)}>
-          {currencySymbol} {lowestAveragePrice?.toFixed(2)}
+          {/* {currencySymbol} {lowestAveragePrice?.toFixed(2)} */}
+          {displayPriceFromValues(lowestAveragePrice, currency)}
         </Typography>
       </Stack>
-      <Typography textAlign={{ md: 'right' }}>Average price / room / night</Typography>
+      <Typography textAlign={{ md: 'right' }}> Average price / room / night</Typography>
       <Button
         size="large"
         disableElevation

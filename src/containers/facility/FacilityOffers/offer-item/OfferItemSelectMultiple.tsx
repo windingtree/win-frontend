@@ -3,12 +3,7 @@ import type { OfferRecord } from 'src/store/types';
 import { Box, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { OfferInformation } from './shared/OfferInformation';
-import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
-
-export interface FacilityGalleryProps {
-  offer: OfferRecord;
-  room: RoomTypes;
-}
+import { displayPriceFromPrice, displayPriceFromValues } from '../../../../utils/price';
 
 export const OfferItemSelectMultiple: React.FC<{
   room: RoomTypes;
@@ -17,8 +12,8 @@ export const OfferItemSelectMultiple: React.FC<{
   nightCount: number;
 }> = ({ offer, room, index, nightCount }) => {
   const { register } = useFormContext();
-  const pricePerNight: number = Number(offer.price.public) / nightCount;
-  const currencySymbol = currencySymbolMap[offer.price.currency] ?? offer.price.currency;
+  const price = offer.preferredCurrencyPrice ?? offer.price;
+  const pricePerNight: number = Number(price.public) / nightCount;
 
   return (
     <Box>
@@ -52,7 +47,8 @@ export const OfferItemSelectMultiple: React.FC<{
                   fontWeight="bold"
                   sx={{ display: 'inline-block' }}
                 >
-                  {`${currencySymbol} ${pricePerNight.toFixed(2)}`}
+                  {/* {`${currencySymbol} ${pricePerNight.toFixed(2)}`} */}
+                  {displayPriceFromValues(pricePerNight, price.currency)}
                 </Typography>
                 <Typography color="text.secondary" variant="body2" component="span">
                   {' '}
@@ -68,7 +64,9 @@ export const OfferItemSelectMultiple: React.FC<{
                     variant="body2"
                     color="text.secondary"
                     fontWeight="bold"
-                  >{`${currencySymbol} ${offer.price.public}`}</Typography>
+                  >
+                    {displayPriceFromPrice(price)}
+                  </Typography>
                   <Typography
                     sx={{ display: 'inline-block' }}
                     component="span"
