@@ -34,6 +34,8 @@ import { ResponsiveContainer } from '../ResponsiveContainer';
 import { SearchAlert } from './SearchAlert';
 import { usePriceFilter } from '../../hooks/usePriceFilter';
 import { SearchFilterDialog } from './SearchFilterDialog';
+import { DateRangeButton } from 'src/components/buttons/DateRangeButton';
+import { GuestDetailsButton } from 'src/components/buttons/GuestDetailsButton';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -68,8 +70,6 @@ type FormInputFields = 'location' | 'dateRange' | 'adultCount' | 'roomCount';
 
 const SearchIcon = () => <Iconify icon="akar-icons:search" width={24} height={24} />;
 const FilterIcon = () => <Iconify icon="mi:filter" width={30} height={30} />;
-const CalendarIcon = () => <Iconify icon="akar-icons:calendar" width={18} height={18} />;
-const PersonIcon = () => <Iconify icon="akar-icons:person" width={18} height={18} />;
 
 export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => {
   const [searchParams] = useSearchParams();
@@ -340,19 +340,6 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     onLocationPopoverClose: checkFieldToHighlight
   };
 
-  const formButtonStyle: SxProps = isMobileView
-    ? {
-        justifyContent: 'start',
-        paddingLeft: theme.spacing(2),
-        '&:hover': {
-          backgroundColor: 'transparent'
-        },
-        '&.highlighted': {
-          border: `3px solid ${theme.palette.primary.main}`
-        }
-      }
-    : {};
-
   const handleLocationInputClick = useCallback(() => {
     if (isMobileView) {
       setLocationPopoverOpen(true);
@@ -434,47 +421,24 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                 highlighted={highlightedInput === 'location'}
                 highlightedColor={theme.palette.primary.main}
               />
-              <Box>
-                <Button
-                  startIcon={isMobileView && <CalendarIcon />}
-                  onClick={() => setDateRangeAnchorEl(dateRef.current)}
-                  size={buttonSize}
-                  variant={isMobileView ? 'outlined' : 'text'}
-                  sx={{
-                    minWidth: isMobileView ? '320px' : '200px',
-                    whiteSpace: 'nowrap',
-                    ...fontStyling,
-                    ...formButtonStyle
-                  }}
-                  className={highlightedInput === 'dateRange' ? 'highlighted' : ''}
-                  color="inherit"
-                  ref={dateRef}
-                  disableRipple={isMobileView}
-                >
-                  {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
-                </Button>
-              </Box>
 
-              <Box>
-                <Button
-                  startIcon={isMobileView && <PersonIcon />}
-                  sx={{
-                    minWidth: isMobileView ? '320px' : '144px',
-                    whiteSpace: 'nowrap',
-                    ...fontStyling,
-                    ...formButtonStyle
-                  }}
-                  onClick={() => setGuestsAnchorEl(guestsRef.current)}
-                  size={buttonSize}
-                  variant={isMobileView ? 'outlined' : 'text'}
-                  color="inherit"
-                  ref={guestsRef}
-                  disableRipple={isMobileView}
-                  className={highlightedInput === 'roomCount' ? 'highlighted' : ''}
-                >
-                  {guestDetailsText}
-                </Button>
-              </Box>
+              <DateRangeButton
+                onClick={() => setDateRangeAnchorEl(dateRef.current)}
+                startDate={startDate}
+                endDate={endDate}
+                className={highlightedInput === 'dateRange' ? 'highlighted' : ''}
+                ref={dateRef}
+                variant={isMobileView ? 'outlined' : 'text'}
+              />
+
+              <GuestDetailsButton
+                roomCount={roomCount}
+                adultCount={adultCount}
+                onClick={() => setGuestsAnchorEl(guestsRef.current)}
+                variant={isMobileView ? 'outlined' : 'text'}
+                ref={guestsRef}
+                className={highlightedInput === 'roomCount' ? 'highlighted' : ''}
+              />
               <Box>
                 <Button
                   disableElevation

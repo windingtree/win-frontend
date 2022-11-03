@@ -69,7 +69,7 @@ export const SearchLocationInput = forwardRef<
         placeholder="Where are you going?"
         name="location"
         options={autocompleteData}
-        width={isMobileView ? '320px' : '200px'}
+        width={isMobileView ? '320px' : '230px'}
         open={allowDropdownOpen ? open : false}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
