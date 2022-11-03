@@ -571,7 +571,14 @@ export const PaymentCard = ({
       </MessageBox>
 
       <MessageBox type="warn" show={!!costError}>
-        <Typography variant="body1">{costError}</Typography>
+        <Typography variant="body1">
+          {costError}. Get some {asset.symbol}{' '}
+          {asset.ramp !== undefined && (
+            <ExternalLink href={`${asset.ramp}${account}`} target="_blank">
+              on ramp
+            </ExternalLink>
+          )}
+        </Typography>
       </MessageBox>
 
       <MessageBox type="warn" show={!!permitError}>
