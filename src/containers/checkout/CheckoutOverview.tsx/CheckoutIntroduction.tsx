@@ -67,7 +67,8 @@ export const CheckoutIntroduction = () => {
 
   const showPreferredCurrencyPrice =
     preferredCurrencyPrice &&
-    bookingInfo.pricing?.offerCurrency.currency != preferredCurrencyCode;
+    bookingInfo.pricing?.offerCurrency.currency != preferredCurrencyCode &&
+    preferredCurrencyCode !== 'USD';
 
   const accommodationImage = useMemo(() => {
     if (bookingInfo.accommodation) {

@@ -49,7 +49,8 @@ export const CheckoutSummary = () => {
 
   const showPreferredCurrencyPrice =
     preferredCurrencyPrice &&
-    bookingInfo.pricing?.offerCurrency.currency != preferredCurrencyCode;
+    bookingInfo.pricing?.offerCurrency.currency != preferredCurrencyCode &&
+    preferredCurrencyCode !== 'USD';
   const subTitle2 = `Equivalent to ${displayPriceFromValues(
     preferredCurrencyPrice?.amount,
     preferredCurrencyCode
@@ -66,7 +67,7 @@ export const CheckoutSummary = () => {
           <Typography variant="h4">{title}</Typography>
           {showUSDPrice && <Typography variant="h5">{subTitle}</Typography>}
           {showPreferredCurrencyPrice && (
-            <Typography variant="h5">{subTitle2}</Typography>
+            <Typography variant="h6">{subTitle2}</Typography>
           )}
 
           {isGroupMode && (
