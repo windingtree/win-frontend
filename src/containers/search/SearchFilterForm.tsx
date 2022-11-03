@@ -20,11 +20,13 @@ import {
   PriceRange,
   useAccommodationsAndOffers
 } from '../../hooks/useAccommodationsAndOffers';
+import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers/helpers';
 import { usePriceFilter } from '../../hooks/usePriceFilter';
 import { useUserSettings } from '../../hooks/useUserSettings';
 import { filterAccommodationsByPriceRanges } from '../../utils/accommodation';
-import { emptyFunction } from '../../utils/common';
+import { emptyFunction, roundToNearest } from '../../utils/common';
 import { compareObjects } from '../../utils/objects';
+import { getPriceRangeFromPriceRanges } from '../../utils/price';
 import { stringToNumber } from '../../utils/strings';
 
 export interface SearchFilterFormProps {
@@ -36,6 +38,58 @@ interface SearchFilterFormData {
   priceRanges: string[];
 }
 
+// get price ranges in preferredCurrency and ignore others (unconverted)
+const buildDefaultPriceRanges = (
+  accommodations: AccommodationWithId[],
+  preferredCurrency: string
+) => {
+  const result: PriceRange[] = [];
+  if (!accommodations) return result;
+
+  const priceRanges = accommodations
+    .filter((acc) => !!acc.preferredCurrencyPriceRange)
+    .map((acc) => acc.preferredCurrencyPriceRange as PriceRange);
+
+  if (!priceRanges) return result;
+
+  const globalPriceRange = getPriceRangeFromPriceRanges(
+    priceRanges,
+    preferredCurrency,
+    'lowestPrices'
+  );
+
+  if (!globalPriceRange) return result;
+
+  const { highestPrice } = globalPriceRange;
+
+  const numberOfSteps = 4;
+  const stepFactor = 1 / numberOfSteps;
+  const initialStepValue = Math.round(highestPrice.price * stepFactor);
+  const baseFive = Math.pow(10, initialStepValue.toString().length - 1) / 2;
+  const nearestBaseFiveNumber = roundToNearest(initialStepValue, baseFive);
+
+  // get price ranges in steps of 25% of highest price
+  for (let i = 0; i <= 1; i += stepFactor) {
+    result.push({
+      lowestPrice: {
+        currency: highestPrice.currency,
+        price: roundToNearest(highestPrice.price * i, nearestBaseFiveNumber),
+        decimals: highestPrice.decimals
+      },
+      highestPrice: {
+        currency: highestPrice.currency,
+        price:
+          i < 1
+            ? roundToNearest(highestPrice.price * (i + 0.25), nearestBaseFiveNumber)
+            : Infinity,
+        decimals: highestPrice.decimals
+      }
+    });
+  }
+
+  return result;
+};
+
 export const SearchFilterForm = ({
   onCloseClick = emptyFunction,
   onSubmitClick = emptyFunction
@@ -44,64 +98,12 @@ export const SearchFilterForm = ({
   const theme = useTheme();
   const [totalAccommodationsSelected, setTotalAccommodationsSelected] = useState(0);
   const { allAccommodations } = useAccommodationsAndOffers();
-  const { preferredCurrencyCode } = useUserSettings();
   const { priceFilter, setPriceFilter } = usePriceFilter();
+  const { preferredCurrencyCode } = useUserSettings();
 
-  // TO-DO: convert ranges from USD to preferredCurrency
   const defaultPriceRanges: PriceRange[] = useMemo(
-    () => [
-      {
-        lowestPrice: {
-          currency: preferredCurrencyCode,
-          price: 0
-        },
-        highestPrice: {
-          currency: preferredCurrencyCode,
-          price: 50
-        }
-      },
-      {
-        lowestPrice: {
-          currency: preferredCurrencyCode,
-          price: 50
-        },
-        highestPrice: {
-          currency: preferredCurrencyCode,
-          price: 100
-        }
-      },
-      {
-        lowestPrice: {
-          currency: preferredCurrencyCode,
-          price: 100
-        },
-        highestPrice: {
-          currency: preferredCurrencyCode,
-          price: 150
-        }
-      },
-      {
-        lowestPrice: {
-          currency: preferredCurrencyCode,
-          price: 150
-        },
-        highestPrice: {
-          currency: preferredCurrencyCode,
-          price: 200
-        }
-      },
-      {
-        lowestPrice: {
-          currency: preferredCurrencyCode,
-          price: 200
-        },
-        highestPrice: {
-          currency: preferredCurrencyCode,
-          price: Infinity
-        }
-      }
-    ],
-    [preferredCurrencyCode]
+    () => buildDefaultPriceRanges(allAccommodations, preferredCurrencyCode),
+    [allAccommodations]
   );
 
   const buildFormDefaultValues = useCallback(() => {
@@ -199,57 +201,66 @@ export const SearchFilterForm = ({
           }}
         >
           <Stack>
-            {defaultPriceRanges.map((priceRange, index) => {
-              return (
-                <Stack
-                  key={index}
-                  justifyContent={'space-between'}
-                  direction={'row'}
-                  alignItems={'center'}
-                >
-                  <RHFArrayCheckbox
-                    label={getLabel(priceRange)}
-                    name={fieldName}
-                    value={index.toString()}
-                    disabled={!accommodationsWithinPriceRanges[index].length}
-                  />
-                  <Typography color={theme.palette.grey[500]}>
-                    {accommodationsWithinPriceRanges[index].length}
-                  </Typography>
-                </Stack>
-              );
-            })}
+            {defaultPriceRanges.length ? (
+              defaultPriceRanges.map((priceRange, index) => {
+                return (
+                  <Stack
+                    key={index}
+                    justifyContent={'space-between'}
+                    direction={'row'}
+                    alignItems={'center'}
+                  >
+                    <RHFArrayCheckbox
+                      label={getLabel(priceRange)}
+                      name={fieldName}
+                      value={index.toString()}
+                      disabled={!accommodationsWithinPriceRanges[index].length}
+                    />
+                    <Typography color={theme.palette.grey[500]}>
+                      {accommodationsWithinPriceRanges[index].length}
+                    </Typography>
+                  </Stack>
+                );
+              })
+            ) : (
+              <>
+                <Typography>Filter is not available for</Typography>
+                <Typography>the displayed currencies</Typography>
+              </>
+            )}
           </Stack>
         </CardContent>
-        <CardActions
-          sx={{
-            justifyContent: 'space-between',
-            px: 3
-          }}
-        >
-          <Link
+        {defaultPriceRanges.length ? (
+          <CardActions
             sx={{
-              fontSize: theme.typography.caption,
-              textDecoration: 'underline',
-              cursor: 'pointer'
+              justifyContent: 'space-between',
+              px: 3
             }}
-            onClick={() => setValue('priceRanges', [])}
           >
-            Clear all
-          </Link>
-          <Button
-            size="small"
-            variant="contained"
-            sx={{
-              fontSize: theme.typography.caption,
-              mb: 1
-            }}
-            type="submit"
-            disabled={!allAccommodations.length}
-          >
-            Show {totalAccommodationsSelected || allAccommodations.length} stay(s)
-          </Button>
-        </CardActions>
+            <Link
+              sx={{
+                fontSize: theme.typography.caption,
+                textDecoration: 'underline',
+                cursor: 'pointer'
+              }}
+              onClick={() => setValue('priceRanges', [])}
+            >
+              Clear all
+            </Link>
+            <Button
+              size="small"
+              variant="contained"
+              sx={{
+                fontSize: theme.typography.caption,
+                mb: 1
+              }}
+              type="submit"
+              disabled={!allAccommodations.length}
+            >
+              Show {totalAccommodationsSelected || allAccommodations.length} stay(s)
+            </Button>
+          </CardActions>
+        ) : null}
       </Card>
     </FormProvider>
   );

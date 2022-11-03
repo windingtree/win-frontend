@@ -3,6 +3,7 @@ import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 import { useFormContext } from 'react-hook-form';
 import { useResponsive } from 'src/hooks/useResponsive';
 import { OfferRecord } from 'src/store/types';
+import { FacilityOffersSelectMultipleFormProps } from './FacilityOffersSelectMultiple';
 
 const getTotalPrice = (prev: number, current: OfferRecord): number => {
   const quantity = Number(current.quantity);
@@ -23,11 +24,11 @@ const Summary = ({
   guestCount,
   nightCount
 }: FacilityGroupOffersSummaryProps) => {
-  const { watch } = useFormContext();
+  const { watch } = useFormContext<FacilityOffersSelectMultipleFormProps>();
   const values = watch();
   const totalPrice = values.offers.reduce(getTotalPrice, 0).toFixed(2);
   const theme = useTheme();
-  const currency = values.offers[0].price?.currency;
+  const currency = values.offers[0].price.currency;
   const currencySymbol = currencySymbolMap[currency] ?? currency;
 
   return (

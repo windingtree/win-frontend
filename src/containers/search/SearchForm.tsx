@@ -29,10 +29,13 @@ import { formatISO, parseISO } from 'date-fns';
 import { SearchSchema } from './SearchScheme';
 import { convertToLocalTime } from 'src/utils/date';
 import { SearchPopovers, SearchPopoversProps } from './SearchPopovers';
-import { SearchLocationInput } from './SearchLocationInput';
+import { SearchLocationInput, SearchLocationInputElement } from './SearchLocationInput';
 import { ResponsiveContainer } from '../ResponsiveContainer';
 import { SearchAlert } from './SearchAlert';
 import { usePriceFilter } from '../../hooks/usePriceFilter';
+import { SearchFilterDialog } from './SearchFilterDialog';
+import { DateRangeButton } from 'src/components/buttons/DateRangeButton';
+import { GuestDetailsButton } from 'src/components/buttons/GuestDetailsButton';
 import { DateRangeType } from 'src/components/hook-form/RHFDateRangePicker';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
@@ -64,8 +67,6 @@ type FormInputFields = 'location' | 'dateRange' | 'adultCount' | 'roomCount';
 
 const SearchIcon = () => <Iconify icon="akar-icons:search" width={24} height={24} />;
 const FilterIcon = () => <Iconify icon="mi:filter" width={30} height={30} />;
-const CalendarIcon = () => <Iconify icon="akar-icons:calendar" width={18} height={18} />;
-const PersonIcon = () => <Iconify icon="akar-icons:person" width={18} height={18} />;
 
 export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => {
   const [searchParams] = useSearchParams();
@@ -73,6 +74,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const theme = useTheme();
   const { pathname, search } = useLocation();
   const [open, setOpen] = useState<boolean>(false);
+  const [isSearchPage, setIsSearchPage] = useState(false);
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
   const isCloseable: boolean = useMemo(
     () => isMobileView && !!closeable,
@@ -93,15 +95,19 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const formRef = useRef<HTMLDivElement>(null);
   const dateRef = useRef<HTMLButtonElement>(null);
   const guestsRef = useRef<HTMLButtonElement>(null);
-  const locationRef = useRef<HTMLInputElement>(null);
+  const locationRef = useRef<SearchLocationInputElement>(null);
   const filterRef = useRef<HTMLButtonElement>(null);
-  const submitRef = useRef<HTMLButtonElement>(null);
+  const filterIconButtonRef = useRef<HTMLLabelElement>(null);
+  const submitRef = useRef<HTMLButtonElement | null>(null);
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
   );
-  const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<
+    HTMLButtonElement | HTMLLabelElement | null
+  >(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [locationPopoverOpen, setLocationPopoverOpen] = useState(false);
+  const [filterDialogOpen, setFilterDialogOpen] = useState(false);
 
   // used to highlight inputs in mobile view
   const [highlightedInput, setHighlightedInput] = useState<FormInputFields>();
@@ -213,9 +219,9 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     isFetching,
     error,
     isFetched,
-    accommodations,
     latestQueryParams,
-    isGroupMode
+    isGroupMode,
+    allAccommodations
   } = useAccommodationsAndOffers({ searchProps });
 
   const onSubmit = useCallback(() => {
@@ -235,7 +241,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
       setOpen(false);
       return;
     }
-  }, [dateRange, roomCount, adultCount, location, navigate]);
+  }, [roomCount, adultCount, dateRange, location, refetch]);
 
   // Prevent error messages from persisting on path change
   // clear errors when path changes
@@ -251,8 +257,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   }, [error]);
 
   useEffect(() => {
-    setShowAccommodationsError(!(accommodations?.length > 0) ?? false);
-  }, [accommodations]);
+    setShowAccommodationsError(!(allAccommodations?.length > 0) ?? false);
+  }, [allAccommodations]);
 
   // clear error messages on path change
   useEffect(() => {
@@ -280,6 +286,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
 
   useEffect(() => {
     if (pathname !== '/search' && pathname !== '/') return;
+
+    setIsSearchPage(pathname === '/search');
 
     const includesAllSearchParams =
       !!searchParams.get('location') &&
@@ -311,7 +319,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const fontStyling = theme.typography.body1;
   const buttonSize = 'large';
   const filterButtonStying: SxProps = {
-    backgroundColor: priceFilter.length ? theme.palette.grey[400] : undefined
+    backgroundColor: priceFilter.length ? theme.palette.grey[400] : undefined,
+    minWidth: isMobileView ? '320px' : '160px'
   };
 
   const popOversState: SearchPopoversProps = {
@@ -328,22 +337,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     setFilterAnchorEl,
     onGuestsPopoverClose: checkFieldToHighlight,
     onDatePopoverClose: checkFieldToHighlight,
-    onLocationPopoverClose: checkFieldToHighlight,
-    onFilterPopoverClose: checkFieldToHighlight
+    onLocationPopoverClose: checkFieldToHighlight
   };
-
-  const formButtonStyle: SxProps = isMobileView
-    ? {
-        justifyContent: 'start',
-        paddingLeft: theme.spacing(2),
-        '&:hover': {
-          backgroundColor: 'transparent'
-        },
-        '&.highlighted': {
-          border: `3px solid ${theme.palette.primary.main}`
-        }
-      }
-    : {};
 
   const handleLocationInputClick = useCallback(() => {
     if (isMobileView) {
@@ -383,13 +378,26 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
             </Box>
           </Grid>
           <Grid item xs={'auto'} mx={1}>
-            <IconButton disabled color="primary" component="label">
+            <IconButton
+              onClick={() => {
+                setFilterDialogOpen(true);
+              }}
+              color="primary"
+              component="label"
+              ref={filterIconButtonRef}
+              disabled={isFetching || !allAccommodations.length}
+            >
               <FilterIcon />
             </IconButton>
           </Grid>
         </Grid>
       </Box>
-
+      {/* only show in mobile  */}
+      {isMobileView && (
+        <Box>
+          <SearchFilterDialog open={filterDialogOpen} setOpen={setFilterDialogOpen} />
+        </Box>
+      )}
       <ResponsiveContainer
         open={open}
         isCloseable={isCloseable}
@@ -413,47 +421,24 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                 highlighted={highlightedInput === 'location'}
                 highlightedColor={theme.palette.primary.main}
               />
-              <Box>
-                <Button
-                  startIcon={isMobileView && <CalendarIcon />}
-                  onClick={() => setDateRangeAnchorEl(dateRef.current)}
-                  size={buttonSize}
-                  variant={isMobileView ? 'outlined' : 'text'}
-                  sx={{
-                    minWidth: isMobileView ? '320px' : '200px',
-                    whiteSpace: 'nowrap',
-                    ...fontStyling,
-                    ...formButtonStyle
-                  }}
-                  className={highlightedInput === 'dateRange' ? 'highlighted' : ''}
-                  color="inherit"
-                  ref={dateRef}
-                  disableRipple={isMobileView}
-                >
-                  {startDateDisplay(dateRange)} — {endDateDisplay(dateRange)}
-                </Button>
-              </Box>
 
-              <Box>
-                <Button
-                  startIcon={isMobileView && <PersonIcon />}
-                  sx={{
-                    minWidth: isMobileView ? '320px' : '144px',
-                    whiteSpace: 'nowrap',
-                    ...fontStyling,
-                    ...formButtonStyle
-                  }}
-                  onClick={() => setGuestsAnchorEl(guestsRef.current)}
-                  size={buttonSize}
-                  variant={isMobileView ? 'outlined' : 'text'}
-                  color="inherit"
-                  ref={guestsRef}
-                  disableRipple={isMobileView}
-                  className={highlightedInput === 'roomCount' ? 'highlighted' : ''}
-                >
-                  {guestDetailsText}
-                </Button>
-              </Box>
+              <DateRangeButton
+                onClick={() => setDateRangeAnchorEl(dateRef.current)}
+                startDate={startDate}
+                endDate={endDate}
+                className={highlightedInput === 'dateRange' ? 'highlighted' : ''}
+                ref={dateRef}
+                variant={isMobileView ? 'outlined' : 'text'}
+              />
+
+              <GuestDetailsButton
+                roomCount={roomCount}
+                adultCount={adultCount}
+                onClick={() => setGuestsAnchorEl(guestsRef.current)}
+                variant={isMobileView ? 'outlined' : 'text'}
+                ref={guestsRef}
+                className={highlightedInput === 'roomCount' ? 'highlighted' : ''}
+              />
               <Box>
                 <Button
                   disableElevation
@@ -467,35 +452,38 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                     whiteSpace: 'nowrap',
                     ...fontStyling
                   }}
-                  ref={submitRef}
+                  ref={(ref) => (submitRef.current = ref)}
                 >
                   Search
                 </Button>
               </Box>
-              <Box>
-                <Button
-                  disableElevation
-                  disabled={isFetching}
-                  variant="outlined"
-                  size={'medium'}
-                  sx={{
-                    whiteSpace: 'nowrap',
-                    ...fontStyling,
-                    ...filterButtonStying
-                  }}
-                  endIcon={<FilterIcon />}
-                  ref={filterRef}
-                  onClick={() => setFilterAnchorEl(filterRef.current)}
-                >
-                  Filter
-                </Button>
-              </Box>
+              {!isMobileView && isSearchPage ? ( // show filter button only on search page and when accommodations are available
+                <Box>
+                  <Button
+                    disableElevation
+                    disabled={isFetching || !allAccommodations.length}
+                    variant="outlined"
+                    size={'medium'}
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      ...fontStyling,
+                      ...filterButtonStying
+                    }}
+                    endIcon={<FilterIcon />}
+                    ref={filterRef}
+                    onClick={() => setFilterAnchorEl(filterRef.current)}
+                  >
+                    Filter
+                  </Button>
+                </Box>
+              ) : null}
             </Stack>
           </ToolbarStyle>
         </FormProvider>
       </ResponsiveContainer>
+
       <Stack>
-        {isGroupMode && accommodations.length && (
+        {isGroupMode && allAccommodations.length && (
           // show this message when in group mode and there are accommodations with offers
           <SearchAlert severity="info">
             You have entered the group booking mode. <br />

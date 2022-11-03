@@ -15,7 +15,7 @@ import { GuestAndRoomsInputs } from 'src/components/form-sections/GuestAndRoomsI
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { emptyFunction } from '../../utils/common';
 import { SearchFilterForm } from './SearchFilterForm';
-import { SearchLocationInput } from './SearchLocationInput';
+import { SearchLocationInput, SearchLocationInputElement } from './SearchLocationInput';
 import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 
 const Popover = styled(BasePopover)(({ theme }) => ({
@@ -42,8 +42,10 @@ export interface SearchPopoversProps {
   locationPopoverOpen: boolean;
   setLocationPopoverOpen: Dispatch<SetStateAction<boolean>>;
   isFilterPopoverOpen: boolean;
-  filterAnchorEl: HTMLButtonElement | null;
-  setFilterAnchorEl: Dispatch<SetStateAction<HTMLButtonElement | null>>;
+  filterAnchorEl: HTMLButtonElement | HTMLLabelElement | null;
+  setFilterAnchorEl: Dispatch<
+    SetStateAction<HTMLButtonElement | HTMLLabelElement | null>
+  >;
   onLocationPopoverClose?: (...args: unknown[]) => void;
   onGuestsPopoverClose?: (...args: unknown[]) => void;
   onDatePopoverClose?: (...args: unknown[]) => void;
@@ -64,12 +66,11 @@ export const SearchPopovers = ({
   setFilterAnchorEl,
   onLocationPopoverClose = emptyFunction,
   onGuestsPopoverClose = emptyFunction,
-  onDatePopoverClose = emptyFunction,
-  onFilterPopoverClose = emptyFunction
+  onDatePopoverClose = emptyFunction
 }: SearchPopoversProps) => {
   const theme = useTheme();
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<SearchLocationInputElement>(null);
 
   const datePicker = (
     <Box sx={{ width: { sx: '100%', md: 'auto' } }}>
@@ -89,9 +90,8 @@ export const SearchPopovers = ({
     setLocationPopoverOpen(false);
     focusNext !== undefined && onLocationPopoverClose('location', focusNext);
   };
-  const handleCloseFilterPopup = (focusNext: boolean | undefined = true) => {
+  const handleCloseFilterPopup = () => {
     setFilterAnchorEl(null);
-    focusNext !== undefined && onFilterPopoverClose('roomCount', focusNext);
   };
 
   const handleEscape = (_, reason) => {
@@ -102,7 +102,7 @@ export const SearchPopovers = ({
       : dateRangeAnchorEl
       ? handleCloseDatePopup(false)
       : filterAnchorEl
-      ? handleCloseFilterPopup(false)
+      ? handleCloseFilterPopup()
       : null;
   };
 
@@ -114,7 +114,7 @@ export const SearchPopovers = ({
           PaperProps={dialogPaperProps}
           onClose={handleEscape}
           TransitionProps={{
-            onEntered: () => inputRef?.current?.focus()
+            onEntered: () => inputRef?.current?.openDropdown()
           }}
         >
           <DialogContent>
@@ -133,6 +133,7 @@ export const SearchPopovers = ({
             >
               Next
             </Button>
+            <Button onClick={() => handleEscape(null, 'done')}>Done</Button>
           </DialogActions>
         </Dialog>
         <Dialog
@@ -149,6 +150,7 @@ export const SearchPopovers = ({
             >
               Next
             </Button>
+            <Button onClick={() => handleEscape(null, 'done')}>Done</Button>
           </DialogActions>
         </Dialog>
         <Dialog
@@ -165,7 +167,7 @@ export const SearchPopovers = ({
               onClick={() => handleCloseGuestsPopup(true)}
               variant={'contained'}
             >
-              Next
+              Done
             </Button>
           </DialogActions>
         </Dialog>

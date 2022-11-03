@@ -17,6 +17,8 @@ type IProps<T extends StringOrObject> = {
   optionValueField?: string;
   optionLabelField?: string;
   open?: boolean;
+  onOpen?: () => void;
+  onClose?: () => void;
 };
 
 type Props<T extends StringOrObject> = IProps<T> & TextFieldProps;
@@ -34,6 +36,8 @@ export const RHFAutocomplete = <T extends StringOrObject>({
   getOptionLabel,
   open,
   sx,
+  onOpen,
+  onClose,
   ...other
 }: Props<T>) => {
   const { control, setValue } = useFormContext();
@@ -90,6 +94,8 @@ export const RHFAutocomplete = <T extends StringOrObject>({
             options={options}
             getOptionLabel={getOptionLabelFn}
             open={open}
+            onOpen={onOpen}
+            onClose={onClose}
             renderInput={({ InputProps, inputProps, ...restParams }) => (
               <TextField
                 label={other.label}

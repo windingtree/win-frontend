@@ -1,13 +1,18 @@
 import { utils } from 'ethers';
 import { Box, Typography, Card } from '@mui/material';
-import { formatPrice } from 'src/utils/strings';
+import { formatPrice, stringToNumber } from 'src/utils/strings';
 import { CardMediaFallback } from 'src/components/CardMediaFallback';
 import { useMemo } from 'react';
 import { sortByLargestImage } from 'src/utils/accommodation';
 import { useCheckout } from 'src/hooks/useCheckout';
+import { CurrencyCode, useCurrencies } from '../../hooks/useCurrencies';
+import { useUserSettings } from '../../hooks/useUserSettings';
+import { displayPriceFromValues } from '../../utils/price';
 
 export const CheckoutSummary = () => {
   const { bookingMode, bookingInfo } = useCheckout();
+  const { convertCurrency } = useCurrencies();
+  const { preferredCurrencyCode } = useUserSettings();
   const isGroupMode = bookingMode === 'group' ? true : false;
   const accommodationName = bookingInfo?.accommodation?.name;
 
@@ -36,6 +41,21 @@ export const CheckoutSummary = () => {
   const showUSDPrice =
     formattedUsdPrice && bookingInfo.pricing?.offerCurrency.currency != 'USD';
 
+  const preferredCurrencyPrice = convertCurrency(
+    bookingInfo.pricing?.offerCurrency.currency as CurrencyCode,
+    preferredCurrencyCode,
+    stringToNumber(bookingInfo.pricing?.offerCurrency.amount, undefined, false)
+  );
+
+  const showPreferredCurrencyPrice =
+    preferredCurrencyPrice &&
+    bookingInfo.pricing?.offerCurrency.currency != preferredCurrencyCode &&
+    preferredCurrencyCode !== 'USD';
+  const subTitle2 = `Equivalent to ${displayPriceFromValues(
+    preferredCurrencyPrice?.amount,
+    preferredCurrencyCode
+  )}`;
+
   return (
     <Box>
       <Box mb={{ xs: 3, lg: 5 }}>
@@ -46,6 +66,9 @@ export const CheckoutSummary = () => {
         >
           <Typography variant="h4">{title}</Typography>
           {showUSDPrice && <Typography variant="h5">{subTitle}</Typography>}
+          {showPreferredCurrencyPrice && (
+            <Typography variant="h6">{subTitle2}</Typography>
+          )}
 
           {isGroupMode && (
             <>
