@@ -1,7 +1,7 @@
 import { utils } from 'ethers';
 import { Box, Card, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { formatPrice } from 'src/utils/strings';
+import { formatPrice, stringToNumber } from 'src/utils/strings';
 import { daysBetween } from 'src/utils/date';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { sortByLargestImage } from 'src/utils/accommodation';
@@ -9,10 +9,15 @@ import { useMemo } from 'react';
 import { CardMediaFallback } from 'src/components/CardMediaFallback';
 import FallbackImage from 'src/images/hotel-fallback.webp';
 import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
+import { CurrencyCode, useCurrencies } from '../../../hooks/useCurrencies';
+import { useUserSettings } from '../../../hooks/useUserSettings';
+import { displayPriceFromValues } from '../../../utils/price';
 
 export const CheckoutIntroduction = () => {
   const theme = useTheme();
   const { bookingMode, bookingInfo } = useCheckout();
+  const { convertCurrency } = useCurrencies();
+  const { preferredCurrencyCode } = useUserSettings();
 
   if (
     !bookingInfo ||
@@ -53,6 +58,17 @@ export const CheckoutIntroduction = () => {
 
   const showUSDPrice =
     formattedUsdPrice && bookingInfo.pricing.offerCurrency.currency != 'USD';
+
+  const preferredCurrencyPrice = convertCurrency(
+    bookingInfo.pricing?.offerCurrency.currency as CurrencyCode,
+    preferredCurrencyCode,
+    stringToNumber(bookingInfo.pricing?.offerCurrency.amount, undefined, false)
+  );
+
+  const showPreferredCurrencyPrice =
+    preferredCurrencyPrice &&
+    bookingInfo.pricing?.offerCurrency.currency != preferredCurrencyCode &&
+    preferredCurrencyCode !== 'USD';
 
   const accommodationImage = useMemo(() => {
     if (bookingInfo.accommodation) {
@@ -149,6 +165,25 @@ export const CheckoutIntroduction = () => {
           <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
           <Typography mb={{ xs: 3, lg: 2 }}>
             {formattedUsdSymbol} {formattedUsdPrice}
+          </Typography>
+        </Box>
+      )}
+      {showPreferredCurrencyPrice && (
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'row'
+          }}
+        >
+          <Typography mb={{ xs: 3, lg: 2 }}>
+            Equivalent amount in {preferredCurrencyCode}
+          </Typography>
+          <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
+          <Typography mb={{ xs: 3, lg: 2 }}>
+            {displayPriceFromValues(
+              preferredCurrencyPrice?.amount,
+              preferredCurrencyCode
+            )}
           </Typography>
         </Box>
       )}

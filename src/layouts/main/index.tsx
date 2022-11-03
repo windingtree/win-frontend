@@ -2,6 +2,8 @@ import { Box, Container, ContainerProps, Stack, SxProps } from '@mui/material';
 import MainFooter from './MainFooter';
 import MainHeader from './MainHeader';
 import { ReactNode, useRef, useEffect } from 'react';
+import { RoutedErrorBoundary } from '../../components/ErrorBoundary';
+import { useAppHistory } from '../../hooks/useAppHistory';
 
 type Props = {
   children: ReactNode;
@@ -16,6 +18,7 @@ export default function MainLayout({
   maxWidth = false,
   footer = true
 }: Props) {
+  useAppHistory();
   const ref = useRef<null | HTMLElement>(null);
 
   useEffect(() => {
@@ -29,17 +32,19 @@ export default function MainLayout({
   };
 
   return (
-    <Stack ref={ref} sx={{ minHeight: 1 }}>
-      <MainHeader childrenBelowHeader={childrenBelowHeader} />
-      <Container
-        disableGutters={maxWidth ? false : true}
-        maxWidth={maxWidth}
-        sx={mobileStyles}
-      >
-        {children}
-      </Container>
-      <Box sx={{ flexGrow: 1 }} />
-      {footer && <MainFooter />}
-    </Stack>
+    <RoutedErrorBoundary>
+      <Stack ref={ref} sx={{ minHeight: 1 }}>
+        <MainHeader childrenBelowHeader={childrenBelowHeader} />
+        <Container
+          disableGutters={maxWidth ? false : true}
+          maxWidth={maxWidth}
+          sx={mobileStyles}
+        >
+          {children}
+        </Container>
+        <Box sx={{ flexGrow: 1 }} />
+        {footer && <MainFooter />}
+      </Stack>
+    </RoutedErrorBoundary>
   );
 }

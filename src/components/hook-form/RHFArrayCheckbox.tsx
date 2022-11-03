@@ -6,7 +6,7 @@ interface RHFCheckboxProps extends Omit<FormControlLabelProps, 'control'> {
   value: string;
 }
 
-export function RHFArrayCheckbox({ name, value, ...other }: RHFCheckboxProps) {
+export function RHFArrayCheckbox({ name, value, disabled, ...other }: RHFCheckboxProps) {
   const { control } = useFormContext();
 
   return (
@@ -17,6 +17,7 @@ export function RHFArrayCheckbox({ name, value, ...other }: RHFCheckboxProps) {
           control={control}
           render={({ field }) => (
             <Checkbox
+              disabled={disabled}
               value={value}
               checked={field.value?.some((existingValue) => existingValue === value)}
               onChange={(event, checked) => {

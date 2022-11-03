@@ -1,5 +1,11 @@
 import { InputAdornment, SxProps, useMediaQuery, useTheme } from '@mui/material';
-import { forwardRef, MouseEventHandler } from 'react';
+import {
+  forwardRef,
+  MouseEventHandler,
+  useImperativeHandle,
+  useRef,
+  useState
+} from 'react';
 import { RHFAutocomplete } from '../../components/hook-form';
 import Iconify from '../../components/Iconify';
 import { emptyFunction } from '../../utils/common';
@@ -13,7 +19,16 @@ export interface SearchLocationInputProps {
   OnEnterKey?: (...args: unknown[]) => void;
 }
 
-export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationInputProps>(
+export type SearchLocationInputElement = {
+  openDropdown: () => void;
+  closeDropdown: () => void;
+  click: () => void;
+};
+
+export const SearchLocationInput = forwardRef<
+  SearchLocationInputElement,
+  SearchLocationInputProps
+>(
   (
     {
       onClick,
@@ -26,6 +41,8 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
   ) => {
     const theme = useTheme();
     const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [open, setOpen] = useState(false);
     const LocationIcon = () => (
       <Iconify icon={'eva:pin-outline'} width={18} height={18} marginLeft={0.5} />
     );
@@ -40,6 +57,12 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
           }
         : {};
 
+    useImperativeHandle(ref, () => ({
+      openDropdown: () => setOpen(true),
+      closeDropdown: () => setOpen(false),
+      click: () => inputRef?.current?.click()
+    }));
+
     return (
       <RHFAutocomplete<string>
         variant={isMobileView ? 'outlined' : 'standard'}
@@ -47,7 +70,9 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
         name="location"
         options={autocompleteData}
         width={isMobileView ? '320px' : '230px'}
-        open={allowDropdownOpen ? undefined : false}
+        open={allowDropdownOpen ? open : false}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
         inputProps={{
           style: {
             textAlign: 'start',
@@ -67,7 +92,7 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
             </InputAdornment>
           ),
           sx: highlightedStyle,
-          inputRef: ref
+          inputRef
         }}
       />
     );
