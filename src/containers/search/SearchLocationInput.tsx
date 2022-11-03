@@ -46,7 +46,7 @@ export const SearchLocationInput = forwardRef<HTMLInputElement, SearchLocationIn
         placeholder="Where are you going?"
         name="location"
         options={autocompleteData}
-        width={isMobileView ? '320px' : '200px'}
+        width={isMobileView ? '320px' : '230px'}
         open={allowDropdownOpen ? undefined : false}
         inputProps={{
           style: {
