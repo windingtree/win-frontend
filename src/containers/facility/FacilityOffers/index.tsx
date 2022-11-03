@@ -5,7 +5,7 @@ import { FacilityOffersSelectMultiple } from './FacilityOffersSelectMultiple';
 import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { FacilityOffersSelectOne } from './FacilityOffersSelectOne';
 import { FacilitySearchFormProvider } from './FacilitySearchFormProvider';
-import { FacilitySearchInputs } from './FacilitySearchInputs';
+import { FacilitySearchInputs } from './offer-item/search/FacilitySearchInputs';
 
 export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
   const { latestQueryParams } = useAccommodationsAndOffers();

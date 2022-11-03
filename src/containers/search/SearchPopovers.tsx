@@ -11,6 +11,7 @@ import {
   useTheme
 } from '@mui/material';
 import { Dispatch, SetStateAction, useRef } from 'react';
+import { GuestAndRoomsInputs } from 'src/components/form-sections/GuestAndRoomsInputs';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { emptyFunction } from '../../utils/common';
 import { SearchFilterForm } from './SearchFilterForm';
@@ -156,7 +157,7 @@ export const SearchPopovers = ({
           onClose={handleEscape}
         >
           <DialogContent>
-            <SelectGuestsAndRooms />
+            <GuestAndRoomsInputs />
           </DialogContent>
           <DialogActions>
             <Button
