@@ -127,12 +127,14 @@ export const useAccommodationsAndOffers = ({
       const priceRange = getOffersPriceRange(
         accommodation.offers,
         true,
+        true,
         false,
         numberOfDays,
         nbRooms
       );
       const preferredCurrencyPriceRange = getOffersPriceRange(
         accommodation.offers,
+        true,
         true,
         true,
         numberOfDays,
