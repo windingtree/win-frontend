@@ -80,7 +80,6 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
     const priceRange = facility.preferredCurrencyPriceRange ?? facility.priceRange;
     const currency = priceRange?.lowestPrice.currency;
-
     const totalPrice = Math.min(...prices);
 
     return (

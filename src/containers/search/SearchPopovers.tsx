@@ -11,12 +11,11 @@ import {
   useTheme
 } from '@mui/material';
 import { Dispatch, SetStateAction, useRef } from 'react';
-import { GuestAndRoomsInputs } from 'src/components/form-sections/GuestAndRoomsInputs';
+import { GuestsAndRoomsInputs } from 'src/components/form-sections/GuestsAndRoomsInputs';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 import { emptyFunction } from '../../utils/common';
 import { SearchFilterForm } from './SearchFilterForm';
 import { SearchLocationInput, SearchLocationInputElement } from './SearchLocationInput';
-import { SelectGuestsAndRooms } from './SelectGuestsAndRooms';
 
 const Popover = styled(BasePopover)(({ theme }) => ({
   width: '100%',
@@ -159,7 +158,7 @@ export const SearchPopovers = ({
           onClose={handleEscape}
         >
           <DialogContent>
-            <GuestAndRoomsInputs />
+            <GuestsAndRoomsInputs />
           </DialogContent>
           <DialogActions>
             <Button
@@ -209,7 +208,7 @@ export const SearchPopovers = ({
           }}
           marginThreshold={0}
         >
-          <SelectGuestsAndRooms />
+          <GuestsAndRoomsInputs />
         </Popover>
 
         <Popover

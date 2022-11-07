@@ -1,15 +1,20 @@
 import { Popover } from '@mui/material';
-import { GuestAndRoomsInputs } from 'src/components/form-sections/GuestAndRoomsInputs';
+import { GuestsAndRoomsInputs } from 'src/components/form-sections/GuestsAndRoomsInputs';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
 
-export const FacilitySearchPopovers = ({ dateRangeAnchorEl, guestsAnchorEl }) => {
+export const FacilitySearchPopovers = ({
+  dateRangeAnchorEl,
+  guestsAnchorEl,
+  setGuestsAnchorEl,
+  setDateRangeAnchorEl
+}) => {
   return (
     <>
       <Popover
         id="popover-date-range"
         open={Boolean(dateRangeAnchorEl)}
         anchorEl={dateRangeAnchorEl}
-        // onClose={() => handleCloseDatePopup()}
+        onClose={() => setDateRangeAnchorEl(null)}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center'
@@ -27,7 +32,7 @@ export const FacilitySearchPopovers = ({ dateRangeAnchorEl, guestsAnchorEl }) =>
         id="popover-guest-and-rooms"
         open={Boolean(guestsAnchorEl)}
         anchorEl={guestsAnchorEl}
-        // onClose={() => handleCloseGuestsPopup()}
+        onClose={() => setGuestsAnchorEl(null)}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center'
@@ -38,7 +43,7 @@ export const FacilitySearchPopovers = ({ dateRangeAnchorEl, guestsAnchorEl }) =>
         }}
         marginThreshold={0}
       >
-        <GuestAndRoomsInputs />
+        <GuestsAndRoomsInputs />
       </Popover>
     </>
   );

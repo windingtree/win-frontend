@@ -1,5 +1,5 @@
-import axios, { AxiosPromise, AxiosResponse } from 'axios';
-import { backend, PROXY_SERVER } from '../config';
+import axios, { AxiosPromise } from 'axios';
+import { PROXY_SERVER } from '../config';
 
 export interface HttpClientOptions {
   method?: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
@@ -16,16 +16,16 @@ const defaultOptions: HttpClientOptions = {
   timeoutInMs: defaultTimeout
 };
 
-export const httpClientRequest = <T>(
+export const httpClient = <T>(
   url: string,
   { method, body, headers, jwt, timeoutInMs }: HttpClientOptions = defaultOptions
-): Promise<AxiosResponse<T>> => {
+): AxiosPromise<T> => {
   const axiosInstance = axios.create();
   const extraHeaders = jwt
     ? { ...headers, Authorization: `Bearer ${jwt}` }
     : { ...headers };
 
-  return axiosInstance.request<T>({
+  return axiosInstance({
     url,
     method,
     data: body,
@@ -42,15 +42,5 @@ export const httpProxyClient = <T>(
   const encodedUrl = encodeURIComponent(url);
   const proxyUrl = PROXY_SERVER + '/' + encodedUrl;
 
-  return httpClientRequest(proxyUrl, { method, body, headers, jwt, timeoutInMs });
-};
-
-export const winBackendClientRequest = <T>(
-  endpoint: string,
-  { method, body, headers, jwt, timeoutInMs }: HttpClientOptions = defaultOptions
-): AxiosPromise<T> => {
-  // encode url adn append to proxy base uri
-  const url = backend.url + '/api' + endpoint;
-
-  return httpClientRequest(url, { method, body, headers, jwt, timeoutInMs });
+  return httpClient(proxyUrl, { method, body, headers, jwt, timeoutInMs });
 };
