@@ -29,15 +29,15 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
   useEffect(() => {
     const getBalance = async () => {
       try {
-        if (provider && account) {
+        if (provider && account && selectedNetwork?.ramp) {
           const currentBalance = await provider.getBalance(account);
           setEmptyBalance(currentBalance.eq(BigNumber.from(0)));
         } else {
-          setEmptyBalance(true);
+          setEmptyBalance(false);
         }
       } catch (err) {
         logger.error(err);
-        setEmptyBalance(true);
+        setEmptyBalance(false);
       }
     };
     getBalance();
@@ -99,10 +99,10 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
             />
           </Box>
         )}
-        <MessageBox type="warn" show={!!selectedNetwork && emptyBalance}>
+        <MessageBox type="warn" show={emptyBalance}>
           <Typography variant="body1">
             Not enough {selectedNetwork?.currency} for transaction. Get some{' '}
-            <ExternalLink href={`${selectedNetwork?.currency}${account}`} target="_blank">
+            <ExternalLink href={selectedNetwork?.ramp} target="_blank">
               on ramp
             </ExternalLink>
           </Typography>
