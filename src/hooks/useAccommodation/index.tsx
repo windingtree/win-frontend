@@ -16,13 +16,14 @@ export interface SearchPropsType {
   location: CoordinatesType;
 }
 
-export const useAccommodation = ({
-  id,
-  searchProps
-}: {
-  id: string | undefined;
-  searchProps?: SearchPropsType;
-}) => {
+export interface UseAccommodationProps {
+  id: string;
+  searchProps: SearchPropsType;
+}
+
+export const useAccommodation = (props: UseAccommodationProps) => {
+  const { id, searchProps } = props || {};
+
   const accommodationQuery = useQuery<AccommodationResponseType | undefined, Error>(
     ['accommodation-details', id],
     async () => {
@@ -35,6 +36,7 @@ export const useAccommodation = ({
   const offersQuery = useQuery<OfferResponseType | undefined, Error>(
     ['accommodation-offers', id, searchProps],
     async () => {
+      console.log(id, searchProps);
       if (!id || !searchProps) return;
 
       const { arrival, departure, roomCount, adultCount } = searchProps;

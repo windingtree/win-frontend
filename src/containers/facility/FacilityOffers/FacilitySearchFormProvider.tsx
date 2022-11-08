@@ -1,12 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { parseISO } from 'date-fns';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { FormProvider } from 'src/components/hook-form';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
-import { SearchPropsType, useAccommodation } from 'src/hooks/useAccommodation';
-import { convertToLocalTime, daysBetween } from 'src/utils/date';
+import { daysBetween } from 'src/utils/date';
 import * as Yup from 'yup';
 
 const baseRoomCountValidation = Yup.number()
@@ -68,6 +67,10 @@ type FormValuesProps = {
 export type Props = {
   children: ReactNode;
 };
+
+/**
+ * Handle the form that allows a user to search for offers based on certain search criteria
+ */
 export const FacilitySearchFormProvider = ({ children }: Props) => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -93,51 +96,8 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
     resolver: yupResolver(SearchSchema),
     defaultValues
   });
-  const { watch } = methods;
-  const { roomCount, adultCount, dateRange } = watch();
-  const [searchProps, setSearchProps] = useState<SearchPropsType | undefined>();
-
-  const arrival = useMemo(
-    () => dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate),
-    [dateRange]
-  );
-  const departure = useMemo(
-    () => dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate),
-    [dateRange]
-  );
-  const { accommodationQuery, offersQuery } = useAccommodation({ id, searchProps });
-  const { data } = accommodationQuery;
-  const { refetch } = offersQuery;
-
-  /**
-   * Set the state which is eventually being send to the BE to retrieve offers of an accommodation.
-   */
-  useEffect(() => {
-    const location = data?.accommodation?.location.coordinates;
-
-    // TODO: location can eventually be removed as the BE will support is searching without the location
-    if (!location) return;
-    setSearchProps({
-      location: { lat: location[0], lon: location[1] },
-      arrival,
-      departure,
-      roomCount: Number(roomCount),
-      adultCount: Number(adultCount)
-    });
-  }, [
-    arrival,
-    setSearchProps,
-    data?.accommodation?.location.coordinates,
-    departure,
-    roomCount,
-    adultCount
-  ]);
 
   if (!id) return null;
 
-  return (
-    <FormProvider methods={methods} onSubmit={() => refetch()}>
-      {children}
-    </FormProvider>
-  );
+  return <FormProvider methods={methods}>{children}</FormProvider>;
 };
