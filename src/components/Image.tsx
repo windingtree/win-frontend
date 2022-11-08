@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
-export type ImageRato =
+export type ImageRatio =
   | '4/3'
   | '3/4'
   | '6/4'
@@ -23,7 +23,7 @@ type IProps = BoxProps & LazyLoadImageProps;
 
 interface ImageProps extends IProps {
   sx?: SxProps<Theme>;
-  ratio?: ImageRato;
+  ratio?: ImageRatio;
   disabledEffect?: boolean;
   timeoutInSeconds?: number;
 }
