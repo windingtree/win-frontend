@@ -18,7 +18,7 @@ export type NullableDate = Date | null | undefined;
 
 export const daysBetween = (fromDate: NullableDate, toDate: NullableDate): number => {
   if (!fromDate || !toDate) return -1;
-  return (toDate.getTime() - fromDate.getTime()) / (1000 * 24 * 3600);
+  return (new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 24 * 3600);
 };
 
 export const getIsToday = (date: Date): boolean => {
