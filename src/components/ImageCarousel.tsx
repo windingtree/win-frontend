@@ -54,7 +54,7 @@ export const ImageCarousel: React.FC<{ media: MediaItem[]; ratio: ImageRato }> =
         }}
         hideArrows={media?.length > 1 ? false : true} // hide arrows when image is less than 2
       >
-        <Slider ref={carouselRef} {...settings}>
+        <Slider ref={carouselRef} {...settings} lazyLoad={'anticipated'}>
           {media && media.length > 0 ? (
             media.map((item, i) => <Image key={i} src={item.url} ratio={ratio} />)
           ) : (
