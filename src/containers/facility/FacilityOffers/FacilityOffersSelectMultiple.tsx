@@ -16,7 +16,6 @@ import { useSnackbar } from 'notistack';
 import { getRoomOfOffer, getTotalRoomCountReducer } from 'src/utils/offers';
 import type { OfferRecord } from 'src/store/types';
 import { MHidden } from 'src/components/MHidden';
-import { FacilityOffersTitle } from './FacilityOffersTitle';
 import { OfferItemSelectMultiple } from './offer-item/OfferItemSelectMultiple';
 import { GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { sortAccommodationOffersByPrice } from 'src/utils/accommodation';
@@ -139,14 +138,6 @@ export const FacilityOffersSelectMultiple = () => {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <FacilityOffersTitle
-        rooms={roomCount}
-        guests={guestCount}
-        startDate={arrival?.toUTCString()}
-        nights={nightCount}
-        roomsAvailable={accommodation?.offers?.length ?? 0}
-      />
-
       <Grid container spacing={4}>
         <Grid
           order={{ xs: 1, md: 2 }}
