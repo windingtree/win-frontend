@@ -2,7 +2,7 @@ import Slider from 'react-slick';
 import { useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import Image, { ImageRato } from './Image';
+import Image, { ImageRatio } from './Image';
 import { CarouselDots, CarouselArrows } from './carousel/';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
 
@@ -14,7 +14,7 @@ const RootStyle = styled(Box)(({ theme }) => ({
   }
 }));
 
-export const ImageCarousel: React.FC<{ media: MediaItem[]; ratio: ImageRato }> = ({
+export const ImageCarousel: React.FC<{ media: MediaItem[]; ratio: ImageRatio }> = ({
   media,
   ratio
 }) => {
@@ -54,7 +54,7 @@ export const ImageCarousel: React.FC<{ media: MediaItem[]; ratio: ImageRato }> =
         }}
         hideArrows={media?.length > 1 ? false : true} // hide arrows when image is less than 2
       >
-        <Slider ref={carouselRef} {...settings}>
+        <Slider ref={carouselRef} {...settings} lazyLoad={'anticipated'}>
           {media && media.length > 0 ? (
             media.map((item, i) => <Image key={i} src={item.url} ratio={ratio} />)
           ) : (
