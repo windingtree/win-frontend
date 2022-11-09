@@ -226,7 +226,9 @@ export const PaymentCard = ({
     setCostError(undefined);
 
     if (payment && balance && balance.lt(paymentValue)) {
-      setCostError('Balance not enough for payment');
+      setCostError(
+        `You don’t have enough ${asset?.symbol} in your wallet, please top-up your wallet before proceeding`
+      );
     }
   }, [payment, balance, paymentValue]);
 
@@ -570,18 +572,18 @@ export const PaymentCard = ({
         </Typography>
       </MessageBox>
 
-      <MessageBox type="warn" show={!!costError}>
+      <MessageBox type="info" show={!!costError}>
         <Typography variant="body1">
-          {costError}. Get some {asset.symbol}{' '}
+          {costError}{' '}
           {asset.ramp !== undefined && (
             <ExternalLink href={`${asset.ramp}${account}`} target="_blank">
-              on ramp
+              Top-up Wallet
             </ExternalLink>
           )}
         </Typography>
       </MessageBox>
 
-      <MessageBox type="warn" show={!!permitError}>
+      <MessageBox type="warning" show={!!permitError}>
         <Typography variant="body1">
           {permitError}
           <br />
@@ -589,7 +591,7 @@ export const PaymentCard = ({
         </Typography>
       </MessageBox>
 
-      <MessageBox type="warn" show={!!approvalError}>
+      <MessageBox type="warning" show={!!approvalError}>
         <Typography variant="body1">
           {approvalError}
           <br />
@@ -604,7 +606,7 @@ export const PaymentCard = ({
         </Typography>
       </MessageBox>
 
-      <MessageBox type="warn" show={!!paymentError}>
+      <MessageBox type="warning" show={!!paymentError}>
         <Typography variant="body1">{paymentError}</Typography>
         <Typography variant="body1">
           Please check your account transactions history on the block explorer:&nbsp;

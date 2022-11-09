@@ -53,7 +53,7 @@ export const Bookings = () => {
 
   return (
     <MainLayout>
-      <MessageBox type="warn" show={!account}>
+      <MessageBox type="warning" show={!account}>
         <Grid container direction="row" alignItems="center">
           <Grid item marginRight={theme.spacing(5)}>
             Please connect your wallet
@@ -64,7 +64,7 @@ export const Bookings = () => {
         </Grid>
       </MessageBox>
 
-      <MessageBox type="warn" show={!!account && !isLoggedIn}>
+      <MessageBox type="warning" show={!!account && !isLoggedIn}>
         <Grid container direction="row" alignItems="center">
           <Grid item marginRight={theme.spacing(5)}>
             Please authorize your account. You will be prompted for signature.
@@ -84,7 +84,7 @@ export const Bookings = () => {
         </Grid>
       </MessageBox>
 
-      <MessageBox type="warn" show={isAccountContract}>
+      <MessageBox type="warning" show={isAccountContract}>
         It seems that your connected account is a multisig wallet or other smart contract.
         It is not possible to authorize a smart contract address.
       </MessageBox>
