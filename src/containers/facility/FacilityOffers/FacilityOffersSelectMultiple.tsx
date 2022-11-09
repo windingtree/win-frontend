@@ -1,14 +1,13 @@
 import { Box, Grid, Typography } from '@mui/material';
 import { FormProvider } from 'src/components/hook-form';
-import { useForm, FieldValues } from 'react-hook-form';
+import { useForm, FieldValues, useFormContext } from 'react-hook-form';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { FacilityOffersSelectMultipleSummary } from './FacilityOffersMultipleSummary';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
 import { useResponsive } from 'src/hooks/useResponsive';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
-import { daysBetween } from 'src/utils/date';
+import { convertToLocalTime, daysBetween } from 'src/utils/date';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
@@ -19,6 +18,7 @@ import { MHidden } from 'src/components/MHidden';
 import { OfferItemSelectMultiple } from './offer-item/OfferItemSelectMultiple';
 import { GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { sortAccommodationOffersByPrice } from 'src/utils/accommodation';
+import { WinAccommodation } from '@windingtree/glider-types/dist/win';
 
 export interface OfferCheckoutType extends OfferRecord {
   quantity: string;
@@ -45,26 +45,34 @@ export type FacilityOffersSelectMultipleFormProps = {
   offers: OfferCheckoutType[];
 };
 
-export const FacilityOffersSelectMultiple = () => {
-  const { getAccommodationById, accommodations, latestQueryParams } =
-    useAccommodationsAndOffers();
-  const params = useParams();
+type FacilityOffersSelectMultipleProps = {
+  accommodation?: WinAccommodation;
+  offers?: OfferRecord[];
+};
+
+export const FacilityOffersSelectMultiple = ({
+  accommodation,
+  offers
+}: FacilityOffersSelectMultipleProps) => {
+  const { watch } = useFormContext();
+  const { roomCount: initialRoomCount, adultCount, dateRange } = watch();
+  const arrival = useMemo(
+    () => dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate),
+    [dateRange]
+  );
+  const departure = useMemo(
+    () => dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate),
+    [dateRange]
+  );
+  //TODO: if we support children, get it from the form inputs
+  const childrenCount = 0;
+
   const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const isDesktop = useResponsive('up', 'md');
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const id: string = params.id as string;
-  const accommodation = useMemo(
-    () => getAccommodationById(accommodations, id),
-    [accommodations, getAccommodationById, id]
-  );
-
-  const offers = accommodation && sortAccommodationOffersByPrice(accommodation);
-
-  const defaultRoomCount = latestQueryParams?.roomCount
-    ? latestQueryParams.roomCount
-    : GROUP_MODE_ROOM_COUNT;
+  const defaultRoomCount = initialRoomCount ? initialRoomCount : GROUP_MODE_ROOM_COUNT;
 
   // ----------------------------------------------------------------------
   const defaultOffers = useMemo(
@@ -75,14 +83,10 @@ export const FacilityOffersSelectMultiple = () => {
     resolver: yupResolver(GroupOffersSchema),
     defaultValues: { offers: defaultOffers } as FieldValues
   });
-  const { handleSubmit, watch } = methods;
-  const values = watch();
+  const { handleSubmit, watch: rewatch } = methods;
+  const values = rewatch();
 
-  // ----------------------------------------------------------------------
-
-  if (!latestQueryParams || !accommodation) return null;
-
-  const { arrival, departure, adultCount, childrenCount, location } = latestQueryParams;
+  console.log(watch(), rewatch());
   const nightCount = daysBetween(arrival, departure);
   const guestCount = (adultCount ?? 0) + (childrenCount ?? 0);
   const roomCount = values.offers.reduce(getTotalRoomCountReducer, 0);
@@ -117,7 +121,6 @@ export const FacilityOffersSelectMultiple = () => {
     setOrganizerInfo(undefined);
     setBookingInfo(
       {
-        location: location,
         accommodation,
         date: {
           arrival,

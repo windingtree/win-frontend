@@ -25,6 +25,7 @@ export const OfferInformation = ({
   room,
   offer
 }: OfferInformationType): JSX.Element | null => {
+  console.log(room, offer);
   if (!room || !offer) return null;
 
   const { name, maximumOccupancy, description } = room;

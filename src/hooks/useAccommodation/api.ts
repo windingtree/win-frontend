@@ -45,7 +45,7 @@ export const fetchOffers = async ({
     accommodation: {
       location: {
         ...location,
-        radius: 20000
+        radius: 1
       },
       arrival,
       departure,

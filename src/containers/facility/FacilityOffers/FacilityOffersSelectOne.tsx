@@ -1,32 +1,32 @@
-import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { WinAccommodation } from '@windingtree/glider-types/dist/win';
+import { OfferRecord } from 'src/store/types';
 import { sortAccommodationOffersByPrice } from 'src/utils/accommodation';
 import { getRoomOfOffer } from 'src/utils/offers';
 import { OfferItemSelectOne } from './offer-item/OfferItemSelectOne';
 
-export const FacilityOffersSelectOne = () => {
-  const { getAccommodationById, accommodations, latestQueryParams } =
-    useAccommodationsAndOffers();
-  const params = useParams();
-  const id: string = params.id as string;
-
-  const accommodation = useMemo(
-    () => getAccommodationById(accommodations, id),
-    [accommodations, id, getAccommodationById]
-  );
-
-  if (!latestQueryParams || !accommodation) return null;
-
-  const offers = sortAccommodationOffersByPrice(accommodation);
+type FacilityOffersSelectOneProps = {
+  accommodation?: WinAccommodation;
+  offers?: OfferRecord[];
+};
+export const FacilityOffersSelectOne = ({
+  accommodation,
+  offers
+}: FacilityOffersSelectOneProps) => {
+  if (!offers || !accommodation) return null;
 
   return (
     <>
       {offers?.map((offer, index) => {
-        const room = getRoomOfOffer(accommodation, offer);
+        console.log('ACC', accommodation, offer);
+        const room = getRoomOfOffer(accommodation.roomTypes, offer);
 
         return (
-          <OfferItemSelectOne key={index} facilityId={id} offer={offer} room={room} />
+          <OfferItemSelectOne
+            key={index}
+            accommodation={accommodation}
+            offer={offer}
+            room={room}
+          />
         );
       })}
     </>

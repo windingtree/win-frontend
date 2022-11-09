@@ -106,7 +106,7 @@ export interface BookingInfoType {
     arrival: Date;
     departure: Date;
   };
-  accommodation?: AccommodationWithId;
+  accommodation?: AccommodationWithId | WinAccommodation;
   offers?: OfferCheckoutType[];
 
   pricing?: GroupBookingDeposits;

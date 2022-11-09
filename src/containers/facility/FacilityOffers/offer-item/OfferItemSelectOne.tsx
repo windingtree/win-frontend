@@ -1,11 +1,15 @@
-import type { RoomTypes, WinPricedOffer } from '@windingtree/glider-types/dist/win';
+import type {
+  RoomTypes,
+  WinAccommodation,
+  WinPricedOffer
+} from '@windingtree/glider-types/dist/win';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useMemo, useState } from 'react';
 import axios from 'axios';
 import type { OfferRecord } from 'src/store/types';
 import { Box, Grid, Divider, Typography, useTheme } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { daysBetween } from 'src/utils/date';
+import { convertToLocalTime, daysBetween } from 'src/utils/date';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
@@ -16,30 +20,34 @@ import { useSnackbar } from 'notistack';
 import { useCurrencies } from '../../../../hooks/useCurrencies';
 import { useUserSettings } from '../../../../hooks/useUserSettings';
 import { displayPriceFromPrice } from '../../../../utils/price';
+import { useFormContext } from 'react-hook-form';
 
 const logger = Logger('OfferItemSelectOne');
 
 export const OfferItemSelectOne: React.FC<{
   room: RoomTypes;
   offer: OfferRecord;
-  facilityId: string;
-}> = ({ offer, facilityId, room }) => {
+  accommodation: WinAccommodation;
+}> = ({ offer, room, accommodation }) => {
+  const { watch } = useFormContext();
+  const { roomCount, adultCount, dateRange } = watch();
+
+  const arrival = useMemo(
+    () => dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate),
+    [dateRange]
+  );
+  const departure = useMemo(
+    () => dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate),
+    [dateRange]
+  );
+
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const { latestQueryParams, getAccommodationById, accommodations } =
-    useAccommodationsAndOffers();
-  const arrival = latestQueryParams?.arrival;
-  const departure = latestQueryParams?.departure;
   const navigate = useNavigate();
   const numberOfDays = daysBetween(arrival, departure);
-  const roomsNumber = latestQueryParams?.roomCount;
   const [loading, setLoading] = useState<boolean>(false);
   const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const { enqueueSnackbar } = useSnackbar();
-  const accommodation = useMemo(
-    () => getAccommodationById(accommodations, facilityId),
-    [accommodations, facilityId, getAccommodationById]
-  );
   const { convertPriceCurrency } = useCurrencies();
   const { preferredCurrencyCode } = useUserSettings();
 
@@ -66,7 +74,6 @@ export const OfferItemSelectOne: React.FC<{
             //TODO: review whether passing the quote is still needed
             quote: res.data.quote,
             accommodation,
-            location: latestQueryParams?.location,
             date: {
               arrival,
               departure
@@ -80,7 +87,7 @@ export const OfferItemSelectOne: React.FC<{
               // BE is likely to update the data structure the same way as for group booking, in the mean time we hardcode the usd value like this.
               usd: res.data.quote?.sourceAmount
             },
-            adultCount: latestQueryParams?.adultCount,
+            adultCount: adultCount,
             serviceId: res.data.serviceId,
             providerId: res.data.provider,
             offers: [{ ...offer, ...res.data.offer, quantity: '1' }]
@@ -129,7 +136,7 @@ export const OfferItemSelectOne: React.FC<{
                 {displayPriceFromPrice(price)}
               </Typography>
               <Typography textAlign={'right'}>
-                {`Price for ${numberOfDays} nights, ${roomsNumber} room(s)`}
+                {`Price for ${numberOfDays} nights, ${roomCount} room(s)`}
               </Typography>
 
               <LoadingButton

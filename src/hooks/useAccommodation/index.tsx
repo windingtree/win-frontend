@@ -1,5 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { CoordinatesType } from 'src/utils/accommodation';
+import { useAccommodationsAndOffersHelpers } from '../useAccommodationsAndOffers/useAccommodationsAndOffersHelpers';
+import { useCurrencies } from '../useCurrencies';
+import { useUserSettings } from '../useUserSettings';
 import {
   AccommodationResponseType,
   fetchAccommodation,
@@ -17,11 +21,15 @@ export interface SearchPropsType {
 }
 
 export interface UseAccommodationProps {
-  id: string;
-  searchProps: SearchPropsType;
+  id?: string;
+  searchProps?: SearchPropsType;
 }
 
 export const useAccommodation = (props: UseAccommodationProps) => {
+  const { convertPriceCurrency } = useCurrencies();
+  const { preferredCurrencyCode } = useUserSettings();
+  const { normalizeOffers } = useAccommodationsAndOffersHelpers();
+
   const { id, searchProps } = props || {};
 
   const accommodationQuery = useQuery<AccommodationResponseType | undefined, Error>(
@@ -36,7 +44,6 @@ export const useAccommodation = (props: UseAccommodationProps) => {
   const offersQuery = useQuery<OfferResponseType | undefined, Error>(
     ['accommodation-offers', id, searchProps],
     async () => {
-      console.log(id, searchProps);
       if (!id || !searchProps) return;
 
       const { arrival, departure, roomCount, adultCount } = searchProps;
@@ -52,10 +59,26 @@ export const useAccommodation = (props: UseAccommodationProps) => {
       //     | undefined;
 
       // },
+      enabled: false,
       cacheTime: offerExpirationTime,
       refetchInterval: offerExpirationTime
     }
   );
 
-  return { accommodationQuery, offersQuery };
+  const { data, ...restOffersQuery } = offersQuery;
+  const { offers, ...restData } = data || {};
+
+  const normalizedOffers = useMemo(
+    () => data?.offers && normalizeOffers(offers),
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, preferredCurrencyCode, normalizeOffers]
+  );
+
+  const normalizedOffersQuery = {
+    data: { offers: normalizedOffers, ...restData },
+    ...restOffersQuery
+  };
+
+  return { accommodationQuery, offersQuery: normalizedOffersQuery };
 };

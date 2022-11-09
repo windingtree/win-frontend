@@ -26,7 +26,7 @@ export const useAccommodationsAndOffersHelpers = () => {
 
   // normalize offers hook
   const normalizeOffers = useCallback(
-    (offers: Record<string, Offer>): OfferRecord[] => {
+    (offers: Record<string, Offer> | undefined): OfferRecord[] => {
       if (!offers) return [];
 
       const normalizedData = Object.entries(offers).map<OfferRecord>(([key, value]) => ({

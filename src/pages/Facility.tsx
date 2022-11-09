@@ -7,6 +7,7 @@ import { createRef, useCallback } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { FacilityIntroduction } from 'src/containers/facility/FacilityIntroduction';
 import { FacilitySearchFormProvider } from 'src/containers/facility/FacilityOffers/FacilitySearchFormProvider';
+import { FacilityCovid } from 'src/containers/facility/FacilityCovid';
 
 export const Facility = () => {
   const detailImagesRef = createRef<HTMLDivElement>();
@@ -49,6 +50,7 @@ export const Facility = () => {
 
         <FacilityIntroduction scrollToDetailImages={scrollToDetailImages} />
         <FacilityOffers ref={detailImagesRef} />
+        <FacilityCovid />
       </MainLayout>
     </FacilitySearchFormProvider>
   );

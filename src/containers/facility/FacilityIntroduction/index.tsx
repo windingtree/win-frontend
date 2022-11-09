@@ -6,16 +6,7 @@ import {
   getOffersPriceRange
 } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { MediaItem, WinAccommodation } from '@windingtree/glider-types/dist/win';
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogProps,
-  DialogTitle,
-  Link,
-  Stack,
-  Typography
-} from '@mui/material';
+import { Alert, AlertTitle, Button, Link, Stack, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { useMemo, useState } from 'react';
@@ -28,9 +19,9 @@ import { FacilityGallery } from './FacilityGallery';
 import { daysBetween } from 'src/utils/date';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from 'src/components/LightboxModal';
-import Iconify from 'src/components/Iconify';
 import { displayPriceFromValues } from '../../../utils/price';
 import { useAccommodation } from 'src/hooks/useAccommodation';
+import { FacilityLoadingSkeleton } from './FacilityLoadingSkeleton';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -172,66 +163,6 @@ const HotelAddress = ({
   );
 };
 
-const CovidDialog = ({
-  open = false,
-  handleClose
-}: {
-  open: boolean;
-  handleClose: () => void;
-}) => {
-  const theme = useTheme();
-  const paperStyles: DialogProps['PaperProps'] = {
-    sx: {
-      '&.MuiPaper-rounded': {
-        border: `1px solid ${theme.palette.error.main}`
-      },
-      position: 'absolute',
-      left: 200,
-      top: 95
-    }
-  };
-
-  return (
-    <Dialog open={open} onClose={handleClose} PaperProps={paperStyles}>
-      <DialogTitle mb={1}>
-        <Stack direction={'row'} alignItems={'center'}>
-          <Iconify
-            icon={'typcn:info-large'}
-            sx={{
-              border: `1px solid ${theme.palette.error.darker}`,
-              borderRadius: '50%',
-              color: theme.palette.error.darker,
-              mr: 1
-            }}
-            fontSize="large"
-          />
-          <Typography variant="h6">Coronavirus (COVID-19) Support</Typography>
-        </Stack>
-      </DialogTitle>
-      <DialogContent>
-        <Typography variant="body2">
-          Please check for travel restrictions. In response to Coronavirus (COVID-19),
-          travel may be permitted only for certain purposes and in particular, touristic
-          travel may not be allowed, and certain services and amenities may be
-          unavailable.
-        </Typography>
-        <br />
-        <Typography variant="body2">
-          Please verify the information published by the government authorities. An
-          overview of country specific rules for COVID can be found{' '}
-          <Link
-            href="https://apply.joinsherpa.com/travel-restrictions"
-            target={'_blank'}
-            rel="noreferrer"
-          >
-            here
-          </Link>
-        </Typography>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
 const HeaderTitle = ({
   name,
   address,
@@ -242,17 +173,10 @@ const HeaderTitle = ({
   accommodation: WinAccommodation | null;
 }) => {
   const theme = useTheme();
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const handleOpenDialog = () => setDialogOpen(true);
-  const handleCloseDialog = () => setDialogOpen(false);
+
   return (
     <HeaderTitleContainer>
       <Box>
-        <Box mb={3}>
-          <Link href="#" onClick={handleOpenDialog} variant={'h6'}>
-            COVID-19 Support
-          </Link>
-        </Box>
         <Typography variant="h2" marginBottom={theme.spacing(1.5)}>
           {name}
         </Typography>
@@ -260,7 +184,6 @@ const HeaderTitle = ({
           address={address}
           coordinates={accommodation?.location?.coordinates}
         />
-        <CovidDialog open={dialogOpen} handleClose={handleCloseDialog} />
       </Box>
     </HeaderTitleContainer>
   );
@@ -276,7 +199,7 @@ export const FacilityIntroduction = ({
   const [slideOpen, setSlideOpen] = useState<boolean>(false);
   const [slideIndex, setSlideIndex] = useState<number>(0);
   const { accommodationQuery } = useAccommodation({ id });
-  const { data } = accommodationQuery;
+  const { data, isLoading, error } = accommodationQuery;
   const accommodation = data?.accommodation;
 
   const sortedImages: MediaItem[] = useMemo(
@@ -313,6 +236,22 @@ export const FacilityIntroduction = ({
 
   const [mainImage, ...rest] = sortedImages;
   const address = buildAccommodationAddress(accommodation);
+
+  if (isLoading) return <FacilityLoadingSkeleton />;
+
+  if (error) {
+    return (
+      <Box>
+        <Alert severity="error" sx={{ display: 'inline-block' }}>
+          <Stack>
+            <AlertTitle>Something went wrong.</AlertTitle>
+            Please try to search for accommodations again.
+            <Button variant="contained">Search again</Button>
+          </Stack>
+        </Alert>
+      </Box>
+    );
+  }
 
   if (!accommodation) return null;
 
