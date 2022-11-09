@@ -99,12 +99,15 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
             />
           </Box>
         )}
-        <MessageBox type="warn" show={emptyBalance}>
+        <MessageBox type="warning" show={emptyBalance}>
           <Typography variant="body1">
-            Not enough {selectedNetwork?.currency} for transaction. Get some{' '}
-            <ExternalLink href={selectedNetwork?.ramp} target="_blank">
-              on ramp
-            </ExternalLink>
+            You don’t have enough {selectedNetwork?.currency} in your wallet, please
+            top-up your wallet before proceeding{' '}
+            {selectedNetwork?.ramp !== undefined && (
+              <ExternalLink href={selectedNetwork?.ramp} target="_blank">
+                Add {selectedNetwork?.currency}
+              </ExternalLink>
+            )}
           </Typography>
         </MessageBox>
       </Box>
