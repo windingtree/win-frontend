@@ -277,7 +277,8 @@ export const PaymentCard = ({
           account,
           asset: asset.address,
           value: paymentValue,
-          expiration: payment.expiration
+          expiration: payment.expiration,
+          permitSalt: asset.permitSalt
         });
         const signature = await createPermitSignature(
           provider.getSigner() as unknown as Wallet,
@@ -285,7 +286,8 @@ export const PaymentCard = ({
           account,
           asset.address,
           paymentValue,
-          payment.expiration
+          payment.expiration,
+          asset.permitSalt
         );
         logger.debug('Permit signature', signature);
         setPermitSignature(signature);
