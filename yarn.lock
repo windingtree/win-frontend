@@ -5521,10 +5521,10 @@
   dependencies:
     ethers "^5.6.9"
 
-"@windingtree/win-pay@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.8.0.tgz#71bffee39d579c07cdb618e90142d00af82a0993"
-  integrity sha512-IX14W75fWciDk/GUiTaa0uLl7LkpLI1e+kCdw9CN5q4y+KZS59K+7ZU/v/U4XmvKGCOYLXY67zCiN62NssZwhQ==
+"@windingtree/win-pay@^1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@windingtree/win-pay/-/win-pay-1.9.0.tgz#b61f95508909f3b0d090885584bcd4c6968365ed"
+  integrity sha512-8TUI27ZUYoeyG1iCpNHGFpF6Zg0nueD20mVgCoHkFVE4EqHnGME7fiX1pt5Ghwwuj0wuusSUBM5khV4GOUZoOQ==
   dependencies:
     "@openzeppelin/contracts" "^4.7.1"
     "@openzeppelin/contracts-upgradeable" "^4.7.1"

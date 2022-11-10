@@ -80,7 +80,7 @@
     "@windingtree/glider-types": "^4.0.1",
     "@windingtree/org.id-utils": "^1.0.0-beta.47",
     "@windingtree/win-commons": "^2.1.1",
-    "@windingtree/win-pay": "^1.8.0",
+    "@windingtree/win-pay": "^1.9.0",
     "axios": "^0.27.2",
     "babel-plugin-named-exports-order": "^0.0.2",
     "buffer": "^6.0.3",
