@@ -1,12 +1,10 @@
 import type { ReactNode } from 'react';
-import type { Web3ModalConfig } from '../hooks/useWeb3Modal';
-import { createContext, useContext, useEffect } from 'react';
-import WalletConnectProvider from '@walletconnect/web3-provider';
+// import type { Web3ModalConfig } from '../hooks/useWeb3Modal';
+import { createContext, useContext } from 'react';
 import { useAppReducer } from './reducer';
-import { useWeb3Modal } from '../hooks/useWeb3Modal';
-import { allowedNetworks } from '../config';
+// import { useWeb3Modal } from '../hooks/useWeb3Modal';
 // import { useRpcProvider } from '../hooks/useRpcProvider';
-import { useAccount } from '../hooks/useAccount';
+// import { useProvider } from '@web3modal/react'
 
 export type AppReducerType = ReturnType<typeof useAppReducer>;
 export type State = AppReducerType[0];
@@ -36,58 +34,65 @@ export const useAppDispatch = () => {
 };
 
 // Web3Modal initialization
-const web3ModalConfig: Web3ModalConfig = {
-  cacheProvider: true,
-  providerOptions: {
-    walletconnect: {
-      package: WalletConnectProvider,
-      options: {
-        rpc: allowedNetworks.reduce((a, v) => ({ ...a, [v.chainId]: v.rpc }), {})
-      }
-    }
-  }
-};
+// const web3ModalConfig = {
+//   cacheProvider: true,
+//   providerOptions: {
+//     coinbasewallet: {
+//       package: CoinbaseWalletSDK,
+//       options: {
+//         rpc: allowedNetworks.reduce((a, v) => ({ ...a, [v.chainId]: v.rpc }), {})
+//       }
+//     },
+//     walletconnect: {
+//       package: WalletConnectProvider,
+//       options: {
+//         rpc: allowedNetworks.reduce((a, v) => ({ ...a, [v.chainId]: v.rpc }), {})
+//       }
+//     }
+//   }
+// };
 
 export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useAppReducer();
-  const [provider, signIn, signOut, isWeb3ModalConnecting] =
-    useWeb3Modal(web3ModalConfig);
-  const [account, isAccountLoading] = useAccount(provider);
+  // const { provider, isReady } = useProvider(web3ModalConfig)
+  // const [provider, signIn, signOut, isWeb3ModalConnecting] =
+  //   useWeb3Modal(web3ModalConfig);
+  // const [account, isAccountLoading] = useAccount(provider);
 
-  useEffect(() => {
-    dispatch({
-      type: 'SET_CONNECTING',
-      payload: isWeb3ModalConnecting || isAccountLoading
-    });
-  }, [dispatch, isWeb3ModalConnecting, isAccountLoading]);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'SET_CONNECTING',
+  //     payload: isWeb3ModalConnecting || isAccountLoading
+  //   });
+  // }, [dispatch, isWeb3ModalConnecting, isAccountLoading]);
 
-  useEffect(() => {
-    dispatch({
-      type: 'SET_WEB3MODAL_SIGN_IN',
-      payload: signIn
-    });
-  }, [dispatch, signIn]);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'SET_WEB3MODAL_SIGN_IN',
+  //     payload: signIn
+  //   });
+  // }, [dispatch, signIn]);
 
-  useEffect(() => {
-    dispatch({
-      type: 'SET_WEB3MODAL_SIGN_OUT',
-      payload: signOut
-    });
-  }, [dispatch, signOut]);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'SET_WEB3MODAL_SIGN_OUT',
+  //     payload: signOut
+  //   });
+  // }, [dispatch, signOut]);
 
-  useEffect(() => {
-    dispatch({
-      type: 'SET_PROVIDER',
-      payload: provider
-    });
-  }, [dispatch, provider]);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'SET_PROVIDER',
+  //     payload: provider
+  //   });
+  // }, [dispatch, provider]);
 
-  useEffect(() => {
-    dispatch({
-      type: 'SET_ACCOUNT',
-      payload: account
-    });
-  }, [dispatch, account]);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'SET_ACCOUNT',
+  //     payload: account
+  //   });
+  // }, [dispatch, account]);
 
   return (
     <StateContext.Provider value={state}>

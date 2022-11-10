@@ -5,15 +5,18 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { isContract } from '@windingtree/win-commons/dist/multisig';
 import { MessageBox } from '../components/MessageBox';
-import { SignInButton } from '../components/Web3Modal';
 import MainLayout from '../layouts/main';
 import { useBookingsAuth } from '../hooks/useBookingsAuth';
 import { useBookings } from '../hooks/useBookings';
 import Iconify from '../components/Iconify';
+import { useProvider, useAccount, Web3Button } from '@web3modal/react';
+import { ethers } from 'ethers';
 
 export const Bookings = () => {
   const theme = useTheme();
-  const { account, provider, walletAuth } = useAppState();
+  const { walletAuth } = useAppState();
+  const { provider, isReady: isProviderReady } = useProvider();
+  const { account } = useAccount();
   const { login, logout } = useBookingsAuth();
   const bookings = useBookings();
   const [isLogin, setLogin] = useState<boolean>(false);
@@ -24,8 +27,13 @@ export const Bookings = () => {
   useEffect(() => {
     const checkIsContract = async () => {
       try {
-        if (account && provider) {
-          setIsContract(await isContract(account, provider));
+        if (account.isConnected && isProviderReady && provider !== undefined) {
+          setIsContract(
+            await isContract(
+              account.address,
+              provider as unknown as ethers.providers.Web3Provider
+            )
+          );
         } else {
           setIsContract(false);
         }
@@ -53,13 +61,13 @@ export const Bookings = () => {
 
   return (
     <MainLayout>
-      <MessageBox type="warning" show={!account}>
+      <MessageBox type="warning" show={!account.isConnected}>
         <Grid container direction="row" alignItems="center">
           <Grid item marginRight={theme.spacing(5)}>
             Please connect your wallet
           </Grid>
           <Grid item>
-            <SignInButton />
+            <Web3Button />
           </Grid>
         </Grid>
       </MessageBox>

@@ -11,12 +11,11 @@ import {
   Button,
   IconButton
 } from '@mui/material';
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import { centerEllipsis, copyToClipboard } from '../utils/strings';
 import Iconify from '../components/Iconify';
 import { SignOutButton } from './Web3Modal';
-import { useAppState } from '../store';
-import { getNetworkInfo } from '../config';
+import { Web3Button, useAccount, useNetwork } from '@web3modal/react';
 
 export interface AccountProps {
   account: string;
@@ -63,35 +62,20 @@ export const Account = ({ account, open }: AccountProps) => {
 export const AccountInfo = () => {
   const theme = useTheme();
   const boxRef = useRef<HTMLDivElement>(null);
-  const { account, provider } = useAppState();
-  const [open, setOpen] = useState<boolean>(false);
-  const [explorer, setExplorer] = useState<string | undefined>();
-  const connectedWith = useMemo(
-    () => (provider && provider.provider.isMetaMask ? 'MetaMask' : 'WalletConnect'),
-    [provider]
-  );
+  const { account } = useAccount();
+  const { network } = useNetwork();
 
-  useEffect(() => {
-    const getExplorer = async () => {
-      try {
-        if (!provider) {
-          setExplorer(undefined);
-          return;
-        }
-        const { chainId } = await provider.getNetwork();
-        const { blockExplorer } = getNetworkInfo(chainId);
-        setExplorer(blockExplorer);
-      } catch (err) {
-        setExplorer(undefined);
-      }
-    };
-    getExplorer();
-  }, [provider]);
+  const [open, setOpen] = useState<boolean>(false);
+  //@todo
+  // const connectedWith = useMemo(
+  //   () => (provider && provider.isMetaMask ? 'MetaMask' : 'WalletConnect'),
+  //   [provider]
+  // );
 
   const handleOpen = useCallback(() => {
     setOpen(true);
-    if (account) {
-      copyToClipboard(account);
+    if (account.isConnected) {
+      copyToClipboard(account.address);
     }
   }, [account]);
 
@@ -100,14 +84,17 @@ export const AccountInfo = () => {
   };
 
   const handleOpenExplorer = (type: 'address' | 'tx', value: string) => {
-    if (!explorer) {
+    if (!network || !network.chain) {
       return;
     }
-    window.open(`${explorer}/${type}/${value}`, '_blank');
+    window.open(
+      `${network.chain?.blockExplorers?.default.url}/${type}/${value}`,
+      '_blank'
+    );
   };
 
-  if (!account) {
-    return null;
+  if (!account.isConnected) {
+    return <Web3Button />;
   }
 
   return (
@@ -120,7 +107,7 @@ export const AccountInfo = () => {
           borderRadius: '6px'
         }}
       >
-        <Account account={account} open={open} />
+        <Account account={account.address} open={open} />
       </Box>
       <Popover
         id="account_control"
@@ -155,7 +142,7 @@ export const AccountInfo = () => {
               marginBottom={theme.spacing(2)}
             >
               <Box marginRight={theme.spacing(2)}>
-                <Typography>Connected with {connectedWith}</Typography>
+                {/* <Typography>Connected with {connectedWith}</Typography> */}
               </Box>
               <Box>
                 <SignOutButton />
@@ -171,12 +158,12 @@ export const AccountInfo = () => {
             >
               <Box marginRight={theme.spacing(2)}>
                 <Box>
-                  <Account account={account} />
+                  <Account account={account.address} />
                 </Box>
                 <Box>
                   <Button
                     endIcon={<Iconify icon="ci:copy" />}
-                    onClick={() => copyToClipboard(account)}
+                    onClick={() => copyToClipboard(account.address)}
                   >
                     Copy address
                   </Button>
@@ -185,8 +172,8 @@ export const AccountInfo = () => {
               <Box>
                 <Button
                   variant="outlined"
-                  disabled={explorer === undefined}
-                  onClick={() => handleOpenExplorer('address', account)}
+                  disabled={network === undefined || network.chain === undefined}
+                  onClick={() => handleOpenExplorer('address', account.address)}
                 >
                   Open in explorer
                 </Button>

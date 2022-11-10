@@ -3,11 +3,11 @@ import type {
   BookingsAuthResponse,
   OrganizerInformation
 } from '@windingtree/glider-types/dist/win';
-import type {
-  Web3ModalProvider,
-  Web3ModalSignInFunction,
-  Web3ModalSignOutFunction
-} from '../hooks/useWeb3Modal';
+// import type {
+//   Web3ModalProvider,
+//   Web3ModalSignInFunction,
+//   Web3ModalSignOutFunction
+// } from '../hooks/useWeb3Modal';
 import type {
   BookingInfoType,
   CheckOut,
@@ -22,20 +22,20 @@ export interface SetConnectingAction {
   payload: boolean;
 }
 
-export interface SetProviderAction {
-  type: 'SET_PROVIDER';
-  payload?: Web3ModalProvider;
-}
+// export interface SetProviderAction {
+//   type: 'SET_PROVIDER';
+//   payload?: Web3ModalProvider;
+// }
 
-export interface SetWeb3ModalSignInAction {
-  type: 'SET_WEB3MODAL_SIGN_IN';
-  payload?: Web3ModalSignInFunction;
-}
+// export interface SetWeb3ModalSignInAction {
+//   type: 'SET_WEB3MODAL_SIGN_IN';
+//   payload?: Web3ModalSignInFunction;
+// }
 
-export interface SetWeb3ModalSignOutAction {
-  type: 'SET_WEB3MODAL_SIGN_OUT';
-  payload?: Web3ModalSignOutFunction;
-}
+// export interface SetWeb3ModalSignOutAction {
+//   type: 'SET_WEB3MODAL_SIGN_OUT';
+//   payload?: Web3ModalSignOutFunction;
+// }
 
 export interface SetAccountAction {
   type: 'SET_ACCOUNT';
@@ -141,9 +141,9 @@ export type Action =
   | SetCheckOutAction
   | SetAuthenticationTokenAction
   | SetConnectingAction
-  | SetProviderAction
-  | SetWeb3ModalSignInAction
-  | SetWeb3ModalSignOutAction
+  // | SetProviderAction
+  // | SetWeb3ModalSignInAction
+  // | SetWeb3ModalSignOutAction
   | SetAccountAction
   | SetSelectedNetwork
   | SetSelectedAsset

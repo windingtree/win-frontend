@@ -5,20 +5,22 @@ import { useAppState } from '../store';
 import { backend } from '../config';
 import { usePoller } from './usePoller';
 import Logger from '../utils/logger';
+import { useAccount } from '@web3modal/react';
 
 const logger = Logger('useBookings');
 
 export type UseBookingsHook = BookingResponse;
 
 export const useBookings = (): UseBookingsHook => {
-  const { account, walletAuth } = useAppState();
+  const { walletAuth } = useAppState();
+  const { account, isReady: isAccountReady } = useAccount();
   const [bookings, setBookings] = useState<BookingResponse>([]);
 
   useEffect(() => {
-    if (!walletAuth) {
+    if (!walletAuth || !isAccountReady) {
       setBookings([]);
     }
-  }, [walletAuth]);
+  }, [walletAuth, isAccountReady]);
 
   const getBookings = useCallback(async () => {
     try {

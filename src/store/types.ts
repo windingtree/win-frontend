@@ -12,11 +12,11 @@ import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/typ
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { PriceRange } from '../hooks/useAccommodationsAndOffers';
 import { CurrencyCode } from '../hooks/useCurrencies';
-import type {
-  Web3ModalProvider,
-  Web3ModalSignInFunction,
-  Web3ModalSignOutFunction
-} from '../hooks/useWeb3Modal';
+// import type {
+//   Web3ModalProvider,
+//   Web3ModalSignInFunction,
+//   Web3ModalSignOutFunction
+// } from '../hooks/useWeb3Modal';
 
 export interface GenericStateRecord {
   id: string;
@@ -121,11 +121,6 @@ export interface UserSettings {
 }
 
 export interface State {
-  isConnecting: boolean;
-  provider?: Web3ModalProvider;
-  signIn?: Web3ModalSignInFunction;
-  signOut?: Web3ModalSignOutFunction;
-  account?: string;
   facilities: FacilityRecord[];
   offers: OfferRecord[];
   authentication: {

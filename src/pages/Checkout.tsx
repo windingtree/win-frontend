@@ -8,14 +8,13 @@ import { WinPay } from 'src/containers/checkout/WinPay';
 import { expirationGap } from 'src/config';
 import Logger from 'src/utils/logger';
 import { PaymentSuccessCallback } from 'src/components/PaymentCard';
-import { SignInButton } from 'src/components/Web3Modal';
-import { useAppState } from 'src/store';
 import { getOfferId } from 'src/hooks/useCheckout/helpers';
 
 import { CheckoutOverview } from 'src/containers/checkout/CheckoutOverview.tsx';
 import { IconButtonAnimate } from 'src/components/animate';
 import Iconify from 'src/components/Iconify';
 
+import { Web3Button, useAccount } from '@web3modal/react';
 const logger = Logger('Checkout');
 
 export const normalizeExpiration = (expirationDate: string): number =>
@@ -24,7 +23,7 @@ export const normalizeExpiration = (expirationDate: string): number =>
 export const Checkout = () => {
   const navigate = useNavigate();
   const { bookingInfo, bookingMode } = useCheckout();
-  const { account } = useAppState();
+  const { account } = useAccount();
   const isGroupMode = bookingMode === 'group';
   const offerId = !isGroupMode && bookingInfo?.offers && getOfferId(bookingInfo.offers);
 
@@ -78,13 +77,13 @@ export const Checkout = () => {
       {payment && (
         <>
           <CheckoutOverview />
-          {!account && (
+          {!account.isConnected && (
             <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
               <Typography fontWeight="bold" mb={1}>
                 Please connect your wallet to proceed
               </Typography>
 
-              <SignInButton size="large" sx={{ width: { xs: '100%', md: 'auto' } }} />
+              <Web3Button />
             </Box>
           )}
           <WinPay payment={payment} onSuccess={onPaymentSuccess} />

@@ -6,8 +6,8 @@ import type {
 import type { CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { useCallback, useState } from 'react';
 import { BigNumber as BN } from 'ethers';
-import { usePoller } from './usePoller';
 import Logger from '../utils/logger';
+import { usePoller } from './usePoller';
 
 const logger = Logger('useAllowance');
 

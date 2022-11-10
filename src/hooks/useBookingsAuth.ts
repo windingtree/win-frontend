@@ -6,9 +6,11 @@ import type {
 import { useCallback } from 'react';
 import axios from 'axios';
 import { createAuthSignature } from '@windingtree/win-commons/dist/auth';
-import { useAppDispatch, useAppState } from '../store';
+import { useAppDispatch } from '../store';
 import { backend } from '../config';
 import Logger from '../utils/logger';
+import { useProvider, useAccount, useNetwork } from '@web3modal/react';
+import { ethers } from 'ethers';
 
 const logger = Logger('useBookingsAuth');
 
@@ -19,11 +21,20 @@ export interface UseBookingsAuthHook {
 
 export const useBookingsAuth = (): UseBookingsAuthHook => {
   const dispatch = useAppDispatch();
-  const { account, provider } = useAppState();
+
+  const { provider, isReady: isProviderReady } = useProvider();
+  const { account, isReady: isAccountReady } = useAccount();
+  const { network, isReady: isNetworkReady } = useNetwork();
 
   const login = useCallback(async () => {
     try {
-      if (!account || !provider) {
+      if (
+        !account.isConnected ||
+        !isProviderReady ||
+        !isAccountReady ||
+        !isNetworkReady ||
+        provider === undefined
+      ) {
         throw new Error('Wallet not connected yet');
       }
 
@@ -39,9 +50,12 @@ export const useBookingsAuth = (): UseBookingsAuthHook => {
         throw new Error('Invalid auth secret');
       }
 
-      const chainId = (await provider.getNetwork()).chainId;
-      const wallet = await provider.getSigner().getAddress();
-      const signature = await createAuthSignature(provider, secret);
+      const chainId = network?.chain?.id;
+      const wallet = account.address;
+      const signature = await createAuthSignature(
+        provider as unknown as ethers.providers.Web3Provider,
+        secret
+      );
 
       const authRes = await axios.post<BookingsAuthResponse>(
         `${backend.url}/api/bookings/auth`,

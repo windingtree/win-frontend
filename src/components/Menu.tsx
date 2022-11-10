@@ -2,11 +2,10 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu as MenuWrap } from 'grommet';
 import { Menu as MenuIcon } from 'grommet-icons';
-import { useAppState } from '../store';
 import { pagesRoutesConfig, Routes } from '../Routes';
 
 export const Menu = () => {
-  const { isConnecting } = useAppState();
+  // const { isConnecting } = useAppState();
   const navigate = useNavigate();
   const buildMenuConfig = useMemo(
     () =>
@@ -37,7 +36,7 @@ export const Menu = () => {
       style={{
         background: 'white'
       }}
-      disabled={isConnecting}
+      // disabled={isConnecting}
       icon={<MenuIcon color="black" />}
       items={buildMenuConfig}
     />

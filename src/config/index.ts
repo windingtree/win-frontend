@@ -1,3 +1,5 @@
+import type { Chain } from '@web3modal/ethereum';
+import type { ConfigOptions } from '@web3modal/core';
 import { Settings } from 'luxon';
 import { config } from '@windingtree/win-commons';
 import { stringToNumber } from '../utils/strings';
@@ -50,8 +52,37 @@ switch (process.env.REACT_APP_MODE) {
 }
 
 export const allowedNetworks = config.getNetworksByMode(mode);
+export const getNetworkInfo = config.getNetworkInfo
 
-export const getNetworkInfo = config.getNetworkInfo;
+const chains: Chain[] = allowedNetworks.map((network) => ({
+  id: network.chainId,
+  name: network.name,
+  network: network.name,
+  nativeCurrency: {
+    name: network.currency,
+    symbol: network.currency,
+    decimals: network.decimals
+  },
+  rpcUrls: {
+    default: network.rpc
+  },
+  blockExplorers: {
+    default: {
+      name: 'string',
+      url: network.blockExplorer
+    }
+  }
+}));
+
+export const web3ModalConfig: ConfigOptions = {
+  projectId: String(process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID),
+  theme: 'light',
+  accentColor: 'default',
+  ethereum: {
+    appName: 'WIN',
+    chains: chains
+  }
+};
 
 export const backend = Object.freeze({
   url: process.env.REACT_APP_API_URL

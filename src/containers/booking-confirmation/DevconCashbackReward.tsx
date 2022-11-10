@@ -14,11 +14,11 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Image from '../../components/Image';
-import { useAppState } from '../../store';
 import { devconCashbackEnabled } from '../../config';
 import Logger from '../../utils/logger';
 import { OffChainTokenConfig } from '@tokenscript/token-negotiator/dist/client/interface';
 import { useCheckout } from 'src/hooks/useCheckout';
+import { useProvider } from '@web3modal/react';
 
 const logger = Logger('DevconCashbackReward');
 
@@ -51,7 +51,7 @@ const AUTH_ERROR_STR =
   'There was an error during Authentication. Please refer to the error message below for more details: ';
 
 export const DevconCashbackReward = () => {
-  const { provider } = useAppState();
+  const { provider } = useProvider();
   const location = useLocation();
   const [params] = useSearchParams();
   const { bookingMode } = useCheckout();

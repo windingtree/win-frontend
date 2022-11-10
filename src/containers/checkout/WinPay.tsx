@@ -1,6 +1,6 @@
-import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import { useState, useCallback, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import { CryptoAsset } from '@windingtree/win-commons/dist/types';
+import { useState, useCallback } from 'react';
+import { Box } from '@mui/material';
 import { useAppDispatch, useAppState } from 'src/store';
 import { useResponsive } from 'src/hooks/useResponsive';
 import { AssetSelector } from 'src/components/AssetSelector';
@@ -8,9 +8,10 @@ import { NetworkSelector } from 'src/components/NetworkSelector';
 import { Payment, PaymentCard, PaymentSuccess } from 'src/components/PaymentCard';
 import { CurrencySelector } from 'src/components/CurrencySelector';
 import Logger from 'src/utils/logger';
+import { useNetwork, useAccount, useProvider, useSwitchNetwork } from '@web3modal/react';
+import { ethers } from 'ethers';
 import { MessageBox } from 'src/components/MessageBox';
 import { ExternalLink } from 'src/components/ExternalLink';
-import { BigNumber } from 'ethers';
 
 const logger = Logger('WinPay');
 
@@ -22,35 +23,15 @@ export interface WinPayProps {
 export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
   const isDesktop = useResponsive('up', 'md');
   const dispatch = useAppDispatch();
-  const { provider, account, selectedNetwork, selectedAsset } = useAppState();
+  const { selectedAsset } = useAppState();
+
+  const { account, isReady: isAccountReady } = useAccount();
+  const { network, isReady: isNetworkReady } = useNetwork();
+  const { provider, isReady: isProviderReady } = useProvider({
+    chainId: network?.chain?.id
+  });
+
   const [withQuote, setWithQuote] = useState<boolean>(false);
-  const [emptyBalance, setEmptyBalance] = useState<boolean>(true);
-
-  useEffect(() => {
-    const getBalance = async () => {
-      try {
-        if (provider && account && selectedNetwork?.ramp) {
-          const currentBalance = await provider.getBalance(account);
-          setEmptyBalance(currentBalance.eq(BigNumber.from(0)));
-        } else {
-          setEmptyBalance(false);
-        }
-      } catch (err) {
-        logger.error(err);
-        setEmptyBalance(false);
-      }
-    };
-    getBalance();
-  }, [provider, account, selectedNetwork, setEmptyBalance]);
-
-  const setNetwork = useCallback(
-    (network: NetworkInfo) =>
-      dispatch({
-        type: 'SET_SELECTED_NETWORK',
-        payload: network
-      }),
-    [dispatch]
-  );
 
   const setAsset = useCallback(
     (asset: CryptoAsset) =>
@@ -61,26 +42,30 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
     [dispatch]
   );
 
+  const { data: newNetwork, switchNetwork } = useSwitchNetwork();
+
   const onUseQuoteChange = (useQuote: boolean) => {
     logger.debug('onUseQuoteChange', useQuote);
     setWithQuote(useQuote);
   };
 
-  if (!payment) {
+  if (!payment || !provider || !isProviderReady || !isAccountReady || !isNetworkReady) {
     return null;
   }
-
+  // console.log('NETWORK', network);
+  // console.log('NEW_NETWORK', newNetwork);
+  // console.log('PROVIDER', provider);
   return (
     <>
-      {account && (
+      {account.isConnected && (
         <CurrencySelector
           payment={payment}
-          network={selectedNetwork}
+          network={network?.chain}
           onQuote={onUseQuoteChange}
         />
       )}
       <Box marginBottom={5}>
-        {account && (
+        {account.isConnected && (
           <Box
             sx={{
               display: 'flex',
@@ -89,9 +74,13 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
               gap: 2
             }}
           >
-            <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
+            <NetworkSelector
+              provider={provider as unknown as ethers.providers.Web3Provider}
+              value={network?.chain?.id}
+              onChange={switchNetwork}
+            />
             <AssetSelector
-              network={selectedNetwork}
+              network={network?.chain}
               payment={payment}
               withQuote={withQuote}
               asset={selectedAsset}
@@ -112,8 +101,9 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
         </MessageBox>
       </Box>
       <PaymentCard
-        provider={provider}
-        network={selectedNetwork}
+        account={account.address}
+        provider={provider as unknown as ethers.providers.Web3Provider}
+        network={network?.chain}
         asset={selectedAsset}
         payment={payment}
         withQuote={withQuote}

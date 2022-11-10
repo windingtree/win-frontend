@@ -127,8 +127,10 @@
     "url": "^0.11.0",
     "uuid": "8.3.2",
     "web-vitals": "^3.0.0-rc.0",
-    "web3modal": "^1.9.9",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "@coinbase/wallet-sdk": "^3.5.4",
+    "@web3modal/react": "^2.0.0-beta.1",
+    "@web3modal/ethereum": "^2.0.0-beta.1"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"

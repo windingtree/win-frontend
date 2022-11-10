@@ -1,5 +1,5 @@
 import { Payment } from './PaymentCard';
-import { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
+import { CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   FormControl,
@@ -10,7 +10,9 @@ import {
 } from '@mui/material';
 import { getNetworkInfo } from '../config';
 import Logger from '../utils/logger';
+import { Chain } from '@web3modal/ethereum';
 
+// Usage
 const logger = Logger('CurrencySelector');
 
 export interface CheckoutPrice {
@@ -19,7 +21,7 @@ export interface CheckoutPrice {
 
 export interface PriceSelectProps {
   payment?: Payment;
-  network?: NetworkInfo;
+  network?: Chain;
   onQuote(withQuote: boolean): void;
 }
 
@@ -51,7 +53,7 @@ export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps
     if (!payment || !network) {
       return [];
     }
-    const chain = getNetworkInfo(network.chainId);
+    const chain = getNetworkInfo(network.id);
     return [...chain.contracts.assets.filter((a) => a.currency === payment.currency)];
   }, [network, payment]);
 

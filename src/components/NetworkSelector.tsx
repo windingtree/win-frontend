@@ -1,32 +1,27 @@
-import { NetworkInfo } from '@windingtree/win-commons/dist/types';
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Select, MenuItem, FormHelperText, SelectChangeEvent } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
-import { allowedNetworks, getNetworkInfo } from '../config';
-import { useAppState } from '../store';
-import { useNetworkId } from '../hooks/useNetworkId';
-import { useWalletRpcApi } from '../hooks/useWalletRpcApi';
+import { allowedNetworks } from '../config';
 import Logger from '../utils/logger';
+import { ethers } from 'ethers';
 
 const logger = Logger('NetworkSelector');
 
 export interface NetworkSelectorProps {
-  value: NetworkInfo | undefined;
-  onChange: (network?: NetworkInfo) => void;
+  value: number | undefined;
+  onChange: ({ chainId }: { chainId: number }) => void;
+  provider: ethers.providers.Web3Provider;
 }
 
-export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
-  const { provider } = useAppState();
-  const { switchChain } = useWalletRpcApi(provider, allowedNetworks);
-  const [networkId, , isRightNetwork] = useNetworkId(provider, allowedNetworks);
-  const [network, setNetwork] = useState<NetworkInfo | undefined>(value);
+export const NetworkSelector = ({ value, onChange, provider }: NetworkSelectorProps) => {
+  const [network, setNetwork] = useState<number | undefined>(value);
 
   useEffect(() => {
     const networkCheck = async () => {
       try {
         if (value && provider) {
           const providerNetwork = await provider.getNetwork();
-          if (providerNetwork.chainId !== value.chainId) {
+          if (providerNetwork.chainId !== value) {
             logger.debug('Reset: saved value and current chain are different');
             setNetwork(undefined);
           }
@@ -41,18 +36,23 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
 
   useEffect(() => {
     try {
-      if (networkId) {
-        setNetwork(getNetworkInfo(networkId));
+      if (network) {
+        setNetwork(network);
+        onChange({ chainId: network });
       }
     } catch (err) {
       logger.error(err);
       setNetwork(undefined);
     }
-  }, [networkId]);
+  }, [network]);
 
-  useEffect(() => onChange(network), [network]);
+  // useEffect(() => {
+  //   if (network) {
+  //     onChange({ chainId: network })
+  //   }
+  // }, [network]);
 
-  const omNetworkChange = useCallback(
+  const onNetworkChange = useCallback(
     async (e: SelectChangeEvent) => {
       try {
         if (provider) {
@@ -60,10 +60,10 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
           const providerNetwork = await provider.getNetwork();
           if (providerNetwork.chainId !== chainId) {
             logger.debug(`Request provider to change chain #${chainId}`);
-            await switchChain(chainId);
+            // await switchChain(chainId);
+            setNetwork(allowedNetworks.find((n) => n.chainId === chainId)?.chainId);
             logger.debug(`Network switched to #${chainId}`);
           }
-          setNetwork(allowedNetworks.filter((n) => n.chainId === chainId)[0]);
         }
       } catch (err) {
         logger.error(err);
@@ -73,11 +73,11 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
   );
 
   return (
-    <FormControl error={network === undefined}>
+    <FormControl error={value === undefined}>
       <Select
         variant="outlined"
-        value={network && isRightNetwork ? network.chainId.toString() : 'none'}
-        onChange={omNetworkChange}
+        value={value ? value.toString() : 'none'}
+        onChange={onNetworkChange}
       >
         <MenuItem value="none">Select network</MenuItem>
         {allowedNetworks.map((n, index) => (
@@ -87,7 +87,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
         ))}
       </Select>
       <FormHelperText>
-        {network === undefined ? 'Please select a supported network' : null}
+        {value === undefined ? 'Please select a supported network' : null}
       </FormHelperText>
     </FormControl>
   );

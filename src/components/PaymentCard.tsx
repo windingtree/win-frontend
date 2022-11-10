@@ -1,19 +1,16 @@
-import { Web3ModalProvider } from '../hooks/useWeb3Modal';
-import {
-  NetworkInfo,
-  CryptoAsset,
-  AssetCurrency
-} from '@windingtree/win-commons/dist/types';
+import type { Chain } from '@web3modal/ethereum';
+import { CryptoAsset, AssetCurrency } from '@windingtree/win-commons/dist/types';
 import { Quote } from '@windingtree/glider-types/dist/simard';
 import {
   BigNumber,
   Wallet,
   Signature,
   ContractReceipt,
-  ContractTransaction
+  ContractTransaction,
+  utils,
+  ethers
 } from 'ethers';
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { utils, BigNumber as BN } from 'ethers';
 import {
   Card,
   CardContent,
@@ -33,14 +30,16 @@ import { MessageBox } from './MessageBox';
 import { ExternalLink } from './ExternalLink';
 import Iconify from '../components/Iconify';
 import { usePoller } from '../hooks/usePoller';
-import { useAsset } from '../hooks/useAsset';
 import { useWalletRpcApi } from '../hooks/useWalletRpcApi';
 import { useAllowance } from 'src/hooks/useAllowance';
-import { useWinPay } from '../hooks/useWinPay';
 import { useResponsive } from '../hooks/useResponsive';
 import { centerEllipsis, formatPrice } from '../utils/strings';
-import { allowedNetworks } from '../config';
 import Logger from '../utils/logger';
+import { useBalance, useSigner } from '@web3modal/react';
+
+import { allowedNetworks } from '@windingtree/win-commons/dist/config';
+import { useWinPay } from 'src/hooks/useWinPay';
+import { useAsset } from 'src/hooks/useAsset';
 
 const logger = Logger('PaymentCard');
 
@@ -62,9 +61,10 @@ export interface PaymentSuccess {
 export type PaymentSuccessCallback = (result: PaymentSuccess) => void;
 
 export interface PaymentCardProps {
-  provider?: Web3ModalProvider;
-  network?: NetworkInfo;
+  provider?: ethers.providers.Web3Provider; //new
+  network?: Chain; //new
   asset?: CryptoAsset;
+  account: string;
   payment: Payment;
   withQuote: boolean;
   onSuccess: PaymentSuccessCallback;
@@ -83,25 +83,35 @@ const parseMetamaskError = (err: MetamaskError): string | undefined => {
 };
 
 export const PaymentCard = ({
-  provider,
-  network,
+  account,
+  provider, //new
+  network, //new
   asset,
   payment,
   withQuote,
   onSuccess
 }: PaymentCardProps) => {
   const isDesktop = useResponsive('up', 'md');
+  const {
+    data: nativeTokenBalance
+    // error,
+    // isLoading,
+    // refetch
+  } = useBalance({ addressOrName: account });
+  const { data: signer, error, isLoading } = useSigner();
+
+  // const chain = getNetworkInfo(network.id);
   const { watchAsset } = useWalletRpcApi(provider, allowedNetworks);
-  const [account, setAccount] = useState<string | undefined>();
   const { winPayContract } = useWinPay(provider, network);
-  const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
+  const { assetContract, tokenContract, tokenAddress } = useAsset(asset);
+
   const tokenAllowance = useAllowance(
     tokenContract,
     account,
     asset,
     asset && asset.permit
   );
-  const [balance, setBalance] = useState<BigNumber>(BN.from(0));
+  const [balance, setBalance] = useState<BigNumber>(BigNumber.from(0));
   const [permitSignature, setPermitSignature] = useState<Signature | undefined>();
   const [isAccountContract, setIsAccountContract] = useState<boolean>(false);
   const [isTxStarted, setTxStarted] = useState<'approve' | 'pay' | undefined>();
@@ -122,9 +132,9 @@ export const PaymentCard = ({
 
   const paymentValue = useMemo(() => {
     if (!asset) {
-      return BN.from(0);
+      return BigNumber.from(0);
     }
-    return BN.from(
+    return BigNumber.from(
       utils.parseUnits(
         withQuote && payment.quote ? payment.quote.sourceAmount : payment.value,
         asset.decimals
@@ -202,25 +212,19 @@ export const PaymentCard = ({
   }, [provider, account]);
 
   // useEffect(() => {
-  //   if (!assetsCurrencies.includes(payment.currency)) {
-  //     throw new Error(`Unsupported currency ${payment.currency}`);
-  //   }
-  // }, [payment]);
-
-  useEffect(() => {
-    const getAccount = async () => {
-      try {
-        if (provider) {
-          setAccount(await provider.getSigner().getAddress());
-        } else {
-          setAccount(undefined);
-        }
-      } catch (err) {
-        logger.error(err);
-      }
-    };
-    getAccount();
-  }, [provider]);
+  //   const getAccount = async () => {
+  //     try {
+  //       if (provider) {
+  //         setAccount(await provider.getSigner().getAddress());
+  //       } else {
+  //         setAccount(undefined);
+  //       }
+  //     } catch (err) {
+  //       logger.error(err);
+  //     }
+  //   };
+  //   getAccount();
+  // }, [provider]);
 
   useEffect(() => {
     setCostError(undefined);
@@ -249,29 +253,30 @@ export const PaymentCard = ({
 
   const getBalance = useCallback(async () => {
     try {
-      if (provider && asset && assetContract && tokenContract && account) {
-        let currentBalance: BigNumber;
-        if (asset.native) {
-          currentBalance = await provider.getBalance(account);
-          setBalance(currentBalance);
-        } else {
-          currentBalance = await tokenContract.balanceOf(account);
-          setBalance(currentBalance);
-        }
-      } else {
-        setBalance(BN.from(0));
+      if (!asset || !tokenContract || !nativeTokenBalance) {
+        return;
+      }
+      let currentBalance: BigNumber;
+      if (asset.native) {
+        currentBalance = nativeTokenBalance.value;
+        setBalance(currentBalance);
+        return;
+      }
+      if (!asset.native) {
+        currentBalance = await tokenContract.balanceOf(account);
+        setBalance(currentBalance);
       }
     } catch (err) {
       logger.error(err);
-      setBalance(BN.from(0));
+      setBalance(BigNumber.from(0));
     }
-  }, [provider, asset, assetContract, tokenContract, account]);
+  }, [provider, asset, assetContract, tokenContract, account, nativeTokenBalance]);
 
   const createPermit = useCallback(async () => {
     try {
       setPermitError(undefined);
 
-      if (provider && asset && tokenContract && account) {
+      if (signer && provider && asset && tokenContract && account) {
         logger.debug('Payment params:', {
           tokenContract,
           account,
@@ -280,7 +285,7 @@ export const PaymentCard = ({
           expiration: payment.expiration
         });
         const signature = await createPermitSignature(
-          provider.getSigner() as unknown as Wallet,
+          signer as unknown as Wallet,
           tokenContract,
           account,
           asset.address,
@@ -303,7 +308,7 @@ export const PaymentCard = ({
       }
       setPermitSignature(undefined);
     }
-  }, [provider, asset, tokenContract, account]);
+  }, [provider, asset, tokenContract, account, signer]);
 
   const approveTokens = useCallback(async () => {
     try {
@@ -443,7 +448,10 @@ export const PaymentCard = ({
   const openExplorer = useCallback(
     (address: string | undefined) => {
       if (network && address) {
-        window.open(`${network.blockExplorer}/address/${address}`, '_blank');
+        window.open(
+          `${network.blockExplorers?.default.url}/address/${address}`,
+          '_blank'
+        );
       }
     },
     [network]
@@ -566,7 +574,10 @@ export const PaymentCard = ({
       <MessageBox type="info" show={!!txHash} loading={isTxStarted !== undefined}>
         <Typography variant="body1">
           Transaction hash:&nbsp;
-          <ExternalLink href={`${network?.blockExplorer}/tx/${txHash}`} target="_blank">
+          <ExternalLink
+            href={`${network?.blockExplorers?.default.url}/tx/${txHash}`}
+            target="_blank"
+          >
             {centerEllipsis(txHash || '')}
           </ExternalLink>
         </Typography>
@@ -611,7 +622,7 @@ export const PaymentCard = ({
         <Typography variant="body1">
           Please check your account transactions history on the block explorer:&nbsp;
           <ExternalLink
-            href={`${network?.blockExplorer}/address/${account}`}
+            href={`${network?.blockExplorers?.default.url}/address/${account}`}
             target="_blank"
           >
             {centerEllipsis(account || '')}
