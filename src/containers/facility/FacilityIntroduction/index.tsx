@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import {
   AccommodationWithId,
-  getGroupMode,
   getOffersPriceRange
 } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
@@ -91,32 +90,28 @@ const HeaderButton = ({ scrollToDetailImages }) => {
   const accommodation = getAccommodationById(accommodations, id);
   const offers = accommodation?.offers;
 
+  const numberOfDays = daysBetween(
+    latestQueryParams?.arrival,
+    latestQueryParams?.departure
+  );
+  const nbRooms = latestQueryParams?.roomCount ?? 1;
   // get lowest offer price
   const localPriceRange = useMemo(
-    () => offers && getOffersPriceRange(offers, false),
+    () => offers && getOffersPriceRange(offers, true, true, false, numberOfDays, nbRooms),
     [offers]
   );
 
   const preferredCurrencyPriceRange = useMemo(
-    () => offers && getOffersPriceRange(offers, false, true),
+    () => offers && getOffersPriceRange(offers, true, true, true, numberOfDays, nbRooms),
     [offers]
   );
-
   const priceRange = preferredCurrencyPriceRange ?? localPriceRange;
   let lowestAveragePrice: number | undefined, currency: string | undefined;
 
   if (priceRange) {
     const { lowestPrice: lowestTotalPrice } = priceRange;
 
-    const numberOfDays = daysBetween(
-      latestQueryParams?.arrival,
-      latestQueryParams?.departure
-    );
-
-    const isGroupMode = getGroupMode(latestQueryParams?.roomCount);
-    const numberOfRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
-
-    lowestAveragePrice = Number(lowestTotalPrice.price) / (numberOfDays * numberOfRooms);
+    lowestAveragePrice = Number(lowestTotalPrice.price);
     currency = lowestTotalPrice.currency;
   }
 

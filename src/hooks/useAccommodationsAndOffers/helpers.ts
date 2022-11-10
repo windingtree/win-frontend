@@ -46,48 +46,47 @@ export const getActiveAccommodations = (
  * Get the lowest and highest price, total or per night/room from an array of offers
  *
  * @param offers offers array
- * @param perNightPerRoom if "true" get price per night/room, "false" to get total price
+ * @param perRoom if "true" get price per room, "false" to price for all requested rooms
+ * @param perNight if "true" get price per night, "false" to price for all requested nights
  * @param getPreferredCurrency return price ranges of the preferred currency where available
- * @param numberOfDays optional - required when perNightPerRoom is true
- * @param numberOfRooms optional - required when perNightPerRoom is true
+ * @param numberOfDays -- number of days
+ * @param numberOfRooms - number of rooms
  * @returns a PriceRange or undefined
  */
 export const getOffersPriceRange = (
   offers: OfferRecord[],
-  perNightPerRoom = true,
+  perRoom = true,
+  perNight = true,
   getPreferredCurrency = false,
-  numberOfDays?: number,
-  numberOfRooms?: number
+  numberOfDays: number,
+  numberOfRooms: number
 ): PriceRange | undefined => {
   let priceRange: PriceRange | undefined = undefined;
 
   offers
     .map((offer) => {
-      const price = getPreferredCurrency
+      //offer that we get from proxies is "total price per room"
+      const totalPricePerRoom = getPreferredCurrency
         ? offer.preferredCurrencyPrice?.public
         : offer.price.public;
       const currency = getPreferredCurrency
         ? offer.preferredCurrencyPrice?.currency
         : offer.price.currency;
 
-      if (!price || !currency) return;
-
-      if (perNightPerRoom) {
-        if (!numberOfDays || !numberOfRooms) {
-          throw new Error(
-            'Error: To get a nightly price range "numberOfDays" and "numberOfRooms" must be provided'
-          );
-        }
-        return {
-          price: Number(price) / (numberOfDays * numberOfRooms),
-          currency
-        };
-      } else {
-        return {
-          price: Number(price),
-          currency
-        };
+      if (!totalPricePerRoom || !currency) return;
+      let divider = 1;
+      let multiplier = 1;
+      //depending on selection (price per night or per rooms) we need to either divide or multiply
+      if (!perRoom) {
+        multiplier *= numberOfRooms;
       }
+      if (perNight) {
+        divider *= numberOfDays;
+      }
+      return {
+        price: (Number(totalPricePerRoom) / divider) * multiplier,
+        currency
+      };
     })
     .forEach((currentVal) => {
       if (!currentVal) return;

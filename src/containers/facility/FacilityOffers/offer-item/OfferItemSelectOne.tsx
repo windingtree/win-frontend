@@ -105,10 +105,10 @@ export const OfferItemSelectOne: React.FC<{
   const localPrice = offer.price;
   const preferredCurrencyPrice = convertPriceCurrency({
     price: localPrice,
-    targetCurrency: preferredCurrencyCode
+    targetCurrency: preferredCurrencyCode,
+    amount: roomsNumber || 1
   });
   const price = preferredCurrencyPrice ?? localPrice;
-
   return (
     <Box mb={5}>
       <Divider />
