@@ -11,11 +11,11 @@ import {
   Button,
   IconButton
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { centerEllipsis, copyToClipboard } from '../utils/strings';
 import Iconify from '../components/Iconify';
-import { SignOutButton } from './Web3Modal';
-import { useAppState } from '../store';
+import { useAccount, useNetwork, useDisconnect } from 'wagmi';
 import { getNetworkInfo } from '../config';
 
 export interface AccountProps {
@@ -62,41 +62,44 @@ export const Account = ({ account, open }: AccountProps) => {
 
 export const AccountInfo = () => {
   const theme = useTheme();
-  const boxRef = useRef<HTMLDivElement>(null);
-  const { account, provider } = useAppState();
+  const boxRef = useRef<HTMLDivElement>(document.createElement('div'));
+  const { address, connector, isConnected } = useAccount();
+  const network = useNetwork();
+  const { disconnect, isLoading } = useDisconnect();
   const [open, setOpen] = useState<boolean>(false);
   const [explorer, setExplorer] = useState<string | undefined>();
-  const connectedWith = useMemo(
-    () => (provider && provider.provider.isMetaMask ? 'MetaMask' : 'WalletConnect'),
-    [provider]
-  );
+  const connectedWith = useMemo(() => (connector ? connector.name : ''), [connector]);
 
   useEffect(() => {
     const getExplorer = async () => {
       try {
-        if (!provider) {
+        if (!network || !network.chain) {
           setExplorer(undefined);
           return;
         }
-        const { chainId } = await provider.getNetwork();
-        const { blockExplorer } = getNetworkInfo(chainId);
+        const { blockExplorer } = getNetworkInfo(network.chain.id);
         setExplorer(blockExplorer);
       } catch (err) {
         setExplorer(undefined);
       }
     };
     getExplorer();
-  }, [provider]);
+  }, [network]);
 
   const handleOpen = useCallback(() => {
     setOpen(true);
-    if (account) {
-      copyToClipboard(account);
+    if (address) {
+      copyToClipboard(address);
     }
-  }, [account]);
+  }, [address]);
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleDisconnect = () => {
+    setOpen(false);
+    disconnect();
   };
 
   const handleOpenExplorer = (type: 'address' | 'tx', value: string) => {
@@ -106,7 +109,7 @@ export const AccountInfo = () => {
     window.open(`${explorer}/${type}/${value}`, '_blank');
   };
 
-  if (!account) {
+  if (!address || !isConnected) {
     return null;
   }
 
@@ -120,7 +123,7 @@ export const AccountInfo = () => {
           borderRadius: '6px'
         }}
       >
-        <Account account={account} open={open} />
+        <Account account={address as string} open={open} />
       </Box>
       <Popover
         id="account_control"
@@ -158,7 +161,14 @@ export const AccountInfo = () => {
                 <Typography>Connected with {connectedWith}</Typography>
               </Box>
               <Box>
-                <SignOutButton />
+                <LoadingButton
+                  variant="contained"
+                  onClick={handleDisconnect}
+                  startIcon={<Iconify icon="ri:logout-box-line" />}
+                  loading={isLoading}
+                >
+                  Disconnect
+                </LoadingButton>
               </Box>
             </Box>
             <Box
@@ -171,12 +181,12 @@ export const AccountInfo = () => {
             >
               <Box marginRight={theme.spacing(2)}>
                 <Box>
-                  <Account account={account} />
+                  <Account account={address as string} />
                 </Box>
                 <Box>
                   <Button
                     endIcon={<Iconify icon="ci:copy" />}
-                    onClick={() => copyToClipboard(account)}
+                    onClick={() => copyToClipboard(address)}
                   >
                     Copy address
                   </Button>
@@ -186,7 +196,7 @@ export const AccountInfo = () => {
                 <Button
                   variant="outlined"
                   disabled={explorer === undefined}
-                  onClick={() => handleOpenExplorer('address', account)}
+                  onClick={() => handleOpenExplorer('address', address)}
                 >
                   Open in explorer
                 </Button>

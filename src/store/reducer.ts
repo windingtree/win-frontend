@@ -2,7 +2,6 @@ import type { Reducer } from 'react';
 import type { Action } from './actions';
 import type { State } from './types';
 import { useReducer } from 'react';
-import { web3ModalReducer } from './web3ModalReducer';
 import { cryptoReducer } from './cryptoReducer';
 import { recordsReducer } from './recordsReducer';
 import { searchReducer } from './searchReducer';
@@ -24,16 +23,6 @@ export const mainReducer = (state: State, action: Action): State => {
 
   try {
     switch (type) {
-      case 'SET_CONNECTING':
-        return {
-          ...state,
-          isConnecting: action.payload
-        };
-      case 'SET_ACCOUNT':
-        return {
-          ...state,
-          account: action.payload
-        };
       default:
         return state;
     }
@@ -74,7 +63,6 @@ export const useAppReducer = () => {
   return useReducer(
     combineReducers([
       mainReducer,
-      web3ModalReducer,
       searchReducer,
       checkOutReducer,
       cryptoReducer,

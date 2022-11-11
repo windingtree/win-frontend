@@ -27,6 +27,7 @@ checkEnvVariables([
   'REACT_APP_MODE',
   'REACT_APP_DISABLE_FEATURES',
   'REACT_APP_LOG_LEVEL'
+  // 'REACT_APP_WALLET_CONNECT_PROJECT_ID'
 ]);
 
 // Configure the time zone
@@ -82,3 +83,5 @@ export const defaultSearchRadiusInMeters = 20000;
 export const defaultCurrencyCode: CurrencyCode = 'USD';
 
 export const devconCashbackEnabled = process.env.REACT_APP_STL_DEVCON ?? 0;
+
+export const walletConnectProjectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID;

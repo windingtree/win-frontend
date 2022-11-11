@@ -5,9 +5,11 @@ import type {
 } from '@windingtree/glider-types/dist/win';
 import { useCallback } from 'react';
 import axios from 'axios';
-import { createAuthSignature } from '@windingtree/win-commons/dist/auth';
-import { useAppDispatch, useAppState } from '../store';
+import { createAuthSignatureWithSigner } from '@windingtree/win-commons/dist/auth';
+import { useAppDispatch } from '../store';
 import { backend } from '../config';
+import { Wallet } from 'ethers';
+import { useNetwork, useAccount, useSigner } from 'wagmi';
 import Logger from '../utils/logger';
 
 const logger = Logger('useBookingsAuth');
@@ -19,11 +21,14 @@ export interface UseBookingsAuthHook {
 
 export const useBookingsAuth = (): UseBookingsAuthHook => {
   const dispatch = useAppDispatch();
-  const { account, provider } = useAppState();
+  const { address } = useAccount();
+  const { chain } = useNetwork();
+  // const provider = useProvider();
+  const { data: signer } = useSigner();
 
   const login = useCallback(async () => {
     try {
-      if (!account || !provider) {
+      if (!chain || !address || !signer) {
         throw new Error('Wallet not connected yet');
       }
 
@@ -39,9 +44,13 @@ export const useBookingsAuth = (): UseBookingsAuthHook => {
         throw new Error('Invalid auth secret');
       }
 
-      const chainId = (await provider.getNetwork()).chainId;
-      const wallet = await provider.getSigner().getAddress();
-      const signature = await createAuthSignature(provider, secret);
+      const chainId = chain.id;
+      const wallet = address as string;
+      const signature = await createAuthSignatureWithSigner(
+        chainId,
+        signer as Wallet,
+        secret
+      );
 
       const authRes = await axios.post<BookingsAuthResponse>(
         `${backend.url}/api/bookings/auth`,
@@ -72,7 +81,7 @@ export const useBookingsAuth = (): UseBookingsAuthHook => {
       logger.error(err);
       throw new Error((err as Error).message || 'Unknown booking login error');
     }
-  }, [dispatch, account, provider]);
+  }, [dispatch, chain, address, signer]);
 
   const logout = useCallback(async () => {
     try {

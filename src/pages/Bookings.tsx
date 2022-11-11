@@ -5,15 +5,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { isContract } from '@windingtree/win-commons/dist/multisig';
 import { MessageBox } from '../components/MessageBox';
-import { SignInButton } from '../components/Web3Modal';
 import MainLayout from '../layouts/main';
 import { useBookingsAuth } from '../hooks/useBookingsAuth';
 import { useBookings } from '../hooks/useBookings';
+import { providers } from 'ethers';
+import { useAccount, useProvider } from 'wagmi';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Iconify from '../components/Iconify';
 
 export const Bookings = () => {
   const theme = useTheme();
-  const { account, provider, walletAuth } = useAppState();
+  const { address } = useAccount();
+  const provider = useProvider();
+  const { walletAuth } = useAppState();
   const { login, logout } = useBookingsAuth();
   const bookings = useBookings();
   const [isLogin, setLogin] = useState<boolean>(false);
@@ -24,8 +28,8 @@ export const Bookings = () => {
   useEffect(() => {
     const checkIsContract = async () => {
       try {
-        if (account && provider) {
-          setIsContract(await isContract(account, provider));
+        if (provider && address) {
+          setIsContract(await isContract(address, provider as providers.JsonRpcProvider));
         } else {
           setIsContract(false);
         }
@@ -37,7 +41,7 @@ export const Bookings = () => {
     };
 
     checkIsContract();
-  }, [account, provider]);
+  }, [provider, address]);
 
   const auth = useCallback(async () => {
     try {
@@ -53,18 +57,18 @@ export const Bookings = () => {
 
   return (
     <MainLayout>
-      <MessageBox type="warning" show={!account}>
+      <MessageBox type="warning" show={typeof address !== 'string'}>
         <Grid container direction="row" alignItems="center">
           <Grid item marginRight={theme.spacing(5)}>
             Please connect your wallet
           </Grid>
           <Grid item>
-            <SignInButton />
+            <ConnectButton />
           </Grid>
         </Grid>
       </MessageBox>
 
-      <MessageBox type="warning" show={!!account && !isLoggedIn}>
+      <MessageBox type="warning" show={!!address && !isLoggedIn}>
         <Grid container direction="row" alignItems="center">
           <Grid item marginRight={theme.spacing(5)}>
             Please authorize your account. You will be prompted for signature.

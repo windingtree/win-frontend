@@ -4,11 +4,6 @@ import type {
   OrganizerInformation
 } from '@windingtree/glider-types/dist/win';
 import type {
-  Web3ModalProvider,
-  Web3ModalSignInFunction,
-  Web3ModalSignOutFunction
-} from '../hooks/useWeb3Modal';
-import type {
   BookingInfoType,
   CheckOut,
   GenericStateRecord,
@@ -16,31 +11,6 @@ import type {
 } from './types';
 import { CurrencyCode } from '../hooks/useCurrencies';
 import { PriceRange } from '../hooks/useAccommodationsAndOffers';
-
-export interface SetConnectingAction {
-  type: 'SET_CONNECTING';
-  payload: boolean;
-}
-
-export interface SetProviderAction {
-  type: 'SET_PROVIDER';
-  payload?: Web3ModalProvider;
-}
-
-export interface SetWeb3ModalSignInAction {
-  type: 'SET_WEB3MODAL_SIGN_IN';
-  payload?: Web3ModalSignInFunction;
-}
-
-export interface SetWeb3ModalSignOutAction {
-  type: 'SET_WEB3MODAL_SIGN_OUT';
-  payload?: Web3ModalSignOutFunction;
-}
-
-export interface SetAccountAction {
-  type: 'SET_ACCOUNT';
-  payload?: string;
-}
 
 export interface SetRecordAction {
   type: 'SET_RECORD';
@@ -140,11 +110,6 @@ export type Action =
   | SetSearchParams
   | SetCheckOutAction
   | SetAuthenticationTokenAction
-  | SetConnectingAction
-  | SetProviderAction
-  | SetWeb3ModalSignInAction
-  | SetWeb3ModalSignOutAction
-  | SetAccountAction
   | SetSelectedNetwork
   | SetSelectedAsset
   | SetWalletAuthAction

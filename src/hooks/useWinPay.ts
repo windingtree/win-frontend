@@ -2,7 +2,8 @@ import type { WinPay } from '@windingtree/win-pay/dist/typechain';
 import type { NetworkInfo } from '@windingtree/win-commons/dist/types';
 import { useState, useEffect } from 'react';
 import { WinPay__factory } from '@windingtree/win-pay/dist/typechain';
-import { Web3ModalProvider } from './useWeb3Modal';
+import { providers } from 'ethers';
+import { useSigner } from 'wagmi';
 import Logger from '../utils/logger';
 
 const logger = Logger('useWinPay');
@@ -12,19 +13,20 @@ export interface UseAssetHook {
 }
 
 export const useWinPay = (
-  provider: Web3ModalProvider | undefined,
+  provider: providers.JsonRpcProvider | undefined,
   network: NetworkInfo | undefined
 ) => {
+  const { data: signer } = useSigner();
   const [winPayContract, setWinPayContract] = useState<WinPay | undefined>();
 
   useEffect(() => {
     const getContracts = async () => {
       try {
-        if (provider && network) {
+        if (provider && network && signer) {
           const contract = WinPay__factory.connect(
             network.contracts.winPay,
             provider
-          ).connect(provider.getSigner());
+          ).connect(signer);
           setWinPayContract(contract);
         } else {
           setWinPayContract(undefined);
@@ -35,7 +37,7 @@ export const useWinPay = (
       }
     };
     getContracts();
-  }, [provider, network]);
+  }, [provider, network, signer]);
 
   return {
     winPayContract
