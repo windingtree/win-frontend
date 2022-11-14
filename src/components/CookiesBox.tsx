@@ -1,12 +1,4 @@
-import {
-  Card,
-  Typography,
-  Button,
-  Modal,
-  Stack,
-  CardContent,
-  CardActions
-} from '@mui/material';
+import { Card, Typography, Button, Modal, Stack, CardContent } from '@mui/material';
 import { useMemo } from 'react';
 import { Cookies, useAllowedCookies } from '../hooks/useAllowedCookies';
 
@@ -19,14 +11,15 @@ export const CookieBox = () => {
       <Card
         sx={{
           display: 'flex',
-          m: 2,
+          flexDirection: { xs: 'column', md: 'row' },
+          m: 3,
           position: 'absolute',
           bottom: 0,
           right: 0
         }}
       >
         <CardContent>
-          <Stack spacing={1} maxWidth="70vw">
+          <Stack spacing={1} maxWidth={{ xs: '100vw', md: '70vw' }}>
             <Typography variant="subtitle1">
               This website uses cookies to ensure you get the best experience on our
               website.
@@ -42,8 +35,15 @@ export const CookieBox = () => {
             </Typography>
           </Stack>
         </CardContent>
-        <CardActions>
-          <Stack direction="column" justifyContent="center" spacing={1}>
+        <CardContent>
+          <Stack
+            spacing={1}
+            sx={{
+              display: 'flex',
+              direction: { xs: 'row', md: 'column' },
+              justifyContent: 'center'
+            }}
+          >
             <Button
               variant="outlined"
               onClick={() => {
@@ -61,7 +61,7 @@ export const CookieBox = () => {
               Accept only essential
             </Button>
           </Stack>
-        </CardActions>
+        </CardContent>
       </Card>
     </Modal>
   );
