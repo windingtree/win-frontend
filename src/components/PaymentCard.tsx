@@ -1,4 +1,3 @@
-import { Web3ModalProvider } from '../hooks/useWeb3Modal';
 import {
   NetworkInfo,
   CryptoAsset,
@@ -13,7 +12,7 @@ import {
   ContractTransaction
 } from 'ethers';
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { utils, BigNumber as BN } from 'ethers';
+import { utils, BigNumber as BN, providers } from 'ethers';
 import {
   Card,
   CardContent,
@@ -40,6 +39,7 @@ import { useWinPay } from '../hooks/useWinPay';
 import { useResponsive } from '../hooks/useResponsive';
 import { centerEllipsis, formatPrice } from '../utils/strings';
 import { allowedNetworks } from '../config';
+import { useAccount, useSigner } from 'wagmi';
 import Logger from '../utils/logger';
 
 const logger = Logger('PaymentCard');
@@ -62,7 +62,7 @@ export interface PaymentSuccess {
 export type PaymentSuccessCallback = (result: PaymentSuccess) => void;
 
 export interface PaymentCardProps {
-  provider?: Web3ModalProvider;
+  provider?: providers.JsonRpcProvider;
   network?: NetworkInfo;
   asset?: CryptoAsset;
   payment: Payment;
@@ -91,7 +91,9 @@ export const PaymentCard = ({
   onSuccess
 }: PaymentCardProps) => {
   const isDesktop = useResponsive('up', 'md');
-  const { watchAsset } = useWalletRpcApi(provider, allowedNetworks);
+  const { address } = useAccount();
+  const { data: signer } = useSigner();
+  const { watchAsset } = useWalletRpcApi(allowedNetworks);
   const [account, setAccount] = useState<string | undefined>();
   const { winPayContract } = useWinPay(provider, network);
   const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
@@ -201,17 +203,11 @@ export const PaymentCard = ({
     checkIsAccount();
   }, [provider, account]);
 
-  // useEffect(() => {
-  //   if (!assetsCurrencies.includes(payment.currency)) {
-  //     throw new Error(`Unsupported currency ${payment.currency}`);
-  //   }
-  // }, [payment]);
-
   useEffect(() => {
     const getAccount = async () => {
       try {
-        if (provider) {
-          setAccount(await provider.getSigner().getAddress());
+        if (address) {
+          setAccount(address);
         } else {
           setAccount(undefined);
         }
@@ -220,7 +216,7 @@ export const PaymentCard = ({
       }
     };
     getAccount();
-  }, [provider]);
+  }, [address]);
 
   useEffect(() => {
     setCostError(undefined);
@@ -235,11 +231,11 @@ export const PaymentCard = ({
   const addTokenToWallet = useCallback(async () => {
     try {
       if (tokenAddress && asset) {
-        await watchAsset('ERC20', {
+        await watchAsset({
           address: tokenAddress,
           symbol: asset.symbol,
           decimals: asset.decimals,
-          image: asset.image
+          image: `${window.location.origin}${asset.image}`
         });
       }
     } catch (err) {
@@ -271,7 +267,7 @@ export const PaymentCard = ({
     try {
       setPermitError(undefined);
 
-      if (provider && asset && tokenContract && account) {
+      if (signer && asset && tokenContract && account) {
         logger.debug('Payment params:', {
           tokenContract,
           account,
@@ -281,7 +277,7 @@ export const PaymentCard = ({
           permitSalt: asset.permitSalt
         });
         const signature = await createPermitSignature(
-          provider.getSigner() as unknown as Wallet,
+          signer as Wallet,
           tokenContract,
           account,
           asset.address,
@@ -305,7 +301,7 @@ export const PaymentCard = ({
       }
       setPermitSignature(undefined);
     }
-  }, [provider, asset, tokenContract, account]);
+  }, [signer, asset, tokenContract, account]);
 
   const approveTokens = useCallback(async () => {
     try {

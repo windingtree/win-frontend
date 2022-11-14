@@ -1,6 +1,5 @@
-import type { Web3ModalProvider } from '../hooks/useWeb3Modal';
 import { useCallback, useMemo, useState } from 'react';
-import { utils } from 'ethers';
+import { utils, providers } from 'ethers';
 import Blockies from 'react-blockies';
 import styled from 'styled-components';
 import { Box, Text, Notification } from 'grommet';
@@ -14,7 +13,7 @@ const logger = Logger('Account');
 
 export interface AccountProps {
   account?: string;
-  provider?: Web3ModalProvider;
+  provider?: providers.JsonRpcProvider;
 }
 
 const AccountIcon = styled(Blockies)`

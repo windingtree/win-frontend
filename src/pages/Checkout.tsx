@@ -8,13 +8,12 @@ import { WinPay } from 'src/containers/checkout/WinPay';
 import { expirationGap } from 'src/config';
 import Logger from 'src/utils/logger';
 import { PaymentSuccessCallback } from 'src/components/PaymentCard';
-import { SignInButton } from 'src/components/Web3Modal';
-import { useAppState } from 'src/store';
 import { getOfferId } from 'src/hooks/useCheckout/helpers';
-
 import { CheckoutOverview } from 'src/containers/checkout/CheckoutOverview.tsx';
 import { IconButtonAnimate } from 'src/components/animate';
 import Iconify from 'src/components/Iconify';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAccount } from 'wagmi';
 
 const logger = Logger('Checkout');
 
@@ -24,7 +23,7 @@ export const normalizeExpiration = (expirationDate: string): number =>
 export const Checkout = () => {
   const navigate = useNavigate();
   const { bookingInfo, bookingMode } = useCheckout();
-  const { account } = useAppState();
+  const { isConnected } = useAccount();
   const isGroupMode = bookingMode === 'group';
   const offerId = !isGroupMode && bookingInfo?.offers && getOfferId(bookingInfo.offers);
 
@@ -78,16 +77,17 @@ export const Checkout = () => {
       {payment && (
         <>
           <CheckoutOverview />
-          {!account && (
+          {!isConnected && (
             <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
               <Typography fontWeight="bold" mb={1}>
                 Please connect your wallet to proceed
               </Typography>
-
-              <SignInButton size="large" sx={{ width: { xs: '100%', md: 'auto' } }} />
+              <ConnectButton />
             </Box>
           )}
-          <WinPay payment={payment} onSuccess={onPaymentSuccess} />
+          <Box sx={{ mb: 5 }}>
+            <WinPay payment={payment} onSuccess={onPaymentSuccess} />
+          </Box>
         </>
       )}
     </MainLayout>

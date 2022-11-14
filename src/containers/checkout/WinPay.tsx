@@ -10,7 +10,8 @@ import { CurrencySelector } from 'src/components/CurrencySelector';
 import Logger from 'src/utils/logger';
 import { MessageBox } from 'src/components/MessageBox';
 import { ExternalLink } from 'src/components/ExternalLink';
-import { BigNumber } from 'ethers';
+import { BigNumber, providers } from 'ethers';
+import { useAccount, useProvider } from 'wagmi';
 
 const logger = Logger('WinPay');
 
@@ -22,15 +23,17 @@ export interface WinPayProps {
 export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
   const isDesktop = useResponsive('up', 'md');
   const dispatch = useAppDispatch();
-  const { provider, account, selectedNetwork, selectedAsset } = useAppState();
+  const { selectedNetwork, selectedAsset } = useAppState();
+  const { address, isConnected } = useAccount();
+  const provider = useProvider();
   const [withQuote, setWithQuote] = useState<boolean>(false);
   const [emptyBalance, setEmptyBalance] = useState<boolean>(true);
 
   useEffect(() => {
     const getBalance = async () => {
       try {
-        if (provider && account && selectedNetwork?.ramp) {
-          const currentBalance = await provider.getBalance(account);
+        if (provider && address && selectedNetwork?.ramp) {
+          const currentBalance = await provider.getBalance(address);
           setEmptyBalance(currentBalance.eq(BigNumber.from(0)));
         } else {
           setEmptyBalance(false);
@@ -41,7 +44,7 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
       }
     };
     getBalance();
-  }, [provider, account, selectedNetwork, setEmptyBalance]);
+  }, [provider, address, selectedNetwork, setEmptyBalance]);
 
   const setNetwork = useCallback(
     (network: NetworkInfo) =>
@@ -66,39 +69,36 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
     setWithQuote(useQuote);
   };
 
-  if (!payment) {
+  if (!payment || !isConnected) {
     return null;
   }
 
   return (
     <>
-      {account && (
-        <CurrencySelector
-          payment={payment}
-          network={selectedNetwork}
-          onQuote={onUseQuoteChange}
-        />
-      )}
-      <Box marginBottom={5}>
-        {account && (
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: isDesktop ? 'row' : 'column',
-              alignItems: isDesktop ? 'top' : 'stretch',
-              gap: 2
-            }}
-          >
-            <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
-            <AssetSelector
-              network={selectedNetwork}
-              payment={payment}
-              withQuote={withQuote}
-              asset={selectedAsset}
-              onChange={setAsset}
-            />
-          </Box>
-        )}
+      <CurrencySelector
+        payment={payment}
+        network={selectedNetwork}
+        onQuote={onUseQuoteChange}
+      />
+
+      <Box sx={{ mb: 3 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: isDesktop ? 'row' : 'column',
+            alignItems: isDesktop ? 'top' : 'stretch',
+            gap: 2
+          }}
+        >
+          <NetworkSelector value={selectedNetwork} onChange={setNetwork} />
+          <AssetSelector
+            network={selectedNetwork}
+            payment={payment}
+            withQuote={withQuote}
+            asset={selectedAsset}
+            onChange={setAsset}
+          />
+        </Box>
         <MessageBox type="warning" show={emptyBalance}>
           <Typography variant="body1">
             You don’t have enough {selectedNetwork?.currency} in your wallet, please
@@ -112,7 +112,7 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
         </MessageBox>
       </Box>
       <PaymentCard
-        provider={provider}
+        provider={provider as providers.JsonRpcProvider}
         network={selectedNetwork}
         asset={selectedAsset}
         payment={payment}

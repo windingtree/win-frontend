@@ -1,5 +1,5 @@
 import type { NetworkInfo } from '@windingtree/win-commons/dist/types';
-import type { Web3ModalProvider } from './useWeb3Modal';
+import { useNetwork } from 'wagmi';
 import { useState, useEffect } from 'react';
 import Logger from '../utils/logger';
 
@@ -13,10 +13,8 @@ export type NetworkIdHook = [
 ];
 
 // useNetworkId react hook
-export const useNetworkId = (
-  provider: undefined | Web3ModalProvider,
-  allowedNetworks: readonly NetworkInfo[]
-): NetworkIdHook => {
+export const useNetworkId = (allowedNetworks: readonly NetworkInfo[]): NetworkIdHook => {
+  const { chain } = useNetwork();
   const [networkId, setNetworkId] = useState<undefined | number>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRightNetwork, setIsRightNetwork] = useState<boolean>(true);
@@ -25,25 +23,24 @@ export const useNetworkId = (
   useEffect(() => {
     setError(undefined);
 
-    if (!provider) {
+    if (!chain) {
       return setNetworkId(undefined);
     }
 
     const getNetworkId = async () => {
       try {
         setIsLoading(true);
-        const network = await provider.getNetwork();
         setIsLoading(false);
-        logger.debug('getNetwork:', network);
+        logger.debug('chain:', chain);
 
-        if (network) {
-          const allowed = allowedNetworks.find((n) => n.chainId === network.chainId);
+        if (chain) {
+          const allowed = allowedNetworks.find((n) => n.chainId === chain.id);
           if (allowed) {
-            setNetworkId(network.chainId);
+            setNetworkId(chain.id);
             setIsRightNetwork(true);
           } else {
             throw new Error(
-              `Invalid network ${network.chainId} though expected ${allowedNetworks.map(
+              `Invalid network ${chain.id} though expected ${allowedNetworks.map(
                 (n) => n.name + ' '
               )}`
             );
@@ -67,7 +64,7 @@ export const useNetworkId = (
     };
 
     getNetworkId();
-  }, [provider]);
+  }, [chain]);
 
   return [networkId, isLoading, isRightNetwork, error];
 };

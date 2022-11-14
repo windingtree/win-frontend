@@ -10,7 +10,8 @@ import {
   MockERC20Dec18Permit__factory,
   MockWrappedERC20Dec18__factory
 } from '@windingtree/win-pay/dist/typechain';
-import { Web3ModalProvider } from './useWeb3Modal';
+import { providers } from 'ethers';
+import { useSigner } from 'wagmi';
 import Logger from '../utils/logger';
 
 const logger = Logger('useAsset');
@@ -22,9 +23,10 @@ export interface UseAssetHook {
 }
 
 export const useAsset = (
-  provider: Web3ModalProvider | undefined,
+  provider: providers.JsonRpcProvider | undefined,
   asset: CryptoAsset | undefined
 ) => {
+  const { data: signer } = useSigner();
   const [assetContract, setAssetContract] = useState<Asset | undefined>();
   const [tokenContract, setTokenContract] = useState<
     MockERC20Dec18Permit | MockWrappedERC20Dec18 | undefined
@@ -34,9 +36,9 @@ export const useAsset = (
   useEffect(() => {
     const getContracts = async () => {
       try {
-        if (provider && asset) {
+        if (provider && asset && signer) {
           const contract = Asset__factory.connect(asset.address, provider).connect(
-            provider.getSigner()
+            signer
           );
           const assetAddress = await contract.asset();
           logger.debug('Asset token address:', assetAddress);
@@ -46,7 +48,7 @@ export const useAsset = (
           setTokenContract(
             (isWrapped ? MockERC20Dec18Permit__factory : MockWrappedERC20Dec18__factory)
               .connect(assetAddress, provider)
-              .connect(provider.getSigner())
+              .connect(signer)
           );
         } else {
           setTokenAddress(undefined);
@@ -61,7 +63,7 @@ export const useAsset = (
       }
     };
     getContracts();
-  }, [provider, asset]);
+  }, [provider, asset, signer]);
 
   return {
     assetContract,
