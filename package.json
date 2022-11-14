@@ -79,7 +79,7 @@
     "@walletconnect/web3-provider": "^1.8.0",
     "@windingtree/glider-types": "^4.3.1",
     "@windingtree/org.id-utils": "^1.2.4",
-    "@windingtree/win-commons": "^2.2.1",
+    "@windingtree/win-commons": "^3.0.0",
     "@windingtree/win-pay": "^1.9.0",
     "axios": "^1.1.3",
     "babel-plugin-named-exports-order": "^0.0.2",
