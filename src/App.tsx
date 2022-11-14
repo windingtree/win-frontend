@@ -60,6 +60,7 @@ const wagmiClient = createClient({
   provider,
   webSocketProvider
 });
+import { CookieBox } from './components/CookiesBox';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -82,6 +83,7 @@ const App = () => (
             <QueryClientProvider client={queryClient}>
               <AppStateProvider>
                 <GrommetProvider>
+                  <CookieBox />
                   <AppRoutes />
                 </GrommetProvider>
               </AppStateProvider>
