@@ -38,7 +38,7 @@ const { chains, provider, webSocketProvider } = configureChains(
 
 const connectors = connectorsForWallets([
   {
-    groupName: 'Choose one',
+    groupName: 'Choose your wallet',
     wallets: [
       injectedWallet({ chains }),
       metaMaskWallet({ chains }),
