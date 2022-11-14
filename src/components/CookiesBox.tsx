@@ -7,10 +7,12 @@ import {
   CardContent,
   CardActions
 } from '@mui/material';
-import { useState } from 'react';
+import { useMemo } from 'react';
+import { Cookies, useAllowedCookies } from '../hooks/useAllowedCookies';
 
 export const CookieBox = () => {
-  const [open, setOpen] = useState(true);
+  const { allowedCookies, setAllowedCookies } = useAllowedCookies();
+  const open = useMemo(() => allowedCookies === undefined, [allowedCookies]);
 
   return (
     <Modal open={open}>
@@ -45,7 +47,7 @@ export const CookieBox = () => {
             <Button
               variant="outlined"
               onClick={() => {
-                setOpen(false);
+                setAllowedCookies(Cookies.all);
               }}
             >
               Accept all
@@ -53,7 +55,7 @@ export const CookieBox = () => {
             <Button
               variant="outlined"
               onClick={() => {
-                setOpen(false);
+                setAllowedCookies(Cookies.essential);
               }}
             >
               Accept only essential

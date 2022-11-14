@@ -11,6 +11,7 @@ import type {
 } from './types';
 import { CurrencyCode } from '../hooks/useCurrencies';
 import { PriceRange } from '../hooks/useAccommodationsAndOffers';
+import { Cookies } from '../hooks/useAllowedCookies';
 
 export interface SetRecordAction {
   type: 'SET_RECORD';
@@ -103,10 +104,16 @@ export interface clearPriceFilterAction {
   payload?: null;
 }
 
+export interface SetAllowedCookiesAction {
+  type: 'SET_ALLOWED_COOKIES';
+  payload: Cookies;
+}
+
 export type UserSettingsAction = SetPreferredCurrency;
 export type PriceFilterAction = SetPriceFilterAction | clearPriceFilterAction;
 
 export type Action =
+  | SetAllowedCookiesAction
   | SetSearchParams
   | SetCheckOutAction
   | SetAuthenticationTokenAction
