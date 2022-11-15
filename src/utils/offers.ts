@@ -59,3 +59,9 @@ export const filterOffersByPriceRanges = (
     });
   });
 };
+
+export const sortOffersByPrice = (offers: OfferRecord[]): OfferRecord[] => {
+  return offers.sort((prevOffer, nextOffer) => {
+    return Number(prevOffer.price.public) - Number(nextOffer.price.public);
+  });
+};

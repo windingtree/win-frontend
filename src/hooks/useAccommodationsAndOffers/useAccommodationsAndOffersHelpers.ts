@@ -1,5 +1,6 @@
 import { Offer, WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { useCallback } from 'react';
+import { sortOffersByPrice } from 'src/utils/offers';
 import { OfferRecord } from '../../store/types';
 import { CurrencyCode, useCurrencies } from '../useCurrencies';
 import { useUserSettings } from '../useUserSettings';
@@ -29,23 +30,24 @@ export const useAccommodationsAndOffersHelpers = () => {
     (offers: Record<string, Offer> | undefined): OfferRecord[] => {
       if (!offers) return [];
 
-      const normalizedData = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
+      const offersArray = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
         id: key,
         ...value
       }));
 
-      let normalizedOffers: OfferRecord[];
+      let offersWithPreferredCurrency: OfferRecord[];
 
       if (preferredCurrencyCode) {
-        normalizedOffers = getOffersWithPreferredCurrency(
-          normalizedData,
+        offersWithPreferredCurrency = getOffersWithPreferredCurrency(
+          offersArray,
           preferredCurrencyCode
         );
       } else {
-        normalizedOffers = normalizedData;
+        offersWithPreferredCurrency = offersArray;
       }
 
-      return normalizedOffers;
+      const sortedOffers = sortOffersByPrice(offersWithPreferredCurrency);
+      return sortedOffers;
     },
     [preferredCurrencyCode, getOffersWithPreferredCurrency]
   );
