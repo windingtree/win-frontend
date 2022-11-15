@@ -2,13 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { CoordinatesType } from 'src/utils/accommodation';
 import { useAccommodationsAndOffersHelpers } from '../useAccommodationsAndOffers/useAccommodationsAndOffersHelpers';
-import { useCurrencies } from '../useCurrencies';
 import { useUserSettings } from '../useUserSettings';
 import {
   AccommodationResponseType,
   fetchAccommodation,
   fetchOffers,
-  OfferResponseType
+  OffersResponseType
 } from './api';
 
 export interface SearchPropsType {
@@ -26,7 +25,6 @@ export interface UseAccommodationProps {
 }
 
 export const useAccommodation = (props: UseAccommodationProps) => {
-  const { convertPriceCurrency } = useCurrencies();
   const { preferredCurrencyCode } = useUserSettings();
   const { normalizeOffers } = useAccommodationsAndOffersHelpers();
 
@@ -41,8 +39,8 @@ export const useAccommodation = (props: UseAccommodationProps) => {
   );
 
   const offerExpirationTime = 25 * 60 * 1000;
-  const offersQuery = useQuery<OfferResponseType | undefined, Error>(
-    ['accommodation-offers', id, searchProps],
+  const offersQuery = useQuery<OffersResponseType | undefined, Error>(
+    ['accommodation-offers'],
     async () => {
       if (!id || !searchProps) return;
 
@@ -66,10 +64,11 @@ export const useAccommodation = (props: UseAccommodationProps) => {
   );
 
   const { data, ...restOffersQuery } = offersQuery;
+
   const { offers, ...restData } = data || {};
 
   const normalizedOffers = useMemo(
-    () => data?.offers && normalizeOffers(offers),
+    () => data?.offers && normalizeOffers(offers, offersQuery.data?.accommodations),
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, preferredCurrencyCode, normalizeOffers]

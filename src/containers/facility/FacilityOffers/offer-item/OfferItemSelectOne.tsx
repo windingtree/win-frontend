@@ -1,5 +1,4 @@
 import type {
-  RoomTypes,
   WinAccommodation,
   WinPricedOffer
 } from '@windingtree/glider-types/dist/win';
@@ -10,7 +9,6 @@ import type { OfferRecord } from 'src/store/types';
 import { Box, Grid, Divider, Typography, useTheme } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { convertToLocalTime, daysBetween } from 'src/utils/date';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
 import Logger from 'src/utils/logger';
@@ -25,10 +23,9 @@ import { useFormContext } from 'react-hook-form';
 const logger = Logger('OfferItemSelectOne');
 
 export const OfferItemSelectOne: React.FC<{
-  room: RoomTypes;
   offer: OfferRecord;
   accommodation: WinAccommodation;
-}> = ({ offer, room, accommodation }) => {
+}> = ({ offer, accommodation }) => {
   const { watch } = useFormContext();
   const { roomCount, adultCount, dateRange } = watch();
 
@@ -122,7 +119,7 @@ export const OfferItemSelectOne: React.FC<{
       <Box py={5}>
         <Grid container spacing={5}>
           <Grid item xs={8}>
-            <OfferInformation room={room} offer={offer} />
+            <OfferInformation room={offer.room} offer={offer} />
           </Grid>
           <Grid item xs={4} alignSelf={'end'}>
             <Box

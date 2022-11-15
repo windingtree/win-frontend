@@ -12,7 +12,7 @@ import { useCheckout } from 'src/hooks/useCheckout';
 import { useNavigate } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers, notFoundText } from '../helpers';
 import { useSnackbar } from 'notistack';
-import { getRoomOfOffer, getTotalRoomCountReducer } from 'src/utils/offers';
+import { getTotalRoomCountReducer } from 'src/utils/offers';
 import type { OfferRecord } from 'src/store/types';
 import { MHidden } from 'src/components/MHidden';
 import { OfferItemSelectMultiple } from './offer-item/OfferItemSelectMultiple';
@@ -73,7 +73,6 @@ export const FacilityOffersSelectMultiple = ({
 
   const defaultRoomCount = initialRoomCount ? initialRoomCount : GROUP_MODE_ROOM_COUNT;
 
-  // ----------------------------------------------------------------------
   const defaultOffers = useMemo(
     () => getOffersWithQuantity(offers, defaultRoomCount),
     [offers, defaultRoomCount]
@@ -164,14 +163,11 @@ export const FacilityOffersSelectMultiple = ({
         <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }} sx={{ mt: 4 }}>
           <Box mt={{ xs: `-${summaryBoxHeight}px`, md: 0 }}>
             {offers?.map((offer, index) => {
-              // console.log('ACC', accommodation, 'OFF', offer);
-              const room = getRoomOfOffer(accommodation, offer);
               return (
                 <OfferItemSelectMultiple
                   index={index}
                   key={index}
                   offer={offer}
-                  room={room}
                   nightCount={nightCount}
                 />
               );

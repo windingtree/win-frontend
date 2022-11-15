@@ -11,9 +11,10 @@ export interface AccommodationResponseType {
   accommodation: WinAccommodation;
 }
 
-export interface OfferResponseType {
+export interface OffersResponseType {
   offers: Record<string, Offer>;
   latestQueryParams: SearchPropsType;
+  accommodations: Record<string, WinAccommodation>;
 }
 
 export async function fetchAccommodation(id: string): Promise<AccommodationResponseType> {
@@ -36,7 +37,7 @@ export const fetchOffers = async ({
 }: {
   id: string;
   searchProps: SearchPropsType;
-}): Promise<OfferResponseType> => {
+}): Promise<OffersResponseType> => {
   const { arrival, departure, roomCount, adultCount, childrenCount, location } =
     searchProps;
   const passengersBody = getPassengersBody(adultCount, childrenCount);
@@ -61,7 +62,7 @@ export const fetchOffers = async ({
       throw new Error('Something went wrong. Please try again.');
     });
 
-  if (!data.offers) {
+  if (!data.offers || !data.accommodations) {
     throw new Error('Something went wrong. Please try again.');
   }
 
@@ -76,6 +77,7 @@ export const fetchOffers = async ({
 
   return {
     latestQueryParams,
-    offers: data.offers
+    offers: data.offers,
+    accommodations: data.accommodations
   };
 };

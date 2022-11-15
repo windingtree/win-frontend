@@ -6,7 +6,8 @@ import type {
   OrganizerInformation,
   GroupBookingDeposits,
   Quote,
-  Price
+  Price,
+  RoomTypes
 } from '@windingtree/glider-types/dist/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
 import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
@@ -23,11 +24,12 @@ export interface GenericStateRecord {
   [key: string]: unknown;
 }
 
-interface OfferPreferredCurrencyPrice {
+interface OfferFrontend {
   preferredCurrencyPrice?: Price;
+  room?: RoomTypes;
 }
 
-export type OfferRecord = Offer & GenericStateRecord & OfferPreferredCurrencyPrice;
+export type OfferRecord = Offer & GenericStateRecord & OfferFrontend;
 export type FacilityRecord = WinAccommodation & GenericStateRecord;
 
 export interface Address {

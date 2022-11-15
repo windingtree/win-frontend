@@ -127,15 +127,13 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               pathname: `/facility/${facility.providerHotelId}`,
               search: `?${createSearchParams(searchParams)}`
             }}
-            // target="_blank"
-            // rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{ textDecoration: 'none', color: 'inherit' }}
           >
             <Stack
-              // fill={true}
               justifyContent="space-between"
               width="100%"
-              // minWidth={theme.spacing(27)}
               spacing={0.5}
               sx={{ p: 1, mt: 0, cursor: 'pointer' }}
             >

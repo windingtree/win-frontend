@@ -99,11 +99,5 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
 
   if (!id) return null;
 
-  return (
-    <FormProvider methods={methods}>
-      {/* <RHFDateRangePicker name="dateRange" minDate={new Date()} /> */}
-
-      {children}
-    </FormProvider>
-  );
+  return <FormProvider methods={methods}>{children}</FormProvider>;
 };

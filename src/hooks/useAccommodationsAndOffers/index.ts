@@ -163,8 +163,9 @@ export const useAccommodationsAndOffers = ({
 
   // all normalized offers prior to filtering
   const allOffers = useMemo(
-    () => data?.offers && normalizeOffers(data.offers),
+    () => data?.offers && normalizeOffers(data.offers, data.accommodations),
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, preferredCurrencyCode, normalizeOffers]
   );
 

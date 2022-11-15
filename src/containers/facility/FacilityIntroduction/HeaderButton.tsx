@@ -53,6 +53,7 @@ export const HeaderButton = ({
   );
 
   const priceRange = preferredCurrencyPriceRange ?? localPriceRange;
+
   let lowestAveragePrice: number | undefined, currency: string | undefined;
 
   if (priceRange) {

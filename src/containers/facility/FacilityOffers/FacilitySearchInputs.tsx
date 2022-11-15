@@ -19,8 +19,7 @@ export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsPr
   const { watch, handleSubmit } = useFormContext();
   const { roomCount, adultCount, dateRange } = watch();
   const { offersQuery } = useAccommodation({ id, searchProps });
-  const { refetch, isFetching, isLoading } = offersQuery;
-  const isFetchedOnce = !isLoading;
+  const { refetch, isFetching } = offersQuery;
 
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
