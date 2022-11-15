@@ -30,7 +30,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
   );
   const [searchProps, setSearchProps] = useState<SearchPropsType | undefined>();
   const { accommodationQuery, offersQuery } = useAccommodation({ id, searchProps });
-  const { error, isLoading, isFetching, refetch, data: offersData } = offersQuery;
+  const { error, isLoading, refetch, data: offersData } = offersQuery;
   const accommodation = accommodationQuery?.data?.accommodation;
   const [isOffersFetchedOnce, setIsOffersFetchedOnce] = useState<boolean>(false);
 
@@ -88,7 +88,13 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
       )}
       {isLoading && <LinearProgress sx={{ mt: 2, display: 'block' }} />}
       {isGroupMode && showOffers && (
-        <FacilityOffersSelectMultiple offers={offersData?.offers} />
+        <FacilityOffersSelectMultiple
+          offers={offersData?.offers}
+          initialRoomCount={roomCount}
+          arrival={arrival}
+          departure={departure}
+          adultCount={adultCount}
+        />
       )}
       {!isGroupMode && showOffers && (
         <FacilityOffersSelectOne

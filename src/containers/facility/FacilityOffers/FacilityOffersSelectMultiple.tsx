@@ -1,13 +1,13 @@
 import { Box, Grid, Typography } from '@mui/material';
 import { FormProvider } from 'src/components/hook-form';
-import { useForm, FieldValues, useFormContext } from 'react-hook-form';
+import { useForm, FieldValues } from 'react-hook-form';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { FacilityOffersSelectMultipleSummary } from './FacilityOffersMultipleSummary';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
 import { useResponsive } from 'src/hooks/useResponsive';
-import { convertToLocalTime, daysBetween } from 'src/utils/date';
+import { daysBetween } from 'src/utils/date';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { useNavigate } from 'react-router-dom';
 import { getOffersWithQuantity, getSelectedOffers, notFoundText } from '../helpers';
@@ -47,31 +47,28 @@ export type FacilityOffersSelectMultipleFormProps = {
 type FacilityOffersSelectMultipleProps = {
   accommodation?: WinAccommodation;
   offers?: OfferRecord[];
+  initialRoomCount: number;
+  arrival: Date;
+  departure: Date;
+  adultCount: number;
 };
 
 export const FacilityOffersSelectMultiple = ({
   accommodation,
-  offers
+  offers,
+  initialRoomCount,
+  adultCount,
+  arrival,
+  departure
 }: FacilityOffersSelectMultipleProps) => {
-  const { watch } = useFormContext();
-  const { roomCount: initialRoomCount, adultCount, dateRange } = watch();
-  const arrival = useMemo(
-    () => dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate),
-    [dateRange]
-  );
-  const departure = useMemo(
-    () => dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate),
-    [dateRange]
-  );
-  //TODO: if we support children, get it from the form inputs
-  const childrenCount = 0;
-
   const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const isDesktop = useResponsive('up', 'md');
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   const defaultRoomCount = initialRoomCount ? initialRoomCount : GROUP_MODE_ROOM_COUNT;
+  //TODO: if we support children, get it from the form inputs
+  const childrenCount = 0;
 
   const defaultOffers = useMemo(
     () => getOffersWithQuantity(offers, defaultRoomCount),
@@ -81,8 +78,8 @@ export const FacilityOffersSelectMultiple = ({
     resolver: yupResolver(GroupOffersSchema),
     defaultValues: { offers: defaultOffers } as FieldValues
   });
-  const { handleSubmit, watch: rewatch } = methods;
-  const values = rewatch();
+  const { handleSubmit, watch } = methods;
+  const values = watch();
 
   const nightCount = daysBetween(arrival, departure);
   const guestCount = (adultCount ?? 0) + (childrenCount ?? 0);
