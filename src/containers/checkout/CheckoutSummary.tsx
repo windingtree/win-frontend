@@ -69,27 +69,6 @@ export const CheckoutSummary = () => {
           {showPreferredCurrencyPrice && (
             <Typography variant="h6">{subTitle2}</Typography>
           )}
-
-          {isGroupMode && (
-            <>
-              <Typography mt={2}>
-                This 10% deposit is required to pre-book the rooms and get the best offer
-                from the hotel. <b>You can get it back anytime.</b>
-              </Typography>
-
-              <Typography>
-                Check out the group booking{' '}
-                <a
-                  rel="noreferrer"
-                  target="_blank"
-                  href="https://blog.windingtree.com/how-to-group-book-with-win-841cf9411427"
-                >
-                  guide
-                </a>
-                .
-              </Typography>
-            </>
-          )}
         </Box>
       </Box>
 
