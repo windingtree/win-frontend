@@ -1,10 +1,6 @@
 import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
-import {
-  getGroupMode,
-  getOffersPriceRange
-} from 'src/hooks/useAccommodationsAndOffers/helpers';
+
 import { MediaItem, WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { Alert, AlertTitle, Button, Link, Stack, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material';
@@ -16,12 +12,11 @@ import {
   sortByLargestImage
 } from 'src/utils/accommodation';
 import { FacilityGallery } from './FacilityGallery';
-import { daysBetween } from 'src/utils/date';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from 'src/components/LightboxModal';
-import { displayPriceFromValues } from '../../../utils/price';
 import { useAccommodation } from 'src/hooks/useAccommodation';
 import { FacilityLoadingSkeleton } from './FacilityLoadingSkeleton';
+import { HeaderButton } from './HeaderButton';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -46,16 +41,6 @@ const HeaderTitleContainer = styled(Box)(() => ({
   width: '100%'
 }));
 
-const HeaderButtonContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-
-  [theme.breakpoints.up('md')]: {
-    alignItems: 'end',
-    width: '100%'
-  }
-}));
-
 const FacilityMainImage = styled('img')(() => ({
   flex: '50%',
   overflow: 'hidden',
@@ -71,74 +56,6 @@ const AllPhotosButton = styled(Button)(({ theme }) => ({
     bottom: 0
   }
 }));
-
-const HeaderButton = ({ scrollToDetailImages }) => {
-  const theme = useTheme();
-  const params = useParams();
-  const { getAccommodationById, accommodations, latestQueryParams } =
-    useAccommodationsAndOffers();
-
-  const id: string = params.id as string;
-  const accommodation = getAccommodationById(accommodations, id);
-  const offers = accommodation?.offers;
-
-  // get lowest offer price
-  const localPriceRange = useMemo(
-    () => offers && getOffersPriceRange(offers, false),
-    [offers]
-  );
-
-  const preferredCurrencyPriceRange = useMemo(
-    () => offers && getOffersPriceRange(offers, false, true),
-    [offers]
-  );
-
-  const priceRange = preferredCurrencyPriceRange ?? localPriceRange;
-  let lowestAveragePrice: number | undefined, currency: string | undefined;
-
-  if (priceRange) {
-    const { lowestPrice: lowestTotalPrice } = priceRange;
-
-    const numberOfDays = daysBetween(
-      latestQueryParams?.arrival,
-      latestQueryParams?.departure
-    );
-
-    const isGroupMode = getGroupMode(latestQueryParams?.roomCount);
-    const numberOfRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
-
-    lowestAveragePrice = Number(lowestTotalPrice.price) / (numberOfDays * numberOfRooms);
-    currency = lowestTotalPrice.currency;
-  }
-
-  return (
-    <HeaderButtonContainer>
-      <Stack direction="row" alignItems="center" mt={1}>
-        <Typography>From</Typography>
-        <Typography variant="h5" marginLeft={theme.spacing(1)}>
-          {/* {currencySymbol} {lowestAveragePrice?.toFixed(2)} */}
-          {displayPriceFromValues(lowestAveragePrice, currency)}
-        </Typography>
-      </Stack>
-      <Typography textAlign={{ md: 'right' }}> Average price / room / night</Typography>
-      <Button
-        size="large"
-        disableElevation
-        variant="outlined"
-        onClick={scrollToDetailImages}
-        sx={{
-          mt: 1
-        }}
-      >
-        Select Room
-      </Button>
-
-      <Typography mt={1} variant="caption">
-        {"You won't be charged yet"}
-      </Typography>
-    </HeaderButtonContainer>
-  );
-};
 
 const HotelAddress = ({
   address,
@@ -198,7 +115,7 @@ export const FacilityIntroduction = ({
   const [galleryOpen, setGalleryOpen] = useState<boolean>(false);
   const [slideOpen, setSlideOpen] = useState<boolean>(false);
   const [slideIndex, setSlideIndex] = useState<number>(0);
-  const { accommodationQuery } = useAccommodation({ id });
+  const { accommodationQuery, offersQuery } = useAccommodation({ id });
   const { data, isLoading, error } = accommodationQuery;
   const accommodation = data?.accommodation;
 
@@ -263,7 +180,12 @@ export const FacilityIntroduction = ({
           address={address}
           accommodation={accommodation}
         />
-        <HeaderButton scrollToDetailImages={scrollToDetailImages} />
+        <HeaderButton
+          latestQueryParams={offersQuery.data?.latestQueryParams}
+          offers={offersQuery.data?.offers}
+          scrollToDetailImages={scrollToDetailImages}
+          isLoading={offersQuery?.isFetching}
+        />
       </Stack>
       <Container>
         <FacilityMainImage src={mainImage?.url} />

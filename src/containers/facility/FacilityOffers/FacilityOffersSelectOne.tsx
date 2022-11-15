@@ -1,7 +1,8 @@
+import { Typography } from '@mui/material';
 import { WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { OfferRecord } from 'src/store/types';
-import { sortAccommodationOffersByPrice } from 'src/utils/accommodation';
 import { getRoomOfOffer } from 'src/utils/offers';
+import { notFoundText } from '../helpers';
 import { OfferItemSelectOne } from './offer-item/OfferItemSelectOne';
 
 type FacilityOffersSelectOneProps = {
@@ -12,12 +13,15 @@ export const FacilityOffersSelectOne = ({
   accommodation,
   offers
 }: FacilityOffersSelectOneProps) => {
-  if (!offers || !accommodation) return null;
+  if (!accommodation) return null;
+
+  if (!offers) {
+    return <Typography>{notFoundText}</Typography>;
+  }
 
   return (
     <>
       {offers?.map((offer, index) => {
-        console.log('ACC', accommodation, offer);
         const room = getRoomOfOffer(accommodation.roomTypes, offer);
 
         return (

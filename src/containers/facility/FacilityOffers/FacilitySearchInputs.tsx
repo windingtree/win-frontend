@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { Popover } from '@mui/material';
+import { Popover, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 import { MouseEvent, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -15,10 +15,12 @@ type FacilitySearchInputsProps = {
 };
 
 export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsProps) => {
+  const theme = useTheme();
   const { watch, handleSubmit } = useFormContext();
   const { roomCount, adultCount, dateRange } = watch();
   const { offersQuery } = useAccommodation({ id, searchProps });
-  const { refetch, isFetching } = offersQuery;
+  const { refetch, isFetching, isLoading } = offersQuery;
+  const isFetchedOnce = !isLoading;
 
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
@@ -72,7 +74,18 @@ export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsPr
         <GuestsAndRoomsInputs />
       </Popover>
 
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} sx={{ mb: 2 }}>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        sx={{
+          width: { xs: '100%', md: 'auto' },
+          border: `solid 2px ${theme.palette.primary.main}`,
+          borderRadius: 1,
+          mb: 2,
+          p: 2,
+          display: 'inline-flex'
+        }}
+        spacing={1}
+      >
         <DateRangeButton
           startDate={dateRange[0].startDate}
           endDate={dateRange[0].endDate}

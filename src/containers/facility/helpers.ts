@@ -5,7 +5,7 @@ export const getSelectedOffers = (offers: OfferCheckoutType[]) =>
   offers.filter((offer) => Number(offer.quantity) > 0);
 
 export const getOffersWithQuantity = (
-  offers: OfferRecord[] | null,
+  offers: OfferRecord[] | undefined,
   roomCount: number
 ) => {
   if (!offers) return [];
@@ -23,3 +23,6 @@ export const getOffersWithQuantity = (
     };
   });
 };
+
+export const notFoundText =
+  'Could not find any rooms for this search criteria. Please try again with different search criteria.';

@@ -42,7 +42,7 @@ export const useAccommodation = (props: UseAccommodationProps) => {
 
   const offerExpirationTime = 25 * 60 * 1000;
   const offersQuery = useQuery<OfferResponseType | undefined, Error>(
-    ['accommodation-offers', id, searchProps],
+    ['accommodation-offers'],
     async () => {
       if (!id || !searchProps) return;
 
@@ -64,6 +64,8 @@ export const useAccommodation = (props: UseAccommodationProps) => {
       refetchInterval: offerExpirationTime
     }
   );
+
+  console.log(offersQuery.data);
 
   const { data, ...restOffersQuery } = offersQuery;
   const { offers, ...restData } = data || {};

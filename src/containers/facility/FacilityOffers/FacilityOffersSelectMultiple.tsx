@@ -9,15 +9,14 @@ import { HEADER } from 'src/config/componentSizes';
 import { useResponsive } from 'src/hooks/useResponsive';
 import { convertToLocalTime, daysBetween } from 'src/utils/date';
 import { useCheckout } from 'src/hooks/useCheckout';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
+import { useNavigate } from 'react-router-dom';
+import { getOffersWithQuantity, getSelectedOffers, notFoundText } from '../helpers';
 import { useSnackbar } from 'notistack';
 import { getRoomOfOffer, getTotalRoomCountReducer } from 'src/utils/offers';
 import type { OfferRecord } from 'src/store/types';
 import { MHidden } from 'src/components/MHidden';
 import { OfferItemSelectMultiple } from './offer-item/OfferItemSelectMultiple';
 import { GROUP_MODE_ROOM_COUNT } from 'src/config';
-import { sortAccommodationOffersByPrice } from 'src/utils/accommodation';
 import { WinAccommodation } from '@windingtree/glider-types/dist/win';
 
 export interface OfferCheckoutType extends OfferRecord {
@@ -86,7 +85,6 @@ export const FacilityOffersSelectMultiple = ({
   const { handleSubmit, watch: rewatch } = methods;
   const values = rewatch();
 
-  console.log(watch(), rewatch());
   const nightCount = daysBetween(arrival, departure);
   const guestCount = (adultCount ?? 0) + (childrenCount ?? 0);
   const roomCount = values.offers.reduce(getTotalRoomCountReducer, 0);
@@ -135,8 +133,8 @@ export const FacilityOffersSelectMultiple = ({
     navigate('/org-details');
   };
 
-  if (!offers || !accommodation) {
-    return <Typography>No rooms available during the selected dates.</Typography>;
+  if (!offers) {
+    return <Typography>{notFoundText}</Typography>;
   }
 
   return (
@@ -166,6 +164,7 @@ export const FacilityOffersSelectMultiple = ({
         <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }} sx={{ mt: 4 }}>
           <Box mt={{ xs: `-${summaryBoxHeight}px`, md: 0 }}>
             {offers?.map((offer, index) => {
+              // console.log('ACC', accommodation, 'OFF', offer);
               const room = getRoomOfOffer(accommodation, offer);
               return (
                 <OfferItemSelectMultiple

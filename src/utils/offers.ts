@@ -1,10 +1,5 @@
-import {
-  RefundabilityPolicy,
-  RoomTypes,
-  WinAccommodation
-} from '@windingtree/glider-types/dist/win';
+import { RefundabilityPolicy, RoomTypes } from '@windingtree/glider-types/dist/win';
 import { OfferCheckoutType } from 'src/containers/facility/FacilityOffers/FacilityOffersSelectMultiple';
-import { AccommodationWithId } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { OfferRecord } from 'src/store/types';
 import { PriceFormat, PriceRange } from '../hooks/useAccommodationsAndOffers';
 import { isBetween } from './common';
@@ -28,13 +23,13 @@ export const getRoomOfOffer = (
   offer: OfferRecord
 ): RoomTypes => {
   const accommodationOfOffer = Object.values(offer.pricePlansReferences)[0];
-  console.log('WADDUP', accommodationOfOffer);
+  // console.log('WADDUP', accommodationOfOffer);
 
   const roomId: string = accommodationOfOffer?.roomType || '';
 
   const matchedRoomWithOffer = roomTypes[roomId];
 
-  console.log('matched', matchedRoomWithOffer);
+  // console.log('matched', matchedRoomWithOffer);
   return matchedRoomWithOffer;
 };
 
