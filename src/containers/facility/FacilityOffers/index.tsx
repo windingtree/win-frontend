@@ -18,7 +18,6 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     formState: { errors }
   } = useFormContext();
   const { roomCount, adultCount, dateRange } = watch();
-  const isGroupMode = getGroupMode(roomCount);
 
   const arrival = useMemo(
     () => dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate),
@@ -30,7 +29,11 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
   );
   const [searchProps, setSearchProps] = useState<SearchPropsType | undefined>();
   const { accommodationQuery, offersQuery } = useAccommodation({ id, searchProps });
-  const { error, isLoading, refetch, data: offersData } = offersQuery;
+  const isGroupMode = getGroupMode(
+    offersQuery.data.latestQueryParams?.roomCount || roomCount
+  );
+
+  const { error, isLoading, isFetching, refetch, data: offersData } = offersQuery;
   const accommodation = accommodationQuery?.data?.accommodation;
   const [isOffersFetchedOnce, setIsOffersFetchedOnce] = useState<boolean>(false);
 
@@ -74,7 +77,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
   const validationErrorMessage = getValidationErrorMessage(errors);
   const errorMessage = validationErrorMessage || error?.message;
   const showOffers = !error && !isLoading;
-  const showError = validationErrorMessage || error;
+  const showError = !isFetching && (validationErrorMessage || error);
 
   return (
     <Box mb={2.5} ref={ref}>

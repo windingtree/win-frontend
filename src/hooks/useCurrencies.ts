@@ -88,10 +88,12 @@ export const useCurrencies = () => {
   const convertPriceCurrency = useCallback(
     ({
       price,
-      targetCurrency
+      targetCurrency,
+      amount
     }: {
       price: Price;
       targetCurrency: CurrencyCode;
+      amount: number;
     }): Price | undefined => {
       // if conversion rate is not provided get it
       if (!targetCurrency)
@@ -102,7 +104,8 @@ export const useCurrencies = () => {
 
       const convertedCurrency = convertCurrency(
         price.currency as CurrencyCode,
-        targetCurrency
+        targetCurrency,
+        amount
       );
 
       if (!convertedCurrency) return undefined;

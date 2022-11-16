@@ -1,11 +1,14 @@
 // @mui
-import { Theme } from '@mui/material/styles';
+import { styled, Theme } from '@mui/material/styles';
 import { Box, BoxProps, SxProps } from '@mui/material';
-import { LazyLoadImage, LazyLoadImageProps } from './LazyLoadImage';
+// import { LazyLoadImage, LazyLoadImageProps } from './LazyLoadImage';
+import NoImage from '../images/no-image.png';
+import { LazyLoadImage, LazyLoadImageProps } from 'react-lazy-load-image-component';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
-export type ImageRato =
+export type ImageRatio =
   | '4/3'
   | '3/4'
   | '6/4'
@@ -20,11 +23,70 @@ type IProps = BoxProps & LazyLoadImageProps;
 
 interface ImageProps extends IProps {
   sx?: SxProps<Theme>;
-  ratio?: ImageRato;
+  ratio?: ImageRatio;
   disabledEffect?: boolean;
+  timeoutInSeconds?: number;
 }
 
-export default function Image({ ratio, sx, ...other }: ImageProps) {
+const ImageContainer = styled('span')(() => ({
+  '&.img-loading': {
+    '&::after': {
+      content: '""',
+      display: 'block',
+      backgroundColor: '#dddfe2',
+      position: 'absolute',
+      opacity: 0.5,
+      top: 0,
+      bottom: 0,
+      width: '50%',
+      height: '100%',
+      transform: 'translateX(0)',
+      animation: '1.2s loading-placeholder ease-in-out infinite'
+    }
+  },
+  '@keyframes loading-placeholder': {
+    '0%': {
+      transform: 'translateX(-100%)'
+    },
+    '100%': {
+      transform: 'translateX(200%)'
+    }
+  }
+}));
+
+export default function Image({
+  ratio,
+  sx,
+  disabledEffect = false,
+  timeoutInSeconds = 10,
+  ...other
+}: ImageProps) {
+  const [loading, setLoading] = useState(true);
+
+  // timer to handle 404/timeouts as image does not fire errors on 404s
+  useEffect(() => {
+    const timeoutId = setTimeout(() => setLoading(false), timeoutInSeconds * 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [timeoutInSeconds]);
+
+  const imageComponent = (
+    <ImageContainer className={`${!disabledEffect && loading ? 'img-loading' : ''}`}>
+      <Box
+        component={LazyLoadImage}
+        wrapperClassName="wrapper"
+        placeholderSrc={NoImage}
+        sx={{ width: 1, height: 1, objectFit: 'cover' }}
+        afterLoad={() => setLoading(false)}
+        onError={() => {
+          setLoading(false);
+        }}
+        alt="" // hide broken image icon
+        {...other}
+      />
+    </ImageContainer>
+  );
+
   if (ratio) {
     return (
       <Box
@@ -43,19 +105,14 @@ export default function Image({ ratio, sx, ...other }: ImageProps) {
             bottom: 0,
             lineHeight: 0,
             position: 'absolute',
-            backgroundSize: 'cover !important'
+            backgroundSize: 'cover !important',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center center'
           },
           ...sx
         }}
       >
-        <Box
-          component={LazyLoadImage}
-          wrapperClassName="wrapper"
-          placeholderImgSrc="/images/no-image.png"
-          showLoadingEffect={true}
-          sx={{ width: 1, height: 1, objectFit: 'cover' }}
-          {...other}
-        />
+        {imageComponent}
       </Box>
     );
   }
@@ -71,14 +128,9 @@ export default function Image({ ratio, sx, ...other }: ImageProps) {
         ...sx
       }}
     >
-      <Box
-        component={LazyLoadImage}
-        wrapperClassName="wrapper"
-        placeholderImgSrc="/images/no-image.png"
-        showLoadingEffect={true}
-        sx={{ width: 1, height: 1, objectFit: 'cover' }}
-        {...other}
-      />
+      <ImageContainer className={`${!disabledEffect && loading ? 'img-loading' : ''}`}>
+        {imageComponent}
+      </ImageContainer>
     </Box>
   );
 }

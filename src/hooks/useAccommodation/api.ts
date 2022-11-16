@@ -4,6 +4,7 @@ import {
   WinAccommodation
 } from '@windingtree/glider-types/dist/win';
 import { winClient } from 'src/api/winClient';
+import { daysBetween } from 'src/utils/date';
 import { SearchPropsType } from '.';
 import { getPassengersBody } from '../useAccommodationsAndOffers/helpers';
 
@@ -66,13 +67,16 @@ export const fetchOffers = async ({
     throw new Error('Something went wrong. Please try again.');
   }
 
+  const nightCount = daysBetween(arrival, departure);
+
   const latestQueryParams = {
     departure,
     arrival,
     roomCount,
     adultCount,
     childrenCount,
-    location
+    location,
+    nightCount
   };
 
   return {

@@ -9,10 +9,7 @@ import {
 } from '@mui/material';
 import { useMemo } from 'react';
 import { SearchPropsType } from 'src/hooks/useAccommodation';
-import {
-  getGroupMode,
-  getOffersPriceRange
-} from 'src/hooks/useAccommodationsAndOffers/helpers';
+import { getOffersPriceRange } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { OfferRecord } from 'src/store/types';
 import { daysBetween } from 'src/utils/date';
 import { displayPriceFromValues } from 'src/utils/price';
@@ -41,35 +38,25 @@ export const HeaderButton = ({
 }: HeaderButtonProps) => {
   const theme = useTheme();
 
+  const numberOfDays = daysBetween(
+    latestQueryParams?.arrival,
+    latestQueryParams?.departure
+  );
+
+  const nbRooms = latestQueryParams?.roomCount ?? 1;
+
   // get lowest offer price
   const localPriceRange = useMemo(
-    () => offers && getOffersPriceRange(offers, false),
-    [offers]
+    () => offers && getOffersPriceRange(offers, true, true, false, numberOfDays, nbRooms),
+    [nbRooms, numberOfDays, offers]
   );
 
   const preferredCurrencyPriceRange = useMemo(
-    () => offers && getOffersPriceRange(offers, false, true),
-    [offers]
+    () => offers && getOffersPriceRange(offers, true, true, true, numberOfDays, nbRooms),
+    [nbRooms, numberOfDays, offers]
   );
 
   const priceRange = preferredCurrencyPriceRange ?? localPriceRange;
-
-  let lowestAveragePrice: number | undefined, currency: string | undefined;
-
-  if (priceRange) {
-    const { lowestPrice: lowestTotalPrice } = priceRange;
-
-    const numberOfDays = daysBetween(
-      latestQueryParams?.arrival,
-      latestQueryParams?.departure
-    );
-
-    const isGroupMode = getGroupMode(latestQueryParams?.roomCount);
-    const numberOfRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
-
-    lowestAveragePrice = Number(lowestTotalPrice.price) / (numberOfDays * numberOfRooms);
-    currency = lowestTotalPrice.currency;
-  }
 
   return (
     <HeaderButtonContainer>
@@ -80,7 +67,10 @@ export const HeaderButton = ({
           {isLoading ? (
             <Skeleton variant="text" width="100px" />
           ) : (
-            displayPriceFromValues(lowestAveragePrice, currency)
+            displayPriceFromValues(
+              priceRange?.lowestPrice.price,
+              priceRange?.lowestPrice.currency
+            )
           )}
         </Typography>
       </Stack>

@@ -27,7 +27,9 @@ export const ExternalLink = ({ href, target, label, children }: ExternalLinkProp
       sx={{
         fontSize: 'inherit',
         color: 'inherit',
-        textDecoration: 'underline'
+        textDecoration: 'underline',
+        paddingLeft: '0.5rem',
+        borderRadius: '0.75rem'
       }}
     />
   );

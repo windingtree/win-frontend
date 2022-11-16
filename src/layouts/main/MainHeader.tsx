@@ -116,6 +116,7 @@ export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
 
             <Box sx={{ flexGrow: 1 }} />
             <PreferredCurrencySelector />
+            {/* <ConnectButton chainStatus={'none'} /> */}
             <AccountInfo />
 
             {isDesktop && <MenuDesktop isOffset={isOffset} navConfig={navConfig} />}

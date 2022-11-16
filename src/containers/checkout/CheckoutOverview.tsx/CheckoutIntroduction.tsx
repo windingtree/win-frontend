@@ -88,23 +88,6 @@ export const CheckoutIntroduction = () => {
         padding: '1.2em' // TODO: figure out theme default padding value for cards
       }}
     >
-      {isGroupMode && (
-        <>
-          <Typography mt={2}>
-            This 10% deposit is required to pre-book the rooms and get the best offer from
-            the hotel. <b>You can get it back anytime.</b>
-          </Typography>
-
-          <Typography>
-            Check out the{' '}
-            <a target="_blank" href="/faq#group-booking">
-              group booking guide
-            </a>
-            .
-          </Typography>
-        </>
-      )}
-
       <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
         {accommodationName}
       </Typography>

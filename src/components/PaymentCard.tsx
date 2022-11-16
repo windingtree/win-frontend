@@ -1,4 +1,3 @@
-import { Web3ModalProvider } from '../hooks/useWeb3Modal';
 import {
   NetworkInfo,
   CryptoAsset,
@@ -13,7 +12,7 @@ import {
   ContractTransaction
 } from 'ethers';
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { utils, BigNumber as BN } from 'ethers';
+import { utils, BigNumber as BN, providers } from 'ethers';
 import {
   Card,
   CardContent,
@@ -40,6 +39,7 @@ import { useWinPay } from '../hooks/useWinPay';
 import { useResponsive } from '../hooks/useResponsive';
 import { centerEllipsis, formatPrice } from '../utils/strings';
 import { allowedNetworks } from '../config';
+import { useAccount, useSigner } from 'wagmi';
 import Logger from '../utils/logger';
 
 const logger = Logger('PaymentCard');
@@ -62,7 +62,7 @@ export interface PaymentSuccess {
 export type PaymentSuccessCallback = (result: PaymentSuccess) => void;
 
 export interface PaymentCardProps {
-  provider?: Web3ModalProvider;
+  provider?: providers.JsonRpcProvider;
   network?: NetworkInfo;
   asset?: CryptoAsset;
   payment: Payment;
@@ -91,7 +91,9 @@ export const PaymentCard = ({
   onSuccess
 }: PaymentCardProps) => {
   const isDesktop = useResponsive('up', 'md');
-  const { watchAsset } = useWalletRpcApi(provider, allowedNetworks);
+  const { address } = useAccount();
+  const { data: signer } = useSigner();
+  const { watchAsset } = useWalletRpcApi(allowedNetworks);
   const [account, setAccount] = useState<string | undefined>();
   const { winPayContract } = useWinPay(provider, network);
   const { assetContract, tokenContract, tokenAddress } = useAsset(provider, asset);
@@ -201,17 +203,11 @@ export const PaymentCard = ({
     checkIsAccount();
   }, [provider, account]);
 
-  // useEffect(() => {
-  //   if (!assetsCurrencies.includes(payment.currency)) {
-  //     throw new Error(`Unsupported currency ${payment.currency}`);
-  //   }
-  // }, [payment]);
-
   useEffect(() => {
     const getAccount = async () => {
       try {
-        if (provider) {
-          setAccount(await provider.getSigner().getAddress());
+        if (address) {
+          setAccount(address);
         } else {
           setAccount(undefined);
         }
@@ -220,24 +216,26 @@ export const PaymentCard = ({
       }
     };
     getAccount();
-  }, [provider]);
+  }, [address]);
 
   useEffect(() => {
     setCostError(undefined);
 
     if (payment && balance && balance.lt(paymentValue)) {
-      setCostError('Balance not enough for payment');
+      setCostError(
+        `You don’t have enough ${asset?.symbol} in your wallet, please top-up your wallet before proceeding`
+      );
     }
   }, [payment, balance, paymentValue]);
 
   const addTokenToWallet = useCallback(async () => {
     try {
       if (tokenAddress && asset) {
-        await watchAsset('ERC20', {
+        await watchAsset({
           address: tokenAddress,
           symbol: asset.symbol,
           decimals: asset.decimals,
-          image: asset.image
+          image: `${window.location.origin}${asset.image}`
         });
       }
     } catch (err) {
@@ -269,21 +267,23 @@ export const PaymentCard = ({
     try {
       setPermitError(undefined);
 
-      if (provider && asset && tokenContract && account) {
+      if (signer && asset && tokenContract && account) {
         logger.debug('Payment params:', {
           tokenContract,
           account,
           asset: asset.address,
           value: paymentValue,
-          expiration: payment.expiration
+          expiration: payment.expiration,
+          permitSalt: asset.permitSalt
         });
         const signature = await createPermitSignature(
-          provider.getSigner() as unknown as Wallet,
+          signer as Wallet,
           tokenContract,
           account,
           asset.address,
           paymentValue,
-          payment.expiration
+          payment.expiration,
+          asset.permitSalt
         );
         logger.debug('Permit signature', signature);
         setPermitSignature(signature);
@@ -301,7 +301,7 @@ export const PaymentCard = ({
       }
       setPermitSignature(undefined);
     }
-  }, [provider, asset, tokenContract, account]);
+  }, [signer, asset, tokenContract, account]);
 
   const approveTokens = useCallback(async () => {
     try {
@@ -570,18 +570,18 @@ export const PaymentCard = ({
         </Typography>
       </MessageBox>
 
-      <MessageBox type="warn" show={!!costError}>
+      <MessageBox type="info" show={!!costError}>
         <Typography variant="body1">
-          {costError}. Get some {asset.symbol}{' '}
+          {costError}{' '}
           {asset.ramp !== undefined && (
             <ExternalLink href={`${asset.ramp}${account}`} target="_blank">
-              on ramp
+              Top-up Wallet
             </ExternalLink>
           )}
         </Typography>
       </MessageBox>
 
-      <MessageBox type="warn" show={!!permitError}>
+      <MessageBox type="warning" show={!!permitError}>
         <Typography variant="body1">
           {permitError}
           <br />
@@ -589,7 +589,7 @@ export const PaymentCard = ({
         </Typography>
       </MessageBox>
 
-      <MessageBox type="warn" show={!!approvalError}>
+      <MessageBox type="warning" show={!!approvalError}>
         <Typography variant="body1">
           {approvalError}
           <br />
@@ -604,7 +604,7 @@ export const PaymentCard = ({
         </Typography>
       </MessageBox>
 
-      <MessageBox type="warn" show={!!paymentError}>
+      <MessageBox type="warning" show={!!paymentError}>
         <Typography variant="body1">{paymentError}</Typography>
         <Typography variant="body1">
           Please check your account transactions history on the block explorer:&nbsp;
