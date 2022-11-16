@@ -59,7 +59,16 @@ export const fetchOffers = async ({
 
   const { data } = await winClient
     .post<SearchResults>(`/api/accommodations/${id}`, requestBody)
-    .catch((_) => {
+    .catch((e) => {
+      // if no offers can be found
+      if (e.response.status === 404)
+        return {
+          data: {
+            accommodations: {},
+            offers: {}
+          }
+        };
+
       throw new Error('Something went wrong. Please try again.');
     });
 
