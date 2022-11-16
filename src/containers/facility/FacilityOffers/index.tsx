@@ -1,5 +1,5 @@
 import { Alert, Box, LinearProgress } from '@mui/material';
-import { forwardRef, useEffect, useMemo } from 'react';
+import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { FacilityOffersSelectMultiple } from './FacilityOffersSelectMultiple';
 import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { FacilityOffersSelectOne } from './FacilityOffersSelectOne';
@@ -18,6 +18,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     formState: { errors }
   } = useFormContext();
   const { roomCount, adultCount, dateRange } = watch();
+  const [isInitialRenderChecked, setIsInitialRenderChecked] = useState<boolean>(false);
 
   const arrival = useMemo(
     () => dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate),
@@ -42,16 +43,40 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     offersQuery.data.latestQueryParams?.roomCount || roomCount
   );
 
-  const { error, isLoading, isFetching, refetch, data: offersData } = offersQuery;
+  const {
+    error,
+    isLoading,
+    isFetching,
+    isFetched,
+    refetch,
+    data: offersData
+  } = offersQuery;
   const accommodation = accommodationQuery?.data?.accommodation;
 
   // Fetch offers on the initial render after the accommodation info  are being retrieved
   useEffect(() => {
-    // Don't query on the initial render if an initial fetch already has been done
+    // Don't query on the initial render if an initial fetch already has been done and a users goes back to this page.
     if (offersData.latestQueryParams) return;
 
+    if (isInitialRenderChecked) return;
+
+    // Don't query on when we are missing variables
+    if (!arrival || !departure || !roomCount || !adultCount) {
+      return setIsInitialRenderChecked(true);
+    }
+
+    // Don't
+
     refetch();
-  }, [offersData.latestQueryParams, refetch]);
+  }, [
+    adultCount,
+    arrival,
+    departure,
+    isInitialRenderChecked,
+    offersData.latestQueryParams,
+    refetch,
+    roomCount
+  ]);
 
   const validationErrorMessage = getValidationErrorMessage(errors);
   const errorMessage = validationErrorMessage || error?.message;
@@ -69,7 +94,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
         </Alert>
       )}
 
-      {isFetching && isLoading && <LinearProgress sx={{ mt: 2, display: 'block' }} />}
+      {!isFetched && isFetching && <LinearProgress sx={{ mt: 2, display: 'block' }} />}
       {isGroupMode && showOffers && (
         <FacilityOffersSelectMultiple
           offers={offersData?.offers}

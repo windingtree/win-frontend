@@ -19,7 +19,7 @@ export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsPr
   const { watch, handleSubmit } = useFormContext();
   const { roomCount, adultCount, dateRange } = watch();
   const { offersQuery } = useAccommodation({ id, searchProps });
-  const { refetch, isFetching, isLoading, status } = offersQuery;
+  const { refetch, isFetching, isFetched } = offersQuery;
 
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
@@ -105,7 +105,7 @@ export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsPr
           sx={{ px: 6 }}
           onClick={handleSubmit(onSubmit)}
         >
-          Change Search
+          {isFetched ? 'Change Search' : 'Search'}
         </LoadingButton>
       </Stack>
     </>
