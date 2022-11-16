@@ -21,7 +21,7 @@ const ButtonStyle = styled(Button)(({ theme }) => ({
 
   [theme.breakpoints.up('md')]: {
     justifyContent: 'center',
-    minWidth: '160px'
+    minWidth: '190px'
   }
 }));
 
@@ -67,7 +67,6 @@ export const GuestDetailsButton = forwardRef<HTMLButtonElement, GuestDetailsButt
         color={color}
         {...rest}
         disableRipple={isMobile}
-        //   className={highlightedInput === 'roomCount' ? 'highlighted' : ''}
       >
         {guestDetailsText}
       </ButtonStyle>

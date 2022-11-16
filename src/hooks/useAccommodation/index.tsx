@@ -40,7 +40,7 @@ export const useAccommodation = (props: UseAccommodationProps) => {
 
   const offerExpirationTime = 25 * 60 * 1000;
   const offersQuery = useQuery<OffersResponseType | undefined, Error>(
-    ['accommodation-offers'],
+    ['accommodation-offers', id],
     async () => {
       if (!id || !searchProps) return;
 

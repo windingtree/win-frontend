@@ -7,14 +7,22 @@ import { OfferItemSelectOne } from './offer-item/OfferItemSelectOne';
 type FacilityOffersSelectOneProps = {
   accommodation?: WinAccommodation;
   offers?: OfferRecord[];
+  roomCount: number;
+  arrival: Date;
+  departure: Date;
+  adultCount: number;
 };
 export const FacilityOffersSelectOne = ({
   accommodation,
-  offers
+  offers,
+  adultCount,
+  arrival,
+  departure,
+  roomCount
 }: FacilityOffersSelectOneProps) => {
-  if (!accommodation) return null;
+  if (!accommodation || !offers) return null;
 
-  if (!offers) {
+  if (Array.isArray(offers) && !offers.length) {
     return <Typography>{notFoundText}</Typography>;
   }
 
@@ -22,7 +30,15 @@ export const FacilityOffersSelectOne = ({
     <>
       {offers?.map((offer, index) => {
         return (
-          <OfferItemSelectOne key={index} accommodation={accommodation} offer={offer} />
+          <OfferItemSelectOne
+            key={index}
+            accommodation={accommodation}
+            offer={offer}
+            adultCount={adultCount}
+            arrival={arrival}
+            departure={departure}
+            roomCount={roomCount}
+          />
         );
       })}
     </>

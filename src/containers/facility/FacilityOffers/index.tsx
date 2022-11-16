@@ -61,18 +61,26 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     accommodation?.location.coordinates
   ]);
 
-  /**
-   * Fetch the offers on the initial render, if we have all the required date from the query params.
-   */
+  // Fetch offers on the initial render
   useEffect(() => {
-    if (isOffersFetchedOnce || !id || !searchProps) return;
+    // Don't query on the initial render if an initial fetch already has been done.
+    if (offersData.latestQueryParams) return;
+
+    if (!id || !searchProps) return;
     const { arrival, departure, roomCount, adultCount } = searchProps;
 
     if (!arrival || !departure || !roomCount || !adultCount) return;
 
     refetch();
     setIsOffersFetchedOnce(true);
-  }, [id, isLoading, isOffersFetchedOnce, refetch, searchProps]);
+  }, [
+    id,
+    isLoading,
+    isOffersFetchedOnce,
+    offersData.latestQueryParams,
+    refetch,
+    searchProps
+  ]);
 
   const validationErrorMessage = getValidationErrorMessage(errors);
   const errorMessage = validationErrorMessage || error?.message;
@@ -103,6 +111,10 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
         <FacilityOffersSelectOne
           offers={offersData?.offers}
           accommodation={accommodation}
+          arrival={arrival}
+          departure={departure}
+          adultCount={adultCount}
+          roomCount={roomCount}
         />
       )}
     </Box>

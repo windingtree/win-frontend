@@ -3,12 +3,12 @@ import type {
   WinPricedOffer
 } from '@windingtree/glider-types/dist/win';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import axios from 'axios';
 import type { OfferRecord } from 'src/store/types';
 import { Box, Grid, Divider, Typography, useTheme } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { convertToLocalTime, daysBetween } from 'src/utils/date';
+import { daysBetween } from 'src/utils/date';
 import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
 import Logger from 'src/utils/logger';
@@ -18,26 +18,17 @@ import { useSnackbar } from 'notistack';
 import { useCurrencies } from '../../../../hooks/useCurrencies';
 import { useUserSettings } from '../../../../hooks/useUserSettings';
 import { displayPriceFromPrice } from '../../../../utils/price';
-import { useFormContext } from 'react-hook-form';
 
 const logger = Logger('OfferItemSelectOne');
 
 export const OfferItemSelectOne: React.FC<{
   offer: OfferRecord;
   accommodation: WinAccommodation;
-}> = ({ offer, accommodation }) => {
-  const { watch } = useFormContext();
-  const { roomCount, adultCount, dateRange } = watch();
-
-  const arrival = useMemo(
-    () => dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate),
-    [dateRange]
-  );
-  const departure = useMemo(
-    () => dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate),
-    [dateRange]
-  );
-
+  roomCount: number;
+  arrival: Date;
+  departure: Date;
+  adultCount: number;
+}> = ({ offer, accommodation, roomCount, arrival, departure, adultCount }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const navigate = useNavigate();

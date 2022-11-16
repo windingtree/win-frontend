@@ -50,7 +50,7 @@ export const OfferInformation = ({
           {children > 0 && `and ${children} ${getChildrenText(children)}`}
         </Typography>
       </Box>
-      <Typography variant="body1">{description}</Typography>
+      <Typography variant="body2">{description}</Typography>
       {refundability && (
         <Typography
           sx={{ display: 'inline-block', verticalAlign: 'middle', mt: 1 }}

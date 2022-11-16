@@ -129,7 +129,7 @@ export const FacilityOffersSelectMultiple = ({
     navigate('/org-details');
   };
 
-  if (!offers) {
+  if (Array.isArray(offers) && !offers.length) {
     return <Typography>{notFoundText}</Typography>;
   }
 
