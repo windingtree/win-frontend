@@ -7,11 +7,11 @@ import { useCheckout } from 'src/hooks/useCheckout';
 import { sortByLargestImage } from 'src/utils/accommodation';
 import { useMemo } from 'react';
 import { CardMediaFallback } from 'src/components/CardMediaFallback';
-import FallbackImage from 'src/images/hotel-fallback.webp';
 import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 import { CurrencyCode, useCurrencies } from '../../../hooks/useCurrencies';
 import { useUserSettings } from '../../../hooks/useUserSettings';
 import { displayPriceFromValues } from '../../../utils/price';
+import { getRndHotelImg, getAccommodationImage } from '../../../utils/getRndHotelImg';
 
 export const CheckoutIntroduction = () => {
   const theme = useTheme();
@@ -76,6 +76,13 @@ export const CheckoutIntroduction = () => {
     }
   }, [bookingInfo]);
 
+  // This random image will be used instead of the test image with text "TEST IMAGE: this image is not a bug".
+  const rndImg = useMemo<string>(getRndHotelImg, []);
+  const imgUrl = useMemo<string | undefined>(() => {
+    const originalUrl = accommodationImage ? accommodationImage.url : '';
+    return getAccommodationImage(originalUrl, rndImg);
+  }, [accommodationImage]);
+
   return (
     <Box
       mb={{ xs: 3, lg: 5 }}
@@ -101,8 +108,8 @@ export const CheckoutIntroduction = () => {
           <CardMediaFallback
             component="img"
             height="200"
-            src={accommodationImage?.url}
-            fallback={FallbackImage}
+            src={imgUrl}
+            fallback="/images/hotel-fallback.webp"
             alt={accommodationName}
           />
         </Card>

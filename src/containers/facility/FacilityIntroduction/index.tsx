@@ -30,6 +30,7 @@ import 'react-image-lightbox/style.css';
 import { LightboxModal } from 'src/components/LightboxModal';
 import Iconify from 'src/components/Iconify';
 import { displayPriceFromValues } from '../../../utils/price';
+import { getRndHotelImg, getAccommodationImage } from '../../../utils/getRndHotelImg';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -313,6 +314,13 @@ export const FacilityIntroduction = ({
   const [mainImage, ...rest] = sortedImages;
   const address = buildAccommodationAddress(accommodation);
 
+  // This random image will be used instead of the test image with text "TEST IMAGE: this image is not a bug".
+  const rndImg = useMemo<string>(getRndHotelImg, []);
+  const mainImageUrl = useMemo<string | undefined>(() => {
+    const originalUrl = mainImage ? mainImage.url : '';
+    return getAccommodationImage(originalUrl, rndImg);
+  }, [mainImage]);
+
   return (
     <>
       <Stack direction={{ md: 'row' }}>
@@ -325,7 +333,7 @@ export const FacilityIntroduction = ({
       </Stack>
 
       <Container>
-        <FacilityMainImage src={mainImage?.url} />
+        <FacilityMainImage src={mainImageUrl} />
         <FacilityDetailImages images={rest} />
         <AllPhotosButton variant="outlined" size="medium" onClick={handleOpenGallery}>
           {largestImages.length > 5 ? 'Show all photos' : 'View Photos'}
