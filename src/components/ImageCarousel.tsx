@@ -1,9 +1,10 @@
 import Slider from 'react-slick';
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import Image, { ImageRatio } from './Image';
 import { CarouselDots, CarouselArrows } from './carousel/';
+import { getRndHotelImg, getAccommodationImage } from '../utils/getRndHotelImg';
 import { MediaItem } from '@windingtree/glider-types/dist/win';
 
 const RootStyle = styled(Box)(({ theme }) => ({
@@ -19,6 +20,9 @@ export const ImageCarousel: React.FC<{ media: MediaItem[]; ratio: ImageRatio }> 
   ratio
 }) => {
   const carouselRef = useRef<Slider | null>(null);
+
+  // This random image will be used instead of the test image with text "TEST IMAGE: this image is not a bug".
+  const rndImg = useMemo<string>(getRndHotelImg, []);
 
   const settings = {
     dots: false,
@@ -56,7 +60,11 @@ export const ImageCarousel: React.FC<{ media: MediaItem[]; ratio: ImageRatio }> 
       >
         <Slider ref={carouselRef} {...settings} lazyLoad={'anticipated'}>
           {media && media.length > 0 ? (
-            media.map((item, i) => <Image key={i} src={item.url} ratio={ratio} />)
+            media.map((item, i) => {
+              const imgUrl = getAccommodationImage(item.url, rndImg);
+
+              return <Image key={i} src={imgUrl} ratio={ratio} />;
+            })
           ) : (
             <Image ratio={ratio} />
           )}

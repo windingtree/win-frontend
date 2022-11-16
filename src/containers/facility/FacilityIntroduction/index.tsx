@@ -17,6 +17,7 @@ import { LightboxModal } from 'src/components/LightboxModal';
 import { useAccommodation } from 'src/hooks/useAccommodation';
 import { FacilityLoadingSkeleton } from './FacilityLoadingSkeleton';
 import { HeaderButton } from './HeaderButton';
+import { getRndHotelImg, getAccommodationImage } from '../../../utils/getRndHotelImg';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -154,6 +155,13 @@ export const FacilityIntroduction = ({
   const [mainImage, ...rest] = sortedImages;
   const address = buildAccommodationAddress(accommodation);
 
+  // This random image will be used instead of the test image with text "TEST IMAGE: this image is not a bug".
+  const rndImg = useMemo<string>(getRndHotelImg, []);
+  const mainImageUrl = useMemo<string | undefined>(() => {
+    const originalUrl = mainImage ? mainImage.url : '';
+    return getAccommodationImage(originalUrl, rndImg);
+  }, [mainImage, rndImg]);
+
   if (isLoading) return <FacilityLoadingSkeleton />;
 
   if (error) {
@@ -188,7 +196,7 @@ export const FacilityIntroduction = ({
         />
       </Stack>
       <Container>
-        <FacilityMainImage src={mainImage?.url} />
+        <FacilityMainImage src={mainImageUrl} />
         <FacilityDetailImages images={rest} />
         <AllPhotosButton variant="outlined" size="medium" onClick={handleOpenGallery}>
           {largestImages.length > 5 ? 'Show all photos' : 'View Photos'}

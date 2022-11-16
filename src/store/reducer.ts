@@ -14,6 +14,7 @@ import { defaultCurrencyCode } from '../config';
 import { userSettingsReducer } from './userSettingsReducer';
 import { localStorageConfig, sessionStorageConfig } from 'src/config/storageConfig';
 import { priceFilterReducer } from './priceFilterReducer';
+import { allowedCookiesReducer } from './cookiesReducer';
 
 const logger = Logger('mainReducer');
 
@@ -64,6 +65,7 @@ export const useAppReducer = () => {
     combineReducers([
       mainReducer,
       searchReducer,
+      allowedCookiesReducer,
       checkOutReducer,
       cryptoReducer,
       recordsReducer,

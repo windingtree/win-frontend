@@ -20,7 +20,6 @@ export default function MainLayout({
 }: Props) {
   useAppHistory();
   const ref = useRef<null | HTMLElement>(null);
-
   useEffect(() => {
     ref.current !== null && ref.current.scrollIntoView();
   }, [ref]);

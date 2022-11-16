@@ -5,6 +5,8 @@ import {
 } from '@windingtree/win-commons/dist/types';
 import { Quote } from '@windingtree/glider-types/dist/simard';
 import {
+  utils,
+  providers,
   BigNumber,
   Wallet,
   Signature,
@@ -12,7 +14,6 @@ import {
   ContractTransaction
 } from 'ethers';
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { utils, BigNumber as BN, providers } from 'ethers';
 import {
   Card,
   CardContent,
@@ -103,7 +104,7 @@ export const PaymentCard = ({
     asset,
     asset && asset.permit
   );
-  const [balance, setBalance] = useState<BigNumber>(BN.from(0));
+  const [balance, setBalance] = useState<BigNumber>(BigNumber.from(0));
   const [permitSignature, setPermitSignature] = useState<Signature | undefined>();
   const [isAccountContract, setIsAccountContract] = useState<boolean>(false);
   const [isTxStarted, setTxStarted] = useState<'approve' | 'pay' | undefined>();
@@ -124,9 +125,9 @@ export const PaymentCard = ({
 
   const paymentValue = useMemo(() => {
     if (!asset) {
-      return BN.from(0);
+      return BigNumber.from(0);
     }
-    return BN.from(
+    return BigNumber.from(
       utils.parseUnits(
         withQuote && payment.quote ? payment.quote.sourceAmount : payment.value,
         asset.decimals
@@ -255,11 +256,11 @@ export const PaymentCard = ({
           setBalance(currentBalance);
         }
       } else {
-        setBalance(BN.from(0));
+        setBalance(BigNumber.from(0));
       }
     } catch (err) {
       logger.error(err);
-      setBalance(BN.from(0));
+      setBalance(BigNumber.from(0));
     }
   }, [provider, asset, assetContract, tokenContract, account]);
 
