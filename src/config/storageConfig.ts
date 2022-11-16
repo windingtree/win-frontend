@@ -6,7 +6,8 @@ export const localStorageConfig: LocalStorageConnectorConfig = {
     'selectedAsset',
     'searchParams',
     'walletAuth',
-    'userSettings'
+    'userSettings',
+    'allowedCookies'
   ]
 };
 
