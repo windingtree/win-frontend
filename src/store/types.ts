@@ -110,6 +110,7 @@ export interface BookingInfoType {
   requestId?: string;
   invoice?: boolean;
   quote?: Quote;
+  pricedOfferId?: string;
 }
 export interface UserSettings {
   preferredCurrencyCode: CurrencyCode;

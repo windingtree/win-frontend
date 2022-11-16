@@ -64,7 +64,7 @@ export const useNetworkId = (allowedNetworks: readonly NetworkInfo[]): NetworkId
     };
 
     getNetworkId();
-  }, [chain]);
+  }, [chain, allowedNetworks]);
 
   return [networkId, isLoading, isRightNetwork, error];
 };

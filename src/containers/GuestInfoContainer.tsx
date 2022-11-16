@@ -17,7 +17,6 @@ import { convertToLocalTime } from '../utils/date';
 import { DateTime } from 'luxon';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { useSnackbar } from 'notistack';
-import { getOfferId } from 'src/hooks/useCheckout/helpers';
 
 const logger = Logger('GuestInfoContainer');
 
@@ -66,9 +65,7 @@ export const GuestInfoContainer = () => {
   const { setOrganizerInfo, organizerInfo, bookingInfo } = useCheckout();
   const [privacy, setPrivacy] = useState<boolean>(false);
   const [error, setError] = useState<undefined | string>();
-  const accommodationId = bookingInfo?.accommodation?.id;
   const { enqueueSnackbar } = useSnackbar();
-  const offerId = getOfferId(bookingInfo?.offers);
 
   const methods = useForm<PersonalInfo>({
     resolver: yupResolver(NewUserSchema),
@@ -83,10 +80,12 @@ export const GuestInfoContainer = () => {
   const onSubmit = useCallback(
     async (values: PersonalInfo) => {
       logger.info('submit user data', values);
+      const accommodationId = bookingInfo?.accommodation?.id;
+
       try {
         setError(undefined);
 
-        if (!accommodationId || !values.birthdate || !offerId) {
+        if (!accommodationId || !values.birthdate || !bookingInfo.pricedOfferId) {
           enqueueSnackbar(
             'Something went wrong with your booking. Please try to select your room again.',
             {
@@ -100,7 +99,7 @@ export const GuestInfoContainer = () => {
         const formattedDate = convertToLocalTime(values.birthdate);
         await axios
           .request(
-            new PersonalInfoRequest(offerId, {
+            new PersonalInfoRequest(bookingInfo.pricedOfferId, {
               ...values,
               birthdate: formattedDate
             })
@@ -117,7 +116,7 @@ export const GuestInfoContainer = () => {
         setError(message);
       }
     },
-    [accommodationId, enqueueSnackbar, navigate, offerId, setOrganizerInfo]
+    [bookingInfo, enqueueSnackbar, navigate, setOrganizerInfo]
   );
 
   return (
