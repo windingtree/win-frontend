@@ -1,5 +1,5 @@
 import { Alert, Box, LinearProgress } from '@mui/material';
-import { forwardRef, useEffect, useMemo, useState } from 'react';
+import { forwardRef, useEffect, useMemo } from 'react';
 import { FacilityOffersSelectMultiple } from './FacilityOffersSelectMultiple';
 import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { FacilityOffersSelectOne } from './FacilityOffersSelectOne';
@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form';
 import { FacilityOffersTitle } from './FacilityOffersTitle';
 import { useAccommodation } from 'src/hooks/useAccommodation';
 import { useParams } from 'react-router-dom';
-import { convertToLocalTime } from 'src/utils/date';
+import { convertToLocalTime, getIsInPast } from 'src/utils/date';
 import { getValidationErrorMessage } from 'src/containers/search/helpers';
 
 export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
@@ -18,7 +18,6 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     formState: { errors }
   } = useFormContext();
   const { roomCount, adultCount, dateRange } = watch();
-  const [isInitialRenderChecked, setIsInitialRenderChecked] = useState<boolean>(false);
 
   const arrival = useMemo(
     () => dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate),
@@ -39,9 +38,9 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     id,
     searchProps
   });
-  const isGroupMode = getGroupMode(
-    offersQuery.data.latestQueryParams?.roomCount || roomCount
-  );
+
+  const latestQueryParams = offersQuery.data.latestQueryParams;
+  const isGroupMode = getGroupMode(latestQueryParams?.roomCount || roomCount);
 
   const {
     error,
@@ -58,23 +57,21 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     // Don't query on the initial render if an initial fetch already has been done and a users goes back to this page.
     if (offersData.latestQueryParams) return;
 
-    if (isInitialRenderChecked) return;
-
-    // Don't query on when we are missing variables
-    if (!arrival || !departure || !roomCount || !adultCount) {
-      return setIsInitialRenderChecked(true);
+    // Don't query on when we are missing variables or when one of the dates is in the past
+    if (
+      !arrival ||
+      !departure ||
+      !roomCount ||
+      !adultCount ||
+      getIsInPast(arrival) ||
+      getIsInPast(departure)
+    ) {
+      return;
     }
 
     refetch();
-  }, [
-    adultCount,
-    arrival,
-    departure,
-    isInitialRenderChecked,
-    offersData.latestQueryParams,
-    refetch,
-    roomCount
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const validationErrorMessage = getValidationErrorMessage(errors);
   const errorMessage = validationErrorMessage || error?.message;
@@ -106,10 +103,10 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
         <FacilityOffersSelectOne
           offers={offersData?.offers}
           accommodation={accommodation}
-          arrival={arrival}
-          departure={departure}
-          adultCount={adultCount}
-          roomCount={roomCount}
+          arrival={latestQueryParams?.arrival}
+          departure={latestQueryParams?.departure}
+          adultCount={latestQueryParams?.adultCount}
+          roomCount={latestQueryParams?.roomCount}
         />
       )}
     </Box>
