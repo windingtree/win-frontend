@@ -128,7 +128,7 @@ export const FacilityIntroduction = ({
   // get largest images and their urls
   const largestImages = useMemo(() => getLargestImages(sortedImages), [sortedImages]);
   const largestImagesUrls = useMemo(
-    () => largestImages && largestImages.map(({ url }) => url as string),
+    () => largestImages.map(({ url }) => url as string),
     [largestImages]
   );
 
@@ -142,7 +142,7 @@ export const FacilityIntroduction = ({
 
   // gallery handlers
   const handleOpenGallery = () => {
-    if (largestImages?.length > 5) {
+    if (largestImages.length > 5) {
       setGalleryOpen(true);
     } else {
       handleCloseGallery();

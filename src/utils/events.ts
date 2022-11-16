@@ -1,5 +1,6 @@
+import type { CoordinatesType } from './accommodation';
+
 import { DateTime } from 'luxon';
-import { CoordinatesType } from './accommodation';
 import { EventItemType, filteredEventsWithCoordinates } from 'src/config/events';
 import { defaultSearchRadiusInMeters } from '../config';
 import { NullableDate } from './date';
