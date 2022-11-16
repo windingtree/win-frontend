@@ -178,10 +178,6 @@ export const OrgDetails = () => {
   const { watch, handleSubmit, trigger } = methods;
   const { privacy, vatNumber, invoice } = watch();
 
-  console.log(watch());
-
-  console.log('WADDUP');
-
   const vatValidation = useCallback(
     debouncedFn(() => trigger('vatNumber'), 1500),
     [debouncedFn, trigger]

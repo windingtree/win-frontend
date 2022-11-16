@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { CoordinatesType } from 'src/utils/accommodation';
 import { useAccommodationsAndOffersHelpers } from '../useAccommodationsAndOffers/useAccommodationsAndOffersHelpers';
 import { useUserSettings } from '../useUserSettings';
 import {
@@ -16,7 +15,6 @@ export interface SearchPropsType {
   roomCount: number;
   adultCount: number;
   childrenCount?: number;
-  location: CoordinatesType;
 }
 
 export interface UseAccommodationProps {
@@ -27,7 +25,6 @@ export interface UseAccommodationProps {
 export const useAccommodation = (props: UseAccommodationProps) => {
   const { preferredCurrencyCode } = useUserSettings();
   const { normalizeOffers } = useAccommodationsAndOffersHelpers();
-
   const { id, searchProps } = props || {};
 
   const accommodationQuery = useQuery<AccommodationResponseType | undefined, Error>(
@@ -42,6 +39,8 @@ export const useAccommodation = (props: UseAccommodationProps) => {
   const offersQuery = useQuery<OffersResponseType | undefined, Error>(
     ['accommodation-offers', id],
     async () => {
+      console.log('JOO');
+      console.log(id, searchProps);
       if (!id || !searchProps) return;
 
       const { arrival, departure, roomCount, adultCount } = searchProps;
@@ -74,10 +73,11 @@ export const useAccommodation = (props: UseAccommodationProps) => {
     [data, preferredCurrencyCode, normalizeOffers]
   );
 
-  const normalizedOffersQuery = {
-    data: { offers: normalizedOffers, ...restData },
-    ...restOffersQuery
+  return {
+    accommodationQuery,
+    offersQuery: {
+      data: { offers: normalizedOffers, ...restData },
+      ...restOffersQuery
+    }
   };
-
-  return { accommodationQuery, offersQuery: normalizedOffersQuery };
 };

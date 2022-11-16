@@ -124,7 +124,9 @@ export const OfferItemSelectOne: React.FC<{
                 {displayPriceFromPrice(price)}
               </Typography>
               <Typography textAlign={'right'}>
-                {`Price for ${numberOfDays} nights, ${roomCount} room(s)`}
+                {`Price for ${numberOfDays} nights, ${roomCount} ${
+                  roomCount === 1 ? 'room' : 'rooms'
+                }`}
               </Typography>
 
               <LoadingButton

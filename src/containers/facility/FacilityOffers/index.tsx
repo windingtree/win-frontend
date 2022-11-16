@@ -1,12 +1,12 @@
 import { Alert, Box, LinearProgress } from '@mui/material';
-import { forwardRef, useEffect, useMemo, useState } from 'react';
+import { forwardRef, useEffect, useMemo } from 'react';
 import { FacilityOffersSelectMultiple } from './FacilityOffersSelectMultiple';
 import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers/helpers';
 import { FacilityOffersSelectOne } from './FacilityOffersSelectOne';
 import { FacilitySearchInputs } from './FacilitySearchInputs';
 import { useFormContext } from 'react-hook-form';
 import { FacilityOffersTitle } from './FacilityOffersTitle';
-import { SearchPropsType, useAccommodation } from 'src/hooks/useAccommodation';
+import { useAccommodation } from 'src/hooks/useAccommodation';
 import { useParams } from 'react-router-dom';
 import { convertToLocalTime } from 'src/utils/date';
 import { getValidationErrorMessage } from 'src/containers/search/helpers';
@@ -27,60 +27,31 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     () => dateRange[0].endDate && convertToLocalTime(dateRange[0].endDate),
     [dateRange]
   );
-  const [searchProps, setSearchProps] = useState<SearchPropsType | undefined>();
-  const { accommodationQuery, offersQuery } = useAccommodation({ id, searchProps });
+
+  const searchProps = {
+    arrival,
+    departure,
+    roomCount: Number(roomCount),
+    adultCount: Number(adultCount)
+  };
+  const { accommodationQuery, offersQuery } = useAccommodation({
+    id,
+    searchProps
+  });
   const isGroupMode = getGroupMode(
     offersQuery.data.latestQueryParams?.roomCount || roomCount
   );
 
   const { error, isLoading, isFetching, refetch, data: offersData } = offersQuery;
   const accommodation = accommodationQuery?.data?.accommodation;
-  const [isOffersFetchedOnce, setIsOffersFetchedOnce] = useState<boolean>(false);
 
-  /**
-   * Set the state which is eventually being send to the BE to retrieve offers of an accommodation.
-   */
+  // Fetch offers on the initial render after the accommodation info  are being retrieved
   useEffect(() => {
-    const location = accommodation?.location.coordinates;
-
-    // TODO: location can eventually be removed as the BE will support is searching without the location
-    if (!location) return;
-    setSearchProps({
-      location: { lat: location[1], lon: location[0] },
-      arrival,
-      departure,
-      roomCount: Number(roomCount),
-      adultCount: Number(adultCount)
-    });
-  }, [
-    arrival,
-    setSearchProps,
-    departure,
-    roomCount,
-    adultCount,
-    accommodation?.location.coordinates
-  ]);
-
-  // Fetch offers on the initial render
-  useEffect(() => {
-    // Don't query on the initial render if an initial fetch already has been done.
+    // Don't query on the initial render if an initial fetch already has been done
     if (offersData.latestQueryParams) return;
 
-    if (!id || !searchProps) return;
-    const { arrival, departure, roomCount, adultCount } = searchProps;
-
-    if (!arrival || !departure || !roomCount || !adultCount) return;
-
     refetch();
-    setIsOffersFetchedOnce(true);
-  }, [
-    id,
-    isLoading,
-    isOffersFetchedOnce,
-    offersData.latestQueryParams,
-    refetch,
-    searchProps
-  ]);
+  }, [offersData.latestQueryParams, refetch]);
 
   const validationErrorMessage = getValidationErrorMessage(errors);
   const errorMessage = validationErrorMessage || error?.message;
@@ -97,7 +68,8 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
           {errorMessage}
         </Alert>
       )}
-      {isLoading && <LinearProgress sx={{ mt: 2, display: 'block' }} />}
+
+      {isFetching && isLoading && <LinearProgress sx={{ mt: 2, display: 'block' }} />}
       {isGroupMode && showOffers && (
         <FacilityOffersSelectMultiple
           offers={offersData?.offers}

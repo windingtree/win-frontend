@@ -39,15 +39,15 @@ export const fetchOffers = async ({
   id: string;
   searchProps: SearchPropsType;
 }): Promise<OffersResponseType> => {
-  const { arrival, departure, roomCount, adultCount, childrenCount, location } =
-    searchProps;
+  const { arrival, departure, roomCount, adultCount, childrenCount } = searchProps;
   const passengersBody = getPassengersBody(adultCount, childrenCount);
 
   const requestBody = {
     accommodation: {
       location: {
-        ...location,
-        radius: 1
+        lat: 0,
+        lon: 0,
+        radius: 0
       },
       arrival,
       departure,
@@ -84,7 +84,6 @@ export const fetchOffers = async ({
     roomCount,
     adultCount,
     childrenCount,
-    location,
     nightCount
   };
 
