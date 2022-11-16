@@ -65,8 +65,6 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
       return setIsInitialRenderChecked(true);
     }
 
-    // Don't
-
     refetch();
   }, [
     adultCount,
