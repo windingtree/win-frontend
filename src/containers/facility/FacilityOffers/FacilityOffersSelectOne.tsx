@@ -7,10 +7,10 @@ import { OfferItemSelectOne } from './offer-item/OfferItemSelectOne';
 type FacilityOffersSelectOneProps = {
   accommodation?: WinAccommodation;
   offers?: OfferRecord[];
-  roomCount: number;
-  arrival: Date;
-  departure: Date;
-  adultCount: number;
+  roomCount?: number;
+  arrival?: Date;
+  departure?: Date;
+  adultCount?: number;
 };
 export const FacilityOffersSelectOne = ({
   accommodation,
@@ -20,7 +20,9 @@ export const FacilityOffersSelectOne = ({
   departure,
   roomCount
 }: FacilityOffersSelectOneProps) => {
-  if (!accommodation || !offers) return null;
+  if (!accommodation || !offers || !arrival || !departure || !adultCount || !roomCount) {
+    return null;
+  }
 
   if (Array.isArray(offers) && !offers.length) {
     return <Typography>{notFoundText}</Typography>;

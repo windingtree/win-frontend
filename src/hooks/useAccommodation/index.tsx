@@ -12,8 +12,8 @@ import {
 } from './api';
 
 export interface SearchPropsType {
-  arrival: Date | null;
-  departure: Date | null;
+  arrival: Date;
+  departure: Date;
   roomCount: number;
   adultCount: number;
   childrenCount?: number;

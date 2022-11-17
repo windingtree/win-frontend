@@ -1,8 +1,10 @@
 import { LoadingButton } from '@mui/lab';
 import { Popover, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
+import { formatISO } from 'date-fns';
 import { MouseEvent, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { DateRangeButton } from 'src/components/buttons/DateRangeButton';
 import { GuestDetailsButton } from 'src/components/buttons/GuestDetailsButton';
 import { GuestsAndRoomsInputs } from 'src/components/form-sections/GuestsAndRoomsInputs';
@@ -20,6 +22,7 @@ export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsPr
   const { roomCount, adultCount, dateRange } = watch();
   const { offersQuery } = useAccommodation({ id, searchProps });
   const { refetch, isFetching, isFetched } = offersQuery;
+  const [_, setSearchParams] = useSearchParams();
 
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
@@ -30,7 +33,17 @@ export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsPr
 
   const onSubmit = (_, event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (!searchProps) return;
     refetch();
+
+    const { arrival, departure, roomCount, adultCount } = searchProps;
+
+    setSearchParams({
+      arrival: formatISO(arrival),
+      departure: formatISO(departure),
+      roomCount: roomCount.toString(),
+      adultCount: adultCount.toString()
+    });
   };
 
   if (!id) return null;
