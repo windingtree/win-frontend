@@ -29,14 +29,12 @@ import {
 } from 'src/hooks/useAccommodationsAndOffers';
 import { daysBetween, getFormattedBetweenDate } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
-import {
-  accommodationEventTransform,
-  InvalidLocationError
-} from '../utils/useAccommodationsAndOffers';
 import { getActiveEventsWithinRadius } from '../utils/events';
 import { AppMode } from '../config';
 import { SearchCard } from 'src/containers/search/SearchCard';
 import { displayPriceFromValues } from '../utils/price';
+import { InvalidLocationError } from '../utils/getCoordinates';
+import { accommodationEventTransform } from '../utils/useAccommodationsAndOffers';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
@@ -178,10 +176,10 @@ export const MapBox: React.FC = () => {
   );
 
   // apply a callback function to transform returned accommodation objects
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
-    focusedEvent
-  ]);
+  const transformFn = useCallback(
+    () => accommodationEventTransform(focusedEvent),
+    [focusedEvent]
+  );
   const { accommodations, coordinates, isLoading, latestQueryParams, isFetching, error } =
     useAccommodationsAndOffers({
       accommodationTransformFn: transformFn

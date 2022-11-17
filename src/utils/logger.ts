@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { APP_LOG_LEVEL } from 'src/config';
 
 export interface LoggerApi {
@@ -40,5 +41,23 @@ const Logger = (subject: string): LoggerApi => ({
     }
   }
 });
+
+export const logItem = (
+  itemToLog: unknown,
+  type: 'error' | 'info' | 'debug' = 'debug'
+) => {
+  switch (type) {
+    case 'error':
+      console.error(`[error]: ${itemToLog}`);
+      break;
+    case 'info':
+      console.log(`[info]: ${itemToLog}`);
+      break;
+    case 'debug':
+    default:
+      console.log(`[debug]: ${itemToLog}`);
+      break;
+  }
+};
 
 export default Logger;

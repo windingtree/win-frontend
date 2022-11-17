@@ -17,8 +17,6 @@ export interface AccommodationWithId extends WinAccommodation {
   eventInfo?: EventInfo[];
 }
 
-export class InvalidLocationError extends Error {}
-
 export const getActiveAccommodations = (
   accommodations: WinAccommodation[],
   offers: Offer[]
