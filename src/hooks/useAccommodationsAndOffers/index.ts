@@ -3,17 +3,14 @@ import { useCallback, useMemo } from 'react';
 import {
   filterAccommodationsByPriceRanges,
   getLargestImages,
-  sortByLargestImage
+  sortByLargestImage,
+  CoordinatesType
 } from '../../utils/accommodation';
 import { daysBetween } from '../../utils/date';
 import { filterOffersByPriceRanges } from '../../utils/offers';
 import { usePriceFilter } from '../usePriceFilter';
 import { useUserSettings } from '../useUserSettings';
-import {
-  AccommodationsAndOffersResponse,
-  Coordinates,
-  fetchAccommodationsAndOffers
-} from './api';
+import { AccommodationsAndOffersResponse, fetchAccommodationsAndOffers } from './api';
 import {
   getAccommodationById,
   getActiveAccommodations,
@@ -53,7 +50,7 @@ export interface EventInfo {
 export type AccommodationTransformFnParams = {
   accommodation: AccommodationWithId;
   searchProps?: SearchTypeProps | void;
-  searchResultsCenter?: Coordinates;
+  searchResultsCenter?: CoordinatesType;
 };
 
 export type AccommodationTransformFn = (
@@ -73,7 +70,7 @@ export const useAccommodationsAndOffers = ({
     AccommodationsAndOffersResponse | undefined,
     Error
   >(
-    ['search-accommodations'],
+    ['accommodations-and-offers'],
     async () => {
       if (!searchProps) {
         return;
@@ -103,6 +100,7 @@ export const useAccommodationsAndOffers = ({
 
   const normalizedAccommodations = useMemo(
     () => normalizeAccommodations(data?.accommodations, data?.offers),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, preferredCurrencyCode]
   );
 
@@ -159,7 +157,13 @@ export const useAccommodationsAndOffers = ({
 
       return { ...transformedAccommodation, priceRange, preferredCurrencyPriceRange };
     });
-  }, [normalizedAccommodations, latestQueryParams]);
+  }, [
+    normalizedAccommodations,
+    latestQueryParams,
+    isGroupMode,
+    accommodationTransformFn,
+    data?.coordinates
+  ]);
 
   // apply price filter to accommodations if any before returning accommodations
   const accommodations = useMemo(() => {
@@ -168,8 +172,10 @@ export const useAccommodationsAndOffers = ({
 
   // all normalized offers prior to filtering
   const allOffers = useMemo(
-    () => data?.offers && normalizeOffers(data.offers),
-    [data, preferredCurrencyCode]
+    () => data?.offers && normalizeOffers(data.offers, data.accommodations),
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, preferredCurrencyCode, normalizeOffers]
   );
 
   // filter offers array by price from price filter

@@ -90,7 +90,7 @@ export const AssetSelector = ({
     }
   };
 
-  useEffect(() => onChange(asset), [asset]);
+  useEffect(() => onChange(asset), [asset, onChange]);
 
   if (!network) {
     return null;

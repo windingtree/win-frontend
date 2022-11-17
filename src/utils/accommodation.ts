@@ -1,13 +1,19 @@
-import { MediaItem } from '@windingtree/glider-types/dist/win';
+import { MediaItem, WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers/helpers';
 import { OfferRecord } from 'src/store/types';
 import { PriceRange } from '../hooks/useAccommodationsAndOffers';
 import { isPriceRangeWithinPriceRange } from './price';
 
-export const sortByLargestImage = (images: MediaItem[]) =>
-  images.sort((itemOne: MediaItem, itemTwo: MediaItem) => {
+export interface CoordinatesType {
+  lat: number;
+  lon: number;
+}
+
+export const sortByLargestImage = (images: MediaItem[]) => {
+  return images.sort((itemOne: MediaItem, itemTwo: MediaItem) => {
     return Number(itemTwo.width) - Number(itemOne.width);
   });
+};
 
 export const getLargestImages = (sortedImages: MediaItem[], limit = 50) => {
   let largestSize;
@@ -32,7 +38,9 @@ export const getLargestImages = (sortedImages: MediaItem[], limit = 50) => {
   return largestImages;
 };
 
-export const buildAccommodationAddress = (accommodation: AccommodationWithId | null) => {
+export const buildAccommodationAddress = (
+  accommodation: AccommodationWithId | WinAccommodation | undefined
+) => {
   if (!accommodation) return;
   return [
     accommodation.contactInformation?.address?.streetAddress,

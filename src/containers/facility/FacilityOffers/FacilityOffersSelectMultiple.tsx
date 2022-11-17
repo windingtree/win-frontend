@@ -7,19 +7,17 @@ import { FacilityOffersSelectMultipleSummary } from './FacilityOffersMultipleSum
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HEADER } from 'src/config/componentSizes';
 import { useResponsive } from 'src/hooks/useResponsive';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { daysBetween } from 'src/utils/date';
 import { useCheckout } from 'src/hooks/useCheckout';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getOffersWithQuantity, getSelectedOffers } from '../helpers';
+import { useNavigate } from 'react-router-dom';
+import { getOffersWithQuantity, getSelectedOffers, notFoundText } from '../helpers';
 import { useSnackbar } from 'notistack';
-import { getRoomOfOffer, getTotalRoomCountReducer } from 'src/utils/offers';
+import { getTotalRoomCountReducer } from 'src/utils/offers';
 import type { OfferRecord } from 'src/store/types';
 import { MHidden } from 'src/components/MHidden';
-import { FacilityOffersTitle } from './FacilityOffersTitle';
 import { OfferItemSelectMultiple } from './offer-item/OfferItemSelectMultiple';
 import { GROUP_MODE_ROOM_COUNT } from 'src/config';
-import { sortAccommodationOffersByPrice } from 'src/utils/accommodation';
+import { WinAccommodation } from '@windingtree/glider-types/dist/win';
 
 export interface OfferCheckoutType extends OfferRecord {
   quantity: string;
@@ -46,33 +44,35 @@ export type FacilityOffersSelectMultipleFormProps = {
   offers: OfferCheckoutType[];
 };
 
-export const FacilityOffersSelectMultiple = () => {
-  const { getAccommodationById, accommodations, latestQueryParams } =
-    useAccommodationsAndOffers();
-  const params = useParams();
+type FacilityOffersSelectMultipleProps = {
+  accommodation?: WinAccommodation;
+  offers?: OfferRecord[];
+  initialRoomCount: number;
+  arrival: Date;
+  departure: Date;
+  adultCount: number;
+};
+
+export const FacilityOffersSelectMultiple = ({
+  accommodation,
+  offers,
+  initialRoomCount,
+  adultCount,
+  arrival,
+  departure
+}: FacilityOffersSelectMultipleProps) => {
   const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const isDesktop = useResponsive('up', 'md');
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const id: string = params.id as string;
-  const accommodation = useMemo(
-    () => getAccommodationById(accommodations, id),
-    [accommodations, id]
-  );
+  const defaultRoomCount = initialRoomCount ? initialRoomCount : GROUP_MODE_ROOM_COUNT;
+  //TODO: if we support children, get it from the form inputs
+  const childrenCount = 0;
 
-  if (!latestQueryParams || !accommodation) return null;
-
-  const offers = sortAccommodationOffersByPrice(accommodation);
-
-  const defaultRoomCount = latestQueryParams.roomCount
-    ? latestQueryParams.roomCount
-    : GROUP_MODE_ROOM_COUNT;
-
-  // ----------------------------------------------------------------------
   const defaultOffers = useMemo(
     () => getOffersWithQuantity(offers, defaultRoomCount),
-    [offers]
+    [offers, defaultRoomCount]
   );
   const methods = useForm<FacilityOffersSelectMultipleFormProps>({
     resolver: yupResolver(GroupOffersSchema),
@@ -81,8 +81,6 @@ export const FacilityOffersSelectMultiple = () => {
   const { handleSubmit, watch } = methods;
   const values = watch();
 
-  // ----------------------------------------------------------------------
-  const { arrival, departure, adultCount, childrenCount, location } = latestQueryParams;
   const nightCount = daysBetween(arrival, departure);
   const guestCount = (adultCount ?? 0) + (childrenCount ?? 0);
   const roomCount = values.offers.reduce(getTotalRoomCountReducer, 0);
@@ -117,7 +115,6 @@ export const FacilityOffersSelectMultiple = () => {
     setOrganizerInfo(undefined);
     setBookingInfo(
       {
-        location: location,
         accommodation,
         date: {
           arrival,
@@ -132,20 +129,12 @@ export const FacilityOffersSelectMultiple = () => {
     navigate('/org-details');
   };
 
-  if (!offers || !accommodation) {
-    return <Typography>No rooms available during the selected dates.</Typography>;
+  if (Array.isArray(offers) && !offers.length) {
+    return <Typography>{notFoundText}</Typography>;
   }
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <FacilityOffersTitle
-        rooms={roomCount}
-        guests={guestCount}
-        startDate={arrival?.toUTCString()}
-        nights={nightCount}
-        roomsAvailable={accommodation?.offers?.length ?? 0}
-      />
-
       <Grid container spacing={4}>
         <Grid
           order={{ xs: 1, md: 2 }}
@@ -171,13 +160,11 @@ export const FacilityOffersSelectMultiple = () => {
         <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }} sx={{ mt: 4 }}>
           <Box mt={{ xs: `-${summaryBoxHeight}px`, md: 0 }}>
             {offers?.map((offer, index) => {
-              const room = getRoomOfOffer(accommodation, offer);
               return (
                 <OfferItemSelectMultiple
                   index={index}
                   key={index}
                   offer={offer}
-                  room={room}
                   nightCount={nightCount}
                 />
               );

@@ -1,5 +1,5 @@
 import { CSSProperties, forwardRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, Link } from 'react-router-dom';
 import {
   Box,
   Stack,
@@ -19,6 +19,7 @@ import {
 } from '../../hooks/useAccommodationsAndOffers';
 import { useAppDispatch } from 'src/store';
 import { displayPriceFromPriceFormat, displayPriceFromValues } from '../../utils/price';
+import { formatISO } from 'date-fns';
 
 export interface SearchCardProps {
   facility: AccommodationWithId;
@@ -30,11 +31,17 @@ export interface SearchCardProps {
 
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
   ({ mapCard, facility, focusedEvent }, ref) => {
-    const navigate = useNavigate();
     const theme = useTheme();
-    const { isGroupMode } = useAccommodationsAndOffers();
+    const { isGroupMode, latestQueryParams } = useAccommodationsAndOffers();
     const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useAppDispatch();
+    const prices = useMemo(
+      () => facility.offers.map((o) => Number(o.price.public)),
+      [facility]
+    );
+
+    if (!latestQueryParams) return null;
+    const { roomCount, adultCount, departure, arrival } = latestQueryParams;
 
     const responsiveStyle: CSSProperties =
       isMobileView || mapCard
@@ -60,13 +67,12 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
           marginBottom: '8px'
         };
 
-    const prices = useMemo(
-      () =>
-        facility.offers.map((o) =>
-          Number(o.preferredCurrencyPrice?.public ?? o.price.public)
-        ),
-      [facility]
-    );
+    const searchParams = {
+      roomCount: roomCount.toString(),
+      adultCount: adultCount.toString(),
+      arrival: formatISO(Number(arrival)),
+      departure: formatISO(Number(departure))
+    };
 
     if (facility.offers.length < 1) {
       return null;
@@ -74,7 +80,6 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
     const priceRange = facility.preferredCurrencyPriceRange ?? facility.priceRange;
     const currency = priceRange?.lowestPrice.currency;
-
     const totalPrice = Math.min(...prices);
 
     return (
@@ -117,98 +122,115 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               media={facility.media}
             />
           </Stack>
-          <Stack
-            // fill={true}
-            onClick={() => navigate(`/facility/${facility.id}`)}
-            justifyContent="space-between"
-            width="100%"
-            // minWidth={theme.spacing(27)}
-            spacing={0.5}
-            sx={{ p: 1, mt: 0, cursor: 'pointer' }}
+          <Link
+            to={{
+              pathname: `/facility/${facility.providerHotelId}`,
+              search: `?${createSearchParams(searchParams)}`
+            }}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none', color: 'inherit' }}
           >
-            <Stack direction="row" justifyContent="space-between" spacing={1}>
-              <Typography
-                maxWidth={theme.spacing(20)}
-                noWrap
-                overflow={'hidden'}
-                variant="subtitle1"
-              >
-                {facility.name}
-              </Typography>
-              <Stack sx={{ color: 'text.secondary' }} direction="row" alignItems="center">
-                <Iconify mr={0.5} icon={'clarity:star-solid'} width={12} height={12} />
-                <Typography variant="caption">{facility.rating}</Typography>
-              </Stack>
-            </Stack>
-
-            {!mapCard && (
-              <Stack direction="row" alignItems="center" sx={{ color: 'text.secondary' }}>
-                <Typography variant="caption" maxWidth={theme.spacing(25)}>
-                  {buildAccommodationAddress(facility)}
-                </Typography>
-              </Stack>
-            )}
-
-            {focusedEvent?.length ? (
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{ color: 'text.secondary', marginTop: '-8px' }}
-              >
-                <Typography variant="caption">
-                  {`Approx.  ${Math.ceil(
-                    focusedEvent[0].durationInMinutes
-                  )}min walking distance, ${focusedEvent[0].distance.toFixed(1)}km from ${
-                    focusedEvent[0].eventName
-                  } `}
-                </Typography>
-              </Stack>
-            ) : null}
-
             <Stack
-              direction={isMobileView || mapCard ? 'row-reverse' : 'row'}
-              alignItems="end"
-              justifyContent={'space-between'}
+              justifyContent="space-between"
+              width="100%"
+              spacing={0.5}
+              sx={{ p: 1, mt: 0, cursor: 'pointer' }}
             >
-              <Stack
-                direction={isMobileView || mapCard ? 'column' : 'row'}
-                alignItems={isMobileView || mapCard ? 'end' : 'center'}
-                justifyContent="space-between"
-                spacing={mapCard ? 0 : 0.5}
-              >
-                <Stack direction="row" alignItems="center" spacing={0.5}>
-                  <Typography
-                    textAlign="center"
-                    variant="caption"
-                    sx={{ color: 'text.secondary' }}
-                  >
-                    From
-                  </Typography>
-                  <Typography variant="subtitle2">
-                    {displayPriceFromPriceFormat(priceRange?.lowestPrice)}
-                    /night
+              <Stack direction="row" justifyContent="space-between" spacing={1}>
+                <Typography
+                  maxWidth={theme.spacing(20)}
+                  noWrap
+                  overflow={'hidden'}
+                  variant="subtitle1"
+                >
+                  {facility.name}
+                </Typography>
+                <Stack
+                  sx={{ color: 'text.secondary' }}
+                  direction="row"
+                  alignItems="center"
+                >
+                  <Iconify mr={0.5} icon={'clarity:star-solid'} width={12} height={12} />
+                  <Typography variant="caption">{facility.rating}</Typography>
+                </Stack>
+              </Stack>
+
+              {!mapCard && (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  sx={{ color: 'text.secondary' }}
+                >
+                  <Typography variant="caption" maxWidth={theme.spacing(25)}>
+                    {buildAccommodationAddress(facility)}
                   </Typography>
                 </Stack>
+              )}
 
-                {!(isMobileView || mapCard) && !isGroupMode && <Typography>|</Typography>}
-                {!mapCard && !isGroupMode && (
-                  <Stack direction="row" alignItems="center" spacing={1}>
+              {focusedEvent?.length ? (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  sx={{ color: 'text.secondary', marginTop: '-8px' }}
+                >
+                  <Typography variant="caption">
+                    {`Approx.  ${Math.ceil(
+                      focusedEvent[0].durationInMinutes
+                    )}min walking distance, ${focusedEvent[0].distance.toFixed(
+                      1
+                    )}km from ${focusedEvent[0].eventName} `}
+                  </Typography>
+                </Stack>
+              ) : null}
+
+              <Stack
+                direction={isMobileView || mapCard ? 'row-reverse' : 'row'}
+                alignItems="end"
+                justifyContent={'space-between'}
+              >
+                <Stack
+                  direction={isMobileView || mapCard ? 'column' : 'row'}
+                  alignItems={isMobileView || mapCard ? 'end' : 'center'}
+                  justifyContent="space-between"
+                  spacing={mapCard ? 0 : 0.5}
+                >
+                  <Stack direction="row" alignItems="center" spacing={0.5}>
                     <Typography
-                      alignItems="center"
+                      textAlign="center"
                       variant="caption"
                       sx={{ color: 'text.secondary' }}
                     >
-                      {displayPriceFromValues(totalPrice, currency)} total
+                      From
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      {displayPriceFromPriceFormat(priceRange?.lowestPrice)}
+                      /night
                     </Typography>
                   </Stack>
+
+                  {!(isMobileView || mapCard) && !isGroupMode && (
+                    <Typography>|</Typography>
+                  )}
+                  {!mapCard && !isGroupMode && (
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Typography
+                        alignItems="center"
+                        variant="caption"
+                        sx={{ color: 'text.secondary' }}
+                      >
+                        {displayPriceFromValues(totalPrice, currency)} total
+                      </Typography>
+                    </Stack>
+                  )}
+                </Stack>
+                {!mapCard && (
+                  <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />
                 )}
               </Stack>
-              {!mapCard && (
-                <Iconify icon="eva:info-outline" mb={0.5} width={16} height={16} />
-              )}
+              {isGroupMode && <Typography variant="subtitle2">Select Rooms</Typography>}
             </Stack>
-            {isGroupMode && <Typography variant="subtitle2">Select Rooms</Typography>}
-          </Stack>
+          </Link>
         </Stack>
       </Card>
     );

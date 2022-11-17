@@ -4,7 +4,7 @@ import { RHFTextField } from 'src/components/hook-form';
 import { DISABLE_FEATURES } from '../../config';
 import { getGroupMode } from '../../hooks/useAccommodationsAndOffers/helpers';
 
-export const SelectGuestsAndRooms = () => {
+export const GuestsAndRoomsInputs = () => {
   const { watch } = useFormContext();
   const FIELD_WIDTH = '80px';
 

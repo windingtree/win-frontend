@@ -111,7 +111,7 @@ export const Results: React.FC = () => {
         top: '25%'
       });
     }
-  }, [mode]);
+  }, [isMobileSafari, mode]);
 
   // to highlight a given event marker use url params "focusedEvent"
   const [searchParams] = useSearchParams();
@@ -121,6 +121,7 @@ export const Results: React.FC = () => {
   );
 
   // apply a callback function to transform returned accommodation objects
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
     focusedEvent
   ]);
@@ -156,6 +157,7 @@ export const Results: React.FC = () => {
         setDepth(e.screenY);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [mode, depth]
   );
 

@@ -94,6 +94,7 @@ const MapSettings: React.FC<{
     dispatch({
       type: 'RESET_SELECTED_FACILITY_ID'
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onMove = useCallback(() => {
@@ -177,6 +178,7 @@ export const MapBox: React.FC = () => {
   );
 
   // apply a callback function to transform returned accommodation objects
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
     focusedEvent
   ]);
@@ -205,6 +207,7 @@ export const MapBox: React.FC = () => {
   // on mount clear selected facility id
   useEffect(() => {
     unSelectFacility();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const currentEvents = useMemo(
@@ -215,7 +218,7 @@ export const MapBox: React.FC = () => {
         center: coordinates,
         focusedEvent
       }),
-    [coordinates, latestQueryParams]
+    [coordinates, focusedEvent, latestQueryParams?.arrival, latestQueryParams?.departure]
   );
 
   const { currentEventsWithinRadius = null, focusedEventItem = null } =
@@ -252,7 +255,7 @@ export const MapBox: React.FC = () => {
     ) : null;
 
     return markers;
-  }, [latestQueryParams]);
+  }, [currentEventsWithinRadius]);
 
   const mapMarkerStyles = useMemo(
     () => (
@@ -371,6 +374,7 @@ export const MapBox: React.FC = () => {
           : null}
       </MapContainer>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [normalizedCoordinates, accommodations, selectedFacilityId, isMobileView]
   );
 

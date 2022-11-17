@@ -36,6 +36,7 @@ import { usePriceFilter } from '../../hooks/usePriceFilter';
 import { SearchFilterDialog } from './SearchFilterDialog';
 import { DateRangeButton } from 'src/components/buttons/DateRangeButton';
 import { GuestDetailsButton } from 'src/components/buttons/GuestDetailsButton';
+import { DateRangeType } from 'src/components/hook-form/RHFDateRangePicker';
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   zIndex: 2,
@@ -59,11 +60,7 @@ type FormValuesProps = {
   location: string;
   roomCount: number | string;
   adultCount: number | string;
-  dateRange: {
-    startDate: Date | null;
-    endDate: Date | null;
-    key: string;
-  }[];
+  dateRange: DateRangeType[];
 };
 
 type FormInputFields = 'location' | 'dateRange' | 'adultCount' | 'roomCount';
@@ -79,7 +76,10 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   const [open, setOpen] = useState<boolean>(false);
   const [isSearchPage, setIsSearchPage] = useState(false);
   const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
-  const isCloseable: boolean = useMemo(() => isMobileView && !!closeable, [isMobileView]);
+  const isCloseable: boolean = useMemo(
+    () => isMobileView && !!closeable,
+    [closeable, isMobileView]
+  );
   const { priceFilter } = usePriceFilter();
 
   // monitor error state locally
@@ -241,7 +241,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
       setOpen(false);
       return;
     }
-  }, [roomCount, adultCount, dateRange, location, refetch, open]);
+  }, [dateRange, roomCount, adultCount, location, navigate]);
 
   // Prevent error messages from persisting on path change
   // clear errors when path changes
@@ -249,6 +249,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     clearErrors();
     setShowError(null);
     setShowAccommodationsError(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // set local error when error object changes
@@ -282,7 +283,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     if (includesAllSearchParams) {
       refetch();
     }
-  }, [search]);
+  }, [pathname, refetch, search, searchParams]);
 
   useEffect(() => {
     if (pathname !== '/search' && pathname !== '/') return;
@@ -309,7 +310,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
         }
       ]);
     }
-  }, [latestQueryParams, pathname]);
+  }, [latestQueryParams, pathname, searchParams, setValue]);
 
   /**
    * Logic in relation to styling and textual UI
@@ -445,6 +446,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
                   type="submit"
                   disabled={isFetching}
                   variant="contained"
+                  disableRipple={isMobileView}
                   size={buttonSize}
                   sx={{
                     minWidth: isMobileView ? '320px' : '160px',

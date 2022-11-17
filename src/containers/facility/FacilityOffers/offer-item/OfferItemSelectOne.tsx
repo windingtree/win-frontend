@@ -1,13 +1,14 @@
-import type { RoomTypes, WinPricedOffer } from '@windingtree/glider-types/dist/win';
+import type {
+  WinAccommodation,
+  WinPricedOffer
+} from '@windingtree/glider-types/dist/win';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import axios from 'axios';
 import type { OfferRecord } from 'src/store/types';
 import { Box, Grid, Divider, Typography, useTheme } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { daysBetween } from 'src/utils/date';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
-import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
 import Logger from 'src/utils/logger';
 import { OfferInformation } from './shared/OfferInformation';
@@ -20,26 +21,19 @@ import { displayPriceFromPrice } from '../../../../utils/price';
 const logger = Logger('OfferItemSelectOne');
 
 export const OfferItemSelectOne: React.FC<{
-  room: RoomTypes;
   offer: OfferRecord;
-  facilityId: string;
-}> = ({ offer, facilityId, room }) => {
-  const dispatch = useAppDispatch();
+  accommodation: WinAccommodation;
+  roomCount: number;
+  arrival: Date;
+  departure: Date;
+  adultCount: number;
+}> = ({ offer, accommodation, roomCount, arrival, departure, adultCount }) => {
   const theme = useTheme();
-  const { latestQueryParams, getAccommodationById, accommodations } =
-    useAccommodationsAndOffers();
-  const arrival = latestQueryParams?.arrival;
-  const departure = latestQueryParams?.departure;
   const navigate = useNavigate();
   const numberOfDays = daysBetween(arrival, departure);
-  const roomsNumber = latestQueryParams?.roomCount;
   const [loading, setLoading] = useState<boolean>(false);
   const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const { enqueueSnackbar } = useSnackbar();
-  const accommodation = useMemo(
-    () => getAccommodationById(accommodations, facilityId),
-    [accommodations, facilityId]
-  );
   const { convertPriceCurrency } = useCurrencies();
   const { preferredCurrencyCode } = useUserSettings();
 
@@ -66,7 +60,6 @@ export const OfferItemSelectOne: React.FC<{
             //TODO: review whether passing the quote is still needed
             quote: res.data.quote,
             accommodation,
-            location: latestQueryParams?.location,
             date: {
               arrival,
               departure
@@ -80,7 +73,7 @@ export const OfferItemSelectOne: React.FC<{
               // BE is likely to update the data structure the same way as for group booking, in the mean time we hardcode the usd value like this.
               usd: res.data.quote?.sourceAmount
             },
-            adultCount: latestQueryParams?.adultCount,
+            adultCount: adultCount,
             serviceId: res.data.serviceId,
             providerId: res.data.provider,
             offers: [{ ...offer, ...res.data.offer, quantity: '1' }]
@@ -99,14 +92,24 @@ export const OfferItemSelectOne: React.FC<{
       });
       setLoading(false);
     }
-  }, [dispatch]);
+  }, [
+    accommodation,
+    adultCount,
+    arrival,
+    departure,
+    enqueueSnackbar,
+    navigate,
+    offer,
+    setBookingInfo,
+    setOrganizerInfo
+  ]);
 
   // convert price to user preferred currency or keep local when not available
   const localPrice = offer.price;
   const preferredCurrencyPrice = convertPriceCurrency({
     price: localPrice,
     targetCurrency: preferredCurrencyCode,
-    amount: roomsNumber || 1
+    amount: roomCount || 1
   });
   const price = preferredCurrencyPrice ?? localPrice;
   return (
@@ -115,7 +118,7 @@ export const OfferItemSelectOne: React.FC<{
       <Box py={5}>
         <Grid container spacing={5}>
           <Grid item xs={8}>
-            <OfferInformation room={room} offer={offer} />
+            <OfferInformation room={offer.room} offer={offer} />
           </Grid>
           <Grid item xs={4} alignSelf={'end'}>
             <Box
@@ -129,7 +132,9 @@ export const OfferItemSelectOne: React.FC<{
                 {displayPriceFromPrice(price)}
               </Typography>
               <Typography textAlign={'right'}>
-                {`Price for ${numberOfDays} nights, ${roomsNumber} room(s)`}
+                {`Price for ${numberOfDays} nights, ${roomCount} ${
+                  roomCount === 1 ? 'room' : 'rooms'
+                }`}
               </Typography>
 
               <LoadingButton

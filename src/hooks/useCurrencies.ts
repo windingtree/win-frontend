@@ -76,6 +76,7 @@ export const useCurrencies = () => {
         decimals: currencyRates[toCurrency].decimals
       };
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currenciesAndRates]
   );
 
@@ -128,6 +129,7 @@ export const useCurrencies = () => {
 
       return convertedPrice;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currenciesAndRates]
   );
 

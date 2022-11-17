@@ -1,4 +1,3 @@
-import type { RoomTypes } from '@windingtree/glider-types/dist/win';
 import type { OfferRecord } from 'src/store/types';
 import { Box, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
@@ -6,11 +5,10 @@ import { OfferInformation } from './shared/OfferInformation';
 import { displayPriceFromPrice, displayPriceFromValues } from '../../../../utils/price';
 
 export const OfferItemSelectMultiple: React.FC<{
-  room: RoomTypes;
   offer: OfferRecord;
   index: number;
   nightCount: number;
-}> = ({ offer, room, index, nightCount }) => {
+}> = ({ offer, index, nightCount }) => {
   const { register } = useFormContext();
   const price = offer.preferredCurrencyPrice ?? offer.price;
   const pricePerNight: number = Number(price.public) / nightCount;
@@ -21,7 +19,7 @@ export const OfferItemSelectMultiple: React.FC<{
       <Box py={5}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            <OfferInformation room={room} offer={offer} />
+            <OfferInformation room={offer.room} offer={offer} />
           </Grid>
           <Grid item xs={12} md={4}>
             <Stack alignItems={{ md: 'flex-end' }} sx={{ textAlign: { md: 'end' } }}>

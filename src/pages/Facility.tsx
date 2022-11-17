@@ -6,6 +6,8 @@ import { useMemo } from 'react';
 import { createRef, useCallback } from 'react';
 import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
 import { FacilityIntroduction } from 'src/containers/facility/FacilityIntroduction';
+import { FacilitySearchFormProvider } from 'src/containers/facility/FacilityOffers/FacilitySearchFormProvider';
+import { FacilityCovid } from 'src/containers/facility/FacilityCovid';
 
 export const Facility = () => {
   const detailImagesRef = createRef<HTMLDivElement>();
@@ -27,26 +29,29 @@ export const Facility = () => {
       focusedEvent: latestQueryParams.focusedEvent ?? ''
     };
     return createSearchParams(params);
-  }, [latestQueryParams, createSearchParams]);
+  }, [latestQueryParams]);
 
   return (
-    <MainLayout maxWidth="lg">
-      <Breadcrumbs
-        sx={{ mb: 2 }}
-        links={[
-          {
-            name: 'Home',
-            href: '/'
-          },
-          {
-            name: 'Search',
-            href: `/search?${query}`
-          }
-        ]}
-      />
+    <FacilitySearchFormProvider>
+      <MainLayout maxWidth="lg">
+        <Breadcrumbs
+          sx={{ mb: 2 }}
+          links={[
+            {
+              name: 'Home',
+              href: '/'
+            },
+            {
+              name: 'Search',
+              href: `/search?${query}`
+            }
+          ]}
+        />
 
-      <FacilityIntroduction scrollToDetailImages={scrollToDetailImages} />
-      <FacilityOffers ref={detailImagesRef} />
-    </MainLayout>
+        <FacilityIntroduction scrollToDetailImages={scrollToDetailImages} />
+        <FacilityOffers ref={detailImagesRef} />
+        <FacilityCovid />
+      </MainLayout>
+    </FacilitySearchFormProvider>
   );
 };

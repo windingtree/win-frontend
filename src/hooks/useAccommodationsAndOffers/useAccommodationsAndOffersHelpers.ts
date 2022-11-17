@@ -1,5 +1,6 @@
 import { Offer, WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { useCallback } from 'react';
+import { getOffersWithRoomInfo, sortOffersByPrice } from 'src/utils/offers';
 import { OfferRecord } from '../../store/types';
 import { CurrencyCode, useCurrencies } from '../useCurrencies';
 import { useUserSettings } from '../useUserSettings';
@@ -10,6 +11,7 @@ export const useAccommodationsAndOffersHelpers = () => {
   const { preferredCurrencyCode } = useUserSettings();
 
   // attach price in preferred currency to array of offers
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getOffersWithPreferredCurrency = (
     offers: OfferRecord[],
     preferredCurrencyCode: CurrencyCode
@@ -25,28 +27,37 @@ export const useAccommodationsAndOffersHelpers = () => {
     });
   };
 
-  // normalize offers hook
   const normalizeOffers = useCallback(
-    (offers: Record<string, Offer>): OfferRecord[] => {
+    (
+      offers: Record<string, Offer> | undefined,
+      accommodations: Record<string, WinAccommodation> | undefined
+    ): OfferRecord[] => {
       if (!offers) return [];
 
-      const normalizedData = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
+      const offersArray = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
         id: key,
         ...value
       }));
 
-      let normalizedOffers: OfferRecord[];
+      let offersWithOptionalPreferredCurrency: OfferRecord[];
 
       if (preferredCurrencyCode) {
-        normalizedOffers = getOffersWithPreferredCurrency(
-          normalizedData,
+        offersWithOptionalPreferredCurrency = getOffersWithPreferredCurrency(
+          offersArray,
           preferredCurrencyCode
         );
       } else {
-        normalizedOffers = normalizedData;
+        offersWithOptionalPreferredCurrency = offersArray;
       }
 
-      return normalizedOffers;
+      const offersWithRoomInfo = getOffersWithRoomInfo(
+        offersWithOptionalPreferredCurrency,
+        accommodations
+      );
+
+      const sortedOffers = sortOffersByPrice(offersWithRoomInfo);
+
+      return sortedOffers;
     },
     [preferredCurrencyCode, getOffersWithPreferredCurrency]
   );
@@ -58,7 +69,7 @@ export const useAccommodationsAndOffersHelpers = () => {
       offers: Record<string, Offer> | undefined
     ): AccommodationWithId[] => {
       if (!accommodations) return [];
-      const normalizedOffers = offers ? normalizeOffers(offers) : [];
+      const normalizedOffers = offers ? normalizeOffers(offers, accommodations) : [];
 
       const normalizedAccommodations = Object.entries(
         accommodations

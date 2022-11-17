@@ -103,7 +103,7 @@ export const SearchFilterForm = ({
 
   const defaultPriceRanges: PriceRange[] = useMemo(
     () => buildDefaultPriceRanges(allAccommodations, preferredCurrencyCode),
-    [allAccommodations]
+    [allAccommodations, preferredCurrencyCode]
   );
 
   const buildFormDefaultValues = useCallback(() => {
@@ -135,7 +135,7 @@ export const SearchFilterForm = ({
     return defaultPriceRanges.map((priceRange) => {
       return filterAccommodationsByPriceRanges(allAccommodations, priceRange);
     });
-  }, [allAccommodations]);
+  }, [allAccommodations, defaultPriceRanges]);
 
   // update the 'stays' count to the total number of accommodation
   // categories selected
@@ -147,7 +147,7 @@ export const SearchFilterForm = ({
     }, 0);
 
     setTotalAccommodationsSelected(selectedCount);
-  }, [priceRanges]);
+  }, [accommodationsWithinPriceRanges, priceRanges]);
 
   // dispatch selected filters
   const onSubmit = useCallback(

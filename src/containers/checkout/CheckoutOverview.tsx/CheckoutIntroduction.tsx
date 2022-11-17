@@ -19,6 +19,19 @@ export const CheckoutIntroduction = () => {
   const { convertCurrency } = useCurrencies();
   const { preferredCurrencyCode } = useUserSettings();
 
+  const accommodationImage = useMemo(() => {
+    if (bookingInfo?.accommodation) {
+      return sortByLargestImage(bookingInfo.accommodation.media)[0];
+    }
+  }, [bookingInfo]);
+
+  // This random image will be used instead of the test image with text "TEST IMAGE: this image is not a bug".
+  const rndImg = useMemo<string>(getRndHotelImg, []);
+  const imgUrl = useMemo<string | undefined>(() => {
+    const originalUrl = accommodationImage ? accommodationImage.url : '';
+    return getAccommodationImage(originalUrl, rndImg);
+  }, [accommodationImage, rndImg]);
+
   if (
     !bookingInfo ||
     !bookingInfo.pricing ||
@@ -69,19 +82,6 @@ export const CheckoutIntroduction = () => {
     preferredCurrencyPrice &&
     bookingInfo.pricing?.offerCurrency.currency != preferredCurrencyCode &&
     preferredCurrencyCode !== 'USD';
-
-  const accommodationImage = useMemo(() => {
-    if (bookingInfo.accommodation) {
-      return sortByLargestImage(bookingInfo.accommodation.media)[0];
-    }
-  }, [bookingInfo]);
-
-  // This random image will be used instead of the test image with text "TEST IMAGE: this image is not a bug".
-  const rndImg = useMemo<string>(getRndHotelImg, []);
-  const imgUrl = useMemo<string | undefined>(() => {
-    const originalUrl = accommodationImage ? accommodationImage.url : '';
-    return getAccommodationImage(originalUrl, rndImg);
-  }, [accommodationImage]);
 
   return (
     <Box

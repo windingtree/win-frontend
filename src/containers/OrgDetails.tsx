@@ -178,6 +178,7 @@ export const OrgDetails = () => {
   const { watch, handleSubmit, trigger } = methods;
   const { privacy, vatNumber, invoice } = watch();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const vatValidation = useCallback(
     debouncedFn(() => trigger('vatNumber'), 1500),
     [debouncedFn, trigger]
@@ -207,14 +208,14 @@ export const OrgDetails = () => {
       setBookingInfo({ invoice });
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [setBookingInfo, setOrganizerInfo, watch]);
 
   const onSubmit = async () => {
     const { serviceId } = await bookGroup.mutateAsync();
     navigate(`/checkout/${serviceId}`);
   };
 
-  const localCountries: CountryType[] = useMemo(() => [...countries], [countries]);
+  const localCountries: CountryType[] = useMemo(() => [...countries], []);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

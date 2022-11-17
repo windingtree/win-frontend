@@ -65,7 +65,7 @@ export const CurrencySelector = ({ payment, network, onQuote }: PriceSelectProps
       onQuote(withQuote);
       logger.debug('Is with quote selected:', withQuote);
     },
-    [onQuote]
+    [onQuote, options]
   );
 
   useEffect(() => {

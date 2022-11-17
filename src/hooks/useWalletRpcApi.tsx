@@ -91,7 +91,7 @@ export const useWalletRpcApi = (
         logger.debug('wallet_switchEthereumChain failure', e);
       }
     },
-    [connector]
+    [allowedNetworks, connector]
   );
 
   return {

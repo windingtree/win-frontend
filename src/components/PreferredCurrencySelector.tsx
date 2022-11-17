@@ -56,6 +56,7 @@ export const PreferredCurrencySelector = () => {
     // for now just clear the priceFilter
 
     clearPriceFilter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preferredCurrencyCode]);
 
   // get display currencies list
@@ -63,6 +64,7 @@ export const PreferredCurrencySelector = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const openDialog = () => setDialogOpen(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const closeDialog = () => setDialogOpen(false);
 
   const handleCurrencyChange = useCallback(
@@ -70,7 +72,7 @@ export const PreferredCurrencySelector = () => {
       setUserSetting('preferredCurrencyCode', code);
       closeDialog();
     },
-    [closeDialog]
+    [closeDialog, setUserSetting]
   );
 
   // hide currency selector when wallet is connected

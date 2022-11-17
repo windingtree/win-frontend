@@ -24,7 +24,7 @@ const ButtonStyle = styled(Button)(({ theme }) => ({
 
   [theme.breakpoints.up('md')]: {
     justifyContent: 'center',
-    minWidth: '240px'
+    minWidth: '260px'
   }
 }));
 

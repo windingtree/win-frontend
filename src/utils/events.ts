@@ -1,7 +1,8 @@
+import type { CoordinatesType } from './accommodation';
+
 import { DateTime } from 'luxon';
 import { EventItemType, filteredEventsWithCoordinates } from 'src/config/events';
 import { defaultSearchRadiusInMeters } from '../config';
-import { Coordinates } from '../hooks/useAccommodationsAndOffers/api';
 import { NullableDate } from './date';
 import { crowDistance } from './geo';
 
@@ -62,7 +63,7 @@ export const getEventsWithinRadius = (
 export interface CurrentEventsProps {
   fromDate?: NullableDate;
   toDate?: NullableDate;
-  center?: Coordinates | null;
+  center?: CoordinatesType | null;
   radius?: number;
   focusedEvent?: string | null;
 }

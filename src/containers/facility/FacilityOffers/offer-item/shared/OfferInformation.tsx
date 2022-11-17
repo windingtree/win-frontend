@@ -17,8 +17,8 @@ const getChildrenText = (adultCount: number | undefined) => {
 };
 
 interface OfferInformationType {
-  room: RoomTypes;
-  offer: OfferRecord;
+  room?: RoomTypes;
+  offer?: OfferRecord;
 }
 
 export const OfferInformation = ({
@@ -45,11 +45,12 @@ export const OfferInformation = ({
           {name}
         </Typography>
         <Typography variant="body1" mb={1}>
-          {adults > 0 && `Book your ${name} for ${adults} ${getAdultText(adults)} `}
+          {adults > 0 &&
+            `Book your ${name.toLowerCase()} for ${adults} ${getAdultText(adults)} `}
           {children > 0 && `and ${children} ${getChildrenText(children)}`}
         </Typography>
       </Box>
-      <Typography variant="body1">{description}</Typography>
+      <Typography variant="body2">{description}</Typography>
       {refundability && (
         <Typography
           sx={{ display: 'inline-block', verticalAlign: 'middle', mt: 1 }}

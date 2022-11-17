@@ -1,21 +1,8 @@
 import { FacilityDetailImages } from './FacilityDetailImages';
 import { useParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
-import {
-  AccommodationWithId,
-  getOffersPriceRange
-} from 'src/hooks/useAccommodationsAndOffers/helpers';
-import { MediaItem } from '@windingtree/glider-types/dist/win';
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogProps,
-  DialogTitle,
-  Link,
-  Stack,
-  Typography
-} from '@mui/material';
+
+import { MediaItem, WinAccommodation } from '@windingtree/glider-types/dist/win';
+import { Alert, AlertTitle, Button, Link, Stack, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material';
 import { Box } from '@mui/material';
 import { useMemo, useState } from 'react';
@@ -25,11 +12,11 @@ import {
   sortByLargestImage
 } from 'src/utils/accommodation';
 import { FacilityGallery } from './FacilityGallery';
-import { daysBetween } from 'src/utils/date';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from 'src/components/LightboxModal';
-import Iconify from 'src/components/Iconify';
-import { displayPriceFromValues } from '../../../utils/price';
+import { useAccommodation } from 'src/hooks/useAccommodation';
+import { FacilityLoadingSkeleton } from './FacilityLoadingSkeleton';
+import { HeaderButton } from './HeaderButton';
 import { getRndHotelImg, getAccommodationImage } from '../../../utils/getRndHotelImg';
 
 const Container = styled(Box)(({ theme }) => ({
@@ -55,16 +42,6 @@ const HeaderTitleContainer = styled(Box)(() => ({
   width: '100%'
 }));
 
-const HeaderButtonContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-
-  [theme.breakpoints.up('md')]: {
-    alignItems: 'end',
-    width: '100%'
-  }
-}));
-
 const FacilityMainImage = styled('img')(() => ({
   flex: '50%',
   overflow: 'hidden',
@@ -80,70 +57,6 @@ const AllPhotosButton = styled(Button)(({ theme }) => ({
     bottom: 0
   }
 }));
-
-const HeaderButton = ({ scrollToDetailImages }) => {
-  const theme = useTheme();
-  const params = useParams();
-  const { getAccommodationById, accommodations, latestQueryParams } =
-    useAccommodationsAndOffers();
-
-  const id: string = params.id as string;
-  const accommodation = getAccommodationById(accommodations, id);
-  const offers = accommodation?.offers;
-
-  const numberOfDays = daysBetween(
-    latestQueryParams?.arrival,
-    latestQueryParams?.departure
-  );
-  const nbRooms = latestQueryParams?.roomCount ?? 1;
-  // get lowest offer price
-  const localPriceRange = useMemo(
-    () => offers && getOffersPriceRange(offers, true, true, false, numberOfDays, nbRooms),
-    [offers]
-  );
-
-  const preferredCurrencyPriceRange = useMemo(
-    () => offers && getOffersPriceRange(offers, true, true, true, numberOfDays, nbRooms),
-    [offers]
-  );
-  const priceRange = preferredCurrencyPriceRange ?? localPriceRange;
-  let lowestAveragePrice: number | undefined, currency: string | undefined;
-
-  if (priceRange) {
-    const { lowestPrice: lowestTotalPrice } = priceRange;
-
-    lowestAveragePrice = Number(lowestTotalPrice.price);
-    currency = lowestTotalPrice.currency;
-  }
-
-  return (
-    <HeaderButtonContainer>
-      <Stack direction="row" alignItems="center" mt={1}>
-        <Typography>From</Typography>
-        <Typography variant="h5" marginLeft={theme.spacing(1)}>
-          {/* {currencySymbol} {lowestAveragePrice?.toFixed(2)} */}
-          {displayPriceFromValues(lowestAveragePrice, currency)}
-        </Typography>
-      </Stack>
-      <Typography textAlign={{ md: 'right' }}> Average price / room / night</Typography>
-      <Button
-        size="large"
-        disableElevation
-        variant="outlined"
-        onClick={scrollToDetailImages}
-        sx={{
-          mt: 1
-        }}
-      >
-        Select Room
-      </Button>
-
-      <Typography mt={1} variant="caption">
-        {"You won't be charged yet"}
-      </Typography>
-    </HeaderButtonContainer>
-  );
-};
 
 const HotelAddress = ({
   address,
@@ -168,66 +81,6 @@ const HotelAddress = ({
   );
 };
 
-const CovidDialog = ({
-  open = false,
-  handleClose
-}: {
-  open: boolean;
-  handleClose: () => void;
-}) => {
-  const theme = useTheme();
-  const paperStyles: DialogProps['PaperProps'] = {
-    sx: {
-      '&.MuiPaper-rounded': {
-        border: `1px solid ${theme.palette.error.main}`
-      },
-      position: 'absolute',
-      left: 200,
-      top: 95
-    }
-  };
-
-  return (
-    <Dialog open={open} onClose={handleClose} PaperProps={paperStyles}>
-      <DialogTitle mb={1}>
-        <Stack direction={'row'} alignItems={'center'}>
-          <Iconify
-            icon={'typcn:info-large'}
-            sx={{
-              border: `1px solid ${theme.palette.error.darker}`,
-              borderRadius: '50%',
-              color: theme.palette.error.darker,
-              mr: 1
-            }}
-            fontSize="large"
-          />
-          <Typography variant="h6">Coronavirus (COVID-19) Support</Typography>
-        </Stack>
-      </DialogTitle>
-      <DialogContent>
-        <Typography variant="body2">
-          Please check for travel restrictions. In response to Coronavirus (COVID-19),
-          travel may be permitted only for certain purposes and in particular, touristic
-          travel may not be allowed, and certain services and amenities may be
-          unavailable.
-        </Typography>
-        <br />
-        <Typography variant="body2">
-          Please verify the information published by the government authorities. An
-          overview of country specific rules for COVID can be found{' '}
-          <Link
-            href="https://apply.joinsherpa.com/travel-restrictions"
-            target={'_blank'}
-            rel="noreferrer"
-          >
-            here
-          </Link>
-        </Typography>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
 const HeaderTitle = ({
   name,
   address,
@@ -235,20 +88,13 @@ const HeaderTitle = ({
 }: {
   name?: string;
   address?: string;
-  accommodation: AccommodationWithId | null;
+  accommodation: WinAccommodation | null;
 }) => {
   const theme = useTheme();
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const handleOpenDialog = () => setDialogOpen(true);
-  const handleCloseDialog = () => setDialogOpen(false);
+
   return (
     <HeaderTitleContainer>
       <Box>
-        <Box mb={3}>
-          <Link href="#" onClick={handleOpenDialog} variant={'h6'}>
-            COVID-19 Support
-          </Link>
-        </Box>
         <Typography variant="h2" marginBottom={theme.spacing(1.5)}>
           {name}
         </Typography>
@@ -256,7 +102,6 @@ const HeaderTitle = ({
           address={address}
           coordinates={accommodation?.location?.coordinates}
         />
-        <CovidDialog open={dialogOpen} handleClose={handleCloseDialog} />
       </Box>
     </HeaderTitleContainer>
   );
@@ -267,21 +112,17 @@ export const FacilityIntroduction = ({
 }: {
   scrollToDetailImages: () => void;
 }) => {
-  const { getAccommodationById, accommodations } = useAccommodationsAndOffers();
   const { id } = useParams();
-
   const [galleryOpen, setGalleryOpen] = useState<boolean>(false);
   const [slideOpen, setSlideOpen] = useState<boolean>(false);
   const [slideIndex, setSlideIndex] = useState<number>(0);
-
-  const accommodation: AccommodationWithId | null = getAccommodationById(
-    accommodations,
-    String(id)
-  );
+  const { accommodationQuery, offersQuery } = useAccommodation({ id });
+  const { data, isLoading, error } = accommodationQuery;
+  const accommodation = data?.accommodation;
 
   const sortedImages: MediaItem[] = useMemo(
     () => sortByLargestImage(accommodation?.media ?? []),
-    [accommodation?.media]
+    [accommodation]
   );
 
   // get largest images and their urls
@@ -319,7 +160,25 @@ export const FacilityIntroduction = ({
   const mainImageUrl = useMemo<string | undefined>(() => {
     const originalUrl = mainImage ? mainImage.url : '';
     return getAccommodationImage(originalUrl, rndImg);
-  }, [mainImage]);
+  }, [mainImage, rndImg]);
+
+  if (isLoading) return <FacilityLoadingSkeleton />;
+
+  if (error) {
+    return (
+      <Box>
+        <Alert severity="error" sx={{ display: 'inline-block' }}>
+          <Stack>
+            <AlertTitle>Something went wrong.</AlertTitle>
+            Please try to search for accommodations again.
+            <Button variant="contained">Search again</Button>
+          </Stack>
+        </Alert>
+      </Box>
+    );
+  }
+
+  if (!accommodation) return null;
 
   return (
     <>
@@ -329,9 +188,13 @@ export const FacilityIntroduction = ({
           address={address}
           accommodation={accommodation}
         />
-        <HeaderButton scrollToDetailImages={scrollToDetailImages} />
+        <HeaderButton
+          latestQueryParams={offersQuery.data?.latestQueryParams}
+          offers={offersQuery.data?.offers}
+          scrollToDetailImages={scrollToDetailImages}
+          isLoading={offersQuery?.isFetching}
+        />
       </Stack>
-
       <Container>
         <FacilityMainImage src={mainImageUrl} />
         <FacilityDetailImages images={rest} />

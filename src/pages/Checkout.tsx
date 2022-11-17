@@ -58,7 +58,7 @@ export const Checkout = () => {
         hash: bookingInfo?.location === 'Bogota' ? 'devcon' : ''
       });
     },
-    [bookingInfo, navigate]
+    [bookingInfo, navigate, offerId]
   );
 
   return (

@@ -63,8 +63,6 @@ export const DevconCashbackReward = () => {
   });
   const isGroupMode = bookingMode === 'group';
 
-  if (isGroupMode) return <></>;
-
   const showError = (message: string, detail: string) => {
     const err = { message: message, detail: detail };
     setError(err);
@@ -194,6 +192,8 @@ export const DevconCashbackReward = () => {
   if (!devconCashbackEnabled || location.hash !== '#devcon') {
     return null;
   }
+
+  if (isGroupMode) return null;
 
   return (
     <>

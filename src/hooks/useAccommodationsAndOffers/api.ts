@@ -7,16 +7,12 @@ import axios from 'axios';
 import { getGroupMode, getPassengersBody, InvalidLocationError } from './helpers';
 import { SearchTypeProps } from '.';
 import { defaultSearchRadiusInMeters, backend } from '../../config';
-
-export interface Coordinates {
-  lat: number;
-  lon: number;
-}
+import { CoordinatesType } from 'src/utils/accommodation';
 
 export interface AccommodationsAndOffersResponse {
   accommodations: Record<string, WinAccommodation>;
   offers: Record<string, Offer>;
-  coordinates: Coordinates;
+  coordinates: CoordinatesType;
   latestQueryParams: SearchTypeProps;
   isGroupMode: boolean;
 }
@@ -53,7 +49,7 @@ export async function fetchAccommodationsAndOffers({
     );
   }
 
-  const normalizedCoordinates: Coordinates = {
+  const normalizedCoordinates: CoordinatesType = {
     lat: Number(coordinates.lat),
     lon: Number(coordinates.lon)
   };

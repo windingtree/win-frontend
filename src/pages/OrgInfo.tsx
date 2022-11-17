@@ -22,7 +22,7 @@ export const OrgInfo = () => {
       location: latestQueryParams.location
     };
     return createSearchParams(params);
-  }, [latestQueryParams, createSearchParams]);
+  }, [latestQueryParams]);
 
   return (
     <MainLayout maxWidth="sm">
