@@ -9,7 +9,6 @@ import type { OfferRecord } from 'src/store/types';
 import { Box, Grid, Divider, Typography, useTheme } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { daysBetween } from 'src/utils/date';
-import { useAppDispatch } from 'src/store';
 import { PricedOfferRequest } from 'src/api/PricedOffer';
 import Logger from 'src/utils/logger';
 import { OfferInformation } from './shared/OfferInformation';
@@ -29,7 +28,6 @@ export const OfferItemSelectOne: React.FC<{
   departure: Date;
   adultCount: number;
 }> = ({ offer, accommodation, roomCount, arrival, departure, adultCount }) => {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const navigate = useNavigate();
   const numberOfDays = daysBetween(arrival, departure);
@@ -94,7 +92,17 @@ export const OfferItemSelectOne: React.FC<{
       });
       setLoading(false);
     }
-  }, [dispatch]);
+  }, [
+    accommodation,
+    adultCount,
+    arrival,
+    departure,
+    enqueueSnackbar,
+    navigate,
+    offer,
+    setBookingInfo,
+    setOrganizerInfo
+  ]);
 
   // convert price to user preferred currency or keep local when not available
   const localPrice = offer.price;

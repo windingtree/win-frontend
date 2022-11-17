@@ -100,6 +100,7 @@ export const useAccommodationsAndOffers = ({
 
   const normalizedAccommodations = useMemo(
     () => normalizeAccommodations(data?.accommodations, data?.offers),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, preferredCurrencyCode]
   );
 
@@ -156,7 +157,13 @@ export const useAccommodationsAndOffers = ({
 
       return { ...transformedAccommodation, priceRange, preferredCurrencyPriceRange };
     });
-  }, [normalizedAccommodations, latestQueryParams]);
+  }, [
+    normalizedAccommodations,
+    latestQueryParams,
+    isGroupMode,
+    accommodationTransformFn,
+    data?.coordinates
+  ]);
 
   // apply price filter to accommodations if any before returning accommodations
   const accommodations = useMemo(() => {

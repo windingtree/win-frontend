@@ -11,6 +11,7 @@ export const useAccommodationsAndOffersHelpers = () => {
   const { preferredCurrencyCode } = useUserSettings();
 
   // attach price in preferred currency to array of offers
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getOffersWithPreferredCurrency = (
     offers: OfferRecord[],
     preferredCurrencyCode: CurrencyCode
@@ -38,19 +39,19 @@ export const useAccommodationsAndOffersHelpers = () => {
         ...value
       }));
 
-      let offersWithPreferredCurrency: OfferRecord[];
+      let offersWithOptionalPreferredCurrency: OfferRecord[];
 
       if (preferredCurrencyCode) {
-        offersWithPreferredCurrency = getOffersWithPreferredCurrency(
+        offersWithOptionalPreferredCurrency = getOffersWithPreferredCurrency(
           offersArray,
           preferredCurrencyCode
         );
       } else {
-        offersWithPreferredCurrency = offersArray;
+        offersWithOptionalPreferredCurrency = offersArray;
       }
 
       const offersWithRoomInfo = getOffersWithRoomInfo(
-        offersWithPreferredCurrency,
+        offersWithOptionalPreferredCurrency,
         accommodations
       );
 

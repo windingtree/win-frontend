@@ -124,7 +124,7 @@ export const FaqAccordion = () => {
         accordionRef.current.scrollIntoView();
       }
     }
-  }, [accordionRef]);
+  }, [accordionRef, anchor]);
 
   const handleChange =
     (panel: string | undefined) =>

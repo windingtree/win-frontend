@@ -30,7 +30,7 @@ export const CheckoutIntroduction = () => {
   const imgUrl = useMemo<string | undefined>(() => {
     const originalUrl = accommodationImage ? accommodationImage.url : '';
     return getAccommodationImage(originalUrl, rndImg);
-  }, [accommodationImage]);
+  }, [accommodationImage, rndImg]);
 
   if (
     !bookingInfo ||

@@ -241,7 +241,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
       setOpen(false);
       return;
     }
-  }, [roomCount, adultCount, dateRange, location, refetch]);
+  }, [dateRange, roomCount, adultCount, location, navigate]);
 
   // Prevent error messages from persisting on path change
   // clear errors when path changes
@@ -249,6 +249,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     clearErrors();
     setShowError(null);
     setShowAccommodationsError(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // set local error when error object changes

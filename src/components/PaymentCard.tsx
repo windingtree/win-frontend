@@ -146,6 +146,7 @@ export const PaymentCard = ({
         !asset.native &&
         tokenAllowance.lt(paymentValue) &&
         permitSignature === undefined),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [costError, asset, paymentValue, balance, tokenAllowance, permitSignature]
   );
 
@@ -158,6 +159,7 @@ export const PaymentCard = ({
       permitSignature !== undefined ||
       tokenAllowance.gte(paymentValue) ||
       isAccountContract,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [asset, paymentValue, balance, permitSignature, tokenAllowance, isAccountContract]
   );
 
@@ -170,6 +172,7 @@ export const PaymentCard = ({
       !permitBlocked ||
       tokenAllowance.gte(paymentValue) ||
       permitSignature !== undefined,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [asset, paymentValue, balance, tokenAllowance, permitSignature, permitBlocked]
   );
 
@@ -181,6 +184,7 @@ export const PaymentCard = ({
     setPaymentError(undefined);
     setTxHash(undefined);
     setTxStarted(undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payment]);
 
   useEffect(() => resetState(), [provider, network, asset, payment, resetState]);
@@ -227,6 +231,7 @@ export const PaymentCard = ({
         `You don’t have enough ${asset?.symbol} in your wallet, please top-up your wallet before proceeding`
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payment, balance, paymentValue]);
 
   const addTokenToWallet = useCallback(async () => {
@@ -242,6 +247,7 @@ export const PaymentCard = ({
     } catch (err) {
       logger.error(err);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenAddress, asset]);
 
   const getBalance = useCallback(async () => {
@@ -302,6 +308,7 @@ export const PaymentCard = ({
       }
       setPermitSignature(undefined);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer, asset, tokenContract, account]);
 
   const approveTokens = useCallback(async () => {
@@ -325,6 +332,7 @@ export const PaymentCard = ({
       );
       setTxStarted(undefined);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenContract, asset, payment]);
 
   const makePayment = useCallback(async () => {
@@ -437,6 +445,7 @@ export const PaymentCard = ({
       setPaymentError(parseMetamaskError(err) ?? 'Unknown payment error');
       setTxStarted(undefined);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [winPayContract, asset, account, permitSignature, resetState]);
 
   const openExplorer = useCallback(

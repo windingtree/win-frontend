@@ -103,7 +103,7 @@ export const SearchFilterForm = ({
 
   const defaultPriceRanges: PriceRange[] = useMemo(
     () => buildDefaultPriceRanges(allAccommodations, preferredCurrencyCode),
-    [allAccommodations]
+    [allAccommodations, preferredCurrencyCode]
   );
 
   const buildFormDefaultValues = useCallback(() => {

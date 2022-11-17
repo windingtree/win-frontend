@@ -55,6 +55,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
     }
   }, [chain]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => onChange(network), [network]);
 
   const omNetworkChange = useCallback(
@@ -75,6 +76,7 @@ export const NetworkSelector = ({ value, onChange }: NetworkSelectorProps) => {
         logger.error(err);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [connector, chain]
   );
 
