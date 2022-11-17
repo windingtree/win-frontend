@@ -86,9 +86,10 @@ export const filterAccommodationsByPriceRanges = (
 
 export const getAccommodationByProviderId = (
   accommodations: Record<string, WinAccommodation>,
-  id: string
+  providerId?: string
 ) => {
   const array = Object.values(accommodations);
-  const accommodation = array.find((item) => item.providerHotelId === id);
+
+  const accommodation = array.find((item) => item.providerHotelId === providerId);
   return accommodation;
 };

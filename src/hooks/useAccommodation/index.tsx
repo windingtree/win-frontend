@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { getAccommodationFromCache } from 'src/api/cache';
+import {
+  getAccommodationAndOffersFromCache,
+  getAccommodationFromCache
+} from 'src/api/cache';
 import { offerExpirationTime } from 'src/config';
 import { useAccommodationsAndOffersHelpers } from '../useAccommodationsAndOffers/useAccommodationsAndOffersHelpers';
 import { useUserSettings } from '../useUserSettings';
@@ -42,7 +45,7 @@ export const useAccommodation = (props: UseAccommodationProps) => {
   );
 
   const offersQuery = useQuery<OffersResponseType | undefined, Error>(
-    ['accommodation-offers', id],
+    ['accommodation-offers', id, searchProps],
     async () => {
       if (!id || !searchProps) return;
 
@@ -52,13 +55,8 @@ export const useAccommodation = (props: UseAccommodationProps) => {
       return await fetchOffers({ id, searchProps });
     },
     {
-      //    TODO: get the offers from the cache
-      // initialData: () => {
-      //   const cache = queryClient.getQueryData(['accommodations-and-offers']) as
-      //     | AccommodationsAndOffersResponse
-      //     | undefined;
-
-      // },
+      initialData: () => getAccommodationAndOffersFromCache(id, searchProps),
+      staleTime: offerExpirationTime,
       enabled: false,
       cacheTime: offerExpirationTime,
       refetchInterval: offerExpirationTime

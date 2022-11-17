@@ -134,19 +134,6 @@ export const getPassengersBody = (
   return passengers;
 };
 
-export const getOffersById = (
-  offers: OfferRecord[],
-  accommodationId: string
-): OfferRecord[] => {
-  if (!accommodationId) return [];
-
-  const matchedOffers = offers.filter((offer) => {
-    return accommodationId === Object.keys(offer.pricePlansReferences)[0];
-  });
-
-  return matchedOffers;
-};
-
 export const getAccommodationById = (
   accommodations: AccommodationWithId[],
   id: string

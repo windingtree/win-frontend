@@ -76,3 +76,26 @@ export const getOffersWithRoomInfo = (
       ...offer
     };
   });
+
+export const transformOffersObjectToArray = (offers: Record<string, Offer>) => {
+  const array = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
+    id: key,
+    ...value
+  }));
+  return array;
+};
+
+export const getOffersById = (
+  offers: Record<string, Offer>,
+  accommodationId: string
+): OfferRecord[] => {
+  if (!accommodationId) return [];
+
+  const offersArray = transformOffersObjectToArray(offers);
+
+  const matchedOffers = offersArray.filter((offer) => {
+    return accommodationId === Object.keys(offer.pricePlansReferences)[0];
+  });
+
+  return matchedOffers;
+};

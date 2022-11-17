@@ -14,7 +14,6 @@ import { AccommodationsAndOffersResponse, fetchAccommodationsAndOffers } from '.
 import {
   getAccommodationById,
   getActiveAccommodations,
-  getOffersById,
   AccommodationWithId,
   getOffersPriceRange
 } from './helpers';
@@ -190,7 +189,6 @@ export const useAccommodationsAndOffers = ({
   );
 
   return {
-    getOffersById,
     getAccommodationById,
     allAccommodations,
     accommodations,
