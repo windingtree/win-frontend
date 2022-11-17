@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { getAccommodationFromCache } from 'src/api/cache';
+import { offerExpirationTime } from 'src/config';
 import { useAccommodationsAndOffersHelpers } from '../useAccommodationsAndOffers/useAccommodationsAndOffersHelpers';
 import { useUserSettings } from '../useUserSettings';
 import {
@@ -32,10 +34,13 @@ export const useAccommodation = (props: UseAccommodationProps) => {
     async () => {
       if (!id) return;
       return await fetchAccommodation(id);
+    },
+    {
+      staleTime: offerExpirationTime,
+      initialData: () => getAccommodationFromCache(id)
     }
   );
 
-  const offerExpirationTime = 25 * 60 * 1000;
   const offersQuery = useQuery<OffersResponseType | undefined, Error>(
     ['accommodation-offers', id],
     async () => {

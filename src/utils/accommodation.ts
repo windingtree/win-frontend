@@ -83,3 +83,12 @@ export const filterAccommodationsByPriceRanges = (
     return isAccommodationWithinPriceRanges(accommodation, ...priceRange);
   });
 };
+
+export const getAccommodationByProviderId = (
+  accommodations: Record<string, WinAccommodation>,
+  id: string
+) => {
+  const array = Object.values(accommodations);
+  const accommodation = array.find((item) => item.providerHotelId === id);
+  return accommodation;
+};

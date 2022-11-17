@@ -85,3 +85,5 @@ export const defaultCurrencyCode: CurrencyCode = 'USD';
 export const devconCashbackEnabled = process.env.REACT_APP_STL_DEVCON ?? 0;
 
 export const walletConnectProjectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID;
+
+export const offerExpirationTime = 25 * 60 * 1000;
