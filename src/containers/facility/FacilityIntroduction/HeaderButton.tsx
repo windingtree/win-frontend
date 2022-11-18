@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useMemo } from 'react';
 import { SearchPropsType } from 'src/hooks/useAccommodation';
-import { getOffersPriceRange } from 'src/hooks/useAccommodationsAndOffers/helpers';
+import { getOffersPriceRange } from 'src/utils/useAccommodationsAndOffers';
 import { OfferRecord } from 'src/store/types';
 import { daysBetween } from 'src/utils/date';
 import { displayPriceFromValues } from 'src/utils/price';

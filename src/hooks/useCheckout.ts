@@ -7,12 +7,12 @@ import {
 import { useAppDispatch, useAppState } from 'src/store';
 import { BookingInfoType } from 'src/store/types';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
-import { bookGroupRequest } from './api';
+import { bookGroupRequest } from '../api/BookingRequest';
 import {
   getBookingMode,
   getNormalizedOffers,
   getNormalizedOrganizerInfo
-} from './helpers';
+} from '../utils/checkout';
 
 type OptionalQuote = Quote | undefined;
 

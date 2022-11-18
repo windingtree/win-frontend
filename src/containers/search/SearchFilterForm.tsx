@@ -20,7 +20,7 @@ import {
   PriceRange,
   useAccommodationsAndOffers
 } from '../../hooks/useAccommodationsAndOffers';
-import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers/helpers';
+import { AccommodationWithId } from '../../utils/useAccommodationsAndOffers';
 import { usePriceFilter } from '../../hooks/usePriceFilter';
 import { useUserSettings } from '../../hooks/useUserSettings';
 import { filterAccommodationsByPriceRanges } from '../../utils/accommodation';

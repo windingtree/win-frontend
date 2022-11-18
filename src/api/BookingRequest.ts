@@ -6,7 +6,7 @@ import axios from 'axios';
 import { backend } from 'src/config';
 import Logger from 'src/utils/logger';
 
-const logger = Logger('useCheckout');
+const logger = Logger('bookGroupRequest');
 
 export const bookGroupRequest = async (mutationProps: GroupBookingRequest) => {
   const { data } = await axios
