@@ -58,7 +58,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
     const smallCardStyle: CSSProperties = mapCard
       ? {
-          minWidth: '360px',
+          minWidth: '96vw',
           marginBottom: '0px',
           minHeight: '128px',
           maxWidth: '100vw'
@@ -122,20 +122,20 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               media={facility.media}
             />
           </Stack>
-          <Link
-            to={{
-              pathname: `/facility/${facility.providerHotelId}`,
-              search: `?${createSearchParams(searchParams)}`
-            }}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ textDecoration: 'none', color: 'inherit' }}
+          <Stack
+            justifyContent="space-between"
+            width="100%"
+            spacing={0.5}
+            sx={{ p: 1, mt: 0, cursor: 'pointer' }}
           >
-            <Stack
-              justifyContent="space-between"
-              width="100%"
-              spacing={0.5}
-              sx={{ p: 1, mt: 0, cursor: 'pointer' }}
+            <Link
+              to={{
+                pathname: `/facility/${facility.providerHotelId}`,
+                search: `?${createSearchParams(searchParams)}`
+              }}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none', color: 'inherit' }}
             >
               <Stack direction="row" justifyContent="space-between" spacing={1}>
                 <Typography
@@ -229,8 +229,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                 )}
               </Stack>
               {isGroupMode && <Typography variant="subtitle2">Select Rooms</Typography>}
-            </Stack>
-          </Link>
+            </Link>
+          </Stack>
         </Stack>
       </Card>
     );
