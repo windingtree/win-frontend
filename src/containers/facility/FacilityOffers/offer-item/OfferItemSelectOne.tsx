@@ -76,6 +76,7 @@ export const OfferItemSelectOne: React.FC<{
             adultCount: adultCount,
             serviceId: res.data.serviceId,
             providerId: res.data.provider,
+            pricedOfferId: res.data.offerId,
             offers: [{ ...offer, ...res.data.offer, quantity: '1' }]
           },
           true
