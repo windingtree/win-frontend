@@ -176,10 +176,10 @@ export const MapBox: React.FC = () => {
   );
 
   // apply a callback function to transform returned accommodation objects
-  const transformFn = useCallback(
-    () => accommodationEventTransform(focusedEvent),
-    [focusedEvent]
-  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const transformFn = useCallback(accommodationEventTransform(focusedEvent), [
+    focusedEvent
+  ]);
   const { accommodations, coordinates, isLoading, latestQueryParams, isFetching, error } =
     useAccommodationsAndOffers({
       accommodationTransformFn: transformFn
