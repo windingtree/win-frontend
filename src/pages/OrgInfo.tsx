@@ -36,12 +36,14 @@ export const OrgInfo = () => {
             name: 'Search',
             href: `/search?${query}`
           },
-          {
-            name: 'Facility',
-            href: bookingInfo
-              ? `/facility/${bookingInfo?.accommodation?.id}`
-              : `/search?${query}`
-          }
+          ...(bookingInfo?.accommodation?.id
+            ? [
+                {
+                  name: 'Facility',
+                  href: `/facility/${bookingInfo?.accommodation?.id}`
+                }
+              ]
+            : [])
         ]}
       />
       <OrgDetails />
