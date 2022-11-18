@@ -32,7 +32,7 @@ import { useSearchParams } from 'react-router-dom';
 import {
   accommodationEventTransform,
   InvalidLocationError
-} from '../hooks/useAccommodationsAndOffers/helpers';
+} from '../utils/useAccommodationsAndOffers';
 import { getActiveEventsWithinRadius } from '../utils/events';
 import { AppMode } from '../config';
 import { SearchCard } from 'src/containers/search/SearchCard';

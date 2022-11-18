@@ -1,5 +1,5 @@
 import { MediaItem, WinAccommodation } from '@windingtree/glider-types/dist/win';
-import { AccommodationWithId } from '../hooks/useAccommodationsAndOffers/helpers';
+import { AccommodationWithId } from './useAccommodationsAndOffers';
 import { OfferRecord } from 'src/store/types';
 import { PriceRange } from '../hooks/useAccommodationsAndOffers';
 import { isPriceRangeWithinPriceRange } from './price';

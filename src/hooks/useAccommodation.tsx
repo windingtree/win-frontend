@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { useAccommodationsAndOffersHelpers } from '../useAccommodationsAndOffers/useAccommodationsAndOffersHelpers';
-import { useUserSettings } from '../useUserSettings';
+import { useUserSettings } from './useUserSettings';
 import {
   AccommodationResponseType,
   fetchAccommodation,
   fetchOffers,
   OffersResponseType
-} from './api';
+} from '../api/AccommodationOffers';
+import { useAccommodationsAndOffers } from './useAccommodationsAndOffers';
 
 export interface SearchPropsType {
   arrival: Date;
@@ -24,7 +24,7 @@ export interface UseAccommodationProps {
 
 export const useAccommodation = (props: UseAccommodationProps) => {
   const { preferredCurrencyCode } = useUserSettings();
-  const { normalizeOffers } = useAccommodationsAndOffersHelpers();
+  const { normalizeOffers } = useAccommodationsAndOffers();
   const { id, searchProps } = props || {};
 
   const accommodationQuery = useQuery<AccommodationResponseType | undefined, Error>(

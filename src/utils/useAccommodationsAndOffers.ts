@@ -1,14 +1,13 @@
 import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { OfferRecord } from 'src/store/types';
-import { AccommodationTransformFn, EventInfo, PriceRange } from '.';
-import { getActiveEventsWithinRadius } from '../../utils/events';
-import { crowDistance } from '../../utils/geo';
-
-enum PassengerType {
-  child = 'CHD',
-  adult = 'ADT'
-}
+import {
+  AccommodationTransformFn,
+  EventInfo,
+  PriceRange
+} from '../hooks/useAccommodationsAndOffers';
+import { getActiveEventsWithinRadius } from './events';
+import { crowDistance } from './geo';
 
 export interface AccommodationWithId extends WinAccommodation {
   id: string;
@@ -110,28 +109,6 @@ export const getOffersPriceRange = (
     });
 
   return priceRange;
-};
-
-export const getPassengersBody = (
-  adultCount: number,
-  childrenCount: number | undefined
-) => {
-  const adults = {
-    type: PassengerType.adult,
-    count: adultCount
-  };
-  const passengers = [adults];
-
-  if (childrenCount && childrenCount != 0) {
-    const children = {
-      type: PassengerType.child,
-      count: childrenCount,
-      childrenAges: Array.from({ length: childrenCount }, () => 12)
-    };
-    passengers.push(children);
-  }
-
-  return passengers;
 };
 
 export const getOffersById = (

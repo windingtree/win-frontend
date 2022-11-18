@@ -1,7 +1,7 @@
 import { Alert, Box, LinearProgress } from '@mui/material';
 import { forwardRef, useEffect, useMemo } from 'react';
 import { FacilityOffersSelectMultiple } from './FacilityOffersSelectMultiple';
-import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers/helpers';
+import { getGroupMode } from 'src/utils/useAccommodationsAndOffers';
 import { FacilityOffersSelectOne } from './FacilityOffersSelectOne';
 import { FacilitySearchInputs } from './FacilitySearchInputs';
 import { useFormContext } from 'react-hook-form';

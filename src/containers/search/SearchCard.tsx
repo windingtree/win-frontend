@@ -10,7 +10,7 @@ import {
   IconButton
 } from '@mui/material';
 import Iconify from '../../components/Iconify';
-import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers/helpers';
+import { AccommodationWithId } from '../../utils/useAccommodationsAndOffers';
 import { ImageCarousel } from '../../components/ImageCarousel';
 import { buildAccommodationAddress } from '../../utils/accommodation';
 import {
