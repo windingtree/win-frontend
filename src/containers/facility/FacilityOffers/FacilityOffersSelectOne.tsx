@@ -8,8 +8,8 @@ type FacilityOffersSelectOneProps = {
   accommodation?: WinAccommodation;
   offers?: OfferRecord[];
   roomCount?: number;
-  arrival?: Date;
-  departure?: Date;
+  arrival?: Date | null;
+  departure?: Date | null;
   adultCount?: number;
 };
 export const FacilityOffersSelectOne = ({

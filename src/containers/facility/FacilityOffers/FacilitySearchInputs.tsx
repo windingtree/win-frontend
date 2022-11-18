@@ -39,8 +39,8 @@ export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsPr
     const { arrival, departure, roomCount, adultCount } = searchProps;
 
     setSearchParams({
-      arrival: formatISO(arrival),
-      departure: formatISO(departure),
+      arrival: arrival ? formatISO(arrival) : '',
+      departure: departure ? formatISO(departure) : '',
       roomCount: roomCount.toString(),
       adultCount: adultCount.toString()
     });
