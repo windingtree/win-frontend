@@ -30,7 +30,8 @@ export const httpClientRequest = <T>(
     method,
     data: body,
     headers: extraHeaders,
-    timeout: timeoutInMs
+    timeout: timeoutInMs,
+    withCredentials: true
   });
 };
 
