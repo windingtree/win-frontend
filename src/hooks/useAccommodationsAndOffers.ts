@@ -7,7 +7,6 @@ import {
   CoordinatesType
 } from '../utils/accommodation';
 import { daysBetween } from '../utils/date';
-import { logItem } from '../utils/logger';
 import { filterOffersByPriceRanges } from '../utils/offers';
 import { usePriceFilter } from '../hooks/usePriceFilter';
 import { useUserSettings } from '../hooks/useUserSettings';
@@ -27,6 +26,7 @@ import { Offer, WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { getOffersWithRoomInfo, sortOffersByPrice } from 'src/utils/offers';
 import { OfferRecord } from '../store/types';
 import { CurrencyCode, useCurrencies } from '../hooks/useCurrencies';
+import Logger from '../utils/logger';
 
 export interface SearchTypeProps {
   location: string;
@@ -75,6 +75,7 @@ export const useAccommodationsAndOffers = ({
   const { convertPriceCurrency } = useCurrencies();
   const { preferredCurrencyCode } = useUserSettings();
   const { priceFilter } = usePriceFilter();
+  const logger = Logger('fetchAccommodationAndOffers');
   const { data, refetch, error, isInitialLoading, isFetching, isFetched } = useQuery<
     AccommodationsAndOffersResponse | undefined,
     Error
@@ -88,7 +89,7 @@ export const useAccommodationsAndOffers = ({
         return await fetchAccommodationsAndOffers(searchProps);
       } catch (error) {
         if (error instanceof InvalidSearchParamsError) {
-          logItem(error.message, 'error');
+          logger.error(error.message);
           throw error;
         }
       }
