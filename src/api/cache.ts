@@ -18,6 +18,9 @@ export const getAccommodationFromCache = (id: string | undefined) => {
   return { accommodation };
 };
 
+/**
+ * Check if the properties that are used in the latest are the same as the ones from the previous search.
+ */
 const isSearchPropsFromCacheValid = (cache, searchProps: SearchPropsType) => {
   const { latestQueryParams } = cache;
 
@@ -47,6 +50,7 @@ export const getAccommodationAndOffersFromCache = (
   const accommodation = getAccommodationByProviderId(cache?.accommodations, providerId);
 
   if (!accommodation) return undefined;
+
   const matchedOffers = getOffersById(cache.offers, accommodation.id);
 
   return {
