@@ -5,14 +5,14 @@ import {
   getAccommodationFromCache
 } from 'src/api/cache';
 import { offerExpirationTime } from 'src/config';
-import { useAccommodationsAndOffersHelpers } from '../useAccommodationsAndOffers/useAccommodationsAndOffersHelpers';
-import { useUserSettings } from '../useUserSettings';
+import { useUserSettings } from './useUserSettings';
 import {
   AccommodationResponseType,
   fetchAccommodation,
   fetchOffers,
   OffersResponseType
-} from './api';
+} from '../api/AccommodationOffers';
+import { useAccommodationMultiple } from './useAccommodationMultiple';
 
 export interface SearchPropsType {
   arrival: Date;
@@ -22,14 +22,14 @@ export interface SearchPropsType {
   childrenCount?: number;
 }
 
-export interface UseAccommodationProps {
+export interface useAccommodationSingleProps {
   id?: string;
   searchProps?: SearchPropsType;
 }
 
-export const useAccommodation = (props: UseAccommodationProps) => {
+export const useAccommodationSingle = (props: useAccommodationSingleProps) => {
   const { preferredCurrencyCode } = useUserSettings();
-  const { normalizeOffers } = useAccommodationsAndOffersHelpers();
+  const { normalizeOffers } = useAccommodationMultiple();
   const { id, searchProps } = props || {};
 
   const accommodationQuery = useQuery<AccommodationResponseType | undefined, Error>(
@@ -39,13 +39,12 @@ export const useAccommodation = (props: UseAccommodationProps) => {
       return await fetchAccommodation(id);
     },
     {
-      staleTime: offerExpirationTime,
       initialData: () => getAccommodationFromCache(id)
     }
   );
 
   const offersQuery = useQuery<OffersResponseType | undefined, Error>(
-    ['accommodation-offers', id],
+    ['accommodation-offers', id, searchProps],
     async () => {
       if (!id || !searchProps) return;
 

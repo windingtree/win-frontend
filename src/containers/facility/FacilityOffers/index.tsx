@@ -1,12 +1,12 @@
 import { Alert, Box, LinearProgress } from '@mui/material';
 import { forwardRef, useEffect, useMemo } from 'react';
 import { FacilityOffersSelectMultiple } from './FacilityOffersSelectMultiple';
-import { getGroupMode } from 'src/hooks/useAccommodationsAndOffers/helpers';
+import { getGroupMode } from 'src/utils/accommodationHookHelper';
 import { FacilityOffersSelectOne } from './FacilityOffersSelectOne';
 import { FacilitySearchInputs } from './FacilitySearchInputs';
 import { useFormContext } from 'react-hook-form';
 import { FacilityOffersTitle } from './FacilityOffersTitle';
-import { useAccommodation } from 'src/hooks/useAccommodation';
+import { useAccommodationSingle } from 'src/hooks/useAccommodationSingle';
 import { useParams } from 'react-router-dom';
 import { convertToLocalTime, getIsInPast } from 'src/utils/date';
 import { getValidationErrorMessage } from 'src/containers/search/helpers';
@@ -34,7 +34,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
     roomCount: Number(roomCount),
     adultCount: Number(adultCount)
   };
-  const { accommodationQuery, offersQuery } = useAccommodation({
+  const { accommodationQuery, offersQuery } = useAccommodationSingle({
     id,
     searchProps
   });

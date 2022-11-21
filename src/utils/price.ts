@@ -1,5 +1,5 @@
 import { Price } from '@windingtree/glider-types/dist/win';
-import { PriceFormat, PriceRange } from '../hooks/useAccommodationsAndOffers';
+import { PriceFormat, PriceRange } from '../hooks/useAccommodationMultiple';
 import { isBetween } from './common';
 import currencyCodes from 'currency-codes';
 import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';

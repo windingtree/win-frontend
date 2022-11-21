@@ -1,14 +1,13 @@
-import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
+import { WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { OfferRecord } from 'src/store/types';
-import { AccommodationTransformFn, EventInfo, PriceRange } from '.';
-import { getActiveEventsWithinRadius } from '../../utils/events';
-import { crowDistance } from '../../utils/geo';
-
-enum PassengerType {
-  child = 'CHD',
-  adult = 'ADT'
-}
+import {
+  AccommodationTransformFn,
+  EventInfo,
+  PriceRange
+} from '../hooks/useAccommodationMultiple';
+import { getActiveEventsWithinRadius } from './events';
+import { crowDistance } from './geo';
 
 export interface AccommodationWithId extends WinAccommodation {
   id: string;
@@ -19,26 +18,6 @@ export interface AccommodationWithId extends WinAccommodation {
 }
 
 export class InvalidLocationError extends Error {}
-
-export const getActiveAccommodations = (
-  accommodations: WinAccommodation[],
-  offers: Offer[]
-) => {
-  if (!accommodations || !offers) return [];
-
-  const idsActiveAccommodations = offers?.map((offer) => {
-    const accommodationId = Object.keys(offer.pricePlansReferences)[0];
-    return accommodationId;
-  });
-
-  const uniqueIdsActiveAccommodations = [...new Set(idsActiveAccommodations)];
-
-  const activeAccommodations = accommodations.filter((accommodation) => {
-    return uniqueIdsActiveAccommodations.includes(accommodation.id as string);
-  });
-
-  return activeAccommodations;
-};
 
 // get the lowest and highest price for a given set of offers
 // optionally get the prices in preferred currency
@@ -110,40 +89,6 @@ export const getOffersPriceRange = (
     });
 
   return priceRange;
-};
-
-export const getPassengersBody = (
-  adultCount: number,
-  childrenCount: number | undefined
-) => {
-  const adults = {
-    type: PassengerType.adult,
-    count: adultCount
-  };
-  const passengers = [adults];
-
-  if (childrenCount && childrenCount != 0) {
-    const children = {
-      type: PassengerType.child,
-      count: childrenCount,
-      childrenAges: Array.from({ length: childrenCount }, () => 12)
-    };
-    passengers.push(children);
-  }
-
-  return passengers;
-};
-
-export const getAccommodationById = (
-  accommodations: AccommodationWithId[],
-  id: string
-): AccommodationWithId | null => {
-  if (!id) return null;
-
-  const selectedAccommodation =
-    accommodations.find((accommodation) => accommodation.id === id) ?? null;
-
-  return selectedAccommodation;
 };
 
 // function to transform accommodation object to include distance/time from chosen event

@@ -4,7 +4,7 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 import { createSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import { createRef, useCallback } from 'react';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useAccommodationMultiple } from 'src/hooks/useAccommodationMultiple';
 import { FacilityIntroduction } from 'src/containers/facility/FacilityIntroduction';
 import { FacilitySearchFormProvider } from 'src/containers/facility/FacilityOffers/FacilitySearchFormProvider';
 import { FacilityCovid } from 'src/containers/facility/FacilityCovid';
@@ -15,7 +15,7 @@ export const Facility = () => {
     detailImagesRef?.current?.scrollIntoView({ behavior: 'smooth' });
   }, [detailImagesRef]);
 
-  const { latestQueryParams } = useAccommodationsAndOffers();
+  const { latestQueryParams } = useAccommodationMultiple();
   const query = useMemo(() => {
     if (latestQueryParams === undefined) {
       return '';

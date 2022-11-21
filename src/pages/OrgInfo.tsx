@@ -3,12 +3,12 @@ import MainLayout from 'src/layouts/main';
 import { OrgDetails } from '../containers/OrgDetails';
 import { useMemo } from 'react';
 import { createSearchParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useAccommodationMultiple } from 'src/hooks/useAccommodationMultiple';
 import { useCheckout } from 'src/hooks/useCheckout';
 
 export const OrgInfo = () => {
   const { bookingInfo } = useCheckout();
-  const { latestQueryParams } = useAccommodationsAndOffers();
+  const { latestQueryParams } = useAccommodationMultiple();
 
   const query = useMemo(() => {
     if (latestQueryParams === undefined) {

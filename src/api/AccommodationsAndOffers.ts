@@ -4,9 +4,11 @@ import {
   WinAccommodation
 } from '@windingtree/glider-types/dist/win';
 import axios from 'axios';
-import { getGroupMode, getPassengersBody, InvalidLocationError } from './helpers';
-import { SearchTypeProps } from '.';
-import { defaultSearchRadiusInMeters, backend } from '../../config';
+import { getPassengersBody } from '../utils/getPassengerBody';
+
+import { getGroupMode, InvalidLocationError } from '../utils/accommodationHookHelper';
+import { SearchTypeProps } from '../hooks/useAccommodationMultiple';
+import { defaultSearchRadiusInMeters, backend } from '../config';
 import { CoordinatesType } from 'src/utils/accommodation';
 
 export interface AccommodationsAndOffersResponse {

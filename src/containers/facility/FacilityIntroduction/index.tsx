@@ -14,7 +14,7 @@ import {
 import { FacilityGallery } from './FacilityGallery';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from 'src/components/LightboxModal';
-import { useAccommodation } from 'src/hooks/useAccommodation';
+import { useAccommodationSingle } from 'src/hooks/useAccommodationSingle';
 import { FacilityLoadingSkeleton } from './FacilityLoadingSkeleton';
 import { HeaderButton } from './HeaderButton';
 import { getRndHotelImg, getAccommodationImage } from '../../../utils/getRndHotelImg';
@@ -116,7 +116,7 @@ export const FacilityIntroduction = ({
   const [galleryOpen, setGalleryOpen] = useState<boolean>(false);
   const [slideOpen, setSlideOpen] = useState<boolean>(false);
   const [slideIndex, setSlideIndex] = useState<number>(0);
-  const { accommodationQuery, offersQuery } = useAccommodation({ id });
+  const { accommodationQuery, offersQuery } = useAccommodationSingle({ id });
   const { data, isLoading, error } = accommodationQuery;
   const accommodation = data?.accommodation;
 

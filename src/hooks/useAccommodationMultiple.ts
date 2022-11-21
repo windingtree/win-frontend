@@ -4,20 +4,27 @@ import {
   filterAccommodationsByPriceRanges,
   getLargestImages,
   sortByLargestImage,
-  CoordinatesType
-} from '../../utils/accommodation';
-import { daysBetween } from '../../utils/date';
-import { filterOffersByPriceRanges } from '../../utils/offers';
-import { usePriceFilter } from '../usePriceFilter';
-import { useUserSettings } from '../useUserSettings';
-import { AccommodationsAndOffersResponse, fetchAccommodationsAndOffers } from './api';
-import {
-  getAccommodationById,
+  CoordinatesType,
   getActiveAccommodations,
+  getAccommodationById
+} from '../utils/accommodation';
+import { daysBetween } from '../utils/date';
+import { filterOffersByPriceRanges } from '../utils/offers';
+import { usePriceFilter } from './usePriceFilter';
+import { useUserSettings } from './useUserSettings';
+import {
+  AccommodationsAndOffersResponse,
+  fetchAccommodationsAndOffers
+} from '../api/AccommodationsAndOffers';
+import {
   AccommodationWithId,
   getOffersPriceRange
-} from './helpers';
-import { useAccommodationsAndOffersHelpers } from './useAccommodationsAndOffersHelpers';
+} from '../utils/accommodationHookHelper';
+import { Offer, WinAccommodation } from '@windingtree/glider-types/dist/win';
+import { getOffersWithRoomInfo, sortOffersByPrice } from 'src/utils/offers';
+import { OfferRecord } from '../store/types';
+import { CurrencyCode, useCurrencies } from './useCurrencies';
+import { offerExpirationTime } from 'src/config';
 
 export interface SearchTypeProps {
   location: string;
@@ -56,13 +63,14 @@ export type AccommodationTransformFn = (
   params: AccommodationTransformFnParams
 ) => AccommodationWithId;
 
-export const useAccommodationsAndOffers = ({
+export const useAccommodationMultiple = ({
   searchProps,
   accommodationTransformFn
 }: {
   searchProps?: SearchTypeProps | void;
   accommodationTransformFn?: AccommodationTransformFn;
 } = {}) => {
+  const { convertPriceCurrency } = useCurrencies();
   const { preferredCurrencyCode } = useUserSettings();
   const { priceFilter } = usePriceFilter();
   const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery<
@@ -79,14 +87,93 @@ export const useAccommodationsAndOffers = ({
     {
       enabled: false,
       keepPreviousData: false,
-      cacheTime: 25 * 60 * 1000, //25 min expiration
-      refetchInterval: 25 * 60 * 1000, //25 min expiration
-      staleTime: 25 * 60 * 1000 //25 min expiration
+      cacheTime: offerExpirationTime,
+      refetchInterval: offerExpirationTime,
+      staleTime: offerExpirationTime
     }
   );
 
-  const { normalizeAccommodations, normalizeOffers } =
-    useAccommodationsAndOffersHelpers();
+  // attach price in preferred currency to array of offers
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getOffersWithPreferredCurrency = (
+    offers: OfferRecord[],
+    preferredCurrencyCode: CurrencyCode
+  ): OfferRecord[] => {
+    return offers.map((offer) => {
+      const preferredCurrencyPrice = convertPriceCurrency({
+        price: offer.price,
+        targetCurrency: preferredCurrencyCode,
+        amount: 1
+      });
+
+      return { ...offer, preferredCurrencyPrice };
+    });
+  };
+
+  const normalizeOffers = useCallback(
+    (
+      offers: Record<string, Offer> | undefined,
+      accommodations: Record<string, WinAccommodation> | undefined
+    ): OfferRecord[] => {
+      if (!offers) return [];
+
+      const offersArray = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
+        id: key,
+        ...value
+      }));
+
+      let offersWithOptionalPreferredCurrency: OfferRecord[];
+
+      if (preferredCurrencyCode) {
+        offersWithOptionalPreferredCurrency = getOffersWithPreferredCurrency(
+          offersArray,
+          preferredCurrencyCode
+        );
+      } else {
+        offersWithOptionalPreferredCurrency = offersArray;
+      }
+
+      const offersWithRoomInfo = getOffersWithRoomInfo(
+        offersWithOptionalPreferredCurrency,
+        accommodations
+      );
+
+      const sortedOffers = sortOffersByPrice(offersWithRoomInfo);
+
+      return sortedOffers;
+    },
+    [preferredCurrencyCode, getOffersWithPreferredCurrency]
+  );
+
+  // normalize accommodations hook
+  const normalizeAccommodations = useCallback(
+    (
+      accommodations: Record<string, WinAccommodation> | undefined,
+      offers: Record<string, Offer> | undefined
+    ): AccommodationWithId[] => {
+      if (!accommodations) return [];
+      const normalizedOffers = offers ? normalizeOffers(offers, accommodations) : [];
+
+      const normalizedAccommodations = Object.entries(
+        accommodations
+      ).map<AccommodationWithId>(([keyA, valueA]) => {
+        const filteredOffers = normalizedOffers.filter((offer) =>
+          Object.entries(offer.pricePlansReferences)
+            .map(([, valueP]) => valueP.accommodation === keyA)
+            .includes(true)
+        );
+
+        return {
+          ...valueA,
+          id: keyA,
+          offers: filteredOffers
+        };
+      });
+
+      return normalizedAccommodations;
+    },
+    [normalizeOffers]
+  );
 
   const latestQueryParams = data?.latestQueryParams;
 
@@ -129,6 +216,7 @@ export const useAccommodationsAndOffers = ({
         numberOfDays,
         nbRooms
       );
+
       const preferredCurrencyPriceRange = getOffersPriceRange(
         accommodation.offers,
         true,
@@ -183,12 +271,8 @@ export const useAccommodationsAndOffers = ({
     [allOffers, priceFilter]
   );
 
-  const getAccommodationByHotelId = useCallback(
-    (hotelId: string) => accommodations.find((a) => a.hotelId === hotelId),
-    [accommodations]
-  );
-
   return {
+    normalizeOffers,
     getAccommodationById,
     allAccommodations,
     accommodations,
@@ -202,7 +286,6 @@ export const useAccommodationsAndOffers = ({
     isFetching,
     latestQueryParams,
     isFetched,
-    getAccommodationByHotelId,
     isGroupMode
   };
 };

@@ -10,7 +10,7 @@ import type {
   SearchParams
 } from './types';
 import { CurrencyCode } from '../hooks/useCurrencies';
-import { PriceRange } from '../hooks/useAccommodationsAndOffers';
+import { PriceRange } from '../hooks/useAccommodationMultiple';
 import { Cookies } from '../hooks/useAllowedCookies';
 
 export interface SetRecordAction {

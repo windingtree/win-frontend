@@ -9,7 +9,10 @@ import { DateRangeButton } from 'src/components/buttons/DateRangeButton';
 import { GuestDetailsButton } from 'src/components/buttons/GuestDetailsButton';
 import { GuestsAndRoomsInputs } from 'src/components/form-sections/GuestsAndRoomsInputs';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
-import { SearchPropsType, useAccommodation } from 'src/hooks/useAccommodation';
+import {
+  SearchPropsType,
+  useAccommodationSingle
+} from 'src/hooks/useAccommodationSingle';
 
 type FacilitySearchInputsProps = {
   id?: string;
@@ -20,7 +23,7 @@ export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsPr
   const theme = useTheme();
   const { watch, handleSubmit } = useFormContext();
   const { roomCount, adultCount, dateRange } = watch();
-  const { offersQuery } = useAccommodation({ id, searchProps });
+  const { offersQuery } = useAccommodationSingle({ id, searchProps });
   const { refetch, isFetching, isFetched } = offersQuery;
   const [_, setSearchParams] = useSearchParams();
 

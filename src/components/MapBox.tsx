@@ -25,14 +25,14 @@ import Logger from '../utils/logger';
 import { useAppDispatch, useAppState } from '../store';
 import {
   PriceFormat,
-  useAccommodationsAndOffers
-} from 'src/hooks/useAccommodationsAndOffers';
+  useAccommodationMultiple
+} from 'src/hooks/useAccommodationMultiple';
 import { daysBetween, getFormattedBetweenDate } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
 import {
   accommodationEventTransform,
   InvalidLocationError
-} from '../hooks/useAccommodationsAndOffers/helpers';
+} from '../utils/accommodationHookHelper';
 import { getActiveEventsWithinRadius } from '../utils/events';
 import { AppMode } from '../config';
 import { SearchCard } from 'src/containers/search/SearchCard';
@@ -183,7 +183,7 @@ export const MapBox: React.FC = () => {
     focusedEvent
   ]);
   const { accommodations, coordinates, isLoading, latestQueryParams, isFetching, error } =
-    useAccommodationsAndOffers({
+    useAccommodationMultiple({
       accommodationTransformFn: transformFn
     });
   const numberOfDays = useMemo(

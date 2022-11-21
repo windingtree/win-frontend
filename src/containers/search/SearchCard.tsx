@@ -10,13 +10,13 @@ import {
   IconButton
 } from '@mui/material';
 import Iconify from '../../components/Iconify';
-import { AccommodationWithId } from '../../hooks/useAccommodationsAndOffers/helpers';
+import { AccommodationWithId } from '../../utils/accommodationHookHelper';
 import { ImageCarousel } from '../../components/ImageCarousel';
 import { buildAccommodationAddress } from '../../utils/accommodation';
 import {
   EventInfo,
-  useAccommodationsAndOffers
-} from '../../hooks/useAccommodationsAndOffers';
+  useAccommodationMultiple
+} from '../../hooks/useAccommodationMultiple';
 import { useAppDispatch } from 'src/store';
 import { displayPriceFromPriceFormat, displayPriceFromValues } from '../../utils/price';
 import { formatISO } from 'date-fns';
@@ -32,7 +32,7 @@ export interface SearchCardProps {
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
   ({ mapCard, facility, focusedEvent }, ref) => {
     const theme = useTheme();
-    const { isGroupMode, latestQueryParams } = useAccommodationsAndOffers();
+    const { isGroupMode, latestQueryParams } = useAccommodationMultiple();
     const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useAppDispatch();
     const prices = useMemo(

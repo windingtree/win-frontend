@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppState } from '../store';
-import { PriceRange } from './useAccommodationsAndOffers';
+import { PriceRange } from './useAccommodationMultiple';
 
 export const usePriceFilter = () => {
   const { priceFilter } = useAppState();

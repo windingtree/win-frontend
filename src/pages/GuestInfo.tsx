@@ -3,12 +3,12 @@ import MainLayout from 'src/layouts/main';
 import { GuestInfoContainer } from '../containers/GuestInfoContainer';
 import { useMemo } from 'react';
 import { createSearchParams } from 'react-router-dom';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useAccommodationMultiple } from 'src/hooks/useAccommodationMultiple';
 import { useAppState } from '../store';
 
 export const GuestInfo = () => {
   const { checkout } = useAppState();
-  const { latestQueryParams } = useAccommodationsAndOffers();
+  const { latestQueryParams } = useAccommodationMultiple();
 
   const query = useMemo(() => {
     if (latestQueryParams === undefined) {

@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { RHFTextField } from 'src/components/hook-form';
 import { DISABLE_FEATURES } from '../../config';
-import { getGroupMode } from '../../hooks/useAccommodationsAndOffers/helpers';
+import { getGroupMode } from '../../utils/accommodationHookHelper';
 
 export const GuestsAndRoomsInputs = () => {
   const { watch } = useFormContext();

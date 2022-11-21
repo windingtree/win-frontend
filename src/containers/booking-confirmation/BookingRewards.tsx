@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useRewards } from 'src/hooks/useRewards';
 import { RewardCard } from './RewardCard';
 import { RewardModal } from './RewardModal';
-import { getOfferId } from 'src/hooks/useCheckout/helpers';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { MHidden } from 'src/components/MHidden';
 import { MobileRewardCard } from './MobileRewardCard';
@@ -97,10 +96,9 @@ const NctRewardContent = () => {
 export const BookingRewards = () => {
   const { bookingMode, bookingInfo } = useCheckout();
   const isGroupMode = bookingMode === 'group';
-  const offerId = !isGroupMode ? getOfferId(bookingInfo?.offers) : undefined;
-  const queryId = isGroupMode ? bookingInfo?.requestId : offerId;
+  const offerId = isGroupMode ? bookingInfo?.requestId : bookingInfo?.pricedOfferId;
 
-  const { data, isLoading, claimReward, error } = useRewards(queryId, isGroupMode);
+  const { data, isLoading, claimReward, error } = useRewards(offerId, isGroupMode);
   const {
     mutate,
     error: mutationError,
@@ -145,7 +143,7 @@ export const BookingRewards = () => {
                   title={`${convertTonsToKilos(nct?.quantity)} kg of CO₂ reduced`}
                   disclaimer="The amount displayed above is based on todays market price, of NCT and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
                   onClick={() => {
-                    mutate({ id: queryId, rewardType: lif?.rewardType });
+                    mutate({ id: offerId, rewardType: lif?.rewardType });
                   }}
                 >
                   <NctRewardContent />
@@ -161,7 +159,7 @@ export const BookingRewards = () => {
                 title={`${convertTonsToKilos(nct?.quantity)} kg of CO₂ reduced`}
                 disclaimer="The amount displayed above is based on todays market price, of NCT and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
                 onClick={() => {
-                  mutate({ id: queryId, rewardType: lif?.rewardType });
+                  mutate({ id: offerId, rewardType: lif?.rewardType });
                 }}
               >
                 <NctRewardContent />
@@ -182,7 +180,7 @@ export const BookingRewards = () => {
                   title={`${lif?.quantity} LIF`}
                   disclaimer="The amount displayed above is based on todays market price, of LIF and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
                   onClick={() => {
-                    mutate({ id: queryId, rewardType: lif?.rewardType });
+                    mutate({ id: offerId, rewardType: lif?.rewardType });
                   }}
                 >
                   <LifRewardContent />
@@ -198,7 +196,7 @@ export const BookingRewards = () => {
                 title={`${lif?.quantity} LIF`}
                 disclaimer="The amount displayed above is based on todays market price, of LIF and is subject to change. The exact amount you will receive, will be calculated based on the tokens value on the check-out date."
                 onClick={() => {
-                  mutate({ id: queryId, rewardType: lif?.rewardType });
+                  mutate({ id: offerId, rewardType: lif?.rewardType });
                 }}
               >
                 <LifRewardContent />

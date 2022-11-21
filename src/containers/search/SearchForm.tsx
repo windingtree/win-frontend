@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useAccommodationMultiple } from 'src/hooks/useAccommodationMultiple';
 import {
   Box,
   Button,
@@ -211,9 +211,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
   };
 
   /**
-   * Logic in relation to executing the query
+   * Logic in relation to executx ing the query
    */
-
   const {
     refetch,
     isFetching,
@@ -222,7 +221,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     latestQueryParams,
     isGroupMode,
     allAccommodations
-  } = useAccommodationsAndOffers({ searchProps });
+  } = useAccommodationMultiple({ searchProps });
 
   const onSubmit = useCallback(() => {
     //TODO: update search params when submitting the form
@@ -238,6 +237,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
         pathname: '/search',
         search: `?${createSearchParams(params)}`
       });
+
       setOpen(false);
       return;
     }

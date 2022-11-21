@@ -8,7 +8,6 @@ import { WinPay } from 'src/containers/checkout/WinPay';
 import { expirationGap } from 'src/config';
 import Logger from 'src/utils/logger';
 import { PaymentSuccessCallback } from 'src/components/PaymentCard';
-import { getOfferId } from 'src/hooks/useCheckout/helpers';
 import { CheckoutOverview } from 'src/containers/checkout/CheckoutOverview.tsx';
 import { IconButtonAnimate } from 'src/components/animate';
 import Iconify from 'src/components/Iconify';
@@ -25,7 +24,7 @@ export const Checkout = () => {
   const { bookingInfo, bookingMode } = useCheckout();
   const { isConnected } = useAccount();
   const isGroupMode = bookingMode === 'group';
-  const offerId = !isGroupMode && bookingInfo?.offers && getOfferId(bookingInfo.offers);
+  const offerId = isGroupMode ? bookingInfo?.requestId : bookingInfo?.pricedOfferId;
 
   const payment = useMemo(() => {
     if (!bookingInfo) return;
