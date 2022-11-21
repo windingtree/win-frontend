@@ -1,5 +1,6 @@
 import { queryClient } from 'src/App';
 import { SearchPropsType } from 'src/hooks/useAccommodation';
+import { OffersResponseType } from 'src/hooks/useAccommodation/api';
 import { AccommodationsAndOffersResponse } from 'src/hooks/useAccommodationsAndOffers/api';
 import { getAccommodationByProviderId } from 'src/utils/accommodation';
 import { getOffersById } from 'src/utils/offers';
@@ -35,24 +36,22 @@ const isSearchPropsFromCacheValid = (cache, searchProps: SearchPropsType) => {
 export const getAccommodationAndOffersFromCache = (
   providerId?: string,
   searchProps?: SearchPropsType
-) => {
+): OffersResponseType | undefined => {
   const cache = queryClient.getQueryData(['accommodations-and-offers']) as
     | AccommodationsAndOffersResponse
     | undefined;
 
   if (!cache || !providerId || !searchProps) return undefined;
-
   if (!isSearchPropsFromCacheValid(cache, searchProps)) return undefined;
 
   const accommodation = getAccommodationByProviderId(cache?.accommodations, providerId);
 
   if (!accommodation) return undefined;
-
-  const offers = getOffersById(cache.offers, accommodation.id);
+  const matchedOffers = getOffersById(cache.offers, accommodation.id);
 
   return {
-    accommodations: [accommodation],
-    offers: [],
+    accommodations: { [accommodation.id]: accommodation },
+    offers: matchedOffers,
     latestQueryParams: searchProps
   };
 };

@@ -69,7 +69,8 @@ export const getOffersWithRoomInfo = (
     const accommodationId = getAccommodationOfOffer(offer).accommodation;
     const roomTypeId = getAccommodationOfOffer(offer).roomType;
     const matchedAccommodation = accommodations[accommodationId];
-    const roomType = matchedAccommodation.roomTypes[roomTypeId];
+
+    const roomType = matchedAccommodation?.roomTypes[roomTypeId];
 
     return {
       room: roomType,
@@ -77,7 +78,9 @@ export const getOffersWithRoomInfo = (
     };
   });
 
-export const transformOffersObjectToArray = (offers: Record<string, Offer>) => {
+export const transformOffersObjectToArray = (
+  offers: Record<string, Offer>
+): OfferRecord[] => {
   const array = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
     id: key,
     ...value
@@ -85,17 +88,29 @@ export const transformOffersObjectToArray = (offers: Record<string, Offer>) => {
   return array;
 };
 
+const transformOffersArrayIntoObject = (offers: OfferRecord[]): Record<string, Offer> => {
+  const object = offers.reduce((acc, current) => {
+    const { id, ...rest } = current;
+    return { ...acc, [id]: rest };
+  }, {});
+
+  return object;
+};
+
+const getAccommodationIdFromOffer = (offer: Offer): string =>
+  Object.values(offer.pricePlansReferences)[0].accommodation;
+
 export const getOffersById = (
   offers: Record<string, Offer>,
   accommodationId: string
-): OfferRecord[] => {
-  if (!accommodationId) return [];
+): Record<string, Offer> => {
+  if (!accommodationId) return {};
 
   const offersArray = transformOffersObjectToArray(offers);
 
   const matchedOffers = offersArray.filter((offer) => {
-    return accommodationId === Object.keys(offer.pricePlansReferences)[0];
+    return accommodationId === getAccommodationIdFromOffer(offer);
   });
 
-  return matchedOffers;
+  return transformOffersArrayIntoObject(matchedOffers);
 };
