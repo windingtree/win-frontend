@@ -45,7 +45,7 @@ export const useAccommodation = (props: UseAccommodationProps) => {
   );
 
   const offersQuery = useQuery<OffersResponseType | undefined, Error>(
-    ['accommodation-offers', id, searchProps],
+    ['accommodation-offers', id],
     async () => {
       if (!id || !searchProps) return;
 
