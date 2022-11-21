@@ -32,7 +32,13 @@ const LINKS = [
     children: [
       { name: 'Terms and Conditions', href: '/terms' },
       { name: 'Privacy and Cookie Policy', href: '/privacy' },
-      { name: 'Booking cancellation', href: '/booking-cancellation' }
+      {
+        name: 'Booking cancellation',
+        href: 'https://winwindao.typeform.com/to/Zfa97hjt',
+        target: '_blank',
+        rel: 'noopener',
+        external: true
+      }
     ]
   },
   {
