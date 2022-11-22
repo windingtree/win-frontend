@@ -9,7 +9,10 @@ import { SearchPropsType } from 'src/hooks/useAccommodationSingle';
 import { FacilityBreadcrumbs } from 'src/containers/facility/FacilityBreadcrumbs';
 
 export const Facility = () => {
-  const [searchProps, setSearchProps] = useState<SearchPropsType | undefined>(undefined);
+  // The properties that are being passed for searching for offers.
+  const [searchPropsQuery, setSearchPropsQuery] = useState<SearchPropsType | undefined>(
+    undefined
+  );
   const detailImagesRef = createRef<HTMLDivElement>();
   const scrollToDetailImages = useCallback(() => {
     detailImagesRef?.current?.scrollIntoView({ behavior: 'smooth' });
@@ -21,12 +24,12 @@ export const Facility = () => {
         <FacilityBreadcrumbs />
         <FacilityIntroduction
           scrollToDetailImages={scrollToDetailImages}
-          searchProps={searchProps}
+          searchPropsQuery={searchPropsQuery}
         />
         <FacilityOffers
           ref={detailImagesRef}
-          searchProps={searchProps}
-          setSearchProps={setSearchProps}
+          searchPropsQuery={searchPropsQuery}
+          setSearchPropsQuery={setSearchPropsQuery}
         />
         <FacilityCovid />
       </MainLayout>

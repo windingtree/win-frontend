@@ -112,10 +112,10 @@ const HeaderTitle = ({
 
 export const FacilityIntroduction = ({
   scrollToDetailImages,
-  searchProps
+  searchPropsQuery
 }: {
   scrollToDetailImages: () => void;
-  searchProps?: SearchPropsType;
+  searchPropsQuery?: SearchPropsType;
 }) => {
   const { id } = useParams();
   const [galleryOpen, setGalleryOpen] = useState<boolean>(false);
@@ -123,7 +123,7 @@ export const FacilityIntroduction = ({
   const [slideIndex, setSlideIndex] = useState<number>(0);
   const { accommodationQuery, offersQuery } = useAccommodationSingle({
     id,
-    searchProps
+    searchProps: searchPropsQuery
   });
   const { data, isLoading, error } = accommodationQuery;
   const accommodation = data?.accommodation;

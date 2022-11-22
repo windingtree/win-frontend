@@ -13,6 +13,7 @@ import {
   OffersResponseType
 } from '../api/AccommodationOffers';
 import { useAccommodationMultiple } from './useAccommodationMultiple';
+import { isOffersSearchPropsValid } from 'src/utils/accommodationHookHelper';
 
 export interface SearchPropsType {
   arrival: Date;
@@ -48,9 +49,8 @@ export const useAccommodationSingle = (props: useAccommodationSingleProps) => {
     async () => {
       if (!id || !searchProps) return undefined;
 
-      const { arrival, departure, roomCount, adultCount } = searchProps;
+      if (!isOffersSearchPropsValid(searchProps)) return undefined;
 
-      if (!arrival || !departure || !roomCount || !adultCount) return;
       return await fetchOffers({ id, searchProps });
     },
     {

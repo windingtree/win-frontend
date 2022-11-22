@@ -76,16 +76,16 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
   const [searchParams] = useSearchParams();
 
   const defaultValues: FormValuesProps = useMemo(() => {
-    const startDateParams = searchParams.get('arrival');
-    const endDateParams = searchParams.get('departure');
+    const arrival = searchParams.get('arrival');
+    const departure = searchParams.get('departure');
 
     return {
       adultCount: Number(searchParams.get('adultCount')) || 2,
       roomCount: Number(searchParams.get('roomCount')) || 1,
       dateRange: [
         {
-          startDate: startDateParams ? parseISO(startDateParams) : null,
-          endDate: endDateParams ? parseISO(endDateParams) : null,
+          startDate: arrival ? parseISO(arrival) : null,
+          endDate: departure ? parseISO(departure) : null,
           key: 'selection'
         }
       ]

@@ -1,11 +1,13 @@
 import { WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
+import { SearchPropsType } from 'src/hooks/useAccommodationSingle';
 import { OfferRecord } from 'src/store/types';
 import {
   AccommodationTransformFn,
   EventInfo,
   PriceRange
 } from '../hooks/useAccommodationMultiple';
+import { getIsInPast } from './date';
 import { getActiveEventsWithinRadius } from './events';
 import { crowDistance } from './geo';
 
@@ -166,4 +168,20 @@ export const getGroupMode = (roomCount: number | string | undefined): boolean =>
   if (roomCount === undefined) false;
   const numRoomCount = Number.isNaN(roomCount) ? 0 : Number(roomCount);
   return numRoomCount >= GROUP_MODE_ROOM_COUNT;
+};
+
+export const isOffersSearchPropsValid = (searchProps: SearchPropsType) => {
+  const { arrival, departure, roomCount, adultCount } = searchProps;
+  if (
+    !arrival ||
+    !departure ||
+    !roomCount ||
+    !adultCount ||
+    getIsInPast(arrival) ||
+    getIsInPast(departure)
+  ) {
+    return false;
+  }
+
+  return true;
 };

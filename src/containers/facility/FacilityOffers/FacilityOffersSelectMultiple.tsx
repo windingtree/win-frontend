@@ -48,15 +48,15 @@ export type FacilityOffersSelectMultipleFormProps = {
 type FacilityOffersSelectMultipleProps = {
   accommodation?: WinAccommodation;
   offers?: OfferRecord[];
-  searchFormProps: SearchPropsType;
+  searchPropsForm: SearchPropsType;
 };
 
 export const FacilityOffersSelectMultiple = ({
   accommodation,
   offers,
-  searchFormProps
+  searchPropsForm
 }: FacilityOffersSelectMultipleProps) => {
-  const { roomCount: initialRoomCount, adultCount, arrival, departure } = searchFormProps;
+  const { roomCount: initialRoomCount, adultCount, arrival, departure } = searchPropsForm;
   const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const isDesktop = useResponsive('up', 'md');
   const navigate = useNavigate();

@@ -5,6 +5,7 @@ import { useAccommodationMultiple } from 'src/hooks/useAccommodationMultiple';
 
 export const FacilityBreadcrumbs = () => {
   const { latestQueryParams } = useAccommodationMultiple();
+
   const query = useMemo(() => {
     if (latestQueryParams === undefined) {
       return '';
