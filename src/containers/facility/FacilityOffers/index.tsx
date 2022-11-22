@@ -10,13 +10,14 @@ import { useAccommodation } from 'src/hooks/useAccommodation';
 import { useParams } from 'react-router-dom';
 import { convertToLocalTime, getIsInPast } from 'src/utils/date';
 import { getValidationErrorMessage } from 'src/containers/search/helpers';
+import { FacilitySearchFormValuesProps } from './FacilitySearchFormProvider';
 
 export const FacilityOffers = forwardRef<HTMLDivElement>((_, ref) => {
   const { id } = useParams();
   const {
     watch,
     formState: { errors }
-  } = useFormContext();
+  } = useFormContext<FacilitySearchFormValuesProps>();
   const { roomCount, adultCount, dateRange } = watch();
 
   const arrival = useMemo(

@@ -48,8 +48,8 @@ type FacilityOffersSelectMultipleProps = {
   accommodation?: WinAccommodation;
   offers?: OfferRecord[];
   initialRoomCount: number;
-  arrival: Date;
-  departure: Date;
+  arrival: Date | null;
+  departure: Date | null;
   adultCount: number;
 };
 

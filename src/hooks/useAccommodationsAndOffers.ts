@@ -8,11 +8,12 @@ import {
 } from '../utils/accommodation';
 import { daysBetween } from '../utils/date';
 import { filterOffersByPriceRanges } from '../utils/offers';
-import { usePriceFilter } from './usePriceFilter';
-import { useUserSettings } from './useUserSettings';
+import { usePriceFilter } from '../hooks/usePriceFilter';
+import { useUserSettings } from '../hooks/useUserSettings';
 import {
   AccommodationsAndOffersResponse,
-  fetchAccommodationsAndOffers
+  fetchAccommodationsAndOffers,
+  InvalidSearchParamsError
 } from '../api/AccommodationsAndOffers';
 import {
   getAccommodationById,
@@ -24,7 +25,8 @@ import {
 import { Offer, WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { getOffersWithRoomInfo, sortOffersByPrice } from 'src/utils/offers';
 import { OfferRecord } from '../store/types';
-import { CurrencyCode, useCurrencies } from './useCurrencies';
+import { CurrencyCode, useCurrencies } from '../hooks/useCurrencies';
+import Logger from '../utils/logger';
 
 export interface SearchTypeProps {
   location: string;
@@ -73,7 +75,8 @@ export const useAccommodationsAndOffers = ({
   const { convertPriceCurrency } = useCurrencies();
   const { preferredCurrencyCode } = useUserSettings();
   const { priceFilter } = usePriceFilter();
-  const { data, refetch, error, isLoading, isFetching, isFetched } = useQuery<
+  const logger = Logger('fetchAccommodationAndOffers');
+  const { data, refetch, error, isInitialLoading, isFetching, isFetched } = useQuery<
     AccommodationsAndOffersResponse | undefined,
     Error
   >(
@@ -82,7 +85,14 @@ export const useAccommodationsAndOffers = ({
       if (!searchProps) {
         return;
       }
-      return await fetchAccommodationsAndOffers(searchProps);
+      try {
+        return await fetchAccommodationsAndOffers(searchProps);
+      } catch (error) {
+        if (error instanceof InvalidSearchParamsError) {
+          logger.error(error.message);
+          throw error;
+        }
+      }
     },
     {
       enabled: false,
@@ -287,7 +297,7 @@ export const useAccommodationsAndOffers = ({
     offers,
     refetch,
     error,
-    isLoading,
+    isLoading: isInitialLoading,
     isFetching,
     latestQueryParams,
     isFetched,

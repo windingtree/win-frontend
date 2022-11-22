@@ -36,10 +36,14 @@ export const GuestInfo = () => {
             name: 'Search',
             href: `/search?${query}`
           },
-          {
-            name: 'Facility',
-            href: checkout ? `/facility/${checkout.facilityId}` : `/search?${query}`
-          }
+          ...(checkout
+            ? [
+                {
+                  name: 'Facility',
+                  href: `/facility/${checkout.facilityId}`
+                }
+              ]
+            : [])
         ]}
       />
       <GuestInfoContainer />

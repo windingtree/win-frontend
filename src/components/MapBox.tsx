@@ -29,14 +29,12 @@ import {
 } from 'src/hooks/useAccommodationsAndOffers';
 import { daysBetween, getFormattedBetweenDate } from '../utils/date';
 import { useSearchParams } from 'react-router-dom';
-import {
-  accommodationEventTransform,
-  InvalidLocationError
-} from '../utils/useAccommodationsAndOffers';
 import { getActiveEventsWithinRadius } from '../utils/events';
 import { AppMode } from '../config';
 import { SearchCard } from 'src/containers/search/SearchCard';
 import { displayPriceFromValues } from '../utils/price';
+import { InvalidLocationError } from '../utils/getCoordinates';
+import { accommodationEventTransform } from '../utils/useAccommodationsAndOffers';
 
 const logger = Logger('MapBox');
 const defaultZoom = 13;
