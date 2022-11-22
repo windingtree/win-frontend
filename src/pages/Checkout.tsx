@@ -2,17 +2,21 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useCheckout } from 'src/hooks/useCheckout';
-import { Box, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import MainLayout from 'src/layouts/main';
 import { WinPay } from 'src/containers/checkout/WinPay';
 import { expirationGap } from 'src/config';
 import Logger from 'src/utils/logger';
 import { PaymentSuccessCallback } from 'src/components/PaymentCard';
-import { CheckoutOverview } from 'src/containers/checkout/CheckoutOverview.tsx';
 import { IconButtonAnimate } from 'src/components/animate';
 import Iconify from 'src/components/Iconify';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
+import { MessageBox } from 'src/components/MessageBox';
+import { CheckoutTitle } from 'src/containers/checkout/CheckoutTitle';
+import { CheckoutCancellation } from 'src/containers/checkout/CheckoutCancellation';
+import { CheckoutIntroduction } from 'src/containers/checkout/CheckoutIntroduction';
+import { CheckoutDetails } from 'src/containers/checkout/CheckoutDetails';
 
 const logger = Logger('Checkout');
 
@@ -70,25 +74,32 @@ export const Checkout = () => {
       >
         <Iconify icon="eva:arrow-ios-back-fill" />
       </IconButtonAnimate>
-      {!payment && (
+      <CheckoutTitle />
+      <MessageBox type="error" show={!payment}>
         <Typography>Missing data to do the payment. Please try again.</Typography>
-      )}
+      </MessageBox>
+
       {payment && (
-        <>
-          <CheckoutOverview />
-          {!isConnected && (
-            <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
-              <Typography fontWeight="bold" mb={1}>
-                Please connect your wallet to proceed
-              </Typography>
-              <ConnectButton />
-            </Box>
-          )}
-          <Box sx={{ mb: 5 }}>
+        <Grid container>
+          <Grid xs={12} md={6}>
+            <CheckoutIntroduction />
+          </Grid>
+          <Grid pl={{ xs: 0, md: 2 }} xs={12} md={6}>
+            <CheckoutDetails />
+            <CheckoutCancellation />
+          </Grid>
+          <Grid xs={12} sx={{ mb: 5 }}>
             <WinPay payment={payment} onSuccess={onPaymentSuccess} />
-          </Box>
-        </>
+          </Grid>
+        </Grid>
       )}
+
+      <MessageBox type="error" show={!isConnected && !!payment}>
+        <Typography fontWeight="bold" mb={1}>
+          Please connect your wallet to proceed
+        </Typography>
+        <ConnectButton />
+      </MessageBox>
     </MainLayout>
   );
 };

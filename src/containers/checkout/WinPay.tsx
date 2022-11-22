@@ -12,6 +12,7 @@ import { MessageBox } from 'src/components/MessageBox';
 import { ExternalLink } from 'src/components/ExternalLink';
 import { BigNumber, providers } from 'ethers';
 import { useAccount, useProvider } from 'wagmi';
+import { AccordionBox } from 'src/components/AccordionBox';
 
 const logger = Logger('WinPay');
 
@@ -74,7 +75,7 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
   }
 
   return (
-    <>
+    <AccordionBox title="Payment Card">
       <CurrencySelector
         payment={payment}
         network={selectedNetwork}
@@ -119,6 +120,6 @@ export const WinPay = ({ payment, onSuccess }: WinPayProps) => {
         withQuote={withQuote}
         onSuccess={onSuccess}
       />
-    </>
+    </AccordionBox>
   );
 };

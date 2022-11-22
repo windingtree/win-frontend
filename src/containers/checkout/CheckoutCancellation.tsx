@@ -1,11 +1,14 @@
 import { Typography } from '@mui/material';
+import { AccordionBox } from 'src/components/AccordionBox';
 import { useCheckout } from 'src/hooks/useCheckout';
+import { useResponsive } from 'src/hooks/useResponsive';
 import { getFormattedDate } from 'src/utils/date';
 import { getIsRefundable } from 'src/utils/offers';
 
 export const CheckoutCancellation = () => {
   const { bookingInfo, bookingMode } = useCheckout();
   const isNormalMode = bookingMode === 'normal';
+  const isDesktop = useResponsive('up', 'md');
 
   if (!isNormalMode || !bookingInfo?.offers) return null;
 
@@ -18,10 +21,12 @@ export const CheckoutCancellation = () => {
   const deadline = refundability?.deadline && getFormattedDate(refundability?.deadline);
 
   return (
-    <>
-      <Typography mt={2} variant="body1">
-        Cancellation Policy
-      </Typography>
+    <AccordionBox title="Cancellation Policy">
+      {isDesktop && (
+        <Typography mt={2} variant="subtitle1">
+          Cancellation Policy
+        </Typography>
+      )}
 
       {isRefundable && (
         <Typography variant="body2">
@@ -33,6 +38,6 @@ export const CheckoutCancellation = () => {
       {!isRefundable && (
         <Typography variant="body2">This a non-refundable reservation.</Typography>
       )}
-    </>
+    </AccordionBox>
   );
 };

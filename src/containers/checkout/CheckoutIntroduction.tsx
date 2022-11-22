@@ -8,16 +8,19 @@ import { sortByLargestImage } from 'src/utils/accommodation';
 import { useMemo } from 'react';
 import { CardMediaFallback } from 'src/components/CardMediaFallback';
 import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
-import { CurrencyCode, useCurrencies } from '../../../hooks/useCurrencies';
-import { useUserSettings } from '../../../hooks/useUserSettings';
-import { displayPriceFromValues } from '../../../utils/price';
-import { getRndHotelImg, getAccommodationImage } from '../../../utils/getRndHotelImg';
+import { CurrencyCode, useCurrencies } from '../../hooks/useCurrencies';
+import { useUserSettings } from '../../hooks/useUserSettings';
+import { displayPriceFromValues } from '../../utils/price';
+import { getRndHotelImg, getAccommodationImage } from '../../utils/getRndHotelImg';
+import { AccordionBox } from 'src/components/AccordionBox';
+import { useResponsive } from 'src/hooks/useResponsive';
 
 export const CheckoutIntroduction = () => {
   const theme = useTheme();
   const { bookingMode, bookingInfo } = useCheckout();
   const { convertCurrency } = useCurrencies();
   const { preferredCurrencyCode } = useUserSettings();
+  const isDesktop = useResponsive('up', 'md');
 
   const accommodationImage = useMemo(() => {
     if (bookingInfo?.accommodation) {
@@ -84,99 +87,107 @@ export const CheckoutIntroduction = () => {
     preferredCurrencyCode !== 'USD';
 
   return (
-    <Box
-      mb={{ xs: 3, lg: 5 }}
-      style={{
-        borderWidth: '0.1em',
-        borderStyle: 'solid',
-        borderColor: theme.palette.text.secondary,
-        borderRadius: theme.shape.borderRadius,
-        minWidth: '25em',
-        padding: '1.2em' // TODO: figure out theme default padding value for cards
-      }}
+    <AccordionBox
+      title={`Your payment value is ${formattedOfferSymbol} ${formattedOfferPrice}`}
     >
-      <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
-        {accommodationName}
-      </Typography>
-      {googleMapsLink && (
-        <Typography mb={{ xs: 3, lg: 2 }}>
-          <a href={googleMapsLink}>see on Google map</a>
-        </Typography>
-      )}
-      <Box mb={{ xs: 3, lg: 2 }}>
-        <Card>
-          <CardMediaFallback
-            component="img"
-            height="200"
-            src={imgUrl}
-            fallback="/images/hotel-fallback.webp"
-            alt={accommodationName}
-          />
-        </Card>
-      </Box>
-      {isGroupMode && (
-        <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
-          The refundable deposit is {formattedOfferSymbol}
-          {formattedOfferPrice}
-        </Typography>
-      )}
-      {!isGroupMode && (
-        <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
-          Your payment value is {formattedOfferSymbol}
-          {formattedOfferPrice}
-        </Typography>
-      )}
-      <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
-        Price details
-      </Typography>
-      <Typography mb={{ xs: 3, lg: 2 }}>
-        {formattedOfferSymbol} {pricePerDay} x {daysOfStay} nights
-      </Typography>
       <Box
-        style={{
-          display: 'flex',
-          flexDirection: 'row'
-        }}
+        mb={{ xs: 3, lg: 5 }}
+        style={
+          isDesktop
+            ? {
+                borderWidth: '0.1em',
+                borderStyle: 'solid',
+                borderColor: theme.palette.text.secondary,
+                borderRadius: theme.shape.borderRadius,
+                // minWidth: '25em',
+                padding: '1.2em' // TODO: figure out theme default padding value for cards
+              }
+            : {}
+        }
       >
-        <Typography mb={{ xs: 3, lg: 2 }}>Total ({offerCurrency})</Typography>
-        <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
-        <Typography mb={{ xs: 3, lg: 2 }}>
-          {formattedOfferSymbol} {formattedOfferPrice}
+        <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
+          {accommodationName}
         </Typography>
+        {googleMapsLink && (
+          <Typography mb={{ xs: 3, lg: 2 }}>
+            <a href={googleMapsLink}>see on Google map</a>
+          </Typography>
+        )}
+        <Box mb={{ xs: 3, lg: 2 }}>
+          <Card>
+            <CardMediaFallback
+              component="img"
+              height="200"
+              src={imgUrl}
+              fallback="/images/hotel-fallback.webp"
+              alt={accommodationName}
+            />
+          </Card>
+        </Box>
+        {isGroupMode && (
+          <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
+            The refundable deposit is {formattedOfferSymbol}
+            {formattedOfferPrice}
+          </Typography>
+        )}
+        {!isGroupMode && isDesktop && (
+          <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
+            Your payment value is {formattedOfferSymbol}
+            {formattedOfferPrice}
+          </Typography>
+        )}
+        <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
+          Price details
+        </Typography>
+        <Typography mb={{ xs: 3, lg: 2 }}>
+          {formattedOfferSymbol} {pricePerDay} x {daysOfStay} nights
+        </Typography>
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'row'
+          }}
+        >
+          <Typography mb={{ xs: 3, lg: 2 }}>Total ({offerCurrency})</Typography>
+          <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
+          <Typography mb={{ xs: 3, lg: 2 }}>
+            {formattedOfferSymbol} {formattedOfferPrice}
+          </Typography>
+        </Box>
+        {showUSDPrice && (
+          <Box
+            style={{
+              display: 'flex',
+              flexDirection: 'row'
+            }}
+          >
+            <Typography mb={{ xs: 3, lg: 2 }}>Equivalent amount in USD</Typography>
+            <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
+            <Typography mb={{ xs: 3, lg: 2 }}>
+              {formattedUsdSymbol} {formattedUsdPrice}
+            </Typography>
+          </Box>
+        )}
+        {showPreferredCurrencyPrice && (
+          <Box
+            style={{
+              display: 'flex',
+              flexDirection: 'row'
+            }}
+          >
+            <Typography mb={{ xs: 3, lg: 2 }}>
+              Equivalent amount in {preferredCurrencyCode}
+            </Typography>
+            <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
+            <Typography mb={{ xs: 3, lg: 2 }}>
+              {displayPriceFromValues(
+                preferredCurrencyPrice?.amount,
+                preferredCurrencyCode
+              )}
+            </Typography>
+          </Box>
+        )}
       </Box>
-      {showUSDPrice && (
-        <Box
-          style={{
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-        >
-          <Typography mb={{ xs: 3, lg: 2 }}>Equivalent amount in USD</Typography>
-          <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
-          <Typography mb={{ xs: 3, lg: 2 }}>
-            {formattedUsdSymbol} {formattedUsdPrice}
-          </Typography>
-        </Box>
-      )}
-      {showPreferredCurrencyPrice && (
-        <Box
-          style={{
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-        >
-          <Typography mb={{ xs: 3, lg: 2 }}>
-            Equivalent amount in {preferredCurrencyCode}
-          </Typography>
-          <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
-          <Typography mb={{ xs: 3, lg: 2 }}>
-            {displayPriceFromValues(
-              preferredCurrencyPrice?.amount,
-              preferredCurrencyCode
-            )}
-          </Typography>
-        </Box>
-      )}
-    </Box>
+    </AccordionBox>
   );
 };

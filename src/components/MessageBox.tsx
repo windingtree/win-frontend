@@ -24,7 +24,10 @@ export const MessageBox = ({
   }
 
   return (
-    <Alert severity={type} sx={{ mb: 2, alignItems: 'center' }}>
+    <Alert
+      severity={type}
+      sx={{ mb: 2, alignItems: 'center', textAlign: { xs: 'center', md: 'left' } }}
+    >
       <Box>{children}</Box>
       {loading === true && <CircularProgress />}
       {typeof onClose === 'function' && (
