@@ -113,7 +113,9 @@ export const useCurrencies = () => {
 
       const { amount: conversionRate, decimals } = convertedCurrency;
       const convertAmount = (amount: string) => {
-        return conversionRate ? (conversionRate * stringToNumber(amount)).toString() : '';
+        return conversionRate
+          ? (conversionRate * stringToNumber(amount)).toFixed(decimals)
+          : '';
       };
 
       // convert sub-amounts
@@ -121,10 +123,8 @@ export const useCurrencies = () => {
         currency: targetCurrency,
         public: price.public && convertAmount(price.public),
         commission: price.commission && convertAmount(price.commission),
-        decimalPlaces: decimals,
         private: price.private && convertAmount(price.private),
-        taxes: price.taxes && convertAmount(price.taxes),
-        isAmountBeforeTax: price.isAmountBeforeTax
+        taxes: price.taxes && convertAmount(price.taxes)
       };
 
       return convertedPrice;

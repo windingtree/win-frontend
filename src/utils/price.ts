@@ -2,8 +2,7 @@ import { Price } from '@windingtree/glider-types/dist/win';
 import { PriceFormat, PriceRange } from '../hooks/useAccommodationsAndOffers';
 import { isBetween } from './common';
 import currencyCodes from 'currency-codes';
-import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
-import { stringToNumber } from './strings';
+import { prefixedCurrencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 
 // used to check 2 price formats if they are the same and can be used for comparison
 export const checkPriceFormatsCompatible = (...prices: PriceFormat[]) => {
@@ -115,8 +114,8 @@ export const getPriceRangeFromPriceRanges = (
 };
 
 export const displayPriceFromPrice = (price: Price): string => {
-  const { currency, decimalPlaces, public: value } = price;
-  return displayPriceFromValues(value, currency, decimalPlaces);
+  const { currency, public: value } = price;
+  return displayPriceFromValues(value, currency);
 };
 
 export const displayPriceFromPriceFormat = (
@@ -134,15 +133,13 @@ export const displayPriceFromValues = (
 ): string => {
   // ideally this should have already been provided
   if (!currency) return '';
-  const decimals = decimalPlaces ?? currencyCodes.code(currency)?.digits;
-  const currencySymbol = currencySymbolMap[currency];
   if (price === undefined) return '';
 
-  const numValue =
-    typeof price === 'number' ? price : stringToNumber(price, undefined, false);
-  if (numValue === undefined) return '';
+  let decimals = decimalPlaces ?? currencyCodes.code(currency)?.digits;
+  if (decimals === undefined) decimals = 2; // This should never happen, but just in case...
+  const currencySymbol = prefixedCurrencySymbolMap[currency];
+  const strValue = typeof price === 'string' ? price : price.toFixed(decimals);
+  if (strValue === undefined) return '';
 
-  return `${currencySymbol} ${
-    decimals !== undefined ? `${numValue.toFixed(decimals)}` : `${numValue}`
-  }`;
+  return `${currencySymbol} ${strValue}`;
 };
