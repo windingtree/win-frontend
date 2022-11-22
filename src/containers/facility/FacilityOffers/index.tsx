@@ -22,6 +22,7 @@ type FacilityOffersProps = {
   setSearchPropsQuery: (value: SearchPropsType) => void;
   searchPropsQuery?: SearchPropsType;
 };
+import { FacilitySearchFormValuesProps } from './FacilitySearchFormProvider';
 
 export const FacilityOffers = forwardRef<HTMLDivElement, FacilityOffersProps>(
   ({ setSearchPropsQuery, searchPropsQuery }: FacilityOffersProps, ref) => {
@@ -29,7 +30,7 @@ export const FacilityOffers = forwardRef<HTMLDivElement, FacilityOffersProps>(
     const {
       watch,
       formState: { errors }
-    } = useFormContext();
+    } = useFormContext<FacilitySearchFormValuesProps>();
     const { roomCount, adultCount, dateRange } = watch();
     const [_, setSearchParams] = useSearchParams();
     const [haveOffersBeenFetchedOnce, setHaveOffersBeenFetchedOnce] = useState(false);
@@ -75,6 +76,8 @@ export const FacilityOffers = forwardRef<HTMLDivElement, FacilityOffersProps>(
 
     const onSubmit = (_, event: MouseEvent) => {
       event.preventDefault();
+
+      if (!arrival || !departure) return;
 
       setSearchPropsQuery(searchPropsForm);
 

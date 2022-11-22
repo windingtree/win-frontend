@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import { FieldError, FieldErrors, FieldErrorsImpl } from 'react-hook-form';
 
 const formatDisplayDate = (date) => {
   const dayNumber = format(date, 'dd');
@@ -33,8 +32,17 @@ interface ValidationErrorChunks {
   otherErrors: string[];
 }
 
+export interface GenericValidationError {
+  message?: string;
+  type?: unknown;
+}
+
+export interface GenericValidationErrors {
+  [key: string | number]: GenericValidationError;
+}
+
 export const buildValidationErrors = (
-  errors: FieldErrorsImpl | FieldErrors
+  errors: GenericValidationErrors
 ): ValidationErrorChunks => {
   const requiredErrors: string[] = [];
   const otherErrors: string[] = [];
@@ -43,7 +51,7 @@ export const buildValidationErrors = (
     if (!error) return;
     if (Array.isArray(error)) {
       const builtErrors = error
-        .map((err: FieldErrors) => buildValidationErrors(err))
+        .map((err: GenericValidationErrors) => buildValidationErrors(err))
         .reduce(
           (result, value) => {
             result.requiredErrors.push(...value.requiredErrors);
@@ -59,7 +67,7 @@ export const buildValidationErrors = (
     }
 
     // check for required and other errors
-    const message = (error as FieldError).message;
+    const message = error.message;
     if (message) {
       if (error.type === 'required' || error.type === 'typeError') {
         requiredErrors.push(message);
@@ -104,9 +112,24 @@ export const buildValidationErrorMessage = ({
   return validationErrorMessage;
 };
 
-export const getValidationErrorMessage = (errors: FieldErrorsImpl) => {
+export const getValidationErrorMessage = (
+  errors: GenericValidationErrors | GenericValidationError[]
+) => {
   if (!errors) return;
-  const builtErrors = buildValidationErrors(errors);
+  let normalizedErrors: GenericValidationErrors;
+  if (Array.isArray(errors)) {
+    normalizedErrors = errors.reduce(
+      (result: GenericValidationErrors, value, key): GenericValidationErrors => {
+        result[key] = value;
+        return result;
+      },
+      {}
+    );
+  } else {
+    normalizedErrors = errors;
+  }
+
+  const builtErrors = buildValidationErrors(normalizedErrors as GenericValidationErrors);
   const message = buildValidationErrorMessage(builtErrors);
 
   return message;

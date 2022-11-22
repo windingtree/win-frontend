@@ -16,8 +16,8 @@ import { useAccommodationMultiple } from './useAccommodationMultiple';
 import { isOffersSearchPropsValid } from 'src/utils/accommodationHookHelper';
 
 export interface SearchPropsType {
-  arrival: Date;
-  departure: Date;
+  arrival: Date | null;
+  departure: Date | null;
   roomCount: number;
   adultCount: number;
   childrenCount?: number;

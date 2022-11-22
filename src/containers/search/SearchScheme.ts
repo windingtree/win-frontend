@@ -34,7 +34,8 @@ export const SearchSchema = Yup.object().shape({
       Yup.object().shape({
         startDate: Yup.date()
           .typeError('a valid check-in date')
-          .required('a check-in date'),
+          .required('a check-in date')
+          .min(new Date(), 'ensure check-in date is not in the past'),
         endDate: Yup.date()
           .typeError('a valid check-out date')
           .required('an check-out date')

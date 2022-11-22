@@ -125,8 +125,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
 
     return {
       location: searchParams.get('location') || '',
-      adultCount: Number(searchParams.get('adultCount')) || 2,
-      roomCount: Number(searchParams.get('roomCount')) || 1,
+      adultCount: Number(searchParams.get('adultCount')),
+      roomCount: Number(searchParams.get('roomCount')),
       dateRange: [
         {
           startDate: startDateParams ? parseISO(startDateParams) : null,
@@ -150,8 +150,6 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     clearErrors
   } = methods;
   const values = watch();
-
-  const validationErrorMessage = getValidationErrorMessage(errors);
 
   const { roomCount, adultCount, dateRange, location } = values;
   const startDate = dateRange[0].startDate && convertToLocalTime(dateRange[0].startDate);
@@ -200,6 +198,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
       setTimeout(() => submitRef?.current?.focus(), 500);
     }
   };
+
+  const validationErrorMessage = getValidationErrorMessage(errors);
 
   const searchProps = {
     arrival: startDate,
@@ -266,8 +266,11 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     clearErrorMessages();
   }, [pathname, search, clearErrorMessages]);
 
+  // NOTE: It might be better to give visual feedback or errors if something is wrong here
+  // as it might feel like the app is broken
   /**
    * Conduct a search on the initial render when conditions are met.
+   * Prevent loading on page mount if search params are incomplete
    */
   useEffect(() => {
     if (pathname !== '/search') return;
@@ -285,20 +288,23 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
     }
   }, [pathname, refetch, search, searchParams]);
 
+  // initialize the form values when
+  //
   useEffect(() => {
     if (pathname !== '/search' && pathname !== '/') return;
 
     setIsSearchPage(pathname === '/search');
 
-    const includesAllSearchParams =
+    // ** THIS DOES NOT SEEM TO BE OF ANY USE HERE
+    /* const includesAllSearchParams =
       !!searchParams.get('location') &&
       !!searchParams.get('endDate') &&
       !!searchParams.get('startDate') &&
       !!searchParams.get('roomCount') &&
       !!searchParams.get('roomCount') &&
-      !!searchParams.get('adultCount');
+      !!searchParams.get('adultCount'); */
 
-    if (!includesAllSearchParams && latestQueryParams) {
+    if (latestQueryParams) {
       setValue('location', latestQueryParams.location);
       setValue('adultCount', latestQueryParams.adultCount);
       setValue('roomCount', latestQueryParams.roomCount);
@@ -484,7 +490,7 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
       </ResponsiveContainer>
 
       <Stack>
-        {isGroupMode && allAccommodations.length && (
+        {isGroupMode && allAccommodations.length > 0 && (
           // show this message when in group mode and there are accommodations with offers
           <SearchAlert severity="info">
             You have entered the group booking mode. <br />

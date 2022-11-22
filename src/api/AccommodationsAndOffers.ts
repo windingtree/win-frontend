@@ -6,10 +6,13 @@ import {
 import axios from 'axios';
 import { getPassengersBody } from '../utils/getPassengerBody';
 
-import { getGroupMode, InvalidLocationError } from '../utils/accommodationHookHelper';
+import { getGroupMode } from '../utils/accommodationHookHelper';
 import { SearchTypeProps } from '../hooks/useAccommodationMultiple';
 import { defaultSearchRadiusInMeters, backend } from '../config';
 import { CoordinatesType } from 'src/utils/accommodation';
+import { ValidationError } from 'yup';
+import { SearchSchema } from '../containers/search/SearchScheme';
+import { getValidationErrorMessage } from '../containers/search/helpers';
 
 export interface AccommodationsAndOffersResponse {
   accommodations: Record<string, WinAccommodation>;
@@ -18,18 +21,31 @@ export interface AccommodationsAndOffersResponse {
   latestQueryParams: SearchTypeProps;
   isGroupMode: boolean;
 }
+
+export class InvalidLocationError extends Error {}
+export class InvalidSearchParamsError extends Error {}
+
 /**
  * This hook fetches accommodations and its related offers.
  * Take into consideration that errors thrown are displayed to the user.
  */
-export async function fetchAccommodationsAndOffers({
-  location,
-  arrival,
-  departure,
-  roomCount,
-  adultCount,
-  childrenCount
-}: SearchTypeProps): Promise<AccommodationsAndOffersResponse> {
+export async function fetchAccommodationsAndOffers(
+  searchProps: SearchTypeProps
+): Promise<AccommodationsAndOffersResponse> {
+  // validate search params before searching
+  const { location, arrival, departure, roomCount, adultCount, childrenCount } =
+    searchProps;
+
+  try {
+    await SearchSchema.validate(
+      { ...searchProps, dateRange: [{ startDate: arrival, endDate: departure }] },
+      { abortEarly: false }
+    );
+  } catch (errors) {
+    const errorMessage = getValidationErrorMessage((errors as ValidationError).inner);
+    throw new InvalidSearchParamsError(errorMessage || 'Invalid search parameters');
+  }
+
   /**
    * Query the coordinates based on the location input of the user.
    * Coordinates are used to query the accommodations.

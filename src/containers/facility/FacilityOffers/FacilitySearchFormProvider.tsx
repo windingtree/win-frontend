@@ -54,9 +54,9 @@ export const SearchSchema = Yup.object().shape({
     )
 });
 
-type FormValuesProps = {
-  roomCount: number | string;
-  adultCount: number | string;
+export type FacilitySearchFormValuesProps = {
+  roomCount: number;
+  adultCount: number;
   dateRange: {
     startDate: Date | null;
     endDate: Date | null;
@@ -75,7 +75,7 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
 
-  const defaultValues: FormValuesProps = useMemo(() => {
+  const defaultValues: FacilitySearchFormValuesProps = useMemo(() => {
     const arrival = searchParams.get('arrival');
     const departure = searchParams.get('departure');
 
@@ -92,7 +92,7 @@ export const FacilitySearchFormProvider = ({ children }: Props) => {
     };
   }, [searchParams]);
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm<FacilitySearchFormValuesProps>({
     resolver: yupResolver(SearchSchema),
     defaultValues
   });

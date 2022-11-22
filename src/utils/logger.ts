@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { APP_LOG_LEVEL } from 'src/config';
 
 export interface LoggerApi {
