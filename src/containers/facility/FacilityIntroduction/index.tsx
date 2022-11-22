@@ -14,7 +14,10 @@ import {
 import { FacilityGallery } from './FacilityGallery';
 import 'react-image-lightbox/style.css';
 import { LightboxModal } from 'src/components/LightboxModal';
-import { useAccommodationSingle } from 'src/hooks/useAccommodationSingle';
+import {
+  SearchPropsType,
+  useAccommodationSingle
+} from 'src/hooks/useAccommodationSingle';
 import { FacilityLoadingSkeleton } from './FacilityLoadingSkeleton';
 import { HeaderButton } from './HeaderButton';
 import { getRndHotelImg, getAccommodationImage } from '../../../utils/getRndHotelImg';
@@ -108,15 +111,20 @@ const HeaderTitle = ({
 };
 
 export const FacilityIntroduction = ({
-  scrollToDetailImages
+  scrollToDetailImages,
+  searchProps
 }: {
   scrollToDetailImages: () => void;
+  searchProps?: SearchPropsType;
 }) => {
   const { id } = useParams();
   const [galleryOpen, setGalleryOpen] = useState<boolean>(false);
   const [slideOpen, setSlideOpen] = useState<boolean>(false);
   const [slideIndex, setSlideIndex] = useState<number>(0);
-  const { accommodationQuery, offersQuery } = useAccommodationSingle({ id });
+  const { accommodationQuery, offersQuery } = useAccommodationSingle({
+    id,
+    searchProps
+  });
   const { data, isLoading, error } = accommodationQuery;
   const accommodation = data?.accommodation;
 

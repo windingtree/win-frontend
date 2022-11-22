@@ -58,12 +58,13 @@ export const HeaderButton = ({
 
   const priceRange = preferredCurrencyPriceRange ?? localPriceRange;
 
+  if (!isLoading && (!offers || offers.length === 0)) return null;
+
   return (
     <HeaderButtonContainer>
       <Stack direction="row" alignItems="center" mt={1}>
         <Typography>From</Typography>
         <Typography variant="h5" marginLeft={theme.spacing(1)}>
-          {/* {currencySymbol} {lowestAveragePrice?.toFixed(2)} */}
           {isLoading ? (
             <Skeleton variant="text" width="100px" />
           ) : (

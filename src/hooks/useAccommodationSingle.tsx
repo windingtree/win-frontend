@@ -44,9 +44,9 @@ export const useAccommodationSingle = (props: useAccommodationSingleProps) => {
   );
 
   const offersQuery = useQuery<OffersResponseType | undefined, Error>(
-    ['accommodation-offers', id, searchProps],
+    ['accommodation-offers', id, JSON.stringify(searchProps)],
     async () => {
-      if (!id || !searchProps) return;
+      if (!id || !searchProps) return undefined;
 
       const { arrival, departure, roomCount, adultCount } = searchProps;
 
@@ -54,11 +54,12 @@ export const useAccommodationSingle = (props: useAccommodationSingleProps) => {
       return await fetchOffers({ id, searchProps });
     },
     {
+      enabled: !!searchProps,
       initialData: () => getAccommodationAndOffersFromCache(id, searchProps),
       staleTime: offerExpirationTime,
-      enabled: false,
       cacheTime: offerExpirationTime,
-      refetchInterval: offerExpirationTime
+      refetchInterval: offerExpirationTime,
+      keepPreviousData: true
     }
   );
 
