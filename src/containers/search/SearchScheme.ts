@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { daysBetween } from '../../utils/date';
+import { daysBetween, getIsInPast } from '../../utils/date';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
 //TODO: update this when group booking should be enabled
 
@@ -35,6 +35,14 @@ export const SearchSchema = Yup.object().shape({
         startDate: Yup.date()
           .typeError('a valid check-in date')
           .required('a check-in date')
+          .test(
+            'startDateAfterToday',
+            'ensure check-in date is not in the past',
+            (value) => {
+              // difference between date and today must not be less than 24 hours
+              return !!value && !getIsInPast(value);
+            }
+          )
           .min(new Date(), 'ensure check-in date is not in the past'),
         endDate: Yup.date()
           .typeError('a valid check-out date')
