@@ -45,8 +45,24 @@ export const getStorageState = (
     }
 
     serializedState = transform ? transform<string>(serializedState) : serializedState;
+    let parsedState = JSON.parse(serializedState);
+    if (
+      parsedState.bookingInfo !== undefined &&
+      parsedState.bookingInfo.date !== undefined
+    ) {
+      parsedState = {
+        ...parsedState,
+        bookingInfo: {
+          ...parsedState.bookingInfo,
+          date: {
+            arrival: new Date(parsedState.bookingInfo.date.arrival),
+            departure: new Date(parsedState.bookingInfo.date.departure)
+          }
+        }
+      };
+    }
 
-    return JSON.parse(serializedState);
+    return parsedState;
   } catch (error) {
     throw new Error(
       `Unable to get stored state due to error: ${

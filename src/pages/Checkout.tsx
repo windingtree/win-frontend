@@ -81,14 +81,14 @@ export const Checkout = () => {
 
       {payment && (
         <Grid container>
-          <Grid xs={12} md={6}>
+          <Grid item xs={12} md={6}>
             <CheckoutIntroduction />
           </Grid>
-          <Grid pl={{ xs: 0, md: 2 }} xs={12} md={6}>
+          <Grid item pl={{ xs: 0, md: 2 }} xs={12} md={6}>
             <CheckoutDetails />
             <CheckoutCancellation />
           </Grid>
-          <Grid xs={12} sx={{ mb: 5 }}>
+          <Grid item xs={12} sx={{ mb: 5 }}>
             <WinPay payment={payment} onSuccess={onPaymentSuccess} />
           </Grid>
         </Grid>

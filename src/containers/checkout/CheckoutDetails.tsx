@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material';
+import { DateTime } from 'luxon';
 import { AccordionBox } from 'src/components/AccordionBox';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { useResponsive } from 'src/hooks/useResponsive';
@@ -17,13 +18,12 @@ export const CheckoutDetails = () => {
   )
     return null;
 
-  // const refundability = bookingInfo?.offers[0]?.refundability;
-  console.log('bookingInfo', bookingInfo);
-  //TODO: this line can be eventually removed if the type becomes required  after BE changes.
-  // if (!refundability) return null;
-
-  // const isRefundable = getIsRefundable(refundability?.type);
-  // const deadline = refundability?.deadline && getFormattedDate(refundability?.deadline);
+  const arrival = DateTime.fromJSDate(bookingInfo.date.arrival).toLocaleString(
+    DateTime.DATE_MED
+  );
+  const departure = DateTime.fromJSDate(bookingInfo.date.departure).toLocaleString(
+    DateTime.DATE_MED
+  );
 
   return (
     <AccordionBox title="Your reservation details">
@@ -31,8 +31,7 @@ export const CheckoutDetails = () => {
       <Typography mt={2} variant="body2">
         Dates
       </Typography>
-      <Typography variant="body2">{`${bookingInfo.date.arrival} - ${bookingInfo.date.departure}`}</Typography>
-
+      <Typography variant="body2">{`${arrival} - ${departure}`}</Typography>
       <Typography mt={2} variant="body2">
         Room Type & Board Basis
       </Typography>
@@ -43,9 +42,9 @@ export const CheckoutDetails = () => {
       <Typography mt={2} variant="body2">
         Guests
       </Typography>
-      <Typography variant="body2">{`${bookingInfo.adultCount} ${
-        bookingInfo.adultCount > 1 ? 'guests' : 'guest'
-      }`}</Typography>
+      <Typography variant="body2">
+        {`${bookingInfo.adultCount} ${bookingInfo.adultCount > 1 ? 'guests' : 'guest'}`}
+      </Typography>
     </AccordionBox>
   );
 };
