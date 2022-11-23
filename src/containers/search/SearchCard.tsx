@@ -58,7 +58,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
     const smallCardStyle: CSSProperties = mapCard
       ? {
-          minWidth: '96vw',
+          minWidth: isMobileView ? '96vw' : '260px',
           marginBottom: '0px',
           minHeight: '128px',
           maxWidth: '100vw'
