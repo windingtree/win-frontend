@@ -4,7 +4,7 @@ import {
   getAccommodationAndOffersFromCache,
   getAccommodationFromCache
 } from 'src/api/cache';
-import { offerExpirationTime } from 'src/config';
+import { accommodationExpirationTime, offerExpirationTime } from 'src/config';
 import { useUserSettings } from './useUserSettings';
 import {
   AccommodationResponseType,
@@ -37,31 +37,31 @@ export const useAccommodationSingle = (props: useAccommodationSingleProps) => {
     ['accommodation-details', id],
     async () => {
       if (!id) return;
+
       return await fetchAccommodation(id);
     },
     {
-      initialData: () => getAccommodationFromCache(id)
+      initialData: () => getAccommodationFromCache(id),
+      staleTime: accommodationExpirationTime
     }
   );
 
-  const offersQuery = useQuery<OffersResponseType | undefined, Error>(
-    ['accommodation-offers', id, JSON.stringify(searchProps)],
-    async () => {
+  const offersQuery = useQuery<OffersResponseType | undefined, Error>({
+    queryFn: async () => {
       if (!id || !searchProps) return undefined;
 
       if (!isOffersSearchPropsValid(searchProps)) return undefined;
 
       return await fetchOffers({ id, searchProps });
     },
-    {
-      enabled: !!searchProps,
-      initialData: () => getAccommodationAndOffersFromCache(id, searchProps),
-      staleTime: offerExpirationTime,
-      cacheTime: offerExpirationTime,
-      refetchInterval: offerExpirationTime,
-      keepPreviousData: true
-    }
-  );
+    queryKey: ['accommodation-offers', id, searchProps],
+    enabled: !!searchProps,
+    initialData: () => getAccommodationAndOffersFromCache(id, searchProps),
+    staleTime: offerExpirationTime,
+    cacheTime: offerExpirationTime,
+    refetchInterval: offerExpirationTime,
+    keepPreviousData: true
+  });
 
   const { data, ...restOffersQuery } = offersQuery;
 
