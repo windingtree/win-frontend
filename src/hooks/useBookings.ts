@@ -5,13 +5,15 @@ import { useAppState } from '../store';
 import { backend } from '../config';
 import { usePoller } from './usePoller';
 import Logger from '../utils/logger';
+import { useAccount } from 'wagmi';
 
 const logger = Logger('useBookings');
 
 export type UseBookingsHook = BookingResponse;
 
 export const useBookings = (): UseBookingsHook => {
-  const { account, walletAuth } = useAppState();
+  const { walletAuth } = useAppState();
+  const { address } = useAccount();
   const [bookings, setBookings] = useState<BookingResponse>([]);
 
   useEffect(() => {
@@ -22,13 +24,13 @@ export const useBookings = (): UseBookingsHook => {
 
   const getBookings = useCallback(async () => {
     try {
-      if (!account || !walletAuth) {
+      if (!address || !walletAuth) {
         setBookings([]);
         return;
       }
 
       const res = await axios.get<BookingResponse>(
-        `${backend.url}/api/booking/${account}`,
+        `${backend.url}/api/booking/${address}`,
         {
           headers: {
             Authorization: `Bearer ${walletAuth.accessToken}`
@@ -48,9 +50,9 @@ export const useBookings = (): UseBookingsHook => {
       logger.error(err);
       setBookings([]);
     }
-  }, [account, walletAuth]);
+  }, [address, walletAuth]);
 
-  usePoller(getBookings, !!account && !!walletAuth, 5000, 'Bookings');
+  usePoller(getBookings, !!address && !!walletAuth, 5000, 'Bookings');
 
   return bookings;
 };
