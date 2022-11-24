@@ -58,7 +58,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
 
     const smallCardStyle: CSSProperties = mapCard
       ? {
-          minWidth: '360px',
+          minWidth: isMobileView ? '96vw' : '260px',
           marginBottom: '0px',
           minHeight: '128px',
           maxWidth: '100vw'
@@ -127,8 +127,6 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               pathname: `/facility/${facility.providerHotelId}`,
               search: `?${createSearchParams(searchParams)}`
             }}
-            // target="_blank"
-            // rel="noopener noreferrer"
             style={{ textDecoration: 'none', color: 'inherit' }}
           >
             <Stack

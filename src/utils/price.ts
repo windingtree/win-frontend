@@ -1,9 +1,9 @@
 import { Price } from '@windingtree/glider-types/dist/win';
-import { PriceFormat, PriceRange } from '../hooks/useAccommodationMultiple';
 import { isBetween } from './common';
 import currencyCodes from 'currency-codes';
 import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 import { stringToNumber } from './strings';
+import { PriceFormat, PriceRange } from 'src/hooks/useAccommodationMultiple';
 
 // used to check 2 price formats if they are the same and can be used for comparison
 export const checkPriceFormatsCompatible = (...prices: PriceFormat[]) => {

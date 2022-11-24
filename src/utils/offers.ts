@@ -4,8 +4,8 @@ import {
   WinAccommodation
 } from '@windingtree/glider-types/dist/win';
 import { OfferCheckoutType } from 'src/containers/facility/FacilityOffers/FacilityOffersSelectMultiple';
+import { PriceFormat, PriceRange } from 'src/hooks/useAccommodationMultiple';
 import { OfferRecord } from 'src/store/types';
-import { PriceFormat, PriceRange } from '../hooks/useAccommodationMultiple';
 import { isBetween } from './common';
 import { checkPriceFormatsCompatible } from './price';
 import { stringToNumber } from './strings';

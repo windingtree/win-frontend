@@ -2,6 +2,7 @@ import { BillingAddress, OrganizerInformation } from '@windingtree/glider-types/
 import { OfferCheckoutType } from 'src/store/types';
 import { getTotalRoomCountReducer } from 'src/utils/offers';
 import { getGroupMode } from './accommodationHookHelper';
+
 export type BookingModeType = 'group' | 'normal' | undefined;
 
 /**

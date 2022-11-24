@@ -12,6 +12,7 @@ import { providers } from 'ethers';
 import { useAccount, useProvider } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Iconify from '../components/Iconify';
+import { DateTime } from 'luxon';
 
 export const Bookings = () => {
   const theme = useTheme();
@@ -111,12 +112,28 @@ export const Bookings = () => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              borderBottom: '1px solid silver'
             }}
           >
-            <Box padding={theme.spacing(2)}>N</Box>
-            <Box padding={theme.spacing(2)}>offerId</Box>
-            <Box padding={theme.spacing(2)}>orderId</Box>
+            <Box width="4%" padding={theme.spacing(1)}>
+              N
+            </Box>
+            <Box width="20%" padding={theme.spacing(2)}>
+              offerId
+            </Box>
+            <Box width="20%" padding={theme.spacing(2)}>
+              orderId
+            </Box>
+            <Box width="10%" padding={theme.spacing(2)}>
+              status
+            </Box>
+            <Box width="30%" padding={theme.spacing(2)}>
+              message
+            </Box>
+            <Box width="16%" padding={theme.spacing(2)}>
+              createdAt
+            </Box>
           </Box>
           {bookings.map((booking, index) => (
             <Box
@@ -124,12 +141,34 @@ export const Bookings = () => {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                borderBottom: '1px solid silver'
               }}
             >
-              <Box padding={theme.spacing(2)}>{index}</Box>
-              <Box padding={theme.spacing(2)}>{booking.offerId}</Box>
-              <Box padding={theme.spacing(2)}>{booking.orderId}</Box>
+              <Box width="4%" padding={theme.spacing(1)}>
+                {index + 1}
+              </Box>
+              <Box width="20%" padding={theme.spacing(2)}>
+                {booking.offerId}
+              </Box>
+              <Box width="20%" padding={theme.spacing(2)}>
+                {booking.orderId || 'n/a'}
+              </Box>
+              <Box width="10%" padding={theme.spacing(2)}>
+                {booking.status}
+              </Box>
+              <Box width="30%" padding={theme.spacing(2)}>
+                {booking.message}
+              </Box>
+              <Box width="16%" padding={theme.spacing(2)}>
+                {DateTime.fromISO(booking.createdAt).toLocaleString({
+                  weekday: 'short',
+                  month: 'short',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </Box>
             </Box>
           ))}
         </>
