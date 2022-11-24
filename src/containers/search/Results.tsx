@@ -1,13 +1,13 @@
 import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { createRef, useCallback, useEffect, useMemo, useState } from 'react';
-import { useAccommodationsAndOffers } from 'src/hooks/useAccommodationsAndOffers';
+import { useAccommodationMultiple } from 'src/hooks/useAccommodationMultiple';
 import { SearchCard } from './SearchCard';
 import { useAppState } from '../../store';
 import { styled } from '@mui/system';
 import { daysBetween } from '../../utils/date';
 import { HEADER } from 'src/config/componentSizes';
 import { useSearchParams } from 'react-router-dom';
-import { accommodationEventTransform } from '../../utils/useAccommodationsAndOffers';
+import { accommodationEventTransform } from '../../utils/accommodationHookHelper';
 import Draggable from 'react-draggable';
 
 export enum ResultsMode {
@@ -126,7 +126,7 @@ export const Results: React.FC = () => {
     focusedEvent
   ]);
   const { accommodations, isFetching, latestQueryParams, error } =
-    useAccommodationsAndOffers({
+    useAccommodationMultiple({
       accommodationTransformFn: transformFn
     });
 

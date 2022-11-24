@@ -8,7 +8,7 @@ import { AccountInfo } from 'src/components/AccountInfo';
 import { SocialsButton } from 'src/components/SocialButton';
 import MenuDesktop from './MenuDesktop';
 import navConfig from './MenuConfig';
-import { useAccommodationsAndOffers } from '../../hooks/useAccommodationsAndOffers';
+import { useAccommodationMultiple } from '../../hooks/useAccommodationMultiple';
 import { PreferredCurrencySelector } from '../../components/PreferredCurrencySelector';
 
 // this is commented out because the navconfig is currently commented out
@@ -80,7 +80,7 @@ const SOCIALS = [
 export default function MainHeader({ childrenBelowHeader }: MainHeaderProps) {
   const isOffset = useOffSetTop(HEADER.MAIN_DESKTOP_HEIGHT);
   const isDesktop = useResponsive('up', 'md');
-  const { isGroupMode } = useAccommodationsAndOffers();
+  const { isGroupMode } = useAccommodationMultiple();
   const theme = useTheme();
 
   return (

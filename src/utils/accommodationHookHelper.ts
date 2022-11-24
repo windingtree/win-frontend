@@ -1,11 +1,13 @@
-import { WinAccommodation, Offer } from '@windingtree/glider-types/dist/win';
+import { WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { DISABLE_FEATURES, GROUP_MODE_ROOM_COUNT } from 'src/config';
+import { SearchPropsType } from 'src/hooks/useAccommodationSingle';
 import { OfferRecord } from 'src/store/types';
 import {
   AccommodationTransformFn,
   EventInfo,
   PriceRange
-} from '../hooks/useAccommodationsAndOffers';
+} from '../hooks/useAccommodationMultiple';
+import { getIsInPast } from './date';
 import { getActiveEventsWithinRadius } from './events';
 import { crowDistance } from './geo';
 
@@ -17,25 +19,7 @@ export interface AccommodationWithId extends WinAccommodation {
   eventInfo?: EventInfo[];
 }
 
-export const getActiveAccommodations = (
-  accommodations: WinAccommodation[],
-  offers: Offer[]
-) => {
-  if (!accommodations || !offers) return [];
-
-  const idsActiveAccommodations = offers?.map((offer) => {
-    const accommodationId = Object.keys(offer.pricePlansReferences)[0];
-    return accommodationId;
-  });
-
-  const uniqueIdsActiveAccommodations = [...new Set(idsActiveAccommodations)];
-
-  const activeAccommodations = accommodations.filter((accommodation) => {
-    return uniqueIdsActiveAccommodations.includes(accommodation.id as string);
-  });
-
-  return activeAccommodations;
-};
+export class InvalidLocationError extends Error {}
 
 // get the lowest and highest price for a given set of offers
 // optionally get the prices in preferred currency
@@ -107,31 +91,6 @@ export const getOffersPriceRange = (
     });
 
   return priceRange;
-};
-
-export const getOffersById = (
-  offers: OfferRecord[],
-  accommodationId: string
-): OfferRecord[] => {
-  if (!accommodationId) return [];
-
-  const matchedOffers = offers.filter((offer) => {
-    return accommodationId === Object.keys(offer.pricePlansReferences)[0];
-  });
-
-  return matchedOffers;
-};
-
-export const getAccommodationById = (
-  accommodations: AccommodationWithId[],
-  id: string
-): AccommodationWithId | null => {
-  if (!id) return null;
-
-  const selectedAccommodation =
-    accommodations.find((accommodation) => accommodation.id === id) ?? null;
-
-  return selectedAccommodation;
 };
 
 // function to transform accommodation object to include distance/time from chosen event
@@ -209,4 +168,20 @@ export const getGroupMode = (roomCount: number | string | undefined): boolean =>
   if (roomCount === undefined) false;
   const numRoomCount = Number.isNaN(roomCount) ? 0 : Number(roomCount);
   return numRoomCount >= GROUP_MODE_ROOM_COUNT;
+};
+
+export const isOffersSearchPropsValid = (searchProps: SearchPropsType) => {
+  const { arrival, departure, roomCount, adultCount } = searchProps;
+  if (
+    !arrival ||
+    !departure ||
+    !roomCount ||
+    !adultCount ||
+    getIsInPast(arrival) ||
+    getIsInPast(departure)
+  ) {
+    return false;
+  }
+
+  return true;
 };

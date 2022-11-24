@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import { WinAccommodation } from '@windingtree/glider-types/dist/win';
+import { SearchPropsType } from 'src/hooks/useAccommodationSingle';
 import { OfferRecord } from 'src/store/types';
 import { notFoundText } from '../helpers';
 import { OfferItemSelectOne } from './offer-item/OfferItemSelectOne';
@@ -7,20 +8,14 @@ import { OfferItemSelectOne } from './offer-item/OfferItemSelectOne';
 type FacilityOffersSelectOneProps = {
   accommodation?: WinAccommodation;
   offers?: OfferRecord[];
-  roomCount?: number;
-  arrival?: Date | null;
-  departure?: Date | null;
-  adultCount?: number;
+  latestQueryParams?: SearchPropsType;
 };
 export const FacilityOffersSelectOne = ({
   accommodation,
   offers,
-  adultCount,
-  arrival,
-  departure,
-  roomCount
+  latestQueryParams
 }: FacilityOffersSelectOneProps) => {
-  if (!accommodation || !offers || !arrival || !departure || !adultCount || !roomCount) {
+  if (!accommodation || !offers || !latestQueryParams) {
     return null;
   }
 
@@ -36,10 +31,7 @@ export const FacilityOffersSelectOne = ({
             key={index}
             accommodation={accommodation}
             offer={offer}
-            adultCount={adultCount}
-            arrival={arrival}
-            departure={departure}
-            roomCount={roomCount}
+            latestQueryParams={latestQueryParams}
           />
         );
       })}

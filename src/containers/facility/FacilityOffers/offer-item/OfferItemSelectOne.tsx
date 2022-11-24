@@ -17,17 +17,16 @@ import { useSnackbar } from 'notistack';
 import { useCurrencies } from '../../../../hooks/useCurrencies';
 import { useUserSettings } from '../../../../hooks/useUserSettings';
 import { displayPriceFromPrice } from '../../../../utils/price';
+import { SearchPropsType } from 'src/hooks/useAccommodationSingle';
 
 const logger = Logger('OfferItemSelectOne');
 
 export const OfferItemSelectOne: React.FC<{
   offer: OfferRecord;
   accommodation: WinAccommodation;
-  roomCount: number;
-  arrival: Date;
-  departure: Date;
-  adultCount: number;
-}> = ({ offer, accommodation, roomCount, arrival, departure, adultCount }) => {
+  latestQueryParams: SearchPropsType;
+}> = ({ offer, accommodation, latestQueryParams }) => {
+  const { roomCount, arrival, departure, adultCount } = latestQueryParams;
   const theme = useTheme();
   const navigate = useNavigate();
   const numberOfDays = daysBetween(arrival, departure);

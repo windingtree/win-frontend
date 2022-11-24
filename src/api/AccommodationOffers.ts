@@ -5,7 +5,7 @@ import {
 } from '@windingtree/glider-types/dist/win';
 import { winClient } from 'src/api/winClient';
 import { daysBetween } from 'src/utils/date';
-import { SearchPropsType } from '../hooks/useAccommodation';
+import { SearchPropsType } from '../hooks/useAccommodationSingle';
 import { getPassengersBody } from '../utils/getPassengerBody';
 
 export interface AccommodationResponseType {

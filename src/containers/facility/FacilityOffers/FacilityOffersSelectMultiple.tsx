@@ -18,6 +18,7 @@ import { MHidden } from 'src/components/MHidden';
 import { OfferItemSelectMultiple } from './offer-item/OfferItemSelectMultiple';
 import { GROUP_MODE_ROOM_COUNT } from 'src/config';
 import { WinAccommodation } from '@windingtree/glider-types/dist/win';
+import { SearchPropsType } from 'src/hooks/useAccommodationSingle';
 
 export interface OfferCheckoutType extends OfferRecord {
   quantity: string;
@@ -47,20 +48,15 @@ export type FacilityOffersSelectMultipleFormProps = {
 type FacilityOffersSelectMultipleProps = {
   accommodation?: WinAccommodation;
   offers?: OfferRecord[];
-  initialRoomCount: number;
-  arrival: Date | null;
-  departure: Date | null;
-  adultCount: number;
+  searchPropsForm: SearchPropsType;
 };
 
 export const FacilityOffersSelectMultiple = ({
   accommodation,
   offers,
-  initialRoomCount,
-  adultCount,
-  arrival,
-  departure
+  searchPropsForm
 }: FacilityOffersSelectMultipleProps) => {
+  const { roomCount: initialRoomCount, adultCount, arrival, departure } = searchPropsForm;
   const { setBookingInfo, setOrganizerInfo } = useCheckout();
   const isDesktop = useResponsive('up', 'md');
   const navigate = useNavigate();

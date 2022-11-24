@@ -24,7 +24,7 @@ export const FacilityLoadingSkeleton = () => {
         {!isDesktop && (
           <Skeleton variant="rounded" sx={{ height: '40px', width: '50%' }} />
         )}
-        <Skeleton variant="rounded" sx={{ height: '600px', width: { md: '50%' } }} />
+        <Skeleton variant="rounded" sx={{ height: '590px', width: { md: '100%' } }} />
       </Stack>
     </>
   );

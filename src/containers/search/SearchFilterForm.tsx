@@ -18,9 +18,9 @@ import { RHFArrayCheckbox } from '../../components/hook-form/RHFArrayCheckbox';
 import Iconify from '../../components/Iconify';
 import {
   PriceRange,
-  useAccommodationsAndOffers
-} from '../../hooks/useAccommodationsAndOffers';
-import { AccommodationWithId } from '../../utils/useAccommodationsAndOffers';
+  useAccommodationMultiple
+} from '../../hooks/useAccommodationMultiple';
+import { AccommodationWithId } from '../../utils/accommodationHookHelper';
 import { usePriceFilter } from '../../hooks/usePriceFilter';
 import { useUserSettings } from '../../hooks/useUserSettings';
 import { filterAccommodationsByPriceRanges } from '../../utils/accommodation';
@@ -97,7 +97,7 @@ export const SearchFilterForm = ({
   const fieldName = 'priceRanges';
   const theme = useTheme();
   const [totalAccommodationsSelected, setTotalAccommodationsSelected] = useState(0);
-  const { allAccommodations } = useAccommodationsAndOffers();
+  const { allAccommodations } = useAccommodationMultiple();
   const { priceFilter, setPriceFilter } = usePriceFilter();
   const { preferredCurrencyCode } = useUserSettings();
 

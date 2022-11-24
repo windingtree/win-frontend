@@ -10,7 +10,7 @@ import type {
   RoomTypes
 } from '@windingtree/glider-types/dist/win';
 import type { NetworkInfo, CryptoAsset } from '@windingtree/win-commons/dist/types';
-import { PriceRange } from '../hooks/useAccommodationsAndOffers';
+import { PriceRange } from '../hooks/useAccommodationMultiple';
 import { CurrencyCode } from '../hooks/useCurrencies';
 
 export interface GenericStateRecord {

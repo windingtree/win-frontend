@@ -1,5 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import {
+  getAccommodationAndOffersFromCache,
+  getAccommodationFromCache
+} from 'src/api/cache';
+import { accommodationExpirationTime, offerExpirationTime } from 'src/config';
 import { useUserSettings } from './useUserSettings';
 import {
   AccommodationResponseType,
@@ -7,7 +12,8 @@ import {
   fetchOffers,
   OffersResponseType
 } from '../api/AccommodationOffers';
-import { useAccommodationsAndOffers } from './useAccommodationsAndOffers';
+import { useAccommodationMultiple } from './useAccommodationMultiple';
+import { isOffersSearchPropsValid } from 'src/utils/accommodationHookHelper';
 
 export interface SearchPropsType {
   arrival: Date | null;
@@ -17,48 +23,45 @@ export interface SearchPropsType {
   childrenCount?: number;
 }
 
-export interface UseAccommodationProps {
+export interface useAccommodationSingleProps {
   id?: string;
   searchProps?: SearchPropsType;
 }
 
-export const useAccommodation = (props: UseAccommodationProps) => {
+export const useAccommodationSingle = (props: useAccommodationSingleProps) => {
   const { preferredCurrencyCode } = useUserSettings();
-  const { normalizeOffers } = useAccommodationsAndOffers();
+  const { normalizeOffers } = useAccommodationMultiple();
   const { id, searchProps } = props || {};
 
   const accommodationQuery = useQuery<AccommodationResponseType | undefined, Error>(
     ['accommodation-details', id],
     async () => {
       if (!id) return;
+
       return await fetchAccommodation(id);
-    }
-  );
-
-  const offerExpirationTime = 25 * 60 * 1000;
-  const offersQuery = useQuery<OffersResponseType | undefined, Error>(
-    ['accommodation-offers', id],
-    async () => {
-      if (!id || !searchProps) return;
-
-      const { arrival, departure, roomCount, adultCount } = searchProps;
-
-      if (!arrival || !departure || !roomCount || !adultCount) return;
-      return await fetchOffers({ id, searchProps });
     },
     {
-      //    TODO: get the offers from the cache
-      // initialData: () => {
-      //   const cache = queryClient.getQueryData(['accommodations-and-offers']) as
-      //     | AccommodationsAndOffersResponse
-      //     | undefined;
-
-      // },
-      enabled: false,
-      cacheTime: offerExpirationTime,
-      refetchInterval: offerExpirationTime
+      initialData: () => getAccommodationFromCache(id),
+      staleTime: accommodationExpirationTime
     }
   );
+
+  const offersQuery = useQuery<OffersResponseType | undefined, Error>({
+    queryFn: async () => {
+      if (!id || !searchProps) return undefined;
+
+      if (!isOffersSearchPropsValid(searchProps)) return undefined;
+
+      return await fetchOffers({ id, searchProps });
+    },
+    queryKey: ['accommodation-offers', id, searchProps],
+    enabled: !!searchProps,
+    initialData: () => getAccommodationAndOffersFromCache(id, searchProps),
+    staleTime: offerExpirationTime,
+    cacheTime: offerExpirationTime,
+    refetchInterval: offerExpirationTime,
+    keepPreviousData: true
+  });
 
   const { data, ...restOffersQuery } = offersQuery;
 

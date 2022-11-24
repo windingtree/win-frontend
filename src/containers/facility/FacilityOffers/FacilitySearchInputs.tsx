@@ -1,50 +1,36 @@
 import { LoadingButton } from '@mui/lab';
 import { Popover, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
-import { formatISO } from 'date-fns';
-import { MouseEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useSearchParams } from 'react-router-dom';
 import { DateRangeButton } from 'src/components/buttons/DateRangeButton';
 import { GuestDetailsButton } from 'src/components/buttons/GuestDetailsButton';
 import { GuestsAndRoomsInputs } from 'src/components/form-sections/GuestsAndRoomsInputs';
 import { RHFDateRangePicker } from 'src/components/hook-form/RHFDateRangePicker';
-import { SearchPropsType, useAccommodation } from 'src/hooks/useAccommodation';
 
 type FacilitySearchInputsProps = {
   id?: string;
-  searchProps?: SearchPropsType;
+  onSubmit: (...args: unknown[]) => void;
+  haveOffersBeenFetchedOnce: boolean;
+  isFetching: boolean;
 };
 
-export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsProps) => {
+export const FacilitySearchInputs = ({
+  id,
+
+  onSubmit,
+  haveOffersBeenFetchedOnce,
+  isFetching
+}: FacilitySearchInputsProps) => {
   const theme = useTheme();
   const { watch, handleSubmit } = useFormContext();
   const { roomCount, adultCount, dateRange } = watch();
-  const { offersQuery } = useAccommodation({ id, searchProps });
-  const { refetch, isFetching, isFetched } = offersQuery;
-  const [_, setSearchParams] = useSearchParams();
-
   const [dateRangeAnchorEl, setDateRangeAnchorEl] = useState<HTMLButtonElement | null>(
     null
   );
   const [guestsAnchorEl, setGuestsAnchorEl] = useState<HTMLButtonElement | null>(null);
   const guestsRef = useRef<HTMLButtonElement>(null);
   const dateRef = useRef<HTMLButtonElement>(null);
-
-  const onSubmit = (_, event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if (!searchProps) return;
-    refetch();
-
-    const { arrival, departure, roomCount, adultCount } = searchProps;
-
-    setSearchParams({
-      arrival: arrival ? formatISO(arrival) : '',
-      departure: departure ? formatISO(departure) : '',
-      roomCount: roomCount.toString(),
-      adultCount: adultCount.toString()
-    });
-  };
 
   if (!id) return null;
 
@@ -115,10 +101,10 @@ export const FacilitySearchInputs = ({ id, searchProps }: FacilitySearchInputsPr
           type="submit"
           size="large"
           variant="contained"
-          sx={{ px: 6 }}
+          sx={{ px: 6, minWidth: 208 }}
           onClick={handleSubmit(onSubmit)}
         >
-          {isFetched ? 'Change Search' : 'Search'}
+          {haveOffersBeenFetchedOnce ? 'Change Search' : 'Search'}
         </LoadingButton>
       </Stack>
     </>

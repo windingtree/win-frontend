@@ -5,8 +5,9 @@ import {
 } from '@windingtree/glider-types/dist/win';
 import axios from 'axios';
 import { getPassengersBody } from '../utils/getPassengerBody';
-import { getGroupMode } from '../utils/useAccommodationsAndOffers';
-import { SearchTypeProps } from '../hooks/useAccommodationsAndOffers';
+
+import { getGroupMode } from '../utils/accommodationHookHelper';
+import { SearchTypeProps } from '../hooks/useAccommodationMultiple';
 import { defaultSearchRadiusInMeters, backend } from '../config';
 import { CoordinatesType } from 'src/utils/accommodation';
 import { ValidationError } from 'yup';

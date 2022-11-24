@@ -4,7 +4,9 @@ import {
   filterAccommodationsByPriceRanges,
   getLargestImages,
   sortByLargestImage,
-  CoordinatesType
+  CoordinatesType,
+  getActiveAccommodations,
+  getAccommodationById
 } from '../utils/accommodation';
 import { daysBetween } from '../utils/date';
 import { filterOffersByPriceRanges } from '../utils/offers';
@@ -16,16 +18,14 @@ import {
   InvalidSearchParamsError
 } from '../api/AccommodationsAndOffers';
 import {
-  getAccommodationById,
-  getActiveAccommodations,
-  getOffersById,
   AccommodationWithId,
   getOffersPriceRange
-} from '../utils/useAccommodationsAndOffers';
+} from '../utils/accommodationHookHelper';
 import { Offer, WinAccommodation } from '@windingtree/glider-types/dist/win';
 import { getOffersWithRoomInfo, sortOffersByPrice } from 'src/utils/offers';
 import { OfferRecord } from '../store/types';
 import { CurrencyCode, useCurrencies } from '../hooks/useCurrencies';
+import { offerExpirationTime } from 'src/config';
 import Logger from '../utils/logger';
 
 export interface SearchTypeProps {
@@ -65,7 +65,7 @@ export type AccommodationTransformFn = (
   params: AccommodationTransformFnParams
 ) => AccommodationWithId;
 
-export const useAccommodationsAndOffers = ({
+export const useAccommodationMultiple = ({
   searchProps,
   accommodationTransformFn
 }: {
@@ -97,9 +97,9 @@ export const useAccommodationsAndOffers = ({
     {
       enabled: false,
       keepPreviousData: false,
-      cacheTime: 25 * 60 * 1000, //25 min expiration
-      refetchInterval: 25 * 60 * 1000, //25 min expiration
-      staleTime: 25 * 60 * 1000 //25 min expiration
+      cacheTime: offerExpirationTime,
+      refetchInterval: offerExpirationTime,
+      staleTime: offerExpirationTime
     }
   );
 
@@ -226,6 +226,7 @@ export const useAccommodationsAndOffers = ({
         numberOfDays,
         nbRooms
       );
+
       const preferredCurrencyPriceRange = getOffersPriceRange(
         accommodation.offers,
         true,
@@ -280,13 +281,7 @@ export const useAccommodationsAndOffers = ({
     [allOffers, priceFilter]
   );
 
-  const getAccommodationByHotelId = useCallback(
-    (hotelId: string) => accommodations.find((a) => a.hotelId === hotelId),
-    [accommodations]
-  );
-
   return {
-    getOffersById,
     normalizeOffers,
     getAccommodationById,
     allAccommodations,
@@ -301,7 +296,6 @@ export const useAccommodationsAndOffers = ({
     isFetching,
     latestQueryParams,
     isFetched,
-    getAccommodationByHotelId,
     isGroupMode
   };
 };

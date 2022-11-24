@@ -10,13 +10,13 @@ import {
   IconButton
 } from '@mui/material';
 import Iconify from '../../components/Iconify';
-import { AccommodationWithId } from '../../utils/useAccommodationsAndOffers';
+import { AccommodationWithId } from '../../utils/accommodationHookHelper';
 import { ImageCarousel } from '../../components/ImageCarousel';
 import { buildAccommodationAddress } from '../../utils/accommodation';
 import {
   EventInfo,
-  useAccommodationsAndOffers
-} from '../../hooks/useAccommodationsAndOffers';
+  useAccommodationMultiple
+} from '../../hooks/useAccommodationMultiple';
 import { useAppDispatch } from 'src/store';
 import { displayPriceFromPriceFormat, displayPriceFromValues } from '../../utils/price';
 import { formatISO } from 'date-fns';
@@ -32,7 +32,7 @@ export interface SearchCardProps {
 export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
   ({ mapCard, facility, focusedEvent }, ref) => {
     const theme = useTheme();
-    const { isGroupMode, latestQueryParams } = useAccommodationsAndOffers();
+    const { isGroupMode, latestQueryParams } = useAccommodationMultiple();
     const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useAppDispatch();
     const prices = useMemo(
@@ -122,20 +122,18 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               media={facility.media}
             />
           </Stack>
-          <Stack
-            justifyContent="space-between"
-            width="100%"
-            spacing={0.5}
-            sx={{ p: 1, mt: 0, cursor: 'pointer' }}
+          <Link
+            to={{
+              pathname: `/facility/${facility.providerHotelId}`,
+              search: `?${createSearchParams(searchParams)}`
+            }}
+            style={{ textDecoration: 'none', color: 'inherit' }}
           >
-            <Link
-              to={{
-                pathname: `/facility/${facility.providerHotelId}`,
-                search: `?${createSearchParams(searchParams)}`
-              }}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: 'none', color: 'inherit' }}
+            <Stack
+              justifyContent="space-between"
+              width="100%"
+              spacing={0.5}
+              sx={{ p: 1, mt: 0, cursor: 'pointer' }}
             >
               <Stack direction="row" justifyContent="space-between" spacing={1}>
                 <Typography
@@ -229,8 +227,8 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
                 )}
               </Stack>
               {isGroupMode && <Typography variant="subtitle2">Select Rooms</Typography>}
-            </Link>
-          </Stack>
+            </Stack>
+          </Link>
         </Stack>
       </Card>
     );

@@ -64,7 +64,7 @@ export const Bookings = () => {
             Please connect your wallet
           </Grid>
           <Grid item>
-            <ConnectButton/>
+            <ConnectButton />
           </Grid>
         </Grid>
       </MessageBox>
@@ -77,7 +77,7 @@ export const Bookings = () => {
           <Grid item>
             <LoadingButton
               loading={isLogin}
-              endIcon={<Iconify icon="ri:login-box-line"/>}
+              endIcon={<Iconify icon="ri:login-box-line" />}
               loadingPosition="end"
               variant="contained"
               disabled={isAccountContract}
@@ -116,12 +116,24 @@ export const Bookings = () => {
               borderBottom: '1px solid silver'
             }}
           >
-            <Box width="4%" padding={theme.spacing(1)}>N</Box>
-            <Box width="20%" padding={theme.spacing(2)}>offerId</Box>
-            <Box width="20%" padding={theme.spacing(2)}>orderId</Box>
-            <Box width="10%" padding={theme.spacing(2)}>status</Box>
-            <Box width="30%" padding={theme.spacing(2)}>message</Box>
-            <Box width="16%" padding={theme.spacing(2)}>createdAt</Box>
+            <Box width="4%" padding={theme.spacing(1)}>
+              N
+            </Box>
+            <Box width="20%" padding={theme.spacing(2)}>
+              offerId
+            </Box>
+            <Box width="20%" padding={theme.spacing(2)}>
+              orderId
+            </Box>
+            <Box width="10%" padding={theme.spacing(2)}>
+              status
+            </Box>
+            <Box width="30%" padding={theme.spacing(2)}>
+              message
+            </Box>
+            <Box width="16%" padding={theme.spacing(2)}>
+              createdAt
+            </Box>
           </Box>
           {bookings.map((booking, index) => (
             <Box
@@ -133,18 +145,30 @@ export const Bookings = () => {
                 borderBottom: '1px solid silver'
               }}
             >
-              <Box width="4%" padding={theme.spacing(1)}>{index + 1}</Box>
-              <Box width="20%" padding={theme.spacing(2)}>{booking.offerId}</Box>
-              <Box width="20%" padding={theme.spacing(2)}>{booking.orderId || 'n/a'}</Box>
-              <Box width="10%" padding={theme.spacing(2)}>{booking.status}</Box>
-              <Box width="30%" padding={theme.spacing(2)}>{booking.message}</Box>
-              <Box width="16%" padding={theme.spacing(2)}>{DateTime.fromISO(booking.createdAt).toLocaleString({
-                weekday: 'short',
-                month: 'short',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}</Box>
+              <Box width="4%" padding={theme.spacing(1)}>
+                {index + 1}
+              </Box>
+              <Box width="20%" padding={theme.spacing(2)}>
+                {booking.offerId}
+              </Box>
+              <Box width="20%" padding={theme.spacing(2)}>
+                {booking.orderId || 'n/a'}
+              </Box>
+              <Box width="10%" padding={theme.spacing(2)}>
+                {booking.status}
+              </Box>
+              <Box width="30%" padding={theme.spacing(2)}>
+                {booking.message}
+              </Box>
+              <Box width="16%" padding={theme.spacing(2)}>
+                {DateTime.fromISO(booking.createdAt).toLocaleString({
+                  weekday: 'short',
+                  month: 'short',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </Box>
             </Box>
           ))}
         </>

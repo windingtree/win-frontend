@@ -4,8 +4,8 @@ import {
   WinAccommodation
 } from '@windingtree/glider-types/dist/win';
 import { OfferCheckoutType } from 'src/containers/facility/FacilityOffers/FacilityOffersSelectMultiple';
+import { PriceFormat, PriceRange } from 'src/hooks/useAccommodationMultiple';
 import { OfferRecord } from 'src/store/types';
-import { PriceFormat, PriceRange } from '../hooks/useAccommodationsAndOffers';
 import { isBetween } from './common';
 import { checkPriceFormatsCompatible } from './price';
 import { stringToNumber } from './strings';
@@ -69,10 +69,48 @@ export const getOffersWithRoomInfo = (
     const accommodationId = getAccommodationOfOffer(offer).accommodation;
     const roomTypeId = getAccommodationOfOffer(offer).roomType;
     const matchedAccommodation = accommodations[accommodationId];
-    const roomType = matchedAccommodation.roomTypes[roomTypeId];
+
+    const roomType = matchedAccommodation?.roomTypes[roomTypeId];
 
     return {
       room: roomType,
       ...offer
     };
   });
+
+export const transformOffersObjectToArray = (
+  offers: Record<string, Offer>
+): OfferRecord[] => {
+  const array = Object.entries(offers).map<OfferRecord>(([key, value]) => ({
+    id: key,
+    ...value
+  }));
+  return array;
+};
+
+const transformOffersArrayIntoObject = (offers: OfferRecord[]): Record<string, Offer> => {
+  const object = offers.reduce((acc, current) => {
+    const { id, ...rest } = current;
+    return { ...acc, [id]: rest };
+  }, {});
+
+  return object;
+};
+
+const getAccommodationIdFromOffer = (offer: Offer): string =>
+  Object.values(offer.pricePlansReferences)[0].accommodation;
+
+export const getOffersById = (
+  offers: Record<string, Offer>,
+  accommodationId: string
+): Record<string, Offer> => {
+  if (!accommodationId) return {};
+
+  const offersArray = transformOffersObjectToArray(offers);
+
+  const matchedOffers = offersArray.filter((offer) => {
+    return accommodationId === getAccommodationIdFromOffer(offer);
+  });
+
+  return transformOffersArrayIntoObject(matchedOffers);
+};

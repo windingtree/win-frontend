@@ -1,7 +1,7 @@
-import { MediaItem, WinAccommodation } from '@windingtree/glider-types/dist/win';
-import { AccommodationWithId } from './useAccommodationsAndOffers';
+import { MediaItem, Offer, WinAccommodation } from '@windingtree/glider-types/dist/win';
+import { AccommodationWithId } from './accommodationHookHelper';
 import { OfferRecord } from 'src/store/types';
-import { PriceRange } from '../hooks/useAccommodationsAndOffers';
+import { PriceRange } from '../hooks/useAccommodationMultiple';
 import { isPriceRangeWithinPriceRange } from './price';
 
 export interface CoordinatesType {
@@ -82,4 +82,49 @@ export const filterAccommodationsByPriceRanges = (
   return accommodations.filter((accommodation) => {
     return isAccommodationWithinPriceRanges(accommodation, ...priceRange);
   });
+};
+
+export const getAccommodationByProviderId = (
+  accommodations: Record<string, WinAccommodation>,
+  providerId?: string
+) => {
+  const array = Object.values(accommodations);
+
+  const accommodation = array.find((item) => item.providerHotelId === providerId);
+  return accommodation;
+};
+
+export const getAccommodationByHotelId = (accommodations, hotelId: string) =>
+  accommodations.find((a) => a.hotelId === hotelId);
+
+export const getAccommodationById = (
+  accommodations: AccommodationWithId[],
+  id: string
+): AccommodationWithId | null => {
+  if (!id) return null;
+
+  const selectedAccommodation =
+    accommodations.find((accommodation) => accommodation.id === id) ?? null;
+
+  return selectedAccommodation;
+};
+
+export const getActiveAccommodations = (
+  accommodations: WinAccommodation[],
+  offers: Offer[]
+) => {
+  if (!accommodations || !offers) return [];
+
+  const idsActiveAccommodations = offers?.map((offer) => {
+    const accommodationId = Object.keys(offer.pricePlansReferences)[0];
+    return accommodationId;
+  });
+
+  const uniqueIdsActiveAccommodations = [...new Set(idsActiveAccommodations)];
+
+  const activeAccommodations = accommodations.filter((accommodation) => {
+    return uniqueIdsActiveAccommodations.includes(accommodation.id as string);
+  });
+
+  return activeAccommodations;
 };
