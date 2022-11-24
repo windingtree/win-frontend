@@ -7,10 +7,10 @@ const CloseIcon = () => (
   <Iconify icon="material-symbols:expand-more-rounded" width={30} height={30} />
 );
 
-export const AccordionBox: React.FC<{ title: string; children: React.ReactNode }> = ({
-  title,
-  children
-}) => {
+export const AccordionMobileBox: React.FC<{
+  title: string;
+  children: React.ReactNode;
+}> = ({ title, children }) => {
   const isDesktop = useResponsive('up', 'md');
 
   if (isDesktop) {

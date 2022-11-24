@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { DateTime } from 'luxon';
-import { AccordionBox } from 'src/components/AccordionBox';
+import { AccordionMobileBox } from 'src/components/AccordionMobileBox';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { useResponsive } from 'src/hooks/useResponsive';
 
@@ -26,7 +26,7 @@ export const CheckoutDetails = () => {
   );
 
   return (
-    <AccordionBox title="Your reservation details">
+    <AccordionMobileBox title="Your reservation details">
       {isDesktop && <Typography variant="subtitle1">Your reservation</Typography>}
       <Typography mt={2} variant="body2">
         Dates
@@ -45,6 +45,6 @@ export const CheckoutDetails = () => {
       <Typography variant="body2">
         {`${bookingInfo.adultCount} ${bookingInfo.adultCount > 1 ? 'guests' : 'guest'}`}
       </Typography>
-    </AccordionBox>
+    </AccordionMobileBox>
   );
 };

@@ -12,7 +12,7 @@ import { CurrencyCode, useCurrencies } from '../../hooks/useCurrencies';
 import { useUserSettings } from '../../hooks/useUserSettings';
 import { displayPriceFromValues } from '../../utils/price';
 import { getRndHotelImg, getAccommodationImage } from '../../utils/getRndHotelImg';
-import { AccordionBox } from 'src/components/AccordionBox';
+import { AccordionMobileBox } from 'src/components/AccordionMobileBox';
 import { useResponsive } from 'src/hooks/useResponsive';
 
 export const CheckoutIntroduction = () => {
@@ -87,7 +87,7 @@ export const CheckoutIntroduction = () => {
     preferredCurrencyCode !== 'USD';
 
   return (
-    <AccordionBox
+    <AccordionMobileBox
       title={`Your payment value is ${formattedOfferSymbol} ${formattedOfferPrice}`}
     >
       <Box
@@ -188,6 +188,6 @@ export const CheckoutIntroduction = () => {
           </Box>
         )}
       </Box>
-    </AccordionBox>
+    </AccordionMobileBox>
   );
 };
