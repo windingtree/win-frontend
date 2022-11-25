@@ -50,27 +50,15 @@ export const CheckoutIntroduction = () => {
     `${accommodationName}, ${hotelCity}`
   )}`;
 
-  // const formattedOfferPrice = formatPrice(
-  //   utils.parseEther(bookingInfo.pricing.offerCurrency.amount.toString())
-  // );
-  // const formattedOfferSymbol =
-  //   currencySymbolMap[bookingInfo.pricing.offerCurrency.currency];
   const offerCurrency = bookingInfo.pricing.offerCurrency.currency;
-
   const formattedOfferPrice = displayPriceFromValues(
     bookingInfo.pricing.offerCurrency.amount,
     bookingInfo.pricing.offerCurrency.currency
   );
 
   const daysOfStay = daysBetween(bookingInfo.date.arrival, bookingInfo.date.departure);
-  // let pricePerDay = '0.00';
-  // if (daysOfStay > 0) {
-  //   pricePerDay = (
-  //     parseFloat(bookingInfo.pricing.offerCurrency.amount) / daysOfStay
-  //   ).toFixed(2);
-  // }
   let formattedPricePerDay = formattedOfferPrice;
-  if (daysOfStay > 0) {
+  if (daysOfStay > 1) {
     const pricePerDay: number =
       parseFloat(bookingInfo.pricing.offerCurrency.amount) / daysOfStay;
     formattedPricePerDay = displayPriceFromValues(
@@ -78,11 +66,6 @@ export const CheckoutIntroduction = () => {
       bookingInfo.pricing.offerCurrency.currency
     );
   }
-
-  // const formattedUsdPrice =
-  //   bookingInfo.pricing.usd &&
-  //   formatPrice(utils.parseEther(bookingInfo.pricing.usd.toString()));
-  // const formattedUsdSymbol = currencySymbolMap['USD'];
 
   const formattedUsdPrice =
     bookingInfo.pricing.usd && displayPriceFromValues(bookingInfo.pricing.usd, 'USD');
