@@ -125,8 +125,8 @@ export const SearchForm: React.FC<{ closeable?: boolean }> = ({ closeable }) => 
 
     return {
       location: searchParams.get('location') || '',
-      adultCount: Number(searchParams.get('adultCount')),
-      roomCount: Number(searchParams.get('roomCount')),
+      adultCount: Number(searchParams.get('adultCount')) || 2,
+      roomCount: Number(searchParams.get('roomCount')) || 1,
       dateRange: [
         {
           startDate: startDateParams ? parseISO(startDateParams) : null,
