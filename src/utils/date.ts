@@ -48,11 +48,10 @@ export const getFormattedBetweenDate = (
   startDate: Date | string,
   endDate: Date | string
 ) => {
-  const startDay = DateTime.fromJSDate(new Date(startDate)).toFormat('d');
-  const endDay = DateTime.fromJSDate(new Date(endDate)).toFormat('d');
-  const month = DateTime.fromJSDate(new Date(endDate)).toFormat('LLL');
+  // const startDay = DateTime.fromISO(startDate).toLocaleString(DateTime.DATE_MED);
+  // const endDay = DateTime.fromISO(endDate)).toLocaleString(DateTime.DATE_MED);
 
-  return `${startDay}-${endDay} ${month}`;
+  return `${startDate} - ${endDate}`;
 };
 
 export const isDatesSameDay = (date1: Date, date2: Date): boolean => {
