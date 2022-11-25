@@ -115,8 +115,8 @@ export const getPriceRangeFromPriceRanges = (
 };
 
 export const displayPriceFromPrice = (price: Price): string => {
-  const { currency, decimalPlaces, public: value } = price;
-  return displayPriceFromValues(value, currency, decimalPlaces);
+  const { currency, public: value } = price;
+  return displayPriceFromValues(value, currency);
 };
 
 export const displayPriceFromPriceFormat = (
