@@ -1,13 +1,11 @@
-import { utils } from 'ethers';
 import { Box, Card, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { formatPrice, stringToNumber } from 'src/utils/strings';
+import { stringToNumber } from 'src/utils/strings';
 import { daysBetween } from 'src/utils/date';
 import { useCheckout } from 'src/hooks/useCheckout';
 import { sortByLargestImage } from 'src/utils/accommodation';
 import { useMemo } from 'react';
 import { CardMediaFallback } from 'src/components/CardMediaFallback';
-import { currencySymbolMap } from '@windingtree/win-commons/dist/currencies';
 import { CurrencyCode, useCurrencies } from '../../hooks/useCurrencies';
 import { useUserSettings } from '../../hooks/useUserSettings';
 import { displayPriceFromValues } from '../../utils/price';
@@ -52,25 +50,42 @@ export const CheckoutIntroduction = () => {
     `${accommodationName}, ${hotelCity}`
   )}`;
 
-  const formattedOfferPrice = formatPrice(
-    utils.parseEther(bookingInfo.pricing.offerCurrency.amount.toString())
-  );
-  const formattedOfferSymbol =
-    currencySymbolMap[bookingInfo.pricing.offerCurrency.currency];
+  // const formattedOfferPrice = formatPrice(
+  //   utils.parseEther(bookingInfo.pricing.offerCurrency.amount.toString())
+  // );
+  // const formattedOfferSymbol =
+  //   currencySymbolMap[bookingInfo.pricing.offerCurrency.currency];
   const offerCurrency = bookingInfo.pricing.offerCurrency.currency;
 
+  const formattedOfferPrice = displayPriceFromValues(
+    bookingInfo.pricing.offerCurrency.amount,
+    bookingInfo.pricing.offerCurrency.currency
+  );
+
   const daysOfStay = daysBetween(bookingInfo.date.arrival, bookingInfo.date.departure);
-  let pricePerDay = '0.00';
+  // let pricePerDay = '0.00';
+  // if (daysOfStay > 0) {
+  //   pricePerDay = (
+  //     parseFloat(bookingInfo.pricing.offerCurrency.amount) / daysOfStay
+  //   ).toFixed(2);
+  // }
+  let formattedPricePerDay = formattedOfferPrice;
   if (daysOfStay > 0) {
-    pricePerDay = (
-      parseFloat(bookingInfo.pricing.offerCurrency.amount) / daysOfStay
-    ).toFixed(2);
+    const pricePerDay: number =
+      parseFloat(bookingInfo.pricing.offerCurrency.amount) / daysOfStay;
+    formattedPricePerDay = displayPriceFromValues(
+      pricePerDay,
+      bookingInfo.pricing.offerCurrency.currency
+    );
   }
 
+  // const formattedUsdPrice =
+  //   bookingInfo.pricing.usd &&
+  //   formatPrice(utils.parseEther(bookingInfo.pricing.usd.toString()));
+  // const formattedUsdSymbol = currencySymbolMap['USD'];
+
   const formattedUsdPrice =
-    bookingInfo.pricing.usd &&
-    formatPrice(utils.parseEther(bookingInfo.pricing.usd.toString()));
-  const formattedUsdSymbol = currencySymbolMap['USD'];
+    bookingInfo.pricing.usd && displayPriceFromValues(bookingInfo.pricing.usd, 'USD');
 
   const showUSDPrice =
     formattedUsdPrice && bookingInfo.pricing.offerCurrency.currency != 'USD';
@@ -87,9 +102,7 @@ export const CheckoutIntroduction = () => {
     preferredCurrencyCode !== 'USD';
 
   return (
-    <AccordionMobileBox
-      title={`Your payment value is ${formattedOfferSymbol} ${formattedOfferPrice}`}
-    >
+    <AccordionMobileBox title={`Your payment value is ${formattedOfferPrice}`}>
       <Box
         mb={{ xs: 3, lg: 5 }}
         style={
@@ -126,21 +139,19 @@ export const CheckoutIntroduction = () => {
         </Box>
         {isGroupMode && (
           <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
-            The refundable deposit is {formattedOfferSymbol}
-            {formattedOfferPrice}
+            The refundable deposit is {formattedOfferPrice}
           </Typography>
         )}
         {!isGroupMode && isDesktop && (
           <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
-            Your payment value is {formattedOfferSymbol}
-            {formattedOfferPrice}
+            Your payment value is {formattedOfferPrice}
           </Typography>
         )}
         <Typography mb={{ xs: 3, lg: 2 }} variant="h5">
           Price details
         </Typography>
         <Typography mb={{ xs: 3, lg: 2 }}>
-          {formattedOfferSymbol} {pricePerDay} x {daysOfStay} nights
+          {formattedPricePerDay} x {daysOfStay} nights
         </Typography>
         <Box
           style={{
@@ -150,9 +161,7 @@ export const CheckoutIntroduction = () => {
         >
           <Typography mb={{ xs: 3, lg: 2 }}>Total ({offerCurrency})</Typography>
           <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
-          <Typography mb={{ xs: 3, lg: 2 }}>
-            {formattedOfferSymbol} {formattedOfferPrice}
-          </Typography>
+          <Typography mb={{ xs: 3, lg: 2 }}>{formattedOfferPrice}</Typography>
         </Box>
         {showUSDPrice && (
           <Box
@@ -163,9 +172,7 @@ export const CheckoutIntroduction = () => {
           >
             <Typography mb={{ xs: 3, lg: 2 }}>Equivalent amount in USD</Typography>
             <Typography style={{ flexGrow: 1 }}>&nbsp;</Typography>
-            <Typography mb={{ xs: 3, lg: 2 }}>
-              {formattedUsdSymbol} {formattedUsdPrice}
-            </Typography>
+            <Typography mb={{ xs: 3, lg: 2 }}>{formattedUsdPrice}</Typography>
           </Box>
         )}
         {showPreferredCurrencyPrice && (
