@@ -44,14 +44,18 @@ export const getFormattedDate = (date: Date | string) => {
   return DateTime.fromJSDate(new Date(date)).toFormat('ccc, LLL d, yyyy');
 };
 
+export const getFormattedShortDate = (date: Date | string) => {
+  return DateTime.fromJSDate(new Date(date)).toFormat('LLL d, yyyy');
+};
+
 export const getFormattedBetweenDate = (
   startDate: Date | string,
   endDate: Date | string
 ) => {
-  // const startDay = DateTime.fromISO(startDate).toLocaleString(DateTime.DATE_MED);
-  // const endDay = DateTime.fromISO(endDate)).toLocaleString(DateTime.DATE_MED);
+  const startDay = getFormattedShortDate(convertToLocalTime(new Date(startDate)));
+  const endDay = getFormattedShortDate(convertToLocalTime(new Date(endDate)));
 
-  return `${startDate} - ${endDate}`;
+  return `${startDay} - ${endDay}`;
 };
 
 export const isDatesSameDay = (date1: Date, date2: Date): boolean => {
