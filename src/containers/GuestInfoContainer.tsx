@@ -79,7 +79,7 @@ export const GuestInfoContainer = () => {
 
   const onSubmit = useCallback(
     async (values: PersonalInfo) => {
-      logger.info('submit user data', values);
+      logger.debug('submit user data', values);
       const accommodationId = bookingInfo?.accommodation?.id;
 
       try {
@@ -109,7 +109,7 @@ export const GuestInfoContainer = () => {
           });
 
         setOrganizerInfo({ ...values, birthdate: formattedDate });
-        logger.info('Guest info sent successfully');
+        logger.debug('Guest info sent successfully');
         navigate('/checkout/' + accommodationId);
       } catch (error) {
         const message = (error as Error).message || 'Unknown error';

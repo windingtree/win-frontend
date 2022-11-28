@@ -112,8 +112,7 @@ export const useAccommodationMultiple = ({
     return offers.map((offer) => {
       const preferredCurrencyPrice = convertPriceCurrency({
         price: offer.price,
-        targetCurrency: preferredCurrencyCode,
-        amount: 1
+        targetCurrency: preferredCurrencyCode
       });
 
       return { ...offer, preferredCurrencyPrice };

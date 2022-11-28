@@ -3,6 +3,7 @@ import { SearchPropsType } from 'src/hooks/useAccommodationSingle';
 import { getAccommodationByProviderId } from 'src/utils/accommodation';
 import { isDatesSameDay } from 'src/utils/date';
 import { getOffersById } from 'src/utils/offers';
+import { getGroupMode } from '../utils/accommodationHookHelper';
 import { OffersResponseType } from './AccommodationOffers';
 import { AccommodationsAndOffersResponse } from './AccommodationsAndOffers';
 
@@ -64,6 +65,7 @@ export const getAccommodationAndOffersFromCache = (
   return {
     accommodations: { [accommodation.id]: accommodation },
     offers: matchedOffers,
-    latestQueryParams: searchProps
+    latestQueryParams: searchProps,
+    isGroupMode: getGroupMode(searchProps.roomCount)
   };
 };

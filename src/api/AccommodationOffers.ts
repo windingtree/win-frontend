@@ -6,6 +6,7 @@ import {
 import { winClient } from 'src/api/winClient';
 import { daysBetween } from 'src/utils/date';
 import { SearchPropsType } from '../hooks/useAccommodationSingle';
+import { getGroupMode } from '../utils/accommodationHookHelper';
 import { getPassengersBody } from '../utils/getPassengerBody';
 
 export interface AccommodationResponseType {
@@ -16,6 +17,7 @@ export interface OffersResponseType {
   offers: Record<string, Offer>;
   latestQueryParams: SearchPropsType;
   accommodations: Record<string, WinAccommodation>;
+  isGroupMode: boolean;
 }
 
 export async function fetchAccommodation(id: string): Promise<AccommodationResponseType> {
@@ -57,6 +59,8 @@ export const fetchOffers = async ({
     passengers: passengersBody
   };
 
+  const isGroupMode = getGroupMode(searchProps.roomCount);
+
   const { data } = await winClient
     .post<SearchResults>(`/api/accommodations/${id}`, requestBody)
     .catch((e) => {
@@ -90,6 +94,7 @@ export const fetchOffers = async ({
   return {
     latestQueryParams,
     offers: data.offers,
-    accommodations: data.accommodations
+    accommodations: data.accommodations,
+    isGroupMode
   };
 };

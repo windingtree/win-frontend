@@ -29,12 +29,14 @@ interface HeaderButtonProps {
   isLoading: boolean;
   latestQueryParams: SearchPropsType | undefined;
   offers: OfferRecord[] | undefined;
+  isGroupMode: boolean | undefined;
 }
 export const HeaderButton = ({
   scrollToDetailImages,
   isLoading,
   latestQueryParams,
-  offers
+  offers,
+  isGroupMode
 }: HeaderButtonProps) => {
   const theme = useTheme();
 
@@ -43,7 +45,7 @@ export const HeaderButton = ({
     latestQueryParams?.departure
   );
 
-  const nbRooms = latestQueryParams?.roomCount ?? 1;
+  const nbRooms = isGroupMode ? 1 : latestQueryParams?.roomCount ?? 1;
 
   // get lowest offer price
   const localPriceRange = useMemo(

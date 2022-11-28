@@ -201,6 +201,7 @@ export const FacilityIntroduction = ({
           offers={offersQuery.data?.offers}
           scrollToDetailImages={scrollToDetailImages}
           isLoading={offersQuery?.isFetching}
+          isGroupMode={offersQuery.data?.isGroupMode}
         />
       </Stack>
       <Container>
