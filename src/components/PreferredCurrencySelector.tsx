@@ -49,8 +49,6 @@ export const PreferredCurrencySelector = () => {
   const { preferredCurrencyCode, setUserSetting } = useUserSettings();
   const { clearPriceFilter } = usePriceFilter();
 
-  //const preferredCurrencyCodeRef = useRef(preferredCurrencyCode);
-
   useEffect(() => {
     // TO-DO: convert currency of price filter when preferred currency changes
     // for now just clear the priceFilter

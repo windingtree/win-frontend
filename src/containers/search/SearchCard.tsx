@@ -36,7 +36,10 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
     const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useAppDispatch();
     const prices = useMemo(
-      () => facility.offers.map((o) => Number(o.price.public)),
+      () =>
+        facility.offers.map((o) =>
+          Number(o.preferredCurrencyPrice?.public ?? o.price.public)
+        ),
       [facility]
     );
 

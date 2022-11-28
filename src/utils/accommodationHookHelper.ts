@@ -46,26 +46,26 @@ export const getOffersPriceRange = (
 
   offers
     .map((offer) => {
-      //offer that we get from proxies is "total price per room"
-      const totalPricePerRoom = getPreferredCurrency
+      //offer that we get from proxies is "total price for all rooms and all nights"
+      const totalPriceAllRoomsAllNights = getPreferredCurrency
         ? offer.preferredCurrencyPrice?.public
         : offer.price.public;
       const currency = getPreferredCurrency
         ? offer.preferredCurrencyPrice?.currency
         : offer.price.currency;
 
-      if (!totalPricePerRoom || !currency) return;
-      let divider = 1;
-      let multiplier = 1;
-      //depending on selection (price per night or per rooms) we need to either divide or multiply
-      if (!perRoom) {
-        multiplier *= numberOfRooms;
+      if (!totalPriceAllRoomsAllNights || !currency) return;
+      let roomDivider = 1;
+      let nightDivider = 1;
+      //depending on selection (price per night or per rooms) we need to either divide rooms and/or nights
+      if (perRoom) {
+        roomDivider = numberOfRooms;
       }
       if (perNight) {
-        divider *= numberOfDays;
+        nightDivider = numberOfDays;
       }
       return {
-        price: (Number(totalPricePerRoom) / divider) * multiplier,
+        price: Number(totalPriceAllRoomsAllNights) / roomDivider / nightDivider,
         currency
       };
     })

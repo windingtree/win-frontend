@@ -81,7 +81,7 @@ export const OfferItemSelectOne: React.FC<{
           true
         );
 
-        logger.info('Get priced offer successfully');
+        logger.debug('Get priced offer successfully');
         navigate('/guest-info');
       } else {
         throw new Error('Something went wrong!');
@@ -108,8 +108,7 @@ export const OfferItemSelectOne: React.FC<{
   const localPrice = offer.price;
   const preferredCurrencyPrice = convertPriceCurrency({
     price: localPrice,
-    targetCurrency: preferredCurrencyCode,
-    amount: roomCount || 1
+    targetCurrency: preferredCurrencyCode
   });
   const price = preferredCurrencyPrice ?? localPrice;
   return (
