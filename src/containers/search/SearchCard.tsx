@@ -130,7 +130,7 @@ export const SearchCard = forwardRef<HTMLDivElement, SearchCardProps>(
               pathname: `/facility/${facility.providerHotelId}`,
               search: `?${createSearchParams(searchParams)}`
             }}
-            style={{ textDecoration: 'none', color: 'inherit' }}
+            style={{ width: '100%', textDecoration: 'none', color: 'inherit' }}
           >
             <Stack
               justifyContent="space-between"
